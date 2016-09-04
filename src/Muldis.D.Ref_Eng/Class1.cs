@@ -1,4 +1,4 @@
-﻿namespace Muldis.D.Ref_Eng
+namespace Muldis.D.Ref_Eng
 {
     public class Class1
     {

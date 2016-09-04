@@ -1,4 +1,4 @@
-﻿namespace Muldis.D.Ref_Eng.Console
+namespace Muldis.D.Ref_Eng.Console
 {
     public class Program
     {
