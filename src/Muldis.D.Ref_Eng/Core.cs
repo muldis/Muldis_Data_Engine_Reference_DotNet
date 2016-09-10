@@ -1,5 +1,65 @@
 namespace Muldis.D.Ref_Eng.Core
 {
+    // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
+    // Enumerates the Muldis D Foundation data types, which are mutually
+    // exclusive; every Muldis D value is a member of exactly one of these.
+
+    public enum MD_Foundation_Type
+    {
+        Boolean,
+        Integer,
+        Array,
+        Bag,
+        Tuple,
+        Capsule,
+        Reference,
+        External
+    };
+
+    // Muldis.D.Ref_Eng.Core.MD_Value
+    // Represents a Muldis D "value", which is an individual constant that
+    // is not fixed in time or space.  Every Muldis D value is unique,
+    // eternal, and immutable; it has no address and can not be updated.
+    // Several distinct MD_Value objects may denote the same Muldis D
+    // "value"; however, any time that two MD_Value are discovered to
+    // denote the same Muldis D value, any references to one may be safely
+    // replaced by references to the other.
+    // As a primary aid in implementing the "flyweight pattern", a MD_Value
+    // object is actually a lightweight "value handle" pointing to a
+    // separate "value struct" object with its components; this allows us
+    // to get as close as easily possible to replacing references to one
+    // MD_Value with another where the underlying implementation / CLR
+    // doesn't natively provide that ability.
+    // Similarly, proving equality of two "value" can often short-circuit.
+    // While MD_Value are immutable from a user's perspective, their
+    // components may in fact mutate for memory sharing or consolidating.
+
+    public class MD_Value
+    {
+        public Value_Struct VS { get; set; }
+    }
+
+    public class Value_Struct
+    {
+        // Memory pool this Muldis D "value" lives in.
+        public Memory Memory { get; set; }
+
+        // Muldis D Foundation data type (MDFT) this "value" is a member of.
+        // This field determines how to interpret most of the other fields.
+        // Some of these types have their own subset of specialized
+        // representation formats for the sake of optimization.
+        public MD_Foundation_Type MD_Foundation_Type { get; set; }
+
+        // Iff MDFT is Boolean, this field is the payload.
+        public System.Boolean Boolean { get; set; }
+
+        // Iff MDFT is Integer, this field is the payload.
+        // While we conceptually could special case smaller integers with
+        // additional fields for performance, we won't, mainly to keep
+        // things simpler, and because BigInteger special-cases internally.
+        public System.Numerics.BigInteger BigInteger { get; set; }
+    }
+
     // Muldis.D.Ref_Eng.Core.Memory
     // Provides a virtual machine memory pool where Muldis D values and
     // variables live, which exploits the "flyweight pattern" for
@@ -109,57 +169,5 @@ namespace Muldis.D.Ref_Eng.Core
             }
             return value.VS.BigInteger;
         }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Value
-    // Represents a Muldis D "value", which is an individual constant that,
-    // from a user's perspective, is immutable; internally one may be
-    // mutated for the purpose of sharing memory per "flyweight".
-    // Specifically, this class represents a "value handle", but the name
-    // doesn't have "handle" in it for brevity and abstraction purposes.
-    // The use of distinct "handle" and "struct" objects is implementing a
-    // low-hanging fruit for "flyweight"; any time it is discovered that
-    // two "handle" represent the same Muldis D value but have distinct
-    // "struct" objects, both "handle" are made to use the same "struct";
-    // similarly, proving equality of two "value" can often short-circuit.
-    public class MD_Value
-    {
-        public Value_Struct VS { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
-    // Used in a Value_Struct as the latter's primary field, which says how
-    // to interpret the rest of the fields.  MD_Foundation_Type maps 1:1
-    // with the set of Muldis D Foundation data types, which are mutually
-    // exclusive.  Some of these types have their own subset of specialized
-    // representation formats for the sake of optimization.
-    public enum MD_Foundation_Type
-    {
-        Boolean,
-        Integer,
-        Array,
-        Bag,
-        Tuple,
-        Capsule,
-        Reference,
-        External
-    };
-
-    // Muldis.D.Ref_Eng.Core.Value_Struct
-    // The actual details of a Muldis D "value" representation.
-    public class Value_Struct
-    {
-        // Memory pool this Muldis D "value" lives in.
-        public Memory Memory { get; set; }
-
-        public MD_Foundation_Type MD_Foundation_Type { get; set; }
-
-        public System.Boolean Boolean { get; set; }
-
-        // Note: BigInteger was introduced in .Net 4.0 apparently.
-        // Note: BigInteger internally uses a signed int to store 32-bit
-        // values and a bit array for larger-magnitude integers, or
-        // otherwise it is designed to special case small numbers.
-        public System.Numerics.BigInteger BigInteger { get; set; }
     }
 }
