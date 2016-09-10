@@ -11,69 +11,69 @@ namespace Muldis.D.Ref_Eng.Core
     // entities that are short-lived versus longer-lived.
     public class Memory
     {
-        private readonly Value _false;
-        private readonly Value _true;
-        private readonly Value _zero;
-        private readonly Value _one;
-        private readonly Value _neg_one;
+        private readonly MD_Value _false;
+        private readonly MD_Value _true;
+        private readonly MD_Value _zero;
+        private readonly MD_Value _one;
+        private readonly MD_Value _neg_one;
 
         public Memory ()
         {
             _false = _v( new Value_Struct {
                 Memory = this,
-                Kind = Value_Struct_Kind.Boolean,
+                MD_Foundation_Type = MD_Foundation_Type.Boolean,
                 Boolean = false
             } );
 
             _true = _v( new Value_Struct {
                 Memory = this,
-                Kind = Value_Struct_Kind.Boolean,
+                MD_Foundation_Type = MD_Foundation_Type.Boolean,
                 Boolean = true
             } );
 
             _zero = _v( new Value_Struct {
                 Memory = this,
-                Kind = Value_Struct_Kind.Integer,
+                MD_Foundation_Type = MD_Foundation_Type.Integer,
                 BigInteger = 0
             } );
 
             _one = _v( new Value_Struct {
                 Memory = this,
-                Kind = Value_Struct_Kind.Integer,
+                MD_Foundation_Type = MD_Foundation_Type.Integer,
                 BigInteger = 1
             } );
 
             _neg_one = _v( new Value_Struct {
                 Memory = this,
-                Kind = Value_Struct_Kind.Integer,
+                MD_Foundation_Type = MD_Foundation_Type.Integer,
                 BigInteger = -1
             } );
         }
 
-        private Value _v (Value_Struct vs)
+        private MD_Value _v (Value_Struct vs)
         {
-            return new Value { VS = vs };
+            return new MD_Value { VS = vs };
         }
 
-        public Value v_Boolean (System.Boolean value)
+        public MD_Value MD_Boolean (System.Boolean value)
         {
             return value ? _true : _false;
         }
 
-        public System.Boolean v_Boolean_as_Boolean (Value value)
+        public System.Boolean MD_Boolean_as_Boolean (MD_Value value)
         {
-            if (value.VS.Kind != Value_Struct_Kind.Boolean)
+            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.Boolean)
             {
                 throw new System.ArgumentException
                 (
                     paramName: "value",
-                    message: "Value is not a Muldis D Boolean"
+                    message: "MD_Value is not a Muldis D Boolean"
                 );
             }
             return value.VS.Boolean;
         }
 
-        public Value v_Integer (System.Numerics.BigInteger value)
+        public MD_Value MD_Integer (System.Numerics.BigInteger value)
         {
             if (value == 0)
             {
@@ -91,27 +91,27 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return _v( new Value_Struct {
                     Memory = this,
-                    Kind = Value_Struct_Kind.Integer,
+                    MD_Foundation_Type = MD_Foundation_Type.Integer,
                     BigInteger = value
                 } );
             }
         }
 
-        public System.Numerics.BigInteger v_Integer_as_BigInteger (Value value)
+        public System.Numerics.BigInteger MD_Integer_as_BigInteger (MD_Value value)
         {
-            if (value.VS.Kind != Value_Struct_Kind.Integer)
+            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.Integer)
             {
                 throw new System.ArgumentException
                 (
                     paramName: "value",
-                    message: "Value is not a Muldis D Integer"
+                    message: "MD_Value is not a Muldis D Integer"
                 );
             }
             return value.VS.BigInteger;
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Value
+    // Muldis.D.Ref_Eng.Core.MD_Value
     // Represents a Muldis D "value", which is an individual constant that,
     // from a user's perspective, is immutable; internally one may be
     // mutated for the purpose of sharing memory per "flyweight".
@@ -122,18 +122,18 @@ namespace Muldis.D.Ref_Eng.Core
     // two "handle" represent the same Muldis D value but have distinct
     // "struct" objects, both "handle" are made to use the same "struct";
     // similarly, proving equality of two "value" can often short-circuit.
-    public class Value
+    public class MD_Value
     {
         public Value_Struct VS { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Value_Struct_Kind
+    // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
     // Used in a Value_Struct as the latter's primary field, which says how
-    // to interpret the rest of the fields.  Value_Struct_Kind maps 1:1
+    // to interpret the rest of the fields.  MD_Foundation_Type maps 1:1
     // with the set of Muldis D Foundation data types, which are mutually
     // exclusive.  Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    public enum Value_Struct_Kind
+    public enum MD_Foundation_Type
     {
         Boolean,
         Integer,
@@ -152,7 +152,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Memory pool this Muldis D "value" lives in.
         public Memory Memory { get; set; }
 
-        public Value_Struct_Kind Kind { get; set; }
+        public MD_Foundation_Type MD_Foundation_Type { get; set; }
 
         public System.Boolean Boolean { get; set; }
 
