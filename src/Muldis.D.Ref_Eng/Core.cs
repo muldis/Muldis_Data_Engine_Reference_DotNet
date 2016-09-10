@@ -11,9 +11,6 @@ namespace Muldis.D.Ref_Eng.Core
     // entities that are short-lived versus longer-lived.
     public class Memory
     {
-        private static readonly System.Numerics.BigInteger _BI_zero
-            = new System.Numerics.BigInteger(0);
-
         private readonly Value _false;
         private readonly Value _true;
         private readonly Value _zero;
@@ -22,40 +19,35 @@ namespace Muldis.D.Ref_Eng.Core
 
         public Memory ()
         {
-            _false = _v( new Value_Struct(
-                Memory: this,
-                Kind: Value_Struct_Kind.Boolean,
-                Bool: false,
-                BigInt: _BI_zero
-            ) );
+            _false = _v( new Value_Struct {
+                Memory = this,
+                Kind = Value_Struct_Kind.Boolean,
+                Boolean = false
+            } );
 
-            _true = _v( new Value_Struct(
-                Memory: this,
-                Kind: Value_Struct_Kind.Boolean,
-                Bool: true,
-                BigInt: _BI_zero
-            ) );
+            _true = _v( new Value_Struct {
+                Memory = this,
+                Kind = Value_Struct_Kind.Boolean,
+                Boolean = true
+            } );
 
-            _zero = _v( new Value_Struct(
-                Memory: this,
-                Kind: Value_Struct_Kind.Integer,
-                Bool: false,
-                BigInt: new System.Numerics.BigInteger(0)
-            ) );
+            _zero = _v( new Value_Struct {
+                Memory = this,
+                Kind = Value_Struct_Kind.Integer,
+                BigInteger = 0
+            } );
 
-            _one = _v( new Value_Struct(
-                Memory: this,
-                Kind: Value_Struct_Kind.Integer,
-                Bool: false,
-                BigInt: new System.Numerics.BigInteger(1)
-            ) );
+            _one = _v( new Value_Struct {
+                Memory = this,
+                Kind = Value_Struct_Kind.Integer,
+                BigInteger = 1
+            } );
 
-            _neg_one = _v( new Value_Struct(
-                Memory: this,
-                Kind: Value_Struct_Kind.Integer,
-                Bool: false,
-                BigInt: new System.Numerics.BigInteger(-1)
-            ) );
+            _neg_one = _v( new Value_Struct {
+                Memory = this,
+                Kind = Value_Struct_Kind.Integer,
+                BigInteger = -1
+            } );
         }
 
         private Value _v (Value_Struct vs)
@@ -63,12 +55,12 @@ namespace Muldis.D.Ref_Eng.Core
             return new Value { VS = vs };
         }
 
-        public Value v_Boolean (bool value)
+        public Value v_Boolean (System.Boolean value)
         {
             return value ? _true : _false;
         }
 
-        public bool v_Boolean_as_bool (Value value)
+        public System.Boolean v_Boolean_as_Boolean (Value value)
         {
             if (value.VS.Kind != Value_Struct_Kind.Boolean)
             {
@@ -78,7 +70,7 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "Value is not a Muldis D Boolean"
                 );
             }
-            return value.VS.Bool;
+            return value.VS.Boolean;
         }
 
         public Value v_Integer (System.Numerics.BigInteger value)
@@ -97,12 +89,11 @@ namespace Muldis.D.Ref_Eng.Core
             }
             else
             {
-                return _v( new Value_Struct(
-                    Memory: this,
-                    Kind: Value_Struct_Kind.Integer,
-                    Bool: false,
-                    BigInt: value
-                ) );
+                return _v( new Value_Struct {
+                    Memory = this,
+                    Kind = Value_Struct_Kind.Integer,
+                    BigInteger = value
+                } );
             }
         }
 
@@ -116,7 +107,7 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "Value is not a Muldis D Integer"
                 );
             }
-            return value.VS.BigInt;
+            return value.VS.BigInteger;
         }
     }
 
@@ -134,12 +125,6 @@ namespace Muldis.D.Ref_Eng.Core
     public class Value
     {
         public Value_Struct VS { get; set; }
-
-        // Memory pool this Muldis D "value" lives in.
-        public Memory Memory()
-        {
-            return VS.Memory;
-        }
     }
 
     // Muldis.D.Ref_Eng.Core.Value_Struct_Kind
@@ -165,34 +150,16 @@ namespace Muldis.D.Ref_Eng.Core
     public class Value_Struct
     {
         // Memory pool this Muldis D "value" lives in.
-        private readonly Memory _Memory;
-        public Memory Memory { get { return _Memory; } }
+        public Memory Memory { get; set; }
 
-        private readonly Value_Struct_Kind _Kind;
-        public Value_Struct_Kind Kind { get { return _Kind; } }
+        public Value_Struct_Kind Kind { get; set; }
 
-        private readonly bool _Bool;
-        public bool Bool { get { return _Bool; } }
+        public System.Boolean Boolean { get; set; }
 
         // Note: BigInteger was introduced in .Net 4.0 apparently.
         // Note: BigInteger internally uses a signed int to store 32-bit
         // values and a bit array for larger-magnitude integers, or
         // otherwise it is designed to special case small numbers.
-        private readonly System.Numerics.BigInteger _BigInt;
-        public System.Numerics.BigInteger BigInt { get { return _BigInt; } }
-
-        public Value_Struct
-        (
-            Memory Memory,
-            Value_Struct_Kind Kind,
-            bool Bool,
-            System.Numerics.BigInteger BigInt
-        )
-        {
-            _Memory = Memory;
-            _Kind = Kind;
-            _Bool = Bool;
-            _BigInt = BigInt;
-        }
+        public System.Numerics.BigInteger BigInteger { get; set; }
     }
 }
