@@ -42,6 +42,9 @@ trouble on either older .Net Framework versions like 4.5 or on Mono,
 however the author is using .Net Core canonically because it is a decent
 modern cross-platform foundation.  Patches to support the others welcome!
 
+It appears that .Net Framework 4.0 would be the practical minimum
+dependency as that version is what introduced the BigInteger type we use.
+
 ## Installation of Dependencies Under Microsoft Windows
 
 To build and run Muldis.D.Ref\_Eng on a Microsoft Windows OS, the following

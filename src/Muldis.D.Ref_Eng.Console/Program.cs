@@ -5,7 +5,7 @@ namespace Muldis.D.Ref_Eng.Console
         public static void Main(string[] args)
         {
             System.Console.WriteLine("Muldis.D.Ref_Eng.Console Main starting.");
-            Class1 x = new Class1();
+            API.Machine x = new API.Machine();
             System.Console.WriteLine("Muldis.D.Ref_Eng.Console Main ending.");
         }
     }
