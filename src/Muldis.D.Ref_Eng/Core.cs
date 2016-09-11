@@ -58,6 +58,31 @@ namespace Muldis.D.Ref_Eng.Core
         // additional fields for performance, we won't, mainly to keep
         // things simpler, and because BigInteger special-cases internally.
         public System.Numerics.BigInteger MD_Integer { get; set; }
+
+        // Iff MDFT is MD_Array, this field is the payload.
+        public Array_Node MD_Array { get; set; }
+    }
+
+    public enum MD_Array_Member_Type
+    {
+        MD_None,
+        MD_Any,
+        MD_Integer,
+        MD_Unicode_Code,
+        MD_Octet
+    }
+
+    public class Array_Node
+    {
+        public MD_Array_Member_Type Type_Each_Local_Member { get; set; }
+        public MD_Value[] Local_Any_Members { get; set; }
+        public System.Numerics.BigInteger[] Local_Integer_Members { get; set; }
+        public uint[] Local_Unicode_Code_Members { get; set; }
+        public byte[] Local_Octet_Members { get; set; }
+        public System.Numerics.BigInteger Local_Multiplicity { get; set; }
+        public Array_Node Pred_Members { get; set; }
+        public Array_Node Succ_Members { get; set; }
+        public System.Numerics.BigInteger Member_Count { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Memory
@@ -76,6 +101,7 @@ namespace Muldis.D.Ref_Eng.Core
         private readonly MD_Value _zero;
         private readonly MD_Value _one;
         private readonly MD_Value _neg_one;
+        private readonly MD_Value _empty_array;
 
         public Memory ()
         {
@@ -107,6 +133,12 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = -1
+            } );
+
+            _empty_array = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Array,
+                MD_Array = new Array_Node()
             } );
         }
 
