@@ -6,14 +6,14 @@ namespace Muldis.D.Ref_Eng.Core
 
     public enum MD_Foundation_Type
     {
-        Boolean,
-        Integer,
-        Array,
-        Bag,
-        Tuple,
-        Capsule,
-        Reference,
-        External
+        MD_Boolean,
+        MD_Integer,
+        MD_Array,
+        MD_Bag,
+        MD_Tuple,
+        MD_Capsule,
+        MD_Reference,
+        MD_External
     };
 
     // Muldis.D.Ref_Eng.Core.MD_Value
@@ -28,8 +28,8 @@ namespace Muldis.D.Ref_Eng.Core
     // object is actually a lightweight "value handle" pointing to a
     // separate "value struct" object with its components; this allows us
     // to get as close as easily possible to replacing references to one
-    // MD_Value with another where the underlying implementation / CLR
-    // doesn't natively provide that ability.
+    // MD_Value with another where the underlying virtual machine or
+    // garbage collector doesn't natively provide that ability.
     // Similarly, proving equality of two "value" can often short-circuit.
     // While MD_Value are immutable from a user's perspective, their
     // components may in fact mutate for memory sharing or consolidating.
@@ -50,14 +50,14 @@ namespace Muldis.D.Ref_Eng.Core
         // representation formats for the sake of optimization.
         public MD_Foundation_Type MD_Foundation_Type { get; set; }
 
-        // Iff MDFT is Boolean, this field is the payload.
-        public System.Boolean Boolean { get; set; }
+        // Iff MDFT is MD_Boolean, this field is the payload.
+        public System.Boolean MD_Boolean { get; set; }
 
-        // Iff MDFT is Integer, this field is the payload.
+        // Iff MDFT is MD_Integer, this field is the payload.
         // While we conceptually could special case smaller integers with
         // additional fields for performance, we won't, mainly to keep
         // things simpler, and because BigInteger special-cases internally.
-        public System.Numerics.BigInteger BigInteger { get; set; }
+        public System.Numerics.BigInteger MD_Integer { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Memory
@@ -81,32 +81,32 @@ namespace Muldis.D.Ref_Eng.Core
         {
             _false = _v( new Value_Struct {
                 Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.Boolean,
-                Boolean = false
+                MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
+                MD_Boolean = false
             } );
 
             _true = _v( new Value_Struct {
                 Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.Boolean,
-                Boolean = true
+                MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
+                MD_Boolean = true
             } );
 
             _zero = _v( new Value_Struct {
                 Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.Integer,
-                BigInteger = 0
+                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
+                MD_Integer = 0
             } );
 
             _one = _v( new Value_Struct {
                 Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.Integer,
-                BigInteger = 1
+                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
+                MD_Integer = 1
             } );
 
             _neg_one = _v( new Value_Struct {
                 Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.Integer,
-                BigInteger = -1
+                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
+                MD_Integer = -1
             } );
         }
 
@@ -122,7 +122,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         public System.Boolean MD_Boolean_as_Boolean (MD_Value value)
         {
-            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.Boolean)
+            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.MD_Boolean)
             {
                 throw new System.ArgumentException
                 (
@@ -130,7 +130,7 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "MD_Value is not a Muldis D Boolean"
                 );
             }
-            return value.VS.Boolean;
+            return value.VS.MD_Boolean;
         }
 
         public MD_Value MD_Integer (System.Numerics.BigInteger value)
@@ -151,15 +151,15 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return _v( new Value_Struct {
                     Memory = this,
-                    MD_Foundation_Type = MD_Foundation_Type.Integer,
-                    BigInteger = value
+                    MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
+                    MD_Integer = value
                 } );
             }
         }
 
         public System.Numerics.BigInteger MD_Integer_as_BigInteger (MD_Value value)
         {
-            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.Integer)
+            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
             {
                 throw new System.ArgumentException
                 (
@@ -167,7 +167,7 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "MD_Value is not a Muldis D Integer"
                 );
             }
-            return value.VS.BigInteger;
+            return value.VS.MD_Integer;
         }
     }
 }
