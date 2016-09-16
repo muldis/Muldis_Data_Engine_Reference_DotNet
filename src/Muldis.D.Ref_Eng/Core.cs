@@ -61,6 +61,21 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff MDFT is MD_Array, this field is the payload.
         public Array_Node MD_Array { get; set; }
+
+        // Iff MDFT is MD_Bag, this field is the payload.
+        public Bag_Node MD_Bag { get; set; }
+
+        // Iff MDFT is MD_Tuple, this field is the payload.
+        public Tuple_Struct MD_Tuple { get; set; }
+
+        // Iff MDFT is MD_Capsule, this field is the payload.
+        public Capsule_Struct MD_Capsule { get; set; }
+
+        // Iff MDFT is MD_Reference, this field is the payload.
+        public Reference_Struct MD_Reference { get; set; }
+
+        // Iff MDFT is MD_External, this field is the payload.
+        public External_Struct MD_External { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -93,6 +108,7 @@ namespace Muldis.D.Ref_Eng.Core
     // a Muldis D Integer in the range 0..255.
     // An Array_Int8u is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
+    // This is the canonical storage type for an octet (byte) string.
 
     public class Array_Int8u
     {
@@ -104,6 +120,7 @@ namespace Muldis.D.Ref_Eng.Core
     // a Muldis D Integer in the range 0..0xFFFFFFFF.
     // An Array_Int32u is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
+    // This is the canonical storage type for a character string or identifier.
 
     public class Array_Int32u
     {
@@ -164,6 +181,76 @@ namespace Muldis.D.Ref_Eng.Core
         public Array_Node Succ_Members { get; set; }
     }
 
+    // Muldis.D.Ref_Eng.Core.Bag_Node
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Bag,
+    // a Bag_Node is used by it to hold the MD_Bag-specific details.
+    // The "tree" is actually a uni-directional graph as multiple nodes can
+    // cite the same other conceptually immutable nodes as their children.
+    // Note that MD_Bag is the most complicated Muldis D Foundation type to
+    // implement while at the same time is the least critical to the
+    // internals; it is mainly just used for user data.
+
+    public class Bag_Node
+    {
+        // TODO.
+    }
+
+    // Muldis.D.Ref_Eng.Core.Tuple_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Tuple,
+    // a Tuple_Struct is used by it to hold the MD_Tuple-specific details.
+
+    public class Tuple_Struct
+    {
+        // TODO.
+    }
+
+    // Muldis.D.Ref_Eng.Core.Capsule_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Capsule,
+    // a Capsule_Struct is used by it to hold the MD_Capsule-specific details.
+
+    public class Capsule_Struct
+    {
+        // The Muldis D value that is the "wrapper" of this MD_Capsule value.
+        public MD_Value Wrapper { get; set; }
+
+        // The Muldis D value that is the "asset" of this MD_Capsule value.
+        public MD_Value Asset { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.Reference_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Reference,
+    // a Reference_Struct is used by it to hold the MD_Reference-specific details.
+
+    public class Reference_Struct
+    {
+        // The anonymous Muldis D "variable" that the MD_Reference value is
+        // an opaque and transient reference to.
+        public MD_Variable Target { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.External_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_External,
+    // a External_Struct is used by it to hold the MD_External-specific details.
+
+    public class External_Struct
+    {
+        // The entity that is defined and managed externally to the Muldis
+        // D language environment, which the MD_External value is an opaque
+        // and transient reference to.
+        public System.Object Value { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Variable
+    // Represents a Muldis D "variable", which is a container for an
+    // appearance of a value.  A Muldis D variable can be created,
+    // destroyed, copied, and mutated.  A variable's fundamental identity
+    // is its address, its identity does not vary with what value appears there.
+
+    public class MD_Variable
+    {
+        public MD_Value Current_Value { get; set; }
+    }
+
     // Muldis.D.Ref_Eng.Core.Memory
     // Provides a virtual machine memory pool where Muldis D values and
     // variables live, which exploits the "flyweight pattern" for
@@ -175,12 +262,33 @@ namespace Muldis.D.Ref_Eng.Core
     // entities that are short-lived versus longer-lived.
     public class Memory
     {
+        // MD_Boolean False (type default value) and True values.
         private readonly MD_Value _false;
         private readonly MD_Value _true;
+
+        // MD_Integer 0 (type default value) and 1 and -1 values.
         private readonly MD_Value _zero;
         private readonly MD_Value _one;
         private readonly MD_Value _neg_one;
+
+        // MD_Array with no members (type default value).
         private readonly MD_Value _empty_array;
+
+        // MD_Bag with no members (type default value).
+        private readonly MD_Value _empty_bag;
+
+        // MD_Tuple with no attributes (type default value).
+        private readonly MD_Value _nullary_tuple;
+
+        // MD_Capsule with False wrapper and False asset (type default value).
+        private readonly MD_Value _false_false_capsule;
+
+        // MD_Reference targeting an implementation-decided example Muldis
+        // D variable that normal code wouldn't use (type default value).
+        private readonly MD_Value _reference_to_example_var;
+
+        // MD_External that is a C# null (type default value).
+        private readonly MD_Value _null_object_external;
 
         public Memory ()
         {
@@ -222,6 +330,47 @@ namespace Muldis.D.Ref_Eng.Core
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None
+                }
+            } );
+
+            _empty_bag = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
+                MD_Bag = new Bag_Node {
+                }
+            } );
+
+            _nullary_tuple = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new Tuple_Struct {
+                }
+            } );
+
+            _false_false_capsule = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
+                MD_Capsule = new Capsule_Struct {
+                    Wrapper = _false,
+                    Asset = _false
+                }
+            } );
+
+            _reference_to_example_var = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Reference,
+                MD_Reference = new Reference_Struct {
+                    Target = new MD_Variable {
+                        Current_Value = _false
+                    }
+                }
+            } );
+
+            _null_object_external = _v( new Value_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_External,
+                MD_External = new External_Struct {
+                    Value = null
                 }
             } );
         }
