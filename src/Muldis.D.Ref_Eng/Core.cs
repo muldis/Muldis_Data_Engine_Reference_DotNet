@@ -121,10 +121,55 @@ namespace Muldis.D.Ref_Eng.Core
     // An Array_Int32u is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
     // This is the canonical storage type for a character string or identifier.
+    // The associated Array_Int32u_Comparer class exists to simplify using
+    // Array_Int32u objects as C# Dictionary keys, such as in MD_Tuple
+    // values where they represent Tuple attribute names / identifiers.
 
     public class Array_Int32u
     {
         public System.Collections.Generic.List<System.UInt32> Members { get; set; }
+    }
+
+    public class Array_Int32u_Comparer
+        : System.Collections.Generic.EqualityComparer<Array_Int32u>
+    {
+        public override System.Boolean Equals(Array_Int32u v1, Array_Int32u v2)
+        {
+            if (v1 == null && v2 == null)
+            {
+                // Would we ever get here?
+                return true;
+            }
+            if (v1 == null || v2 == null)
+            {
+                return false;
+            }
+            if (System.Object.ReferenceEquals(v1, v2))
+            {
+                return true;
+            }
+            if (v1.Members.Count != v2.Members.Count)
+            {
+                return false;
+            }
+            if (v1.Members.Count == 0)
+            {
+                return true;
+            }
+            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
+        }
+
+        public override int GetHashCode(Array_Int32u v)
+        {
+            if (v == null)
+            {
+                // Would we ever get here?
+                return 0;
+            }
+            return System.Linq.Enumerable
+                .Aggregate(v.Members, (System.UInt32)0, (m1, m2) => m1 ^ m2)
+                .GetHashCode();
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Node
@@ -201,7 +246,9 @@ namespace Muldis.D.Ref_Eng.Core
 
     public class Tuple_Struct
     {
-        // TODO.
+        // The Muldis D Tuple attributes as a set of name-asset pairs.
+        public System.Collections.Generic.Dictionary<Array_Int32u,MD_Value>
+            Attributes { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Capsule_Struct
@@ -344,6 +391,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new Tuple_Struct {
+                    Attributes = new System.Collections.Generic
+                        .Dictionary<Array_Int32u,MD_Value>()
                 }
             } );
 
