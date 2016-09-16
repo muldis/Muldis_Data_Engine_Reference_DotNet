@@ -63,26 +63,105 @@ namespace Muldis.D.Ref_Eng.Core
         public Array_Node MD_Array { get; set; }
     }
 
-    public enum MD_Array_Member_Type
+    // Muldis.D.Ref_Eng.Core.Widest_Component_Type
+    // Enumerates the levels of restriction that a collection's elements
+    // would conform to, which can help set an optimized storage strategy.
+    // Unrestricted means any Muldis D value at all may be a component.
+    // None means no component is allowed; it is for empty collections.
+
+    public enum Widest_Component_Type
     {
-        MD_None,
-        MD_Any,
-        MD_Integer,
-        MD_Unicode_Code,
-        MD_Octet
+        None,
+        Unrestricted,
+        Int8u,
+        Int32u
     }
+
+    // Muldis.D.Ref_Eng.Core.Array_MD_Value
+    // Represents a Muldis D Array value where each member value is
+    // unrestricted in allowed type.
+    // An Array_MD_Value is the simplest storage representation for that
+    // type which doesn't internally use trees for sharing or multipliers.
+
+    public class Array_MD_Value
+    {
+        public System.Collections.Generic.List<MD_Value> Members { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.Array_Int8u
+    // Represents a Muldis D Array value where each member value is
+    // a Muldis D Integer in the range 0..255.
+    // An Array_Int8u is the simplest storage representation for that
+    // type which doesn't internally use trees for sharing or multipliers.
+
+    public class Array_Int8u
+    {
+        public System.Collections.Generic.List<System.Byte> Members { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.Array_Int32u
+    // Represents a Muldis D Array value where each member value is
+    // a Muldis D Integer in the range 0..0xFFFFFFFF.
+    // An Array_Int32u is the simplest storage representation for that
+    // type which doesn't internally use trees for sharing or multipliers.
+
+    public class Array_Int32u
+    {
+        public System.Collections.Generic.List<System.UInt32> Members { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.Array_Node
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Array,
+    // an Array_Node is used by it to hold the MD_Array-specific details.
+    // It takes the form of a tree of its own kind to aid in reusability
+    // of common substrings of members of distinct MD_Array values;
+    // the actual members of the MD_Array value are, in order, any members
+    // specified by Pred_Members, then any Local_*_Members, then
+    // Succ_Members.  An Array_Node also uses run-length encoding to
+    // optimize storage, such that the actual "local" members of a node are
+    // defined as the sequence in Local_*_Members repeated the number of
+    // times specified by Local_Multiplicity.
+    // The "tree" is actually a uni-directional graph as multiple nodes can
+    // cite the same other conceptually immutable nodes as their children.
 
     public class Array_Node
     {
-        public MD_Array_Member_Type Type_Each_Local_Member { get; set; }
-        public MD_Value[] Local_Any_Members { get; set; }
-        public System.Numerics.BigInteger[] Local_Integer_Members { get; set; }
-        public uint[] Local_Unicode_Code_Members { get; set; }
-        public byte[] Local_Octet_Members { get; set; }
-        public System.Numerics.BigInteger Local_Multiplicity { get; set; }
+        // Cached count of members of the Muldis D Array represented by
+        // this tree node including those defined by it and child nodes.
+        // Equals count(Local_*_Members) x Local_Multiplicity
+        // + Pred_Members.Tree_Member_Count + Succ_Members.Tree_Member_Count.
+        public System.UInt64 Tree_Member_Count { get; set; }
+
+        // Cached indication of the widest Local_Widest_Type in the tree,
+        // and thus of the over-all type of the tree.
+        public Widest_Component_Type Tree_Widest_Type { get; set; }
+
+        // Iff this is zero, then there are zero "local" members;
+        // iff this is 1, then the "local" members are as Local_*_Members
+        // specifies with no repeats;
+        // iff this is >1, then the local members have that many occurrances.
+        public System.UInt64 Local_Multiplicity { get; set; }
+
+        // LWT indicates which of the Local_*_Members this node is using.
+        // This is None iff Local_Multiplicity is zero.
+        public Widest_Component_Type Local_Widest_Type { get; set; }
+
+        // Iff LWT is Unrestricted, this field is the payload.
+        public Array_MD_Value Local_Unrestricted_Members { get; set; }
+
+        // Iff LWT is Int8u, this field is the payload.
+        public Array_Int8u Local_Int8u_Members { get; set; }
+
+        // Iff LWT is Int32u, this field is the payload.
+        public Array_Int32u Local_Int32u_Members { get; set; }
+
+        // Iff there is at least 1 predecessor member of the "local" ones,
+        // this subtree says what they are.
         public Array_Node Pred_Members { get; set; }
+
+        // Iff there is at least 1 successor member of the "local" ones,
+        // this subtree says what they are.
         public Array_Node Succ_Members { get; set; }
-        public System.Numerics.BigInteger Member_Count { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Memory
@@ -138,7 +217,12 @@ namespace Muldis.D.Ref_Eng.Core
             _empty_array = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new Array_Node()
+                MD_Array = new Array_Node {
+                    Tree_Member_Count = 0,
+                    Tree_Widest_Type = Widest_Component_Type.None,
+                    Local_Multiplicity = 0,
+                    Local_Widest_Type = Widest_Component_Type.None
+                }
             } );
         }
 
