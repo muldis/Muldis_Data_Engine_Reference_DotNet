@@ -1,3 +1,5 @@
+[assembly: System.CLSCompliant(true)]
+
 namespace Muldis.D.Ref_Eng.Console
 {
     public class Program

@@ -88,8 +88,8 @@ namespace Muldis.D.Ref_Eng.Core
     {
         None,
         Unrestricted,
-        Int8u,
-        Int32u
+        Octet,
+        Codepoint
     }
 
     // Muldis.D.Ref_Eng.Core.Array_MD_Value
@@ -103,37 +103,37 @@ namespace Muldis.D.Ref_Eng.Core
         public System.Collections.Generic.List<MD_Value> Members { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Array_Int8u
+    // Muldis.D.Ref_Eng.Core.Array_Octet
     // Represents a Muldis D Array value where each member value is
     // a Muldis D Integer in the range 0..255.
-    // An Array_Int8u is the simplest storage representation for that
+    // An Array_Octet is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
     // This is the canonical storage type for an octet (byte) string.
 
-    public class Array_Int8u
+    public class Array_Octet
     {
         public System.Collections.Generic.List<System.Byte> Members { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Array_Int32u
+    // Muldis.D.Ref_Eng.Core.Array_Codepoint
     // Represents a Muldis D Array value where each member value is
-    // a Muldis D Integer in the range 0..0xFFFFFFFF.
-    // An Array_Int32u is the simplest storage representation for that
+    // a Muldis D Integer in the range 0..0x7FFFFFFF.
+    // An Array_Codepoint is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
     // This is the canonical storage type for a character string or identifier.
-    // The associated Array_Int32u_Comparer class exists to simplify using
-    // Array_Int32u objects as C# Dictionary keys, such as in MD_Tuple
+    // The associated Array_Codepoint_Comparer class exists to simplify using
+    // Array_Codepoint objects as C# Dictionary keys, such as in MD_Tuple
     // values where they represent Tuple attribute names / identifiers.
 
-    public class Array_Int32u
+    public class Array_Codepoint
     {
-        public System.Collections.Generic.List<System.UInt32> Members { get; set; }
+        public System.Collections.Generic.List<System.Int32> Members { get; set; }
     }
 
-    public class Array_Int32u_Comparer
-        : System.Collections.Generic.EqualityComparer<Array_Int32u>
+    public class Array_Codepoint_Comparer
+        : System.Collections.Generic.EqualityComparer<Array_Codepoint>
     {
-        public override System.Boolean Equals(Array_Int32u v1, Array_Int32u v2)
+        public override System.Boolean Equals(Array_Codepoint v1, Array_Codepoint v2)
         {
             if (v1 == null && v2 == null)
             {
@@ -159,7 +159,7 @@ namespace Muldis.D.Ref_Eng.Core
             return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
         }
 
-        public override int GetHashCode(Array_Int32u v)
+        public override System.Int32 GetHashCode(Array_Codepoint v)
         {
             if (v == null)
             {
@@ -167,7 +167,7 @@ namespace Muldis.D.Ref_Eng.Core
                 return 0;
             }
             return System.Linq.Enumerable
-                .Aggregate(v.Members, (System.UInt32)0, (m1, m2) => m1 ^ m2)
+                .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
                 .GetHashCode();
         }
     }
@@ -192,7 +192,7 @@ namespace Muldis.D.Ref_Eng.Core
         // this tree node including those defined by it and child nodes.
         // Equals count(Local_*_Members) x Local_Multiplicity
         // + Pred_Members.Tree_Member_Count + Succ_Members.Tree_Member_Count.
-        public System.UInt64 Tree_Member_Count { get; set; }
+        public System.Int64 Tree_Member_Count { get; set; }
 
         // Cached indication of the widest Local_Widest_Type in the tree,
         // and thus of the over-all type of the tree.
@@ -202,7 +202,7 @@ namespace Muldis.D.Ref_Eng.Core
         // iff this is 1, then the "local" members are as Local_*_Members
         // specifies with no repeats;
         // iff this is >1, then the local members have that many occurrances.
-        public System.UInt64 Local_Multiplicity { get; set; }
+        public System.Int64 Local_Multiplicity { get; set; }
 
         // LWT indicates which of the Local_*_Members this node is using.
         // This is None iff Local_Multiplicity is zero.
@@ -211,11 +211,11 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff LWT is Unrestricted, this field is the payload.
         public Array_MD_Value Local_Unrestricted_Members { get; set; }
 
-        // Iff LWT is Int8u, this field is the payload.
-        public Array_Int8u Local_Int8u_Members { get; set; }
+        // Iff LWT is Octet, this field is the payload.
+        public Array_Octet Local_Octet_Members { get; set; }
 
-        // Iff LWT is Int32u, this field is the payload.
-        public Array_Int32u Local_Int32u_Members { get; set; }
+        // Iff LWT is Codepoint, this field is the payload.
+        public Array_Codepoint Local_Codepoint_Members { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
@@ -247,7 +247,7 @@ namespace Muldis.D.Ref_Eng.Core
     public class Tuple_Struct
     {
         // The Muldis D Tuple attributes as a set of name-asset pairs.
-        public System.Collections.Generic.Dictionary<Array_Int32u,MD_Value>
+        public System.Collections.Generic.Dictionary<Array_Codepoint,MD_Value>
             Attributes { get; set; }
     }
 
@@ -384,6 +384,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = new Bag_Node {
+                    // TODO.
                 }
             } );
 
@@ -392,7 +393,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new Tuple_Struct {
                     Attributes = new System.Collections.Generic
-                        .Dictionary<Array_Int32u,MD_Value>()
+                        .Dictionary<Array_Codepoint,MD_Value>()
                 }
             } );
 

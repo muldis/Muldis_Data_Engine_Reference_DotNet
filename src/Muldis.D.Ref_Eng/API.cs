@@ -1,3 +1,5 @@
+[assembly: System.CLSCompliant(true)]
+
 namespace Muldis.D.Ref_Eng.API
 {
     public class Machine
