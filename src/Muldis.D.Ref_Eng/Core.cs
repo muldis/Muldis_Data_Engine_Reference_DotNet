@@ -128,6 +128,8 @@ namespace Muldis.D.Ref_Eng.Core
     public class Array_Codepoint
     {
         public System.Collections.Generic.List<System.Int32> Members { get; set; }
+
+        public System.Int32 Cached_HashCode { get; set; } = -1;
     }
 
     public class Array_Codepoint_Comparer
@@ -166,9 +168,16 @@ namespace Muldis.D.Ref_Eng.Core
                 // Would we ever get here?
                 return 0;
             }
-            return System.Linq.Enumerable
-                .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
-                .GetHashCode();
+            if (v.Cached_HashCode == -1)
+            {
+                // We are assuming that all XOR operations on valid
+                // character codepoints would have a zero sign bit,
+                // and so -1 would never be a result of any XORing.
+                v.Cached_HashCode = System.Linq.Enumerable
+                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
+                    .GetHashCode();
+            }
+            return v.Cached_HashCode;
         }
     }
 
