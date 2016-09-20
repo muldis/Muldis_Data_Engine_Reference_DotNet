@@ -108,7 +108,7 @@ namespace Muldis.D.Ref_Eng.Core
     // a Muldis D Integer in the range 0..255.
     // An Array_Octet is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
-    // This is the canonical storage type for an octet (byte) string.
+    // This is the canonical storage type for a regular octet (byte) string.
 
     public class Array_Octet
     {
@@ -120,65 +120,11 @@ namespace Muldis.D.Ref_Eng.Core
     // a Muldis D Integer in the range 0..0x7FFFFFFF.
     // An Array_Codepoint is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
-    // This is the canonical storage type for a character string or identifier.
-    // The associated Array_Codepoint_Comparer class exists to simplify using
-    // Array_Codepoint objects as C# Dictionary keys, such as in MD_Tuple
-    // values where they represent Tuple attribute names / identifiers.
+    // This is the canonical storage type for a regular character string.
 
     public class Array_Codepoint
     {
         public System.Collections.Generic.List<System.Int32> Members { get; set; }
-
-        public System.Int32 Cached_HashCode { get; set; } = -1;
-    }
-
-    public class Array_Codepoint_Comparer
-        : System.Collections.Generic.EqualityComparer<Array_Codepoint>
-    {
-        public override System.Boolean Equals(Array_Codepoint v1, Array_Codepoint v2)
-        {
-            if (v1 == null && v2 == null)
-            {
-                // Would we ever get here?
-                return true;
-            }
-            if (v1 == null || v2 == null)
-            {
-                return false;
-            }
-            if (System.Object.ReferenceEquals(v1, v2))
-            {
-                return true;
-            }
-            if (v1.Members.Count != v2.Members.Count)
-            {
-                return false;
-            }
-            if (v1.Members.Count == 0)
-            {
-                return true;
-            }
-            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
-        }
-
-        public override System.Int32 GetHashCode(Array_Codepoint v)
-        {
-            if (v == null)
-            {
-                // Would we ever get here?
-                return 0;
-            }
-            if (v.Cached_HashCode == -1)
-            {
-                // We are assuming that all XOR operations on valid
-                // character codepoints would have a zero sign bit,
-                // and so -1 would never be a result of any XORing.
-                v.Cached_HashCode = System.Linq.Enumerable
-                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
-                    .GetHashCode();
-            }
-            return v.Cached_HashCode;
-        }
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Node
@@ -249,6 +195,68 @@ namespace Muldis.D.Ref_Eng.Core
         // TODO.
     }
 
+    // Muldis.D.Ref_Eng.Core.Tuple_Attr_Name
+    // Represents a Muldis D Tuple attribute name which is a string where
+    // each member is a Muldis D Integer in the range 0..0x7FFFFFFF.
+    // The associated Tuple_Attr_Name_Comparer class exists to simplify
+    // using Tuple_Attr_Name objects as C# Dictionary keys.
+
+    public class Tuple_Attr_Name
+    {
+        public System.Collections.Generic.List<System.Int32> Members { get; set; }
+
+        public System.Int32 Cached_HashCode { get; set; } = -1;
+    }
+
+    public class Tuple_Attr_Name_Comparer
+        : System.Collections.Generic.EqualityComparer<Tuple_Attr_Name>
+    {
+        public override System.Boolean Equals(Tuple_Attr_Name v1, Tuple_Attr_Name v2)
+        {
+            if (v1 == null && v2 == null)
+            {
+                // Would we ever get here?
+                return true;
+            }
+            if (v1 == null || v2 == null)
+            {
+                return false;
+            }
+            if (System.Object.ReferenceEquals(v1, v2))
+            {
+                return true;
+            }
+            if (v1.Members.Count != v2.Members.Count)
+            {
+                return false;
+            }
+            if (v1.Members.Count == 0)
+            {
+                return true;
+            }
+            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
+        }
+
+        public override System.Int32 GetHashCode(Tuple_Attr_Name v)
+        {
+            if (v == null)
+            {
+                // Would we ever get here?
+                return 0;
+            }
+            if (v.Cached_HashCode == -1)
+            {
+                // We are assuming that all XOR operations on valid
+                // character codepoints would have a zero sign bit,
+                // and so -1 would never be a result of any XORing.
+                v.Cached_HashCode = System.Linq.Enumerable
+                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
+                    .GetHashCode();
+            }
+            return v.Cached_HashCode;
+        }
+    }
+
     // Muldis.D.Ref_Eng.Core.Tuple_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Tuple,
     // a Tuple_Struct is used by it to hold the MD_Tuple-specific details.
@@ -256,7 +264,7 @@ namespace Muldis.D.Ref_Eng.Core
     public class Tuple_Struct
     {
         // The Muldis D Tuple attributes as a set of name-asset pairs.
-        public System.Collections.Generic.Dictionary<Array_Codepoint,MD_Value>
+        public System.Collections.Generic.Dictionary<Tuple_Attr_Name,MD_Value>
             Attributes { get; set; }
     }
 
@@ -402,7 +410,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new Tuple_Struct {
                     Attributes = new System.Collections.Generic
-                        .Dictionary<Array_Codepoint,MD_Value>()
+                        .Dictionary<Tuple_Attr_Name,MD_Value>()
                 }
             } );
 
