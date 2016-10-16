@@ -13,7 +13,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Tuple,
         MD_Capsule,
         MD_Reference,
-        MD_External
+        MD_External,
     };
 
     // Muldis.D.Ref_Eng.Core.MD_Value
@@ -76,6 +76,11 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff MDFT is MD_External, this field is the payload.
         public External_Struct MD_External { get; set; }
+
+        // Normalized serialization of the Muldis D "value" that its host
+        // Value_Struct represents.  This is calculated lazily if needed,
+        // typically when the "value" is a member of an indexed collection.
+        public MD_Value_Identity Cached_MD_Value_Identity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -89,7 +94,7 @@ namespace Muldis.D.Ref_Eng.Core
         None,
         Unrestricted,
         Octet,
-        Codepoint
+        Codepoint,
     }
 
     // Muldis.D.Ref_Eng.Core.Array_MD_Value
@@ -125,6 +130,10 @@ namespace Muldis.D.Ref_Eng.Core
     public class Array_Codepoint
     {
         public System.Collections.Generic.List<System.Int32> Members { get; set; }
+        // TODO: Consider caching alternate formats, such as C# string or
+        // UTF-8 octets as byte[], to avoid unnecessary conversions;
+        // however those alternatives will only work for Unicode proper,
+        // and not supersets that we otherwise support.
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Node
@@ -181,6 +190,40 @@ namespace Muldis.D.Ref_Eng.Core
         public Array_Node Succ_Members { get; set; }
     }
 
+    // Muldis.D.Ref_Eng.Core.Symbolic_Value_Type
+    // Enumerates the various ways that a collection can be defined
+    // symbolically in terms of other collections.
+    // None means the collection simply has zero members.
+
+    public enum Symbolic_Value_Type
+    {
+        None,
+        Singular,
+        Arrayed,
+        Indexed,
+        Unique,
+        Insert_N,
+        Remove_N,
+        Member_Plus,
+        Except,
+        Intersect,
+        Union,
+        Exclusive,
+    }
+
+    // Muldis.D.Ref_Eng.Core.Multiplied_Member
+    // Represents a multiset of 0..N members of a collection where every
+    // member is the same Muldis D value.
+
+    public class Multiplied_Member
+    {
+        // The Muldis D value that every member of this multiset is.
+        public MD_Value Member { get; set; }
+
+        // The count of members of this multiset.
+        public System.Int64 Multiplicity { get; set; }
+    }
+
     // Muldis.D.Ref_Eng.Core.Bag_Node
     // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Bag,
     // a Bag_Node is used by it to hold the MD_Bag-specific details.
@@ -192,7 +235,57 @@ namespace Muldis.D.Ref_Eng.Core
 
     public class Bag_Node
     {
-        // TODO.
+        // Cached count of members of the Muldis D Bag represented by
+        // this tree node including those defined by it and child nodes.
+        public System.Int64 Tree_Member_Count { get; set; }
+
+        // LST determines how to interpret most of the other fields.
+        // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
+        // Iff LST is Arrayed, Local_Arrayed_Members defines all of the Bag members.
+        // Iff LST is Indexed, Local_Indexed_Members defines all of the Bag members.
+        // Iff LST is Unique, this Bag's members are defined as
+        // the unique members of Primary_Arg.
+        // Iff LST is Insert_N, this Bag's members are defined as
+        // the multiset sum of Primary_Arg and Local_Singular_Members.
+        // Iff LST is Remove_N, this Bag's members are defined as
+        // the multiset difference of Primary_Arg and Local_Singular_Members.
+        // Iff LST is Member_Plus, this Bag's members are defined as
+        // the multiset sum of Primary_Arg and Extra_Arg.
+        // Iff LST is Except, this Bag's members are defined as
+        // the multiset difference of Primary_Arg and Extra_Arg.
+        // Iff LST is Intersect, this Bag's members are defined as
+        // the multiset intersection of Primary_Arg and Extra_Arg.
+        // Iff LST is Union, this Bag's members are defined as
+        // the multiset union of Primary_Arg and Extra_Arg.
+        // Iff LST is Exclusive, this Bag's members are defined as
+        // the multiset symmetric difference of Primary_Arg and Extra_Arg.
+        public Symbolic_Value_Type Local_Symbolic_Type { get; set; }
+
+        // Cached count of members defined by the Local_*_Members fields as
+        // they are defined in isolation, meaning it is positive (or zero)
+        // even when LST is Remove_N.
+        public System.Int64 Local_Member_Count { get; set; }
+
+        // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
+        public Multiplied_Member Local_Singular_Members { get; set; }
+
+        // This field is used iff LST is Arrayed.
+        public System.Collections.Generic.List<Multiplied_Member> Local_Arrayed_Members { get; set; }
+
+        // This field is used iff LST is Indexed.
+        // The Dictionary has one key-value pair for each distinct Muldis D
+        // "value", all of which are indexed by Cached_MD_Value_Identity.
+        public System.Collections.Generic
+            .Dictionary<MD_Value_Identity,Multiplied_Member>
+            Local_Indexed_Members { get; set; }
+
+        // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
+        // Member_Plus, Except, Intersect, Union, Exclusive}.
+        public Bag_Node Primary_Arg { get; set; }
+
+        // This field is used iff LST is one of
+        // {Member_Plus, Except, Intersect, Union, Exclusive}.
+        public Bag_Node Extra_Arg { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Tuple_Attr_Name
@@ -304,6 +397,67 @@ namespace Muldis.D.Ref_Eng.Core
         public System.Object Value { get; set; }
     }
 
+    // Muldis.D.Ref_Eng.Core.MD_Value_Identity
+    // Normalized serialization of a Muldis D "value".  This is calculated
+    // lazily if needed, typically when the "value" is a member of an
+    // indexed collection.
+
+    public class MD_Value_Identity
+    {
+        public System.Collections.Generic.List<System.Int32> Members { get; set; }
+
+        public System.Int32 Cached_HashCode { get; set; } = -1;
+    }
+
+    public class MD_Value_Identity_Comparer
+        : System.Collections.Generic.EqualityComparer<MD_Value_Identity>
+    {
+        public override System.Boolean Equals(MD_Value_Identity v1, MD_Value_Identity v2)
+        {
+            if (v1 == null && v2 == null)
+            {
+                // Would we ever get here?
+                return true;
+            }
+            if (v1 == null || v2 == null)
+            {
+                return false;
+            }
+            if (System.Object.ReferenceEquals(v1, v2))
+            {
+                return true;
+            }
+            if (v1.Members.Count != v2.Members.Count)
+            {
+                return false;
+            }
+            if (v1.Members.Count == 0)
+            {
+                return true;
+            }
+            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
+        }
+
+        public override System.Int32 GetHashCode(MD_Value_Identity v)
+        {
+            if (v == null)
+            {
+                // Would we ever get here?
+                return 0;
+            }
+            if (v.Cached_HashCode == -1)
+            {
+                // We are assuming that all XOR operations on valid
+                // character codepoints would have a zero sign bit,
+                // and so -1 would never be a result of any XORing.
+                v.Cached_HashCode = System.Linq.Enumerable
+                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
+                    .GetHashCode();
+            }
+            return v.Cached_HashCode;
+        }
+    }
+
     // Muldis.D.Ref_Eng.Core.MD_Variable
     // Represents a Muldis D "variable", which is a container for an
     // appearance of a value.  A Muldis D variable can be created,
@@ -359,31 +513,31 @@ namespace Muldis.D.Ref_Eng.Core
             _false = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
-                MD_Boolean = false
+                MD_Boolean = false,
             } );
 
             _true = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
-                MD_Boolean = true
+                MD_Boolean = true,
             } );
 
             _zero = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = 0
+                MD_Integer = 0,
             } );
 
             _one = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = 1
+                MD_Integer = 1,
             } );
 
             _neg_one = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = -1
+                MD_Integer = -1,
             } );
 
             _empty_array = _v( new Value_Struct {
@@ -393,7 +547,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Tree_Member_Count = 0,
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
-                    Local_Widest_Type = Widest_Component_Type.None
+                    Local_Widest_Type = Widest_Component_Type.None,
                 }
             } );
 
@@ -401,7 +555,9 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = new Bag_Node {
-                    // TODO.
+                    Tree_Member_Count = 0,
+                    Local_Symbolic_Type = Symbolic_Value_Type.None,
+                    Local_Member_Count = 0,
                 }
             } );
 
@@ -410,7 +566,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new Tuple_Struct {
                     Attributes = new System.Collections.Generic
-                        .Dictionary<Tuple_Attr_Name,MD_Value>()
+                        .Dictionary<Tuple_Attr_Name,MD_Value>(),
                 }
             } );
 
@@ -419,7 +575,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
                 MD_Capsule = new Capsule_Struct {
                     Wrapper = _false,
-                    Asset = _false
+                    Asset = _false,
                 }
             } );
 
@@ -428,8 +584,8 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Reference,
                 MD_Reference = new Reference_Struct {
                     Target = new MD_Variable {
-                        Current_Value = _false
-                    }
+                        Current_Value = _false,
+                    },
                 }
             } );
 
@@ -437,7 +593,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_External,
                 MD_External = new External_Struct {
-                    Value = null
+                    Value = null,
                 }
             } );
         }
@@ -484,7 +640,7 @@ namespace Muldis.D.Ref_Eng.Core
                 return _v( new Value_Struct {
                     Memory = this,
                     MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                    MD_Integer = value
+                    MD_Integer = value,
                 } );
             }
         }
