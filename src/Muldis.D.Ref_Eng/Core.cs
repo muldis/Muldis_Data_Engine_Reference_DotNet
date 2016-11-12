@@ -353,12 +353,39 @@ namespace Muldis.D.Ref_Eng.Core
     // Muldis.D.Ref_Eng.Core.Tuple_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Tuple,
     // a Tuple_Struct is used by it to hold the MD_Tuple-specific details.
+    // For efficiency, a few most-commonly used Muldis D Tuple attribute
+    // names have their own corresponding Tuple_Struct fields, while the
+    // long tail of remaining possible but less often used names don't.
+    // For example, all routine argument lists of degree 0..3 with just
+    // conceptually-ordered arguments are fully covered with said few,
+    // including nearly all routines of the Muldis D Standard Library.
 
     public class Tuple_Struct
     {
-        // The Muldis D Tuple attributes as a set of name-asset pairs.
+        // Cached count of attributes of the Muldis D Tuple.
+        public System.Int32 Degree { get; set; }
+
+        // Iff Muldis D Tuple has attr named [], this field has its asset.
+        // In a Package materials namespace, this name has special meaning.
+        public MD_Value Attr_Named_Empty_Str { get; set; }
+
+        // Iff Muldis D Tuple has attr named [0], this field has its asset.
+        // This is the canonical name of a first conceptually-ordered attr.
+        public MD_Value Attr_Named_0 { get; set; }
+
+        // Iff Muldis D Tuple has attr named [1], this field has its asset.
+        // This is the canonical name of a second conceptually-ordered attr.
+        public MD_Value Attr_Named_1 { get; set; }
+
+        // Iff Muldis D Tuple has attr named [2], this field has its asset.
+        // This is the canonical name of a third conceptually-ordered attr.
+        public MD_Value Attr_Named_2 { get; set; }
+
+        // Iff Muldis D Tuple has at least 1 attribute with some other name
+        // than the ones handled above, those other attrs are represented
+        // by this field as a set of name-asset pairs.
         public System.Collections.Generic.Dictionary<Tuple_Attr_Name,MD_Value>
-            Attributes { get; set; }
+            Other_Attrs { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Capsule_Struct
@@ -440,6 +467,13 @@ namespace Muldis.D.Ref_Eng.Core
 
         public override System.Int32 GetHashCode(MD_Value_Identity v)
         {
+            // TODO: The current hashing algorithm would in practice not
+            // produce more than about 64 distinct values due to only the
+            // lowest 7 of the 32 bits tending to vary (#letters+digits);
+            // consider using a better hashing algorithm that uses the full
+            // 31/32 bits for better key/bucket distribution; for example,
+            // with each consecutive 4 members {a,b,c,d} combined with like
+            // 2^24*(a mod 128) + 2^16*(b mod 256) + 256*(c mod 256) + (d mod 256).
             if (v == null)
             {
                 // Would we ever get here?
@@ -565,8 +599,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new Tuple_Struct {
-                    Attributes = new System.Collections.Generic
-                        .Dictionary<Tuple_Attr_Name,MD_Value>(),
+                    Degree = 0,
                 }
             } );
 
