@@ -33,6 +33,11 @@ Muldis.D.Ref\_Eng requires any version of C# that is at least 1.0 plus any
 version of the .Net Core framework that is at least 1.0 plus the
 appropriate runtime.  *(TODO: Check / flesh out the details of this.)*
 
+*Since this project was first created, a newer version of the .Net Core and
+tooling has been released, but this project will not currently work with
+that new version 1.1 without tweaks to its configuration files, which still
+specify version 1.0; a relevant configuration update is pending.*
+
 See [https://www.microsoft.com/net/core](https://www.microsoft.com/net/core)
 for instructions on how to install the dependencies.  These instructions
 are further interpreted in the following sections.
@@ -73,7 +78,8 @@ savvy or prefer other development environments; Visual Studio is optional.
 To build and run Muldis.D.Ref\_Eng on an Apple Mac OS, the following
 procedure has been successfully used by the author.
 
-1. Mac OS 10.9.5 was the foundation; other Mac OS versions weren't tried.
+1. Mac OS 10.9.5 was the foundation on the first try; Mac OS 10.12.1 was
+the foundation on the second try; other Mac OS versions weren't tried.
 
 2. Download and install the .Net Core SDK, which provides the command-line
 tool ```dotnet``` for building and running the C#/.Net code.  To be
