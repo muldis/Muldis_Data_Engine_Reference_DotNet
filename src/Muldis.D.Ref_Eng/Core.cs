@@ -430,10 +430,7 @@ namespace Muldis.D.Ref_Eng.Core
     // indexed collection.
     // The serialization format either is or resembles a Muldis D Plain Text
     // literal for selecting the value, in the form of character strings
-    // whose character codepoints are typically in the 0..127 range;
-    // when hashing this string we merge each 4 consecutive characters by
-    // catenation of each one's lower 8 bits so we can use millions of
-    // hash buckets rather than just about 64 buckets (#letters+digits).
+    // whose character codepoints are typically in the 0..127 range.
 
     public class MD_Value_Identity
     {
@@ -470,6 +467,13 @@ namespace Muldis.D.Ref_Eng.Core
             }
             return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
         }
+
+        // When hashing the string we merge each 4 consecutive characters by
+        // catenation of each one's lower 8 bits so we can use millions of
+        // hash buckets rather than just about 64 buckets (#letters+digits);
+        // however it doesn't resist degeneration of hash-based collections
+        // such as when many strings used as keys have just 8-character
+        // repetitions in the form ABCDABCD and so all resolve to bucket 0.
 
         public override System.Int32 GetHashCode(MD_Value_Identity v)
         {
