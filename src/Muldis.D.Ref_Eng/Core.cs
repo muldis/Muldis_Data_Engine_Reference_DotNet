@@ -428,6 +428,12 @@ namespace Muldis.D.Ref_Eng.Core
     // Normalized serialization of a Muldis D "value".  This is calculated
     // lazily if needed, typically when the "value" is a member of an
     // indexed collection.
+    // The serialization format either is or resembles a Muldis D Plain Text
+    // literal for selecting the value, in the form of character strings
+    // whose character codepoints are typically in the 0..127 range;
+    // when hashing this string we merge each 4 consecutive characters by
+    // catenation of each one's lower 8 bits so we can use millions of
+    // hash buckets rather than just about 64 buckets (#letters+digits).
 
     public class MD_Value_Identity
     {
@@ -467,13 +473,6 @@ namespace Muldis.D.Ref_Eng.Core
 
         public override System.Int32 GetHashCode(MD_Value_Identity v)
         {
-            // TODO: The current hashing algorithm would in practice not
-            // produce more than about 64 distinct values due to only the
-            // lowest 7 of the 32 bits tending to vary (#letters+digits);
-            // consider using a better hashing algorithm that uses the full
-            // 31/32 bits for better key/bucket distribution; for example,
-            // with each consecutive 4 members {a,b,c,d} combined with like
-            // 2^24*(a mod 128) + 2^16*(b mod 256) + 256*(c mod 256) + (d mod 256).
             if (v == null)
             {
                 // Would we ever get here?
@@ -484,9 +483,17 @@ namespace Muldis.D.Ref_Eng.Core
                 // We are assuming that all XOR operations on valid
                 // character codepoints would have a zero sign bit,
                 // and so -1 would never be a result of any XORing.
-                v.Cached_HashCode = System.Linq.Enumerable
-                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
-                    .GetHashCode();
+                v.Cached_HashCode = 0;
+                System.Int32[] members = v.Members.ToArray();
+                for (System.Int32 i = 0; i < members.Length; i += 4)
+                {
+                    System.Int32 chunk_size = System.Math.Min(4, members.Length - i);
+                    System.Int32 m1 =                  16777216 * (members[i  ] % 128);
+                    System.Int32 m2 = (chunk_size <= 2) ? 65536 * (members[i+1] % 256) : 0;
+                    System.Int32 m3 = (chunk_size <= 3) ?   256 * (members[i+2] % 256) : 0;
+                    System.Int32 m4 = (chunk_size <= 4) ?          members[i+3] % 256  : 0;
+                    v.Cached_HashCode = v.Cached_HashCode ^ (m1 + m2 + m3 + m4);
+                }
             }
             return v.Cached_HashCode;
         }
