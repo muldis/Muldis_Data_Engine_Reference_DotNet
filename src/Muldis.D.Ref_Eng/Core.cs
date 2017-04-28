@@ -12,8 +12,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Bag,
         MD_Tuple,
         MD_Capsule,
-        MD_Reference,
-        MD_External,
+        MD_Handle,
     };
 
     // Muldis.D.Ref_Eng.Core.MD_Value
@@ -33,6 +32,8 @@ namespace Muldis.D.Ref_Eng.Core
     // Similarly, proving equality of two "value" can often short-circuit.
     // While MD_Value are immutable from a user's perspective, their
     // components may in fact mutate for memory sharing or consolidating.
+    // Iff a Muldis D "value" is a "Handle" then it references something
+    // that possibly can mutate, such as a Muldis D "variable".
 
     public class MD_Value
     {
@@ -71,11 +72,8 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MDFT is MD_Capsule, this field is the payload.
         public Capsule_Struct MD_Capsule { get; set; }
 
-        // Iff MDFT is MD_Reference, this field is the payload.
-        public Reference_Struct MD_Reference { get; set; }
-
-        // Iff MDFT is MD_External, this field is the payload.
-        public External_Struct MD_External { get; set; }
+        // Iff MDFT is MD_Handle, this field is the payload.
+        public Handle_Struct MD_Handle { get; set; }
 
         // Normalized serialization of the Muldis D "value" that its host
         // Value_Struct represents.  This is calculated lazily if needed,
@@ -273,7 +271,7 @@ namespace Muldis.D.Ref_Eng.Core
         public System.Collections.Generic.List<Multiplied_Member> Local_Arrayed_Members { get; set; }
 
         // This field is used iff LST is Indexed.
-        // The Dictionary has one key-value pair for each distinct Muldis D
+        // The Dictionary has one key-asset pair for each distinct Muldis D
         // "value", all of which are indexed by Cached_MD_Value_Identity.
         public System.Collections.Generic
             .Dictionary<MD_Value_Identity,Multiplied_Member>
@@ -367,6 +365,8 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff Muldis D Tuple has attr named [], this field has its asset.
         // In a Package materials namespace, this name has special meaning.
+        // TODO: Probably fold this into Other_Attrs considering its use cases
+        // including it likely only used in same Tuple as other named attrs.
         public MD_Value Attr_Named_Empty_Str { get; set; }
 
         // Iff Muldis D Tuple has attr named [0], this field has its asset.
@@ -394,22 +394,58 @@ namespace Muldis.D.Ref_Eng.Core
 
     public class Capsule_Struct
     {
-        // The Muldis D value that is the "wrapper" of this MD_Capsule value.
-        public MD_Value Wrapper { get; set; }
+        // The Muldis D value that is the "label" of this MD_Capsule value.
+        public MD_Value Label { get; set; }
 
-        // The Muldis D value that is the "asset" of this MD_Capsule value.
-        public MD_Value Asset { get; set; }
+        // The Muldis D value that is the "attributes" of this MD_Capsule value.
+        public MD_Value Attrs { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Reference_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Reference,
-    // a Reference_Struct is used by it to hold the MD_Reference-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Handle_Type
+    // Enumerates the Muldis D Handle data types, which are for now mutually
+    // exclusive; every Muldis D Handle value is a member of exactly one of
+    // these, though that is subject to change in the future.
 
-    public class Reference_Struct
+    public enum MD_Handle_Type
     {
-        // The anonymous Muldis D "variable" that the MD_Reference value is
-        // an opaque and transient reference to.
-        public MD_Variable Target { get; set; }
+        MD_Variable,
+        MD_Process,
+        MD_Stream,
+        MD_External,
+    };
+
+    // Muldis.D.Ref_Eng.Core.Handle_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Handle,
+    // a Reference_Struct is used by it to hold the MD_Handle-specific details.
+
+    public class Handle_Struct
+    {
+        // Muldis D Handle data type (MDHT) this Handle "value" is a member of.
+        // This field determines how to interpret most of the other fields.
+        // Some of these types have their own subset of specialized
+        // representation formats for the sake of optimization.
+        public MD_Handle_Type MD_Handle_Type { get; set; }
+
+        // Iff MDHT is MD_Variable, this field is the payload.
+        public Variable_Struct MD_Variable { get; set; }
+
+        // TODO: MD_Process, MD_Stream.
+
+        // Iff MDHT is MD_External, this field is the payload.
+        public External_Struct MD_External { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.Variable_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Variable,
+    // a Variable_Struct is used by it to hold the MD_Variable-specific details.
+    // Represents a Muldis D "variable", which is a container for an
+    // appearance of a value.  A Muldis D variable can be created,
+    // destroyed, copied, and mutated.  A variable's fundamental identity
+    // is its address, its identity does not vary with what value appears there.
+
+    public class Variable_Struct
+    {
+        public MD_Value Current_Value { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.External_Struct
@@ -503,17 +539,6 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Variable
-    // Represents a Muldis D "variable", which is a container for an
-    // appearance of a value.  A Muldis D variable can be created,
-    // destroyed, copied, and mutated.  A variable's fundamental identity
-    // is its address, its identity does not vary with what value appears there.
-
-    public class MD_Variable
-    {
-        public MD_Value Current_Value { get; set; }
-    }
-
     // Muldis.D.Ref_Eng.Core.Memory
     // Provides a virtual machine memory pool where Muldis D values and
     // variables live, which exploits the "flyweight pattern" for
@@ -543,15 +568,8 @@ namespace Muldis.D.Ref_Eng.Core
         // MD_Tuple with no attributes (type default value).
         private readonly MD_Value _nullary_tuple;
 
-        // MD_Capsule with False wrapper and False asset (type default value).
-        private readonly MD_Value _false_false_capsule;
-
-        // MD_Reference targeting an implementation-decided example Muldis
-        // D variable that normal code wouldn't use (type default value).
-        private readonly MD_Value _reference_to_example_var;
-
-        // MD_External that is a C# null (type default value).
-        private readonly MD_Value _null_object_external;
+        // MD_Capsule with False label and no attributes (type default value).
+        private readonly MD_Value _false_nullary_capsule;
 
         public Memory ()
         {
@@ -614,30 +632,12 @@ namespace Muldis.D.Ref_Eng.Core
                 }
             } );
 
-            _false_false_capsule = _v( new Value_Struct {
+            _false_nullary_capsule = _v( new Value_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
                 MD_Capsule = new Capsule_Struct {
-                    Wrapper = _false,
-                    Asset = _false,
-                }
-            } );
-
-            _reference_to_example_var = _v( new Value_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Reference,
-                MD_Reference = new Reference_Struct {
-                    Target = new MD_Variable {
-                        Current_Value = _false,
-                    },
-                }
-            } );
-
-            _null_object_external = _v( new Value_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_External,
-                MD_External = new External_Struct {
-                    Value = null,
+                    Label = _false,
+                    Attrs = _nullary_tuple,
                 }
             } );
         }

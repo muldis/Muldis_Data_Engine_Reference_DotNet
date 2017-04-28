@@ -124,7 +124,7 @@ Darren Duncan - darren@DarrenDuncan.net
 
 # LICENSE AND COPYRIGHT
 
-Muldis.D.Ref\_Eng is Copyright © 2015-2016, Muldis Data Systems, Inc.
+Muldis.D.Ref\_Eng is Copyright © 2015-2017, Muldis Data Systems, Inc.
 
 [http://www.muldis.com/](http://www.muldis.com/)
 
@@ -133,7 +133,7 @@ it under the terms of the GNU Lesser General Public License (LGPL) as
 published by the Free Software Foundation
 ([http://www.fsf.org/](http://www.fsf.org/)); either
 version 3 of the License, or (at your option) any later version.  You
-should have received a copy of the LGPL as part of the Muldis.D.Ref_Eng
+should have received a copy of the LGPL as part of the Muldis.D.Ref\_Eng
 distribution, in the files named "LICENSE/LGPL" and "LICENSE/GPL" (the
 LGPLv3 is defined as the terms of the GPLv3 plus extra permissions); if
 not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
@@ -146,7 +146,7 @@ is still possible for you to employ Muldis.D.Ref\_Eng to meet your needs.
 Any versions of Muldis.D.Ref\_Eng that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
 changes, in addition to preserving this original copyright notice and other
-credits.  Muldis.D.Ref_Eng is distributed in the hope that it will be
+credits.  Muldis.D.Ref\_Eng is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
