@@ -1,3 +1,5 @@
+using Util = Muldis.D.Ref_Eng.Util;
+
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
@@ -78,7 +80,10 @@ namespace Muldis.D.Ref_Eng.Core
         // Normalized serialization of the Muldis D "value" that its host
         // Value_Struct represents.  This is calculated lazily if needed,
         // typically when the "value" is a member of an indexed collection.
-        public MD_Value_Identity Cached_MD_Value_Identity { get; set; }
+        // The serialization format either is or resembles a Muldis D Plain Text
+        // literal for selecting the value, in the form of character strings
+        // whose character codepoints are typically in the 0..127 range.
+        public Util.Codepoint_Array Cached_MD_Value_Identity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -116,22 +121,6 @@ namespace Muldis.D.Ref_Eng.Core
     public class Array_Octet
     {
         public System.Collections.Generic.List<System.Byte> Members { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.Array_Codepoint
-    // Represents a Muldis D Array value where each member value is
-    // a Muldis D Integer in the range 0..0x7FFFFFFF.
-    // An Array_Codepoint is the simplest storage representation for that
-    // type which doesn't internally use trees for sharing or multipliers.
-    // This is the canonical storage type for a regular character string.
-
-    public class Array_Codepoint
-    {
-        public System.Collections.Generic.List<System.Int32> Members { get; set; }
-        // TODO: Consider caching alternate formats, such as C# string or
-        // UTF-8 octets as byte[], to avoid unnecessary conversions;
-        // however those alternatives will only work for Unicode proper,
-        // and not supersets that we otherwise support.
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Node
@@ -177,7 +166,12 @@ namespace Muldis.D.Ref_Eng.Core
         public Array_Octet Local_Octet_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
-        public Array_Codepoint Local_Codepoint_Members { get; set; }
+        // Represents a Muldis D Array value where each member value is
+        // a Muldis D Integer in the range 0..0x7FFFFFFF.
+        // A Codepoint_Array is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        // This is the canonical storage type for a regular character string.
+        public Util.Codepoint_Array Local_Codepoint_Members { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
@@ -274,7 +268,7 @@ namespace Muldis.D.Ref_Eng.Core
         // The Dictionary has one key-asset pair for each distinct Muldis D
         // "value", all of which are indexed by Cached_MD_Value_Identity.
         public System.Collections.Generic
-            .Dictionary<MD_Value_Identity,Multiplied_Member>
+            .Dictionary<Util.Codepoint_Array,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
@@ -284,68 +278,6 @@ namespace Muldis.D.Ref_Eng.Core
         // This field is used iff LST is one of
         // {Member_Plus, Except, Intersect, Union, Exclusive}.
         public Bag_Node Extra_Arg { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.Tuple_Attr_Name
-    // Represents a Muldis D Tuple attribute name which is a string where
-    // each member is a Muldis D Integer in the range 0..0x7FFFFFFF.
-    // The associated Tuple_Attr_Name_Comparer class exists to simplify
-    // using Tuple_Attr_Name objects as C# Dictionary keys.
-
-    public class Tuple_Attr_Name
-    {
-        public System.Collections.Generic.List<System.Int32> Members { get; set; }
-
-        public System.Int32 Cached_HashCode { get; set; } = -1;
-    }
-
-    public class Tuple_Attr_Name_Comparer
-        : System.Collections.Generic.EqualityComparer<Tuple_Attr_Name>
-    {
-        public override System.Boolean Equals(Tuple_Attr_Name v1, Tuple_Attr_Name v2)
-        {
-            if (v1 == null && v2 == null)
-            {
-                // Would we ever get here?
-                return true;
-            }
-            if (v1 == null || v2 == null)
-            {
-                return false;
-            }
-            if (System.Object.ReferenceEquals(v1, v2))
-            {
-                return true;
-            }
-            if (v1.Members.Count != v2.Members.Count)
-            {
-                return false;
-            }
-            if (v1.Members.Count == 0)
-            {
-                return true;
-            }
-            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
-        }
-
-        public override System.Int32 GetHashCode(Tuple_Attr_Name v)
-        {
-            if (v == null)
-            {
-                // Would we ever get here?
-                return 0;
-            }
-            if (v.Cached_HashCode == -1)
-            {
-                // We are assuming that all XOR operations on valid
-                // character codepoints would have a zero sign bit,
-                // and so -1 would never be a result of any XORing.
-                v.Cached_HashCode = System.Linq.Enumerable
-                    .Aggregate(v.Members, 0, (m1, m2) => m1 ^ m2)
-                    .GetHashCode();
-            }
-            return v.Cached_HashCode;
-        }
     }
 
     // Muldis.D.Ref_Eng.Core.Tuple_Struct
@@ -384,7 +316,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff Muldis D Tuple has at least 1 attribute with some other name
         // than the ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        public System.Collections.Generic.Dictionary<Tuple_Attr_Name,MD_Value>
+        public System.Collections.Generic.Dictionary<Util.Codepoint_Array,MD_Value>
             Other_Attrs { get; set; }
     }
 
@@ -458,85 +390,6 @@ namespace Muldis.D.Ref_Eng.Core
         // D language environment, which the MD_External value is an opaque
         // and transient reference to.
         public System.Object Value { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Value_Identity
-    // Normalized serialization of a Muldis D "value".  This is calculated
-    // lazily if needed, typically when the "value" is a member of an
-    // indexed collection.
-    // The serialization format either is or resembles a Muldis D Plain Text
-    // literal for selecting the value, in the form of character strings
-    // whose character codepoints are typically in the 0..127 range.
-
-    public class MD_Value_Identity
-    {
-        public System.Collections.Generic.List<System.Int32> Members { get; set; }
-
-        public System.Int32 Cached_HashCode { get; set; } = -1;
-    }
-
-    public class MD_Value_Identity_Comparer
-        : System.Collections.Generic.EqualityComparer<MD_Value_Identity>
-    {
-        public override System.Boolean Equals(MD_Value_Identity v1, MD_Value_Identity v2)
-        {
-            if (v1 == null && v2 == null)
-            {
-                // Would we ever get here?
-                return true;
-            }
-            if (v1 == null || v2 == null)
-            {
-                return false;
-            }
-            if (System.Object.ReferenceEquals(v1, v2))
-            {
-                return true;
-            }
-            if (v1.Members.Count != v2.Members.Count)
-            {
-                return false;
-            }
-            if (v1.Members.Count == 0)
-            {
-                return true;
-            }
-            return System.Linq.Enumerable.SequenceEqual(v1.Members, v2.Members);
-        }
-
-        // When hashing the string we merge each 4 consecutive characters by
-        // catenation of each one's lower 8 bits so we can use millions of
-        // hash buckets rather than just about 64 buckets (#letters+digits);
-        // however it doesn't resist degeneration of hash-based collections
-        // such as when many strings used as keys have just 8-character
-        // repetitions in the form ABCDABCD and so all resolve to bucket 0.
-
-        public override System.Int32 GetHashCode(MD_Value_Identity v)
-        {
-            if (v == null)
-            {
-                // Would we ever get here?
-                return 0;
-            }
-            if (v.Cached_HashCode == -1)
-            {
-                // We are assuming that all XOR operations on valid
-                // character codepoints would have a zero sign bit,
-                // and so -1 would never be a result of any XORing.
-                v.Cached_HashCode = 0;
-                System.Int32[] members = v.Members.ToArray();
-                for (System.Int32 i = 0; i < members.Length; i += 4)
-                {
-                    System.Int32 chunk_size = System.Math.Min(4, members.Length - i);
-                    System.Int32 m1 =                  16777216 * (members[i  ] % 128);
-                    System.Int32 m2 = (chunk_size <= 2) ? 65536 * (members[i+1] % 256) : 0;
-                    System.Int32 m3 = (chunk_size <= 3) ?   256 * (members[i+2] % 256) : 0;
-                    System.Int32 m4 = (chunk_size <= 4) ?          members[i+3] % 256  : 0;
-                    v.Cached_HashCode = v.Cached_HashCode ^ (m1 + m2 + m3 + m4);
-                }
-            }
-            return v.Cached_HashCode;
-        }
     }
 
     // Muldis.D.Ref_Eng.Core.Memory

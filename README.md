@@ -25,6 +25,8 @@ The Muldis D language itself has as a primary influence the work of Chris
 Date (C.J. Date) and Hugh Darwen whose home website is
 [http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
 
+*TODO: Consider naming this project with "DotNet" rather than "CSharp".*
+
 *This documentation is pending.*
 
 # DEPENDENCIES

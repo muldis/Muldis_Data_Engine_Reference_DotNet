@@ -1,3 +1,6 @@
+using Core = Muldis.D.Ref_Eng.Core;
+using Util = Muldis.D.Ref_Eng.Util;
+
 [assembly: System.CLSCompliant(true)]
 
 namespace Muldis.D.Ref_Eng.API
