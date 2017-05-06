@@ -1,7 +1,7 @@
 # NAME
 
 Muldis.D.Ref\_Eng -
-Reference Implementation of Muldis D Over C#
+Reference Implementation of Muldis D Over .Net
 
 # VERSION
 
@@ -25,13 +25,11 @@ The Muldis D language itself has as a primary influence the work of Chris
 Date (C.J. Date) and Hugh Darwen whose home website is
 [http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
 
-*TODO: Consider naming this project with "DotNet" rather than "CSharp".*
-
 *This documentation is pending.*
 
 # DEPENDENCIES
 
-Muldis.D.Ref\_Eng requires any version of C# that is at least 1.0 plus any
+Muldis.D.Ref\_Eng requires any version of .Net that is at least 1.0 plus any
 version of the .Net Core framework that is at least 1.0 plus the
 appropriate runtime.  *(TODO: Check / flesh out the details of this.)*
 
@@ -84,7 +82,7 @@ procedure has been successfully used by the author.
 the foundation on the second try; other Mac OS versions weren't tried.
 
 2. Download and install the .Net Core SDK, which provides the command-line
-tool ```dotnet``` for building and running the C#/.Net code.  To be
+tool ```dotnet``` for building and running the .Net code.  To be
 specific, ```dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg``` was the
 installer used by the author.
 
