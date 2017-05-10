@@ -10,14 +10,14 @@ namespace Muldis.D.Ref_Eng.Util
     // Conceptually an ordered sequence of System.Int32 and actually either
     // that or one of several alternate storage foramts.
 
-    public class Codepoint_Array
+    internal class Codepoint_Array
     {
-        public System.Collections.Generic.List<System.Int32> As_List { get; set; }
+        internal System.Collections.Generic.List<System.Int32> As_List { get; set; }
 
-        public System.Nullable<System.Int32> Cached_HashCode { get; set; }
+        internal System.Nullable<System.Int32> Cached_HashCode { get; set; }
     }
 
-    public class Codepoint_Array_Comparer
+    internal class Codepoint_Array_Comparer
         : System.Collections.Generic.EqualityComparer<Codepoint_Array>
     {
         public override System.Boolean Equals(Codepoint_Array v1, Codepoint_Array v2)
