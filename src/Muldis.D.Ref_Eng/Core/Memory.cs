@@ -12,155 +12,150 @@ namespace Muldis.D.Ref_Eng.Core
     internal class Memory
     {
         // MD_Boolean False (type default value) and True values.
-        private readonly MD_Value _false;
-        private readonly MD_Value _true;
+        private readonly MD_Any m_false;
+        private readonly MD_Any m_true;
 
         // MD_Integer 0 (type default value) and 1 and -1 values.
-        private readonly MD_Value _zero;
-        private readonly MD_Value _one;
-        private readonly MD_Value _neg_one;
+        private readonly MD_Any m_zero;
+        private readonly MD_Any m_one;
+        private readonly MD_Any m_neg_one;
 
         // MD_Array with no members (type default value).
-        private readonly MD_Value _empty_array;
+        private readonly MD_Any m_empty_array;
 
         // MD_Bag with no members (type default value).
-        private readonly MD_Value _empty_bag;
+        private readonly MD_Any m_empty_bag;
 
         // MD_Tuple with no attributes (type default value).
-        private readonly MD_Value _nullary_tuple;
+        private readonly MD_Any m_nullary_tuple;
 
         // MD_Capsule with False label and no attributes (type default value).
-        private readonly MD_Value _false_nullary_capsule;
+        private readonly MD_Any m_false_nullary_capsule;
 
         internal Memory ()
         {
-            _false = _v( new Value_Struct {
+            m_false = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = false,
-            } );
+            } };
 
-            _true = _v( new Value_Struct {
+            m_true = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = true,
-            } );
+            } };
 
-            _zero = _v( new Value_Struct {
+            m_zero = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = 0,
-            } );
+            } };
 
-            _one = _v( new Value_Struct {
+            m_one = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = 1,
-            } );
+            } };
 
-            _neg_one = _v( new Value_Struct {
+            m_neg_one = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = -1,
-            } );
+            } };
 
-            _empty_array = _v( new Value_Struct {
+            m_empty_array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new Array_Node {
+                MD_Array = new MD_Array_Node {
                     Tree_Member_Count = 0,
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
                 }
-            } );
+            } };
 
-            _empty_bag = _v( new Value_Struct {
+            m_empty_bag = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                MD_Bag = new Bag_Node {
+                MD_Bag = new MD_Bag_Node {
                     Tree_Member_Count = 0,
                     Local_Symbolic_Type = Symbolic_Value_Type.None,
                     Local_Member_Count = 0,
                 }
-            } );
+            } };
 
-            _nullary_tuple = _v( new Value_Struct {
+            m_nullary_tuple = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new Tuple_Struct {
+                MD_Tuple = new MD_Tuple_Struct {
                     Degree = 0,
                 }
-            } );
+            } };
 
-            _false_nullary_capsule = _v( new Value_Struct {
+            m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
-                MD_Capsule = new Capsule_Struct {
-                    Label = _false,
-                    Attrs = _nullary_tuple,
+                MD_Capsule = new MD_Capsule_Struct {
+                    Label = m_false,
+                    Attrs = m_nullary_tuple,
                 }
-            } );
+            } };
         }
 
-        private MD_Value _v (Value_Struct vs)
+        internal MD_Any MD_Boolean (System.Boolean value)
         {
-            return new MD_Value { VS = vs };
+            return value ? m_true : m_false;
         }
 
-        internal MD_Value MD_Boolean (System.Boolean value)
+        internal System.Boolean MD_Boolean_as_Boolean (MD_Any value)
         {
-            return value ? _true : _false;
-        }
-
-        internal System.Boolean MD_Boolean_as_Boolean (MD_Value value)
-        {
-            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.MD_Boolean)
+            if (value.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Boolean)
             {
                 throw new System.ArgumentException
                 (
                     paramName: "value",
-                    message: "MD_Value is not a Muldis D Boolean"
+                    message: "MD_Any is not a Muldis D Boolean"
                 );
             }
-            return value.VS.MD_Boolean;
+            return value.AS.MD_Boolean;
         }
 
-        internal MD_Value MD_Integer (System.Numerics.BigInteger value)
+        internal MD_Any MD_Integer (System.Numerics.BigInteger value)
         {
             if (value == 0)
             {
-                return _zero;
+                return m_zero;
             }
             else if (value == 1)
             {
-                return _one;
+                return m_one;
             }
             else if (value == -1)
             {
-                return _neg_one;
+                return m_neg_one;
             }
             else
             {
-                return _v( new Value_Struct {
+                return new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
                     MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                     MD_Integer = value,
-                } );
+                } };
             }
         }
 
-        internal System.Numerics.BigInteger MD_Integer_as_BigInteger (MD_Value value)
+        internal System.Numerics.BigInteger MD_Integer_as_BigInteger (MD_Any value)
         {
-            if (value.VS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
+            if (value.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
             {
                 throw new System.ArgumentException
                 (
                     paramName: "value",
-                    message: "MD_Value is not a Muldis D Integer"
+                    message: "MD_Any is not a Muldis D Integer"
                 );
             }
-            return value.VS.MD_Integer;
+            return value.AS.MD_Integer;
         }
     }
 }

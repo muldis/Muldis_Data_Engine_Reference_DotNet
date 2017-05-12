@@ -15,32 +15,32 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Handle,
     };
 
-    // Muldis.D.Ref_Eng.Core.MD_Value
+    // Muldis.D.Ref_Eng.Core.MD_Any
     // Represents a Muldis D "value", which is an individual constant that
     // is not fixed in time or space.  Every Muldis D value is unique,
     // eternal, and immutable; it has no address and can not be updated.
-    // Several distinct MD_Value objects may denote the same Muldis D
-    // "value"; however, any time that two MD_Value are discovered to
+    // Several distinct MD_Any objects may denote the same Muldis D
+    // "value"; however, any time that two MD_Any are discovered to
     // denote the same Muldis D value, any references to one may be safely
     // replaced by references to the other.
-    // As a primary aid in implementing the "flyweight pattern", a MD_Value
+    // As a primary aid in implementing the "flyweight pattern", a MD_Any
     // object is actually a lightweight "value handle" pointing to a
     // separate "value struct" object with its components; this allows us
     // to get as close as easily possible to replacing references to one
-    // MD_Value with another where the underlying virtual machine or
+    // MD_Any with another where the underlying virtual machine or
     // garbage collector doesn't natively provide that ability.
     // Similarly, proving equality of two "value" can often short-circuit.
-    // While MD_Value are immutable from a user's perspective, their
+    // While MD_Any are immutable from a user's perspective, their
     // components may in fact mutate for memory sharing or consolidating.
     // Iff a Muldis D "value" is a "Handle" then it references something
     // that possibly can mutate, such as a Muldis D "variable".
 
-    internal class MD_Value
+    internal class MD_Any
     {
-        internal Value_Struct VS { get; set; }
+        internal MD_Any_Struct AS { get; set; }
     }
 
-    internal class Value_Struct
+    internal class MD_Any_Struct
     {
         // Memory pool this Muldis D "value" lives in.
         internal Memory Memory { get; set; }
@@ -61,27 +61,27 @@ namespace Muldis.D.Ref_Eng.Core
         internal System.Numerics.BigInteger MD_Integer { get; set; }
 
         // Iff MDFT is MD_Array, this field is the payload.
-        internal Array_Node MD_Array { get; set; }
+        internal MD_Array_Node MD_Array { get; set; }
 
         // Iff MDFT is MD_Bag, this field is the payload.
-        internal Bag_Node MD_Bag { get; set; }
+        internal MD_Bag_Node MD_Bag { get; set; }
 
         // Iff MDFT is MD_Tuple, this field is the payload.
-        internal Tuple_Struct MD_Tuple { get; set; }
+        internal MD_Tuple_Struct MD_Tuple { get; set; }
 
         // Iff MDFT is MD_Capsule, this field is the payload.
-        internal Capsule_Struct MD_Capsule { get; set; }
+        internal MD_Capsule_Struct MD_Capsule { get; set; }
 
         // Iff MDFT is MD_Handle, this field is the payload.
-        internal Handle_Struct MD_Handle { get; set; }
+        internal MD_Handle_Struct MD_Handle { get; set; }
 
         // Normalized serialization of the Muldis D "value" that its host
-        // Value_Struct represents.  This is calculated lazily if needed,
+        // MD_Any_Struct represents.  This is calculated lazily if needed,
         // typically when the "value" is a member of an indexed collection.
         // The serialization format either is or resembles a Muldis D Plain Text
         // literal for selecting the value, in the form of character strings
         // whose character codepoints are typically in the 0..127 range.
-        internal Codepoint_Array Cached_MD_Value_Identity { get; set; }
+        internal Codepoint_Array Cached_MD_Any_Identity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -98,15 +98,15 @@ namespace Muldis.D.Ref_Eng.Core
         Codepoint,
     }
 
-    // Muldis.D.Ref_Eng.Core.Array_MD_Value
+    // Muldis.D.Ref_Eng.Core.MD_Array_MD_Any
     // Represents a Muldis D Array value where each member value is
     // unrestricted in allowed type.
-    // An Array_MD_Value is the simplest storage representation for that
+    // An MD_Array_MD_Any is the simplest storage representation for that
     // type which doesn't internally use trees for sharing or multipliers.
 
-    internal class Array_MD_Value
+    internal class MD_Array_MD_Any
     {
-        internal System.Collections.Generic.List<MD_Value> Members { get; set; }
+        internal System.Collections.Generic.List<MD_Any> Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Octet
@@ -116,26 +116,26 @@ namespace Muldis.D.Ref_Eng.Core
     // type which doesn't internally use trees for sharing or multipliers.
     // This is the canonical storage type for a regular octet (byte) string.
 
-    internal class Array_Octet
+    internal class MD_Array_Octet
     {
         internal System.Collections.Generic.List<System.Byte> Members { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Array_Node
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Array,
-    // an Array_Node is used by it to hold the MD_Array-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Array_Node
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
+    // an MD_Array_Node is used by it to hold the MD_Array-specific details.
     // It takes the form of a tree of its own kind to aid in reusability
     // of common substrings of members of distinct MD_Array values;
     // the actual members of the MD_Array value are, in order, any members
     // specified by Pred_Members, then any Local_*_Members, then
-    // Succ_Members.  An Array_Node also uses run-length encoding to
+    // Succ_Members.  An MD_Array_Node also uses run-length encoding to
     // optimize storage, such that the actual "local" members of a node are
     // defined as the sequence in Local_*_Members repeated the number of
     // times specified by Local_Multiplicity.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
 
-    internal class Array_Node
+    internal class MD_Array_Node
     {
         // Cached count of members of the Muldis D Array represented by
         // this tree node including those defined by it and child nodes.
@@ -158,10 +158,10 @@ namespace Muldis.D.Ref_Eng.Core
         internal Widest_Component_Type Local_Widest_Type { get; set; }
 
         // Iff LWT is Unrestricted, this field is the payload.
-        internal Array_MD_Value Local_Unrestricted_Members { get; set; }
+        internal MD_Array_MD_Any Local_Unrestricted_Members { get; set; }
 
         // Iff LWT is Octet, this field is the payload.
-        internal Array_Octet Local_Octet_Members { get; set; }
+        internal MD_Array_Octet Local_Octet_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
@@ -173,11 +173,11 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
-        internal Array_Node Pred_Members { get; set; }
+        internal MD_Array_Node Pred_Members { get; set; }
 
         // Iff there is at least 1 successor member of the "local" ones,
         // this subtree says what they are.
-        internal Array_Node Succ_Members { get; set; }
+        internal MD_Array_Node Succ_Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Symbolic_Value_Type
@@ -208,22 +208,22 @@ namespace Muldis.D.Ref_Eng.Core
     internal class Multiplied_Member
     {
         // The Muldis D value that every member of this multiset is.
-        internal MD_Value Member { get; set; }
+        internal MD_Any Member { get; set; }
 
         // The count of members of this multiset.
         internal System.Int64 Multiplicity { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Bag_Node
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Bag,
-    // a Bag_Node is used by it to hold the MD_Bag-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Bag_Node
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Bag,
+    // a MD_Bag_Node is used by it to hold the MD_Bag-specific details.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
     // Note that MD_Bag is the most complicated Muldis D Foundation type to
     // implement while at the same time is the least critical to the
     // internals; it is mainly just used for user data.
 
-    internal class Bag_Node
+    internal class MD_Bag_Node
     {
         // Cached count of members of the Muldis D Bag represented by
         // this tree node including those defined by it and child nodes.
@@ -264,31 +264,31 @@ namespace Muldis.D.Ref_Eng.Core
 
         // This field is used iff LST is Indexed.
         // The Dictionary has one key-asset pair for each distinct Muldis D
-        // "value", all of which are indexed by Cached_MD_Value_Identity.
+        // "value", all of which are indexed by Cached_MD_Any_Identity.
         internal System.Collections.Generic
             .Dictionary<Codepoint_Array,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
         // Member_Plus, Except, Intersect, Union, Exclusive}.
-        internal Bag_Node Primary_Arg { get; set; }
+        internal MD_Bag_Node Primary_Arg { get; set; }
 
         // This field is used iff LST is one of
         // {Member_Plus, Except, Intersect, Union, Exclusive}.
-        internal Bag_Node Extra_Arg { get; set; }
+        internal MD_Bag_Node Extra_Arg { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Tuple_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Tuple,
-    // a Tuple_Struct is used by it to hold the MD_Tuple-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Tuple_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Tuple,
+    // a MD_Tuple_Struct is used by it to hold the MD_Tuple-specific details.
     // For efficiency, a few most-commonly used Muldis D Tuple attribute
-    // names have their own corresponding Tuple_Struct fields, while the
+    // names have their own corresponding MD_Tuple_Struct fields, while the
     // long tail of remaining possible but less often used names don't.
     // For example, all routine argument lists of degree 0..3 with just
     // conceptually-ordered arguments are fully covered with said few,
     // including nearly all routines of the Muldis D Standard Library.
 
-    internal class Tuple_Struct
+    internal class MD_Tuple_Struct
     {
         // Cached count of attributes of the Muldis D Tuple.
         internal System.Int32 Degree { get; set; }
@@ -297,38 +297,38 @@ namespace Muldis.D.Ref_Eng.Core
         // In a Package materials namespace, this name has special meaning.
         // TODO: Probably fold this into Other_Attrs considering its use cases
         // including it likely only used in same Tuple as other named attrs.
-        internal MD_Value Attr_Named_Empty_Str { get; set; }
+        internal MD_Any Attr_Named_Empty_Str { get; set; }
 
         // Iff Muldis D Tuple has attr named [0], this field has its asset.
         // This is the canonical name of a first conceptually-ordered attr.
-        internal MD_Value Attr_Named_0 { get; set; }
+        internal MD_Any Attr_Named_0 { get; set; }
 
         // Iff Muldis D Tuple has attr named [1], this field has its asset.
         // This is the canonical name of a second conceptually-ordered attr.
-        internal MD_Value Attr_Named_1 { get; set; }
+        internal MD_Any Attr_Named_1 { get; set; }
 
         // Iff Muldis D Tuple has attr named [2], this field has its asset.
         // This is the canonical name of a third conceptually-ordered attr.
-        internal MD_Value Attr_Named_2 { get; set; }
+        internal MD_Any Attr_Named_2 { get; set; }
 
         // Iff Muldis D Tuple has at least 1 attribute with some other name
         // than the ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        internal System.Collections.Generic.Dictionary<Codepoint_Array,MD_Value>
+        internal System.Collections.Generic.Dictionary<Codepoint_Array,MD_Any>
             Other_Attrs { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Capsule_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Capsule,
-    // a Capsule_Struct is used by it to hold the MD_Capsule-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Capsule,
+    // a MD_Capsule_Struct is used by it to hold the MD_Capsule-specific details.
 
-    internal class Capsule_Struct
+    internal class MD_Capsule_Struct
     {
         // The Muldis D value that is the "label" of this MD_Capsule value.
-        internal MD_Value Label { get; set; }
+        internal MD_Any Label { get; set; }
 
         // The Muldis D value that is the "attributes" of this MD_Capsule value.
-        internal MD_Value Attrs { get; set; }
+        internal MD_Any Attrs { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Handle_Type
@@ -344,11 +344,11 @@ namespace Muldis.D.Ref_Eng.Core
         MD_External,
     };
 
-    // Muldis.D.Ref_Eng.Core.Handle_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Handle,
-    // a Reference_Struct is used by it to hold the MD_Handle-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Handle_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Handle,
+    // a MD_Reference_Struct is used by it to hold the MD_Handle-specific details.
 
-    internal class Handle_Struct
+    internal class MD_Handle_Struct
     {
         // Muldis D Handle data type (MDHT) this Handle "value" is a member of.
         // This field determines how to interpret most of the other fields.
@@ -357,32 +357,32 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Handle_Type MD_Handle_Type { get; set; }
 
         // Iff MDHT is MD_Variable, this field is the payload.
-        internal Variable_Struct MD_Variable { get; set; }
+        internal MD_Variable_Struct MD_Variable { get; set; }
 
         // TODO: MD_Process, MD_Stream.
 
         // Iff MDHT is MD_External, this field is the payload.
-        internal External_Struct MD_External { get; set; }
+        internal MD_External_Struct MD_External { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Variable_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_Variable,
-    // a Variable_Struct is used by it to hold the MD_Variable-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Variable_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Variable,
+    // a MD_Variable_Struct is used by it to hold the MD_Variable-specific details.
     // Represents a Muldis D "variable", which is a container for an
     // appearance of a value.  A Muldis D variable can be created,
     // destroyed, copied, and mutated.  A variable's fundamental identity
     // is its address, its identity does not vary with what value appears there.
 
-    internal class Variable_Struct
+    internal class MD_Variable_Struct
     {
-        internal MD_Value Current_Value { get; set; }
+        internal MD_Any Current_Value { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.External_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Value is representing a MD_External,
-    // a External_Struct is used by it to hold the MD_External-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_External_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_External,
+    // a MD_External_Struct is used by it to hold the MD_External-specific details.
 
-    internal class External_Struct
+    internal class MD_External_Struct
     {
         // The entity that is defined and managed externally to the Muldis
         // D language environment, which the MD_External value is an opaque
