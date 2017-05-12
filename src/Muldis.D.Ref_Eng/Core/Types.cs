@@ -1,5 +1,3 @@
-using Util = Muldis.D.Ref_Eng.Util;
-
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
@@ -83,7 +81,7 @@ namespace Muldis.D.Ref_Eng.Core
         // The serialization format either is or resembles a Muldis D Plain Text
         // literal for selecting the value, in the form of character strings
         // whose character codepoints are typically in the 0..127 range.
-        internal Util.Codepoint_Array Cached_MD_Value_Identity { get; set; }
+        internal Codepoint_Array Cached_MD_Value_Identity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -171,7 +169,7 @@ namespace Muldis.D.Ref_Eng.Core
         // A Codepoint_Array is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular character string.
-        internal Util.Codepoint_Array Local_Codepoint_Members { get; set; }
+        internal Codepoint_Array Local_Codepoint_Members { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
@@ -268,7 +266,7 @@ namespace Muldis.D.Ref_Eng.Core
         // The Dictionary has one key-asset pair for each distinct Muldis D
         // "value", all of which are indexed by Cached_MD_Value_Identity.
         internal System.Collections.Generic
-            .Dictionary<Util.Codepoint_Array,Multiplied_Member>
+            .Dictionary<Codepoint_Array,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
@@ -316,7 +314,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff Muldis D Tuple has at least 1 attribute with some other name
         // than the ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        internal System.Collections.Generic.Dictionary<Util.Codepoint_Array,MD_Value>
+        internal System.Collections.Generic.Dictionary<Codepoint_Array,MD_Value>
             Other_Attrs { get; set; }
     }
 

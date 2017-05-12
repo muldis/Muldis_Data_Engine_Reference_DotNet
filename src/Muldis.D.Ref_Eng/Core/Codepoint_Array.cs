@@ -1,6 +1,6 @@
-namespace Muldis.D.Ref_Eng.Util
+namespace Muldis.D.Ref_Eng.Core
 {
-    // Muldis.D.Ref_Eng.Util.Codepoint_Array
+    // Muldis.D.Ref_Eng.Core.Codepoint_Array
     // This type is for internal use only.
     // Conceptually an Array of Unicode character codepoints, but also
     // supports non-Unicode codepoints, integers in the range 0..0x7FFFFFFF.

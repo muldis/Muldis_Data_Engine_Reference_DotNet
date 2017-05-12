@@ -1,5 +1,3 @@
-using Util = Muldis.D.Ref_Eng.Util;
-
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.Memory
