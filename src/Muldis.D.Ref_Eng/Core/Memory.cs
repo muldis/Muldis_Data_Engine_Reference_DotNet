@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.Memory
@@ -121,7 +123,7 @@ namespace Muldis.D.Ref_Eng.Core
             return value.AS.MD_Boolean;
         }
 
-        internal MD_Any MD_Integer (System.Numerics.BigInteger value)
+        internal MD_Any MD_Integer (BigInteger value)
         {
             if (value == 0)
             {
@@ -145,7 +147,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
         }
 
-        internal System.Numerics.BigInteger MD_Integer_as_BigInteger (MD_Any value)
+        internal BigInteger MD_Integer_as_BigInteger (MD_Any value)
         {
             if (value.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
             {

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
@@ -58,7 +61,7 @@ namespace Muldis.D.Ref_Eng.Core
         // While we conceptually could special case smaller integers with
         // additional fields for performance, we won't, mainly to keep
         // things simpler, and because BigInteger special-cases internally.
-        internal System.Numerics.BigInteger MD_Integer { get; set; }
+        internal BigInteger MD_Integer { get; set; }
 
         // Iff MDFT is MD_Array, this field is the payload.
         internal MD_Array_Node MD_Array { get; set; }
@@ -106,7 +109,7 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class MD_Array_MD_Any
     {
-        internal System.Collections.Generic.List<MD_Any> Members { get; set; }
+        internal List<MD_Any> Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Array_Octet
@@ -118,7 +121,7 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class MD_Array_Octet
     {
-        internal System.Collections.Generic.List<System.Byte> Members { get; set; }
+        internal List<System.Byte> Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Node
@@ -260,13 +263,12 @@ namespace Muldis.D.Ref_Eng.Core
         internal Multiplied_Member Local_Singular_Members { get; set; }
 
         // This field is used iff LST is Arrayed.
-        internal System.Collections.Generic.List<Multiplied_Member> Local_Arrayed_Members { get; set; }
+        internal List<Multiplied_Member> Local_Arrayed_Members { get; set; }
 
         // This field is used iff LST is Indexed.
         // The Dictionary has one key-asset pair for each distinct Muldis D
         // "value", all of which are indexed by Cached_MD_Any_Identity.
-        internal System.Collections.Generic
-            .Dictionary<Codepoint_Array,Multiplied_Member>
+        internal Dictionary<Codepoint_Array,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
@@ -314,8 +316,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff Muldis D Tuple has at least 1 attribute with some other name
         // than the ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        internal System.Collections.Generic.Dictionary<Codepoint_Array,MD_Any>
-            Other_Attrs { get; set; }
+        internal Dictionary<Codepoint_Array,MD_Any> Other_Attrs { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct
