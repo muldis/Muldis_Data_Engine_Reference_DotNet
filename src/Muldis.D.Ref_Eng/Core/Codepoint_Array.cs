@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Muldis.D.Ref_Eng.Core
 {
     // Muldis.D.Ref_Eng.Core.Codepoint_Array
-    // This type is for internal use only.
-    // Conceptually an Array of Unicode character codepoints, but also
-    // supports non-Unicode codepoints, integers in the range 0..0x7FFFFFFF.
+    // Conceptually an Array of Unicode standard character codepoints,
+    // integers in the set {0..0xD7FF,0xE000..0x10FFFF},
+    // but additionally supports non-Unicode codepoints,
+    // integers in the set {0xD800..0xDFFF,0x110000..0x7FFFFFFF}.
     // Used to represent a Muldis D Tuple attribute name, any unqualified identifier.
     // Used as canonical storage type for a Muldis D Text value / a regular character string.
     // Used as internal generic Muldis D value serialization format for indexing.
@@ -16,9 +18,110 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class Codepoint_Array
     {
-        internal List<Int32> As_List { get; set; }
+        // Array of System.Int32
+        // This option supports any codepoints in the 31-bit range 0..0x7FFFFFFF.
+        internal List<Int32> Maybe_As_List { get; set; }
+
+        // System.String aka Array of System.Char
+        // This option is the one used preferentially in the general case,
+        // except in special cases where the List form is known to be better.
+        // This option supports any codepoints representable by UTF-16,
+        // in the 21-bit range 0..0x10FFFF, which includes all of the
+        // official Unicode standard character codepoints,
+        // but System.String will also represent UTF-16 surrogate codepoints
+        // (in the range 0xD800..0xDFFF) that aren't in a valid surrogate pair.
+        // A .Net String is conceptualized in terms of an array of Char objects
+        // each of which is a UTF-16 code unit; conceptualization in terms
+        // of whole Unicode code points is NOT what String does; so for example
+        // String.Length will return 2 for a surrogate pair rather than 1.
+        // Moreover, it appears that a .Net String can also be mal-formed
+        // such as having either high or low surrogates outside of pairs.
+        // https://codeblog.jonskeet.uk/2014/11/07/when-is-a-string-not-a-string/
+        // In contrast, the official count of codepoints in a Codepoint_Array
+        // is based on its List representation (a valid UTF-16 surrogate pair = 1).
+        // For now, Codepoint_Array supports lossless conversion between its
+        // List and String forms, meaning valid surrogate pairs in a String
+        // will be merged into a single List element, while any other Char that
+        // isn't part of a valid surrogate pair will be retained as 1 List element.
+        internal String Maybe_As_String { get; set; }
+
+        // TODO: Consider Maybe_As_Octets / List<Byte> alternative which would be UTF-8 encoded.
 
         internal Nullable<Int32> Cached_HashCode { get; set; }
+
+        internal Codepoint_Array(List<Int32> value)
+        {
+            Maybe_As_List = value;
+        }
+
+        internal Codepoint_Array(String value)
+        {
+            Maybe_As_String = value;
+        }
+
+        internal List<Int32> As_List()
+        {
+            if (Maybe_As_List == null)
+            {
+                if (Maybe_As_String == null)
+                {
+                    throw new InvalidOperationException(
+                        "Can't produce List representation from Codepoint_Array"
+                        + " as none of its possible representations are defined.");
+                }
+                Maybe_As_List = new List<Int32>(Maybe_As_String.Length);
+                for (Int32 i = 0; i < Maybe_As_String.Length; i++)
+                {
+                    if ((i+1) < Maybe_As_String.Length
+                        && Char.IsSurrogatePair(Maybe_As_String[i], Maybe_As_String[i+1]))
+                    {
+                        Maybe_As_List.Add(Char.ConvertToUtf32(
+                            Maybe_As_String[i], Maybe_As_String[i+1]));
+                        i++;
+                    }
+                    else
+                    {
+                        Maybe_As_List.Add(Maybe_As_String[i]);
+                    }
+                }
+            }
+            return Maybe_As_List;
+        }
+
+        internal String As_String()
+        {
+            if (Maybe_As_String == null)
+            {
+                if (Maybe_As_List == null)
+                {
+                    throw new InvalidOperationException(
+                        "Can't produce String representation from Codepoint_Array"
+                        + " as none of its possible representations are defined.");
+                }
+                StringBuilder sb = new StringBuilder(
+                    Maybe_As_List.Count, 2 * Maybe_As_List.Count);
+                for (Int32 i = 0; i < Maybe_As_List.Count; i++)
+                {
+                    if (Maybe_As_List[i] <= 0xFFFF)
+                    {
+                        sb.Append((Char)Maybe_As_List[i]);
+                    }
+                    else if (Maybe_As_List[i] <= 0x10FFFF)
+                    {
+                        sb.Append(Char.ConvertFromUtf32(Maybe_As_List[i]));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Can't produce String representation from Codepoint_Array"
+                            + " as its List representation includes codepoints above"
+                            + " the 21-bit range a UTF-16 .Net String can represent.");
+                    }
+                }
+                Maybe_As_String = sb.ToString();
+            }
+            return Maybe_As_String;
+        }
     }
 
     internal class Codepoint_Array_Comparer : EqualityComparer<Codepoint_Array>
@@ -38,17 +141,24 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
-            if (v1.As_List.Count != v2.As_List.Count)
+            if ((v1.Maybe_As_String == null || v2.Maybe_As_String == null)
+                && (v1.Maybe_As_List != null && v2.Maybe_As_List != null))
             {
-                return false;
+                // We don't yet have both String representations but we do
+                // already have both List representations, so use the latter.
+                return Enumerable.SequenceEqual(v1.Maybe_As_List, v2.Maybe_As_List);
             }
-            if (v1.As_List.Count == 0)
-            {
-                return true;
-            }
-            return Enumerable.SequenceEqual(v1.As_List, v2.As_List);
+            // We don't have a reason to prefer using List reprs so use String reprs.
+            return v1.As_String() == v2.As_String();
         }
 
+        // We always hash using the same representations to guarantee
+        // that two logically same Codepoint_Array hash the same;
+        // for now that representation of choice is String in the interest
+        // of overall performance and potentially better security,
+        // but at the cost that we'd have to come up with a plan if users
+        // would reasonably ever use codepoints outside the 21 bit Unicode range.
+        // THE FOLLOWING LINES ARE SPECIFIC TO THE COMMENTED-OUT LIST VERSION.
         // When hashing the string we merge each 4 consecutive characters by
         // catenation of each one's lower 8 bits so we can use millions of
         // hash buckets rather than just about 64 buckets (#letters+digits);
@@ -65,17 +175,18 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (v.Cached_HashCode == null)
             {
-                v.Cached_HashCode = 0;
-                Int32[] members = v.As_List.ToArray();
-                for (Int32 i = 0; i < members.Length; i += 4)
-                {
-                    Int32 chunk_size = Math.Min(4, members.Length - i);
-                    Int32 m1 =                  16777216 * (members[i  ] % 128);
-                    Int32 m2 = (chunk_size <= 2) ? 65536 * (members[i+1] % 256) : 0;
-                    Int32 m3 = (chunk_size <= 3) ?   256 * (members[i+2] % 256) : 0;
-                    Int32 m4 = (chunk_size <= 4) ?          members[i+3] % 256  : 0;
-                    v.Cached_HashCode = v.Cached_HashCode ^ (m1 + m2 + m3 + m4);
-                }
+                v.Cached_HashCode = v.As_String().GetHashCode();
+                // v.Cached_HashCode = 0;
+                // Int32[] members = v.As_List().ToArray();
+                // for (Int32 i = 0; i < members.Length; i += 4)
+                // {
+                    // Int32 chunk_size = Math.Min(4, members.Length - i);
+                    // Int32 m1 =                  16777216 * (members[i  ] % 128);
+                    // Int32 m2 = (chunk_size <= 2) ? 65536 * (members[i+1] % 256) : 0;
+                    // Int32 m3 = (chunk_size <= 3) ?   256 * (members[i+2] % 256) : 0;
+                    // Int32 m4 = (chunk_size <= 4) ?          members[i+3] % 256  : 0;
+                    // v.Cached_HashCode = v.Cached_HashCode ^ (m1 + m2 + m3 + m4);
+                // }
             }
             return (Int32)v.Cached_HashCode;
         }
