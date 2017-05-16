@@ -102,29 +102,6 @@ namespace Muldis.D.Ref_Eng.Core
         Codepoint,
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Array_MD_Any
-    // Represents a Muldis D Array value where each member value is
-    // unrestricted in allowed type.
-    // An MD_Array_MD_Any is the simplest storage representation for that
-    // type which doesn't internally use trees for sharing or multipliers.
-
-    internal class MD_Array_MD_Any
-    {
-        internal List<MD_Any> Members { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.Array_Octet
-    // Represents a Muldis D Array value where each member value is
-    // a Muldis D Integer in the range 0..255.
-    // An Array_Octet is the simplest storage representation for that
-    // type which doesn't internally use trees for sharing or multipliers.
-    // This is the canonical storage type for a regular octet (byte) string.
-
-    internal class MD_Array_Octet
-    {
-        internal List<Byte> Members { get; set; }
-    }
-
     // Muldis.D.Ref_Eng.Core.MD_Array_Node
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
     // an MD_Array_Node is used by it to hold the MD_Array-specific details.
@@ -132,7 +109,7 @@ namespace Muldis.D.Ref_Eng.Core
     // of common substrings of members of distinct MD_Array values;
     // the actual members of the MD_Array value are, in order, any members
     // specified by Pred_Members, then any Local_*_Members, then
-    // Succ_Members.  An MD_Array_Node also uses run-length encoding to
+    // Succ_Members.  A MD_Array_Node also uses run-length encoding to
     // optimize storage, such that the actual "local" members of a node are
     // defined as the sequence in Local_*_Members repeated the number of
     // times specified by Local_Multiplicity.
@@ -144,8 +121,8 @@ namespace Muldis.D.Ref_Eng.Core
         // Cached count of members of the Muldis D Array represented by
         // this tree node including those defined by it and child nodes.
         // Equals count(Local_*_Members) x Local_Multiplicity
-        // + Pred_Members.Tree_Member_Count + Succ_Members.Tree_Member_Count.
-        internal Int64 Tree_Member_Count { get; set; }
+        // + Pred_Members.Cached_Tree_Member_Count + Succ_Members.Cached_Tree_Member_Count.
+        internal Nullable<Int64> Cached_Tree_Member_Count { get; set; }
 
         // Cached indication of the widest Local_Widest_Type in the tree,
         // and thus of the over-all type of the tree.
@@ -162,10 +139,19 @@ namespace Muldis.D.Ref_Eng.Core
         internal Widest_Component_Type Local_Widest_Type { get; set; }
 
         // Iff LWT is Unrestricted, this field is the payload.
-        internal MD_Array_MD_Any Local_Unrestricted_Members { get; set; }
+        // Represents a Muldis D Array value where each member value is
+        // unrestricted in allowed type.
+        // A List<MD_Any> is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        internal List<MD_Any> Local_Unrestricted_Members { get; set; }
 
         // Iff LWT is Octet, this field is the payload.
-        internal MD_Array_Octet Local_Octet_Members { get; set; }
+        // Represents a Muldis D Array value where each member value is
+        // a Muldis D Integer in the range 0..255.
+        // A List<Byte> is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        // This is the canonical storage type for a regular octet (byte) string.
+        internal List<Byte> Local_Octet_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
@@ -216,6 +202,18 @@ namespace Muldis.D.Ref_Eng.Core
 
         // The count of members of this multiset.
         internal Int64 Multiplicity { get; set; }
+
+        internal Multiplied_Member (MD_Any member, Int64 multiplicity)
+        {
+            Member       = member;
+            Multiplicity = multiplicity;
+        }
+
+        internal Multiplied_Member (MD_Any member)
+        {
+            Member       = member;
+            Multiplicity = 1;
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Bag_Node
@@ -231,7 +229,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         // Cached count of members of the Muldis D Bag represented by
         // this tree node including those defined by it and child nodes.
-        internal Int64 Tree_Member_Count { get; set; }
+        internal Nullable<Int64> Cached_Tree_Member_Count { get; set; }
 
         // LST determines how to interpret most of the other fields.
         // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
@@ -258,7 +256,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Cached count of members defined by the Local_*_Members fields as
         // they are defined in isolation, meaning it is positive (or zero)
         // even when LST is Remove_N.
-        internal Int64 Local_Member_Count { get; set; }
+        internal Nullable<Int64> Cached_Local_Member_Count { get; set; }
 
         // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
         internal Multiplied_Member Local_Singular_Members { get; set; }
@@ -296,12 +294,6 @@ namespace Muldis.D.Ref_Eng.Core
         // Cached count of attributes of the Muldis D Tuple.
         internal Int32 Degree { get; set; }
 
-        // Iff Muldis D Tuple has attr named [], this field has its asset.
-        // In a Package materials namespace, this name has special meaning.
-        // TODO: Probably fold this into Other_Attrs considering its use cases
-        // including it likely only used in same Tuple as other named attrs.
-        internal MD_Any Attr_Named_Empty_Str { get; set; }
-
         // Iff Muldis D Tuple has attr named [0], this field has its asset.
         // This is the canonical name of a first conceptually-ordered attr.
         internal MD_Any Attr_Named_0 { get; set; }
@@ -317,6 +309,8 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff Muldis D Tuple has at least 1 attribute with some other name
         // than the ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
+        // TODO: ACTUALLY, all Tuple attributes are currently stored in here;
+        // making use of the Attr_Named_* is an optimization for later.
         internal Dictionary<Codepoint_Array,MD_Any> Other_Attrs { get; set; }
     }
 
@@ -361,7 +355,11 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MDHT is MD_Variable, this field is the payload.
         internal MD_Variable_Struct MD_Variable { get; set; }
 
-        // TODO: MD_Process, MD_Stream.
+        // Iff MDHT is MD_Process, this field is the payload.
+        internal MD_Process_Struct MD_Process { get; set; }
+
+        // Iff MDHT is MD_Stream, this field is the payload.
+        internal MD_Stream_Struct MD_Stream { get; set; }
 
         // Iff MDHT is MD_External, this field is the payload.
         internal MD_External_Struct MD_External { get; set; }
@@ -378,6 +376,22 @@ namespace Muldis.D.Ref_Eng.Core
     internal class MD_Variable_Struct
     {
         internal MD_Any Current_Value { get; set; }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Process_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Process,
+    // a MD_Process_Struct is used by it to hold the MD_Process-specific details.
+
+    internal class MD_Process_Struct
+    {
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Stream_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Stream,
+    // a MD_Stream_Struct is used by it to hold the MD_Stream-specific details.
+
+    internal class MD_Stream_Struct
+    {
     }
 
     // Muldis.D.Ref_Eng.Core.MD_External_Struct

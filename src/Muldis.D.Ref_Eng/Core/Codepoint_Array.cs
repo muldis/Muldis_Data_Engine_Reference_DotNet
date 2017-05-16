@@ -9,7 +9,7 @@ namespace Muldis.D.Ref_Eng.Core
     // Conceptually an Array of Unicode standard character codepoints,
     // integers in the set {0..0xD7FF,0xE000..0x10FFFF},
     // but additionally supports non-Unicode codepoints,
-    // integers in the set {0xD800..0xDFFF,0x110000..0x7FFFFFFF}.
+    // integers in the set {-0x80000000..-1,0xD800..0xDFFF,0x110000..0x7FFFFFFF}.
     // Used to represent a Muldis D Tuple attribute name, any unqualified identifier.
     // Used as canonical storage type for a Muldis D Text value / a regular character string.
     // Used as internal generic Muldis D value serialization format for indexing.
@@ -19,7 +19,7 @@ namespace Muldis.D.Ref_Eng.Core
     internal class Codepoint_Array
     {
         // Array of System.Int32
-        // This option supports any codepoints in the 31-bit range 0..0x7FFFFFFF.
+        // This option supports any codepoints in the signed 32-bit range -0x80000000..0x7FFFFFFF.
         internal List<Int32> Maybe_As_List { get; set; }
 
         // System.String aka Array of System.Char
@@ -47,6 +47,11 @@ namespace Muldis.D.Ref_Eng.Core
 
         // TODO: Consider Maybe_As_Octets / List<Byte> alternative which would be UTF-8 encoded.
 
+        // Nullable Boolean
+        // This is true if we know that all of the character codepoints are
+        // valid standard Unicode codepoints, and false if we know any aren't.
+        internal Nullable<Boolean> Cached_Is_Unicode { get; set; }
+
         internal Nullable<Int32> Cached_HashCode { get; set; }
 
         internal Codepoint_Array(List<Int32> value)
@@ -66,10 +71,11 @@ namespace Muldis.D.Ref_Eng.Core
                 if (Maybe_As_String == null)
                 {
                     throw new InvalidOperationException(
-                        "Can't produce List representation from Codepoint_Array"
-                        + " as none of its possible representations are defined.");
+                        "Can't produce String representation from"
+                        + " Codepoint_Array as it is malformed.");
                 }
                 Maybe_As_List = new List<Int32>(Maybe_As_String.Length);
+                Cached_Is_Unicode = true;
                 for (Int32 i = 0; i < Maybe_As_String.Length; i++)
                 {
                     if ((i+1) < Maybe_As_String.Length
@@ -82,6 +88,10 @@ namespace Muldis.D.Ref_Eng.Core
                     else
                     {
                         Maybe_As_List.Add(Maybe_As_String[i]);
+                        if (Char.IsSurrogate(Maybe_As_String[i]))
+                        {
+                            Cached_Is_Unicode = false;
+                        }
                     }
                 }
             }
@@ -95,16 +105,28 @@ namespace Muldis.D.Ref_Eng.Core
                 if (Maybe_As_List == null)
                 {
                     throw new InvalidOperationException(
-                        "Can't produce String representation from Codepoint_Array"
-                        + " as none of its possible representations are defined.");
+                        "Can't produce String representation from"
+                        + " Codepoint_Array as it is malformed.");
                 }
                 StringBuilder sb = new StringBuilder(
                     Maybe_As_List.Count, 2 * Maybe_As_List.Count);
+                Cached_Is_Unicode = true;
                 for (Int32 i = 0; i < Maybe_As_List.Count; i++)
                 {
-                    if (Maybe_As_List[i] <= 0xFFFF)
+                    if (Maybe_As_List[i] < 0)
+                    {
+                        Cached_Is_Unicode = false;
+                        throw new InvalidOperationException(
+                            "Can't produce String representation from Codepoint_Array"
+                            + " as its List representation includes negative codepoints.");
+                    }
+                    else if (Maybe_As_List[i] <= 0xFFFF)
                     {
                         sb.Append((Char)Maybe_As_List[i]);
+                        if (Maybe_As_List[i] >= 0xD800 && Maybe_As_List[i] <= 0xDFFF)
+                        {
+                            Cached_Is_Unicode = false;
+                        }
                     }
                     else if (Maybe_As_List[i] <= 0x10FFFF)
                     {
@@ -112,6 +134,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     else
                     {
+                        Cached_Is_Unicode = false;
                         throw new InvalidOperationException(
                             "Can't produce String representation from Codepoint_Array"
                             + " as its List representation includes codepoints above"
@@ -121,6 +144,30 @@ namespace Muldis.D.Ref_Eng.Core
                 Maybe_As_String = sb.ToString();
             }
             return Maybe_As_String;
+        }
+
+        internal Boolean Is_Unicode()
+        {
+            if (Cached_Is_Unicode == null)
+            {
+                if (Maybe_As_List != null)
+                {
+                    Cached_Is_Unicode = Enumerable.All(Maybe_As_List,
+                        c => c >= 0 && c <= 0xD7FF || c >= 0xE000 && c <= 0x10FFFF);
+                }
+                else if (Maybe_As_String != null)
+                {
+                    Cached_Is_Unicode = Enumerable.All(Maybe_As_String,
+                        c => !Char.IsSurrogate(c));
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        "Can't determine if Codepoint_Array is valid Unicode"
+                        + " as it is malformed.");
+                }
+            }
+            return (Boolean)Cached_Is_Unicode;
         }
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Muldis.D.Ref_Eng.Core
@@ -18,10 +19,10 @@ namespace Muldis.D.Ref_Eng.Core
         private readonly MD_Any m_false;
         private readonly MD_Any m_true;
 
-        // MD_Integer 0 (type default value) and 1 and -1 values.
-        private readonly MD_Any m_zero;
-        private readonly MD_Any m_one;
-        private readonly MD_Any m_neg_one;
+        // MD_Integer value cache.
+        // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
+        // The MD_Integer 0 is the type default value.
+        private readonly Dictionary<Int32,MD_Any> m_integers;
 
         // MD_Array with no members (type default value).
         private readonly MD_Any m_empty_array;
@@ -49,29 +50,17 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Boolean = true,
             } };
 
-            m_zero = new MD_Any { AS = new MD_Any_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = 0,
-            } };
-
-            m_one = new MD_Any { AS = new MD_Any_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = 1,
-            } };
-
-            m_neg_one = new MD_Any { AS = new MD_Any_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = -1,
-            } };
+            m_integers = new Dictionary<Int32,MD_Any>();
+            for (Int32 i = -1; i <= 1; i++)
+            {
+                MD_Any v = MD_Integer(i);
+            }
 
             m_empty_array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
                 MD_Array = new MD_Array_Node {
-                    Tree_Member_Count = 0,
+                    Cached_Tree_Member_Count = 0,
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
@@ -82,9 +71,9 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = new MD_Bag_Node {
-                    Tree_Member_Count = 0,
+                    Cached_Tree_Member_Count = 0,
                     Local_Symbolic_Type = Symbolic_Value_Type.None,
-                    Local_Member_Count = 0,
+                    Cached_Local_Member_Count = 0,
                 }
             } };
 
@@ -113,26 +102,21 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any MD_Integer (BigInteger value)
         {
-            if (value == 0)
+            Boolean may_cache = value >= -2000000000 && value <= 2000000000;
+            if (may_cache && m_integers.ContainsKey((Int32)value))
             {
-                return m_zero;
+                return m_integers[(Int32)value];
             }
-            else if (value == 1)
+            MD_Any v = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
+                MD_Integer = value,
+            } };
+            if (may_cache && m_integers.Count < 10000)
             {
-                return m_one;
+                m_integers.Add((Int32)value, v);
             }
-            else if (value == -1)
-            {
-                return m_neg_one;
-            }
-            else
-            {
-                return new MD_Any { AS = new MD_Any_Struct {
-                    Memory = this,
-                    MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                    MD_Integer = value,
-                } };
-            }
+            return v;
         }
     }
 }
