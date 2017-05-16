@@ -110,19 +110,6 @@ namespace Muldis.D.Ref_Eng.Core
             return value ? m_true : m_false;
         }
 
-        internal System.Boolean MD_Boolean_as_Boolean (MD_Any value)
-        {
-            if (value.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Boolean)
-            {
-                throw new System.ArgumentException
-                (
-                    paramName: "value",
-                    message: "MD_Any is not a Muldis D Boolean"
-                );
-            }
-            return value.AS.MD_Boolean;
-        }
-
         internal MD_Any MD_Integer (BigInteger value)
         {
             if (value == 0)
@@ -145,19 +132,6 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Integer = value,
                 } };
             }
-        }
-
-        internal BigInteger MD_Integer_as_BigInteger (MD_Any value)
-        {
-            if (value.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
-            {
-                throw new System.ArgumentException
-                (
-                    paramName: "value",
-                    message: "MD_Any is not a Muldis D Integer"
-                );
-            }
-            return value.AS.MD_Integer;
         }
     }
 }
