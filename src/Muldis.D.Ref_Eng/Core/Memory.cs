@@ -42,12 +42,16 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = false,
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Boolean},
             } };
 
             m_true = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = true,
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Boolean},
             } };
 
             m_integers = new Dictionary<Int32,MD_Any>();
@@ -64,7 +68,9 @@ namespace Muldis.D.Ref_Eng.Core
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
-                }
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
             } };
 
             m_empty_bag = new MD_Any { AS = new MD_Any_Struct {
@@ -74,7 +80,9 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Tree_Member_Count = 0,
                     Local_Symbolic_Type = Symbolic_Value_Type.None,
                     Cached_Local_Member_Count = 0,
-                }
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Bag},
             } };
 
             m_nullary_tuple = new MD_Any { AS = new MD_Any_Struct {
@@ -82,7 +90,9 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
                     Degree = 0,
-                }
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
             } };
 
             m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
@@ -91,7 +101,9 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Capsule = new MD_Capsule_Struct {
                     Label = m_false,
                     Attrs = m_nullary_tuple,
-                }
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Capsule},
             } };
         }
 
@@ -111,6 +123,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = value,
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Integer},
             } };
             if (may_cache && m_integers.Count < 10000)
             {
