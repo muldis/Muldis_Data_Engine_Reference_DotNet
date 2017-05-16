@@ -169,6 +169,45 @@ namespace Muldis.D.Ref_Eng.Core
             }
             return (Boolean)Cached_Is_Unicode;
         }
+
+        internal Boolean Has_Any_Members()
+        {
+            if (Maybe_As_String != null)
+            {
+                return Maybe_As_String != "";
+            }
+            else if (Maybe_As_List != null)
+            {
+                return Maybe_As_List.Count != 0;  // Is there a faster test?
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    "Can't determine if Codepoint_Array has any members"
+                    + " as it is malformed.");
+            }
+        }
+
+        internal Int32 Count()
+        {
+            return this.As_List().Count();
+        }
+
+        internal Boolean May_Cache()
+        {
+            if (Maybe_As_List != null)
+            {
+                return Maybe_As_List.Count <= 200;
+            }
+            else if (Maybe_As_String != null)
+            {
+                return Maybe_As_String.Length <= 200;
+            }
+            else
+            {
+                return false;  // This is a malformed Codepoint_Array object.
+            }
+        }
     }
 
     internal class Codepoint_Array_Comparer : EqualityComparer<Codepoint_Array>
