@@ -129,6 +129,42 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any_Struct AS { get; set; }
     }
 
+    internal class MD_Any_Comparer : EqualityComparer<MD_Any>
+    {
+        public override Boolean Equals(MD_Any v1, MD_Any v2)
+        {
+            if (v1 == null && v2 == null)
+            {
+                // Would we ever get here?
+                return true;
+            }
+            if (v1 == null || v2 == null)
+            {
+                return false;
+            }
+            if (Object.ReferenceEquals(v1, v2))
+            {
+                return true;
+            }
+            return false;  // TODO; meanwhile we compare like a reference type
+        }
+
+        public override Int32 GetHashCode(MD_Any v)
+        {
+            if (v == null)
+            {
+                // Would we ever get here?
+                return 0;
+            }
+            if (v.AS.Cached_MD_Any_Identity == null)
+            {
+                v.AS.Cached_MD_Any_Identity = new Codepoint_Array(
+                    new List<Int32>()); // TODO, fix this
+            }
+            return v.AS.Cached_MD_Any_Identity.GetHashCode();
+        }
+    }
+
     internal class MD_Any_Struct
     {
         // Memory pool this Muldis D "value" lives in.
@@ -356,7 +392,7 @@ namespace Muldis.D.Ref_Eng.Core
         // This field is used iff LST is Indexed.
         // The Dictionary has one key-asset pair for each distinct Muldis D
         // "value", all of which are indexed by Cached_MD_Any_Identity.
-        internal Dictionary<Codepoint_Array,Multiplied_Member>
+        internal Dictionary<MD_Any,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
