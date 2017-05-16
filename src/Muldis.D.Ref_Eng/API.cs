@@ -1,4 +1,6 @@
-[assembly: System.CLSCompliant(true)]
+using System;
+
+[assembly: CLSCompliant(true)]
 
 namespace Muldis.D.Ref_Eng
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 
 namespace Muldis.D.Ref_Eng.Core
@@ -105,7 +106,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Boolean (System.Boolean value)
+        internal MD_Any MD_Boolean (Boolean value)
         {
             return value ? m_true : m_false;
         }

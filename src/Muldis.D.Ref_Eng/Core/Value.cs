@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -55,7 +56,7 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Foundation_Type MD_Foundation_Type { get; set; }
 
         // Iff MDFT is MD_Boolean, this field is the payload.
-        internal System.Boolean MD_Boolean { get; set; }
+        internal Boolean MD_Boolean { get; set; }
 
         // Iff MDFT is MD_Integer, this field is the payload.
         // While we conceptually could special case smaller integers with
@@ -121,7 +122,7 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class MD_Array_Octet
     {
-        internal List<System.Byte> Members { get; set; }
+        internal List<Byte> Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Node
@@ -144,7 +145,7 @@ namespace Muldis.D.Ref_Eng.Core
         // this tree node including those defined by it and child nodes.
         // Equals count(Local_*_Members) x Local_Multiplicity
         // + Pred_Members.Tree_Member_Count + Succ_Members.Tree_Member_Count.
-        internal System.Int64 Tree_Member_Count { get; set; }
+        internal Int64 Tree_Member_Count { get; set; }
 
         // Cached indication of the widest Local_Widest_Type in the tree,
         // and thus of the over-all type of the tree.
@@ -154,7 +155,7 @@ namespace Muldis.D.Ref_Eng.Core
         // iff this is 1, then the "local" members are as Local_*_Members
         // specifies with no repeats;
         // iff this is >1, then the local members have that many occurrances.
-        internal System.Int64 Local_Multiplicity { get; set; }
+        internal Int64 Local_Multiplicity { get; set; }
 
         // LWT indicates which of the Local_*_Members this node is using.
         // This is None iff Local_Multiplicity is zero.
@@ -214,7 +215,7 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any Member { get; set; }
 
         // The count of members of this multiset.
-        internal System.Int64 Multiplicity { get; set; }
+        internal Int64 Multiplicity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Bag_Node
@@ -230,7 +231,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         // Cached count of members of the Muldis D Bag represented by
         // this tree node including those defined by it and child nodes.
-        internal System.Int64 Tree_Member_Count { get; set; }
+        internal Int64 Tree_Member_Count { get; set; }
 
         // LST determines how to interpret most of the other fields.
         // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
@@ -257,7 +258,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Cached count of members defined by the Local_*_Members fields as
         // they are defined in isolation, meaning it is positive (or zero)
         // even when LST is Remove_N.
-        internal System.Int64 Local_Member_Count { get; set; }
+        internal Int64 Local_Member_Count { get; set; }
 
         // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
         internal Multiplied_Member Local_Singular_Members { get; set; }
@@ -293,7 +294,7 @@ namespace Muldis.D.Ref_Eng.Core
     internal class MD_Tuple_Struct
     {
         // Cached count of attributes of the Muldis D Tuple.
-        internal System.Int32 Degree { get; set; }
+        internal Int32 Degree { get; set; }
 
         // Iff Muldis D Tuple has attr named [], this field has its asset.
         // In a Package materials namespace, this name has special meaning.
@@ -388,6 +389,6 @@ namespace Muldis.D.Ref_Eng.Core
         // The entity that is defined and managed externally to the Muldis
         // D language environment, which the MD_External value is an opaque
         // and transient reference to.
-        internal System.Object Value { get; set; }
+        internal Object Value { get; set; }
     }
 }
