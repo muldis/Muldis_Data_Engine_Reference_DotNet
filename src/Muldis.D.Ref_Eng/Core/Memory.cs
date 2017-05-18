@@ -49,7 +49,7 @@ namespace Muldis.D.Ref_Eng.Core
         // MD_Capsule with False label and no attributes (type default value).
         private readonly MD_Any m_false_nullary_capsule;
 
-        internal Memory ()
+        internal Memory()
         {
             m_false = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -127,12 +127,12 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Boolean (Boolean value)
+        internal MD_Any MD_Boolean(Boolean value)
         {
             return value ? m_true : m_false;
         }
 
-        internal MD_Any MD_Integer (BigInteger value)
+        internal MD_Any MD_Integer(BigInteger value)
         {
             Boolean may_cache = value >= -2000000000 && value <= 2000000000;
             if (may_cache && m_integers.ContainsKey((Int32)value))
@@ -153,7 +153,7 @@ namespace Muldis.D.Ref_Eng.Core
             return v;
         }
 
-        internal MD_Any MD_Array (List<MD_Any> members)
+        internal MD_Any MD_Array(List<MD_Any> members)
         {
             if (members.Count == 0)
             {
@@ -174,7 +174,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Octet_String (List<Byte> members)
+        internal MD_Any MD_Octet_String(List<Byte> members)
         {
             if (members.Count == 0)
             {
@@ -195,7 +195,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Codepoint_String (Codepoint_Array members)
+        internal MD_Any MD_Codepoint_String(Codepoint_Array members)
         {
             if (!members.Has_Any_Members())
             {
@@ -216,7 +216,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Bag (List<Multiplied_Member> members)
+        internal MD_Any MD_Bag(List<Multiplied_Member> members)
         {
             if (members.Count == 0)
             {
@@ -235,7 +235,7 @@ namespace Muldis.D.Ref_Eng.Core
             return bag;
         }
 
-        internal MD_Any MD_Tuple (Dictionary<Codepoint_Array, MD_Any> attrs)
+        internal MD_Any MD_Tuple(Dictionary<Codepoint_Array, MD_Any> attrs)
         {
             if (attrs.Count == 0)
             {
@@ -296,7 +296,7 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
-        internal MD_Any MD_Attr_Name (Codepoint_Array value)
+        internal MD_Any MD_Attr_Name(Codepoint_Array value)
         {
             if (value.May_Cache() && m_attr_name_tuples.ContainsKey(value))
             {
@@ -327,7 +327,7 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
-        internal Codepoint_Array MD_Attr_Name_as_Codepoint_Array (MD_Any value)
+        internal Codepoint_Array MD_Attr_Name_as_Codepoint_Array(MD_Any value)
         {
             if (!value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Attr_Name))
             {
@@ -340,7 +340,7 @@ namespace Muldis.D.Ref_Eng.Core
             return Enumerable.Single(value.AS.MD_Tuple.Other_Attrs).Key;
         }
 
-        internal MD_Any MD_Capsule (MD_Any label, MD_Any attrs)
+        internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
         {
             if (Object.ReferenceEquals(label, m_false)
                 && Object.ReferenceEquals(attrs, m_nullary_tuple))
@@ -359,7 +359,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Variable (MD_Any current_value)
+        internal MD_Any MD_Variable(MD_Any current_value)
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -375,7 +375,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Process ()
+        internal MD_Any MD_Process()
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -389,7 +389,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Stream ()
+        internal MD_Any MD_Stream()
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -403,7 +403,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_External (Object value)
+        internal MD_Any MD_External(Object value)
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -419,7 +419,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Excuse (MD_Any attrs)
+        internal MD_Any MD_Excuse(MD_Any attrs)
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,

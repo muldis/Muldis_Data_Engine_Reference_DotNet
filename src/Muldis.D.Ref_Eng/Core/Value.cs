@@ -328,13 +328,13 @@ namespace Muldis.D.Ref_Eng.Core
         // The count of members of this multiset.
         internal Int64 Multiplicity { get; set; }
 
-        internal Multiplied_Member (MD_Any member, Int64 multiplicity)
+        internal Multiplied_Member(MD_Any member, Int64 multiplicity)
         {
             Member       = member;
             Multiplicity = multiplicity;
         }
 
-        internal Multiplied_Member (MD_Any member)
+        internal Multiplied_Member(MD_Any member)
         {
             Member       = member;
             Multiplicity = 1;
