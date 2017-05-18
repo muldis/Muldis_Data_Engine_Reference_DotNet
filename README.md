@@ -48,7 +48,8 @@ however the author is using .Net Core canonically because it is a decent
 modern cross-platform foundation.  Patches to support the others welcome!
 
 It appears that .Net Framework 4.0 would be the practical minimum
-dependency as that version is what introduced the BigInteger type we use.
+dependency as that version is what introduced the BigInteger type we use
+as well as several other things we use.
 
 ## Installation of Dependencies Under Microsoft Windows
 

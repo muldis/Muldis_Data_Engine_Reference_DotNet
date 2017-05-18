@@ -45,7 +45,16 @@ namespace Muldis.D.Ref_Eng.Core
         // isn't part of a valid surrogate pair will be retained as 1 List element.
         internal String Maybe_As_String { get; set; }
 
-        // TODO: Consider Maybe_As_Octets / List<Byte> alternative which would be UTF-8 encoded.
+        // Array of System.Byte
+        // This option is the most compact format for typical character
+        // data, using one octet per such character instead of 2 or 4.
+        // It is used preferentially for data coming from or going to the
+        // file system or user I/O or networks.
+        // This option supports any codepoints representable by UTF-8,
+        // in the 21-bit range 0..0x10FFFF, which includes all of the
+        // official Unicode standard character codepoints, and possibly more.
+        // This option is also valid ASCII when all codepoints are in 0..127.
+        internal Byte[] Maybe_As_UTF_8_Octets { get; set; }
 
         // Nullable Boolean
         // This is true if we know that all of the character codepoints are
@@ -64,15 +73,24 @@ namespace Muldis.D.Ref_Eng.Core
             Maybe_As_String = value;
         }
 
+        internal Codepoint_Array(Byte[] value)
+        {
+            Maybe_As_UTF_8_Octets = value;
+        }
+
         internal List<Int32> As_List()
         {
             if (Maybe_As_List == null)
             {
                 if (Maybe_As_String == null)
                 {
-                    throw new InvalidOperationException(
-                        "Can't produce String representation from"
-                        + " Codepoint_Array as it is malformed.");
+                    if (Maybe_As_UTF_8_Octets == null)
+                    {
+                        throw new InvalidOperationException(
+                            "Can't produce List representation from"
+                            + " Codepoint_Array as it is malformed.");
+                    }
+                    String s = As_String();
                 }
                 Maybe_As_List = new List<Int32>(Maybe_As_String.Length);
                 Cached_Is_Unicode = true;
@@ -102,6 +120,28 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (Maybe_As_String == null)
             {
+                if (Maybe_As_UTF_8_Octets != null)
+                {
+                    UTF8Encoding enc = new UTF8Encoding
+                    (
+                        encoderShouldEmitUTF8Identifier: false,
+                        throwOnInvalidBytes: true
+                    );
+                    try
+                    {
+                        Maybe_As_String = enc.GetString(Maybe_As_UTF_8_Octets);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new FormatException(
+                            message: "Can't produce String representation"
+                                + " from Codepoint_Array as its UTF_8_Octets"
+                                + " representation is not valid UTF-8.",
+                            innerException: e
+                        );
+                    }
+                    return Maybe_As_String;
+                }
                 if (Maybe_As_List == null)
                 {
                     throw new InvalidOperationException(
@@ -144,6 +184,42 @@ namespace Muldis.D.Ref_Eng.Core
                 Maybe_As_String = sb.ToString();
             }
             return Maybe_As_String;
+        }
+
+        internal Byte[] As_UTF_8_Octets()
+        {
+            if (Maybe_As_UTF_8_Octets == null)
+            {
+                if (Maybe_As_String == null)
+                {
+                    if (Maybe_As_List == null)
+                    {
+                        throw new InvalidOperationException(
+                            "Can't produce UTF_8_Octets representation from"
+                            + " Codepoint_Array as it is malformed.");
+                    }
+                    String s = As_String();
+                }
+                UTF8Encoding enc = new UTF8Encoding
+                (
+                    encoderShouldEmitUTF8Identifier: false,
+                    throwOnInvalidBytes: true
+                );
+                try
+                {
+                    Maybe_As_UTF_8_Octets = enc.GetBytes(Maybe_As_String);
+                }
+                catch (Exception e)
+                {
+                    throw new FormatException(
+                        message: "Can't produce UTF_8_Octets representation"
+                            + " from Codepoint_Array as its String"
+                            + " representation is invalid somehow.",
+                        innerException: e
+                    );
+                }
+            }
+            return Maybe_As_UTF_8_Octets;
         }
 
         internal Boolean Is_Unicode()
