@@ -388,6 +388,33 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
+        internal MD_Any MD_Tuple(MD_Any a0 = null, MD_Any a1 = null, MD_Any a2 = null)
+        {
+            if (a0 == null && a1 == null && a2 == null)
+            {
+                return m_nullary_tuple;
+            }
+            if (a1 == null && a2 == null && Object.ReferenceEquals(a0, m_false))
+            {
+                return MD_Attr_Name(m_cpa_0);
+            }
+            Dictionary<Codepoint_Array,MD_Any> attrs
+                = new Dictionary<Codepoint_Array,MD_Any>();
+            if (a0 != null)
+            {
+                attrs.Add(m_cpa_0, a0);
+            }
+            if (a1 != null)
+            {
+                attrs.Add(m_cpa_1, a1);
+            }
+            if (a2 != null)
+            {
+                attrs.Add(m_cpa_2, a2);
+            }
+            return MD_Tuple(attrs);
+        }
+
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
         {
             if (Object.ReferenceEquals(label, m_false)
