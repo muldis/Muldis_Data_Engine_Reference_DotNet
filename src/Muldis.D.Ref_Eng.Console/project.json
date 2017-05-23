@@ -6,8 +6,8 @@
 
   "dependencies": {
     "Microsoft.NETCore.App": {
-        "type": "platform",
-        "version": "1.0.0"
+      "type": "platform",
+      "version": "1.0.0"
     },
     "Muldis.D.Ref_Eng": "1.0.0-*"
   },

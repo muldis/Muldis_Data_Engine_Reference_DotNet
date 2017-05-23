@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
@@ -9,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A2B475A7-D062-4179-9757-CCC78CA5ED65}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Muldis.DBP", "src\Muldis.DBP\Muldis.DBP.xproj", "{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Muldis.D.Ref_Eng", "src\Muldis.D.Ref_Eng\Muldis.D.Ref_Eng.xproj", "{29436A84-0CA2-4384-B56C-42458DC57897}"
 EndProject
@@ -24,6 +25,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{29436A84-0CA2-4384-B56C-42458DC57897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29436A84-0CA2-4384-B56C-42458DC57897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29436A84-0CA2-4384-B56C-42458DC57897}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +46,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
 		{29436A84-0CA2-4384-B56C-42458DC57897} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
 		{B5672A90-7005-4AFF-B0BC-4513BFBF05E8} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
 		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC} = {F880A31D-4CE0-4F86-960A-B8FE120D1031}
