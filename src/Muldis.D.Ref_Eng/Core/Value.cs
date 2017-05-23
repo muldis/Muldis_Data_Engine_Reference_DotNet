@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -222,6 +223,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         None,
         Unrestricted,
+        Bit,
         Octet,
         Codepoint,
     }
@@ -268,6 +270,16 @@ namespace Muldis.D.Ref_Eng.Core
         // A List<MD_Any> is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         internal List<MD_Any> Local_Unrestricted_Members { get; set; }
+
+        // Iff LWT is Bit, this field is the payload.
+        // Represents a Muldis D Array value where each member value is
+        // a Muldis D Integer in the range 0..1.
+        // A BitArray is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        // This is the canonical storage type for a regular bit string.
+        // TODO: Consider rolling this into Local_Octet_Members instead,
+        // where one octet represents one bit.
+        internal BitArray Local_Bit_Members { get; set; }
 
         // Iff LWT is Octet, this field is the payload.
         // Represents a Muldis D Array value where each member value is

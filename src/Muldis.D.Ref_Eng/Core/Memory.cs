@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -206,7 +207,7 @@ namespace Muldis.D.Ref_Eng.Core
             return v;
         }
 
-        internal MD_Any MD_Array(List<MD_Any> members)
+        internal MD_Any MD_Array(List<MD_Any> members, Boolean known_is_string = false)
         {
             if (members.Count == 0)
             {
@@ -223,6 +224,31 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Array},
+            } };
+            if (known_is_string)
+            {
+                array.AS.Cached_WKT.Add(MD_Well_Known_Type.String);
+            }
+            return array;
+        }
+
+        internal MD_Any Bit_MD_String(BitArray members)
+        {
+            if (members.Length == 0)
+            {
+                return m_empty_array;
+            }
+            MD_Any array = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Array,
+                MD_Array = new MD_Array_Node {
+                    Tree_Widest_Type = Widest_Component_Type.Bit,
+                    Local_Multiplicity = 1,
+                    Local_Widest_Type = Widest_Component_Type.Bit,
+                    Local_Bit_Members = members,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
             } };
             return array;
         }
