@@ -236,10 +236,20 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Is_Unicode = Enumerable.All(Maybe_As_List,
                         c => c >= 0 && c <= 0xD7FF || c >= 0xE000 && c <= 0x10FFFF);
                 }
-                else if (Maybe_As_String != null)
+                else if (Maybe_As_String != null || Maybe_As_UTF_8_Octets != null)
                 {
-                    Cached_Is_Unicode = Enumerable.All(Maybe_As_String,
-                        c => !Char.IsSurrogate(c));
+                    String s = As_String();
+                    Cached_Is_Unicode = true;
+                    for (Int32 i = 0; i < s.Length; i++)
+                    {
+                        if (Char.IsSurrogate(s[i])
+                            && !((i+1) < s.Length
+                            && Char.IsSurrogatePair(s[i], s[i+1])))
+                        {
+                            Cached_Is_Unicode = false;
+                            break;
+                        }
+                    }
                 }
                 else
                 {
@@ -260,6 +270,10 @@ namespace Muldis.D.Ref_Eng.Core
             else if (Maybe_As_List != null)
             {
                 return Maybe_As_List.Length != 0;  // Is there a faster test?
+            }
+            else if (Maybe_As_UTF_8_Octets != null)
+            {
+                return Maybe_As_UTF_8_Octets.Length != 0;
             }
             else
             {
@@ -283,6 +297,10 @@ namespace Muldis.D.Ref_Eng.Core
             else if (Maybe_As_String != null)
             {
                 return Maybe_As_String.Length <= 200;
+            }
+            else if (Maybe_As_UTF_8_Octets != null)
+            {
+                return Maybe_As_UTF_8_Octets.Length <= 200;
             }
             else
             {
@@ -308,12 +326,19 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
-            if ((v1.Maybe_As_String == null || v2.Maybe_As_String == null)
-                && (v1.Maybe_As_List != null && v2.Maybe_As_List != null))
+            if (v1.Maybe_As_String == null || v2.Maybe_As_String == null)
             {
-                // We don't yet have both String representations but we do
-                // already have both List representations, so use the latter.
-                return Enumerable.SequenceEqual(v1.Maybe_As_List, v2.Maybe_As_List);
+                if (v1.Maybe_As_List != null && v2.Maybe_As_List != null)
+                {
+                    // We don't yet have both String representations but we do
+                    // already have both List representations, so use the latter.
+                    return Enumerable.SequenceEqual(v1.Maybe_As_List, v2.Maybe_As_List);
+                }
+                if (v1.Maybe_As_UTF_8_Octets != null && v2.Maybe_As_UTF_8_Octets != null)
+                {
+                    return Enumerable.SequenceEqual(
+                        v1.Maybe_As_UTF_8_Octets, v2.Maybe_As_UTF_8_Octets);
+                }
             }
             // We don't have a reason to prefer using List reprs so use String reprs.
             return v1.As_String() == v2.As_String();
