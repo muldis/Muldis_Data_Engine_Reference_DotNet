@@ -250,6 +250,13 @@ namespace Muldis.D.Ref_Eng.Core
         // + Pred_Members.Cached_Tree_Member_Count + Succ_Members.Cached_Tree_Member_Count.
         internal Nullable<Int64> Cached_Tree_Member_Count { get; set; }
 
+        // Nullable Boolean
+        // This is true iff we know that no 2 members of the Muldis D Array
+        // represented by this tree node (including child nodes) are the
+        // same value, and false iff we know that at least 2 members are
+        // the same value.
+        internal Nullable<Boolean> Cached_Tree_All_Unique { get; set; }
+
         // Cached indication of the widest Local_Widest_Type in the tree,
         // and thus of the over-all type of the tree.
         internal Widest_Component_Type Tree_Widest_Type { get; set; }
@@ -367,6 +374,13 @@ namespace Muldis.D.Ref_Eng.Core
         // this tree node including those defined by it and child nodes.
         internal Nullable<Int64> Cached_Tree_Member_Count { get; set; }
 
+        // Nullable Boolean
+        // This is true iff we know that no 2 members of the Muldis D Bag
+        // represented by this tree node (including child nodes) are the
+        // same value, and false iff we know that at least 2 members are
+        // the same value.
+        internal Nullable<Boolean> Cached_Tree_All_Unique { get; set; }
+
         // LST determines how to interpret most of the other fields.
         // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
         // Iff LST is Arrayed, Local_Arrayed_Members defines all of the Bag members.
@@ -393,6 +407,13 @@ namespace Muldis.D.Ref_Eng.Core
         // they are defined in isolation, meaning it is positive (or zero)
         // even when LST is Remove_N.
         internal Nullable<Int64> Cached_Local_Member_Count { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that no 2 members of the Muldis D Bag
+        // represented by this tree node (specifically the Local_*_Members
+        // fields as they are defined in isolation) are the same value, and
+        // false iff we know that at least 2 members are the same value.
+        internal Nullable<Boolean> Cached_Local_All_Unique { get; set; }
 
         // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
         internal Multiplied_Member Local_Singular_Members { get; set; }

@@ -97,6 +97,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
                 MD_Array = new MD_Array_Node {
                     Cached_Tree_Member_Count = 0,
+                    Cached_Tree_All_Unique = true,
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
@@ -110,8 +111,10 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = new MD_Bag_Node {
                     Cached_Tree_Member_Count = 0,
+                    Cached_Tree_All_Unique = true,
                     Local_Symbolic_Type = Symbolic_Value_Type.None,
                     Cached_Local_Member_Count = 0,
+                    Cached_Local_All_Unique = true,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Bag},
@@ -295,19 +298,29 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Bag(List<Multiplied_Member> members)
+        internal MD_Any MD_Bag(List<Multiplied_Member> members, Boolean with_unique = false)
         {
             if (members.Count == 0)
             {
                 return m_empty_bag;
             }
+            MD_Bag_Node arrayed_node = new MD_Bag_Node {
+                Local_Symbolic_Type = Symbolic_Value_Type.Arrayed,
+                Local_Arrayed_Members = members,
+            };
+            MD_Bag_Node root_node = arrayed_node;
+            if (with_unique)
+            {
+                root_node = new MD_Bag_Node {
+                    Cached_Tree_All_Unique = true,
+                    Local_Symbolic_Type = Symbolic_Value_Type.Unique,
+                    Primary_Arg = arrayed_node,
+                };
+            }
             MD_Any bag = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                MD_Bag = new MD_Bag_Node {
-                    Local_Symbolic_Type = Symbolic_Value_Type.Arrayed,
-                    Local_Arrayed_Members = members,
-                },
+                MD_Bag = root_node,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Bag},
             } };
