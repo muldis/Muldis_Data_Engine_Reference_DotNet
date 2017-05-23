@@ -57,6 +57,9 @@ namespace Muldis.D.Ref_Eng.Core
         // MD_Capsule with False label and no attributes (type default value).
         private readonly MD_Any m_false_nullary_capsule;
 
+        // All well known MD_Excuse values.
+        private readonly Dictionary<String,MD_Any> m_well_known_excuses;
+
         internal Memory()
         {
             m_cpas = new Dictionary<String,Codepoint_Array>();
@@ -147,6 +150,23 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Capsule},
             } };
+
+            m_well_known_excuses = new Dictionary<String,MD_Any>();
+            foreach (String s in new String[] {
+                    "No_Reason",
+                    "Before_All_Others",
+                    "After_All_Others",
+                    "Div_By_Zero",
+                    "Zero_To_The_Zero",
+                    "No_Empty_Value",
+                    "No_Such_Ord_Pos",
+                    "No_Such_Attr_Name",
+                    "Not_Same_Heading",
+                })
+            {
+                m_well_known_excuses.Add(s,
+                    MD_Excuse(MD_Tuple(MD_Attr_Name(Codepoint_Array(s)))));
+            }
         }
 
         internal Codepoint_Array Codepoint_Array(Int32[] value)
@@ -506,6 +526,15 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Capsule, MD_Well_Known_Type.Excuse},
             } };
+        }
+
+        internal MD_Any Simple_MD_Excuse(String value)
+        {
+            if (m_well_known_excuses.ContainsKey(value))
+            {
+                return m_well_known_excuses[value];
+            }
+            return MD_Excuse(MD_Tuple(MD_Attr_Name(Codepoint_Array(value))));
         }
 
         internal MD_Any MD_Attr_Name(Codepoint_Array value)
