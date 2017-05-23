@@ -21,6 +21,14 @@ namespace Muldis.D.Ref_Eng.Core
     // reuse them, not just know they exist, so Dictionaries are used instead.
     internal class Memory
     {
+        // Cache of Codepoint_Array, limited to 10K entries of shorter size
+        // and to those that are representable by a System.String.
+        private readonly Dictionary<String,Codepoint_Array> m_cpas;
+        // Commonly used Codepoint_Array values {[0],[1],[2]}.
+        private readonly Codepoint_Array m_cpa_0;
+        private readonly Codepoint_Array m_cpa_1;
+        private readonly Codepoint_Array m_cpa_2;
+
         // MD_Boolean False (type default value) and True values.
         private readonly MD_Any m_false;
         private readonly MD_Any m_true;
@@ -50,6 +58,17 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Memory()
         {
+            m_cpas = new Dictionary<String,Codepoint_Array>();
+            m_cpas.Add("", new Codepoint_Array(new Int32[] {}));
+            for (Int32 cp = 0; cp <= 127; cp++)
+            {
+                m_cpas.Add(Char.ConvertFromUtf32(cp),
+                    new Codepoint_Array(new Int32[] {cp}));
+            }
+            m_cpa_0 = m_cpas["\u0000"];
+            m_cpa_1 = m_cpas["\u0001"];
+            m_cpa_2 = m_cpas["\u0002"];
+
             m_false = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
@@ -124,6 +143,41 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Capsule},
             } };
+        }
+
+        internal Codepoint_Array Codepoint_Array(Int32[] value)
+        {
+            Codepoint_Array cpa = new Codepoint_Array(value);
+            if (cpa.May_Cache())
+            {
+                if (m_cpas.ContainsKey(cpa.As_String()))
+                {
+                    return m_cpas[cpa.As_String()];
+                }
+                if (m_cpas.Count < 10000)
+                {
+                    m_cpas.Add(cpa.As_String(), cpa);
+                }
+            }
+            return cpa;
+        }
+
+        internal Codepoint_Array Codepoint_Array(String value)
+        {
+            if (value.Length <= 200)
+            {
+                if (m_cpas.ContainsKey(value))
+                {
+                    return m_cpas[value];
+                }
+                if (m_cpas.Count < 10000)
+                {
+                    Codepoint_Array cpa = new Codepoint_Array(value);
+                    m_cpas.Add(value, cpa);
+                    return cpa;
+                }
+            }
+            return new Codepoint_Array(value);
         }
 
         internal MD_Any MD_Boolean(Boolean value)
@@ -380,7 +434,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
                 MD_Capsule = new MD_Capsule_Struct {
-                    Label = MD_Attr_Name(new Codepoint_Array("Excuse")),
+                    Label = MD_Attr_Name(Codepoint_Array("Excuse")),
                     Attrs = attrs,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
