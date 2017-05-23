@@ -14,6 +14,11 @@ namespace Muldis.D.Ref_Eng.Core
     // VM values/vars/processes/etc that would interact must share one.
     // Memory might have multiple pools, say, for separate handling of
     // entities that are short-lived versus longer-lived.
+    // Note that .Net Core lacks System.Runtime.Caching or similar built-in
+    // so for any situations we might have used such, we roll our own.
+    // Some caches are logically just HashSets, but we need the ability to
+    // fetch the actual cached objects which are the set members so we can
+    // reuse them, not just know they exist, so Dictionaries are used instead.
     internal class Memory
     {
         // MD_Boolean False (type default value) and True values.
@@ -33,14 +38,8 @@ namespace Muldis.D.Ref_Eng.Core
 
         // MD_Tuple with no attributes (type default value).
         private readonly MD_Any m_nullary_tuple;
-        // Cache of MD_Tuple subtype Heading values (all Tuple attribute assets are False).
-        // This is logically just a HashSet,
-        // but we need the ability to fetch the actual MD_Any object
-        // which is the set member so we can reuse it, not just know it
-        // exists, hence a Dictionary is used instead.
-        // Cache limited to 10K entries as protection against a
-        // large amount of degenerate code using a large number of, eg
-        // randomly generated, unique Heading values.
+        // Cache of MD_Tuple subtype Heading values (all Tuple attribute
+        // assets are False), limited to 10K entries of shorter size.
         private readonly Dictionary<MD_Any,MD_Any> m_heading_tuples;
         // Cache of MD_Tuple and Heading subtype Attr_Name values.
         // The set of values in here is a proper subset of m_nullary_tuple.
@@ -174,9 +173,9 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Octet_String(List<Byte> members)
+        internal MD_Any MD_Octet_String(Byte[] members)
         {
-            if (members.Count == 0)
+            if (members.Length == 0)
             {
                 return m_empty_array;
             }
@@ -235,7 +234,7 @@ namespace Muldis.D.Ref_Eng.Core
             return bag;
         }
 
-        internal MD_Any MD_Tuple(Dictionary<Codepoint_Array, MD_Any> attrs)
+        internal MD_Any MD_Tuple(Dictionary<Codepoint_Array,MD_Any> attrs)
         {
             if (attrs.Count == 0)
             {
@@ -243,7 +242,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (attrs.Count == 1)
             {
-                KeyValuePair<Codepoint_Array, MD_Any> only_attr = Enumerable.Single(attrs);
+                KeyValuePair<Codepoint_Array,MD_Any> only_attr = Enumerable.Single(attrs);
                 if (Object.ReferenceEquals(only_attr.Value, m_false)
                     && only_attr.Key.May_Cache()
                     && m_attr_name_tuples.ContainsKey(only_attr.Key))
@@ -263,7 +262,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
             if (attrs.Count == 1)
             {
-                KeyValuePair<Codepoint_Array, MD_Any> only_attr = Enumerable.Single(attrs);
+                KeyValuePair<Codepoint_Array,MD_Any> only_attr = Enumerable.Single(attrs);
                 if (Object.ReferenceEquals(only_attr.Value, m_false))
                 {
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
@@ -307,7 +306,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
                     Degree = 1,
-                    Other_Attrs = new Dictionary<Codepoint_Array, MD_Any>()
+                    Other_Attrs = new Dictionary<Codepoint_Array,MD_Any>()
                     {
                         {value, m_false},
                     }

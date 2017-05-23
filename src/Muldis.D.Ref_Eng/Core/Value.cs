@@ -158,8 +158,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (v.AS.Cached_MD_Any_Identity == null)
             {
-                v.AS.Cached_MD_Any_Identity = new Codepoint_Array(
-                    new List<Int32>()); // TODO, fix this
+                v.AS.Cached_MD_Any_Identity = new Codepoint_Array(""); // TODO, fix this
             }
             return v.AS.Cached_MD_Any_Identity.GetHashCode();
         }
@@ -273,14 +272,14 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff LWT is Octet, this field is the payload.
         // Represents a Muldis D Array value where each member value is
         // a Muldis D Integer in the range 0..255.
-        // A List<Byte> is the simplest storage representation for that
+        // A Byte[] is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular octet (byte) string.
-        internal List<Byte> Local_Octet_Members { get; set; }
+        internal Byte[] Local_Octet_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
-        // a Muldis D Integer in the range 0..0x7FFFFFFF.
+        // a Muldis D Integer in the range -0x80000000..0x7FFFFFFF.
         // A Codepoint_Array is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular character string.

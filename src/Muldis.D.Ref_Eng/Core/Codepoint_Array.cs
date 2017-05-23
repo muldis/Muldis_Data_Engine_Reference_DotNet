@@ -15,12 +15,16 @@ namespace Muldis.D.Ref_Eng.Core
     // Used as internal generic Muldis D value serialization format for indexing.
     // Conceptually an ordered sequence of Int32 and actually either
     // that or one of several alternate storage foramts.
+    // WARNING: This class isn't especially reliable now for representing
+    // the general case of ordered sequences of Int32 as some operations
+    // will unconditionally cast to a String due to corner cutting
+    // assumptions we would normally just handle Unicode; that will change.
 
     internal class Codepoint_Array
     {
         // Array of System.Int32
         // This option supports any codepoints in the signed 32-bit range -0x80000000..0x7FFFFFFF.
-        internal List<Int32> Maybe_As_List { get; set; }
+        internal Int32[] Maybe_As_List { get; set; }
 
         // System.String aka Array of System.Char
         // This option is the one used preferentially in the general case,
@@ -63,7 +67,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Nullable<Int32> Cached_HashCode { get; set; }
 
-        internal Codepoint_Array(List<Int32> value)
+        internal Codepoint_Array(Int32[] value)
         {
             Maybe_As_List = value;
         }
@@ -78,7 +82,7 @@ namespace Muldis.D.Ref_Eng.Core
             Maybe_As_UTF_8_Octets = value;
         }
 
-        internal List<Int32> As_List()
+        internal Int32[] As_List()
         {
             if (Maybe_As_List == null)
             {
@@ -92,26 +96,27 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     String s = As_String();
                 }
-                Maybe_As_List = new List<Int32>(Maybe_As_String.Length);
+                List<Int32> list = new List<Int32>(Maybe_As_String.Length);
                 Cached_Is_Unicode = true;
                 for (Int32 i = 0; i < Maybe_As_String.Length; i++)
                 {
                     if ((i+1) < Maybe_As_String.Length
                         && Char.IsSurrogatePair(Maybe_As_String[i], Maybe_As_String[i+1]))
                     {
-                        Maybe_As_List.Add(Char.ConvertToUtf32(
+                        list.Add(Char.ConvertToUtf32(
                             Maybe_As_String[i], Maybe_As_String[i+1]));
                         i++;
                     }
                     else
                     {
-                        Maybe_As_List.Add(Maybe_As_String[i]);
+                        list.Add(Maybe_As_String[i]);
                         if (Char.IsSurrogate(Maybe_As_String[i]))
                         {
                             Cached_Is_Unicode = false;
                         }
                     }
                 }
+                Maybe_As_List = list.ToArray();
             }
             return Maybe_As_List;
         }
@@ -149,9 +154,9 @@ namespace Muldis.D.Ref_Eng.Core
                         + " Codepoint_Array as it is malformed.");
                 }
                 StringBuilder sb = new StringBuilder(
-                    Maybe_As_List.Count, 2 * Maybe_As_List.Count);
+                    Maybe_As_List.Length, 2 * Maybe_As_List.Length);
                 Cached_Is_Unicode = true;
-                for (Int32 i = 0; i < Maybe_As_List.Count; i++)
+                for (Int32 i = 0; i < Maybe_As_List.Length; i++)
                 {
                     if (Maybe_As_List[i] < 0)
                     {
@@ -254,7 +259,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
             else if (Maybe_As_List != null)
             {
-                return Maybe_As_List.Count != 0;  // Is there a faster test?
+                return Maybe_As_List.Length != 0;  // Is there a faster test?
             }
             else
             {
@@ -266,14 +271,14 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Int32 Count()
         {
-            return this.As_List().Count();
+            return this.As_List().Length;
         }
 
         internal Boolean May_Cache()
         {
             if (Maybe_As_List != null)
             {
-                return Maybe_As_List.Count <= 200;
+                return Maybe_As_List.Length <= 200;
             }
             else if (Maybe_As_String != null)
             {
