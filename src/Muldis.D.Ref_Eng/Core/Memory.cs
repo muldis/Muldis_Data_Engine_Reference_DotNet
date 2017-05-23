@@ -173,7 +173,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Octet_String(Byte[] members)
+        internal MD_Any Octet_MD_String(Byte[] members)
         {
             if (members.Length == 0)
             {
@@ -194,7 +194,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any MD_Codepoint_String(Codepoint_Array members)
+        internal MD_Any Codepoint_MD_String(Codepoint_Array members)
         {
             if (!members.Has_Any_Members())
             {
@@ -295,50 +295,6 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
-        internal MD_Any MD_Attr_Name(Codepoint_Array value)
-        {
-            if (value.May_Cache() && m_attr_name_tuples.ContainsKey(value))
-            {
-                return m_attr_name_tuples[value];
-            }
-            MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
-                    Degree = 1,
-                    Other_Attrs = new Dictionary<Codepoint_Array,MD_Any>()
-                    {
-                        {value, m_false},
-                    }
-                },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                {
-                    MD_Well_Known_Type.Tuple,
-                    MD_Well_Known_Type.Heading,
-                    MD_Well_Known_Type.Attr_Name,
-                },
-            } };
-            if (value.May_Cache() && m_heading_tuples.Count < 10000)
-            {
-                m_heading_tuples.Add(tuple, tuple);
-                m_attr_name_tuples.Add(value, tuple);
-            }
-            return tuple;
-        }
-
-        internal Codepoint_Array MD_Attr_Name_as_Codepoint_Array(MD_Any value)
-        {
-            if (!value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Attr_Name))
-            {
-                throw new ArgumentException
-                (
-                    paramName: "value",
-                    message: "MD_Any is not a Muldis D Attr_Name"
-                );
-            }
-            return Enumerable.Single(value.AS.MD_Tuple.Other_Attrs).Key;
-        }
-
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
         {
             if (Object.ReferenceEquals(label, m_false)
@@ -430,6 +386,50 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Capsule, MD_Well_Known_Type.Excuse},
             } };
+        }
+
+        internal MD_Any MD_Attr_Name(Codepoint_Array value)
+        {
+            if (value.May_Cache() && m_attr_name_tuples.ContainsKey(value))
+            {
+                return m_attr_name_tuples[value];
+            }
+            MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = 1,
+                    Other_Attrs = new Dictionary<Codepoint_Array,MD_Any>()
+                    {
+                        {value, m_false},
+                    }
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                {
+                    MD_Well_Known_Type.Tuple,
+                    MD_Well_Known_Type.Heading,
+                    MD_Well_Known_Type.Attr_Name,
+                },
+            } };
+            if (value.May_Cache() && m_heading_tuples.Count < 10000)
+            {
+                m_heading_tuples.Add(tuple, tuple);
+                m_attr_name_tuples.Add(value, tuple);
+            }
+            return tuple;
+        }
+
+        internal Codepoint_Array MD_Attr_Name_as_Codepoint_Array(MD_Any value)
+        {
+            if (!value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Attr_Name))
+            {
+                throw new ArgumentException
+                (
+                    paramName: "value",
+                    message: "MD_Any is not a Muldis D Attr_Name."
+                );
+            }
+            return Enumerable.Single(value.AS.MD_Tuple.Other_Attrs).Key;
         }
     }
 }
