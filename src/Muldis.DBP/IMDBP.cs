@@ -40,6 +40,12 @@ namespace Muldis.DBP
         IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
 
         IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs);
+
+        IMD_Excuse MD_Excuse(IMD_Tuple attrs);
+
+        IMD_Excuse MD_Excuse(String value);
+
+        IMD_Excuse_No_Reason MD_Excuse_No_Reason();
     }
 
     public interface IMD_Any
@@ -64,6 +70,14 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Capsule : IMD_Any
+    {
+    }
+
+    public interface IMD_Excuse : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Excuse_No_Reason : IMD_Excuse
     {
     }
 }

@@ -98,6 +98,15 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
+                    {
+                        if (ReferenceEquals(value, Core_MD_Excuse("No_Reason")))
+                        {
+                            return (MD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                                .init(m_machine, value);
+                        }
+                        return (MD_Excuse)new MD_Excuse().init(m_machine, value);
+                    }
                     return (MD_Capsule)new MD_Capsule().init(m_machine, value);
                 default:
                     throw new NotImplementedException();
@@ -205,6 +214,20 @@ namespace Muldis.D.Ref_Eng
                         }
                     }
                     break;
+                case "Excuse":
+                    if (v == null)
+                    {
+                        return Core_MD_Excuse("No_Reason");
+                    }
+                    if (type_name == "System.DBNull")
+                    {
+                        return Core_MD_Excuse("No_Reason");
+                    }
+                    if (type_name == "System.String")
+                    {
+                        return Core_MD_Excuse((String)v);
+                    }
+                    throw new NotImplementedException();
                 default:
                     throw new NotImplementedException(
                         "Unhandled MDBP value type ["+value.Key+"]+["+type_name+"].");
@@ -218,12 +241,12 @@ namespace Muldis.D.Ref_Eng
         {
             if (value == null)
             {
-                throw new NotImplementedException();
+                return Core_MD_Excuse("No_Reason");
             }
             String type_name = value.GetType().FullName;
             if (type_name == "System.DBNull")
             {
-                throw new NotImplementedException();
+                return Core_MD_Excuse("No_Reason");
             }
             if (type_name == "System.Boolean")
             {
@@ -499,6 +522,47 @@ namespace Muldis.D.Ref_Eng
                 ((MD_Any)attrs).m_value
             );
         }
+
+        public IMD_Excuse MD_Excuse(IMD_Tuple attrs)
+        {
+            if (attrs == null)
+            {
+                throw new ArgumentNullException("attrs");
+            }
+            return (IMD_Excuse)new MD_Excuse().init(m_machine,
+                Core_MD_Excuse(attrs));
+        }
+
+        public IMD_Excuse MD_Excuse(String value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            if (value == "No_Reason")
+            {
+                return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                    .init(m_machine, Core_MD_Excuse("No_Reason"));
+            }
+            return (IMD_Excuse)new MD_Excuse().init(m_machine,
+                Core_MD_Excuse(value));
+        }
+
+        private Core.MD_Any Core_MD_Excuse(IMD_Tuple attrs)
+        {
+            return m_memory.MD_Excuse(((MD_Tuple)attrs).m_value);
+        }
+
+        private Core.MD_Any Core_MD_Excuse(String value)
+        {
+            return m_memory.Simple_MD_Excuse(value);
+        }
+
+        public IMD_Excuse_No_Reason MD_Excuse_No_Reason()
+        {
+            return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                .init(m_machine, Core_MD_Excuse("No_Reason"));
+        }
     }
 }
 
@@ -555,6 +619,14 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Capsule : MD_Any, IMD_Capsule
+    {
+    }
+
+    public class MD_Excuse : MD_Capsule, IMD_Excuse
+    {
+    }
+
+    public class MD_Excuse_No_Reason : MD_Excuse, IMD_Excuse_No_Reason
     {
     }
 }
