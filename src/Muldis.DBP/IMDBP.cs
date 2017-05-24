@@ -51,6 +51,10 @@ namespace Muldis.DBP
 
         IMD_Array MD_Array(List<Object> members);
 
+        IMD_Set MD_Set(List<Object> members);
+
+        IMD_Bag MD_Bag(List<Object> members);
+
         IMD_Tuple MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
             Nullable<KeyValuePair<String,Object>> attr = null,
@@ -107,6 +111,14 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Array : IMD_Any
+    {
+    }
+
+    public interface IMD_Set : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Bag : IMD_Any
     {
     }
 

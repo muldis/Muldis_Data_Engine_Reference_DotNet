@@ -102,6 +102,8 @@ namespace Muldis.D.Ref_Eng
                         return (MD_String)new MD_String().init(m_machine, value);
                     }
                     return (IMD_Array)new MD_Array().init(m_machine, value);
+                case Core.MD_Foundation_Type.MD_Bag:
+                    return (IMD_Bag)new MD_Bag().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
@@ -120,6 +122,10 @@ namespace Muldis.D.Ref_Eng
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Text))
                     {
                         return (MD_Text)new MD_Text().init(m_machine, value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Set))
+                    {
+                        return (MD_Set)new MD_Set().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
@@ -255,6 +261,18 @@ namespace Muldis.D.Ref_Eng
                     if (type_name.StartsWith("System.Collections.Generic.List`"))
                     {
                         return Core_MD_Array((List<Object>)v);
+                    }
+                    break;
+                case "Set":
+                    if (type_name.StartsWith("System.Collections.Generic.List`"))
+                    {
+                        return Core_MD_Set((List<Object>)v);
+                    }
+                    break;
+                case "Bag":
+                    if (type_name.StartsWith("System.Collections.Generic.List`"))
+                    {
+                        return Core_MD_Bag((List<Object>)v);
                     }
                     break;
                 case "Tuple":
@@ -650,6 +668,52 @@ namespace Muldis.D.Ref_Eng
             );
         }
 
+        public IMD_Set MD_Set(List<Object> members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Set)new MD_Set().init(m_machine,
+                Core_MD_Set(members));
+        }
+
+        private Core.MD_Any Core_MD_Set(List<Object> members)
+        {
+            Core.MD_Any set = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Set")),
+                m_memory.MD_Tuple(
+                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
+                        m_memory.Codepoint_Array("members"),
+                        Core_MD_Bag(members: members, with_unique: true)
+                    )
+                )
+            );
+            set.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Set);
+            return set;
+        }
+
+        public IMD_Bag MD_Bag(List<Object> members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Bag)new MD_Bag().init(m_machine,
+                Core_MD_Bag(members));
+        }
+
+        private Core.MD_Any Core_MD_Bag(
+            List<Object> members, Boolean with_unique = false)
+        {
+            return m_memory.MD_Bag(
+                members: new List<Core.Multiplied_Member>(members.Select(
+                    m => new Core.Multiplied_Member(Core_MD_Any(m))
+                )),
+                with_unique: with_unique
+            );
+        }
+
         public IMD_Tuple MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
             Nullable<KeyValuePair<String,Object>> attr = null,
@@ -990,6 +1054,14 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Array : MD_Any, IMD_Array
+    {
+    }
+
+    public class MD_Set : MD_Capsule, IMD_Set
+    {
+    }
+
+    public class MD_Bag : MD_Any, IMD_Bag
     {
     }
 
