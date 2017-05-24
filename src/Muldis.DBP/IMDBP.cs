@@ -34,6 +34,12 @@ namespace Muldis.DBP
             Object a0 = null, Object a1 = null, Object a2 = null,
             Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null);
+
+        IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs);
+
+        IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
+
+        IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs);
     }
 
     public interface IMD_Any
@@ -54,6 +60,10 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Tuple : IMD_Any
+    {
+    }
+
+    public interface IMD_Capsule : IMD_Any
     {
     }
 }

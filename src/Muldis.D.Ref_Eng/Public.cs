@@ -97,6 +97,8 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Integer)new MD_Integer().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
+                case Core.MD_Foundation_Type.MD_Capsule:
+                    return (MD_Capsule)new MD_Capsule().init(m_machine, value);
                 default:
                     throw new NotImplementedException();
             }
@@ -155,6 +157,52 @@ namespace Muldis.D.Ref_Eng
                     if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                     {
                         return Core_MD_Tuple(attrs: (Dictionary<String,Object>)v);
+                    }
+                    break;
+                case "Capsule":
+                    if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                    {
+                        Object label = ((KeyValuePair<Object,Object>)v).Key;
+                        Object attrs = ((KeyValuePair<Object,Object>)v).Value;
+                        // Note that .Net guarantees the .Key is never null.
+                        if (attrs == null)
+                        {
+                            throw new ArgumentNullException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Capsule with a null Capsule attrs."
+                            );
+                        }
+                        Core.MD_Any attrs_cv = Core_MD_Any(attrs);
+                        if (attrs_cv.AS.MD_Foundation_Type != Core.MD_Foundation_Type.MD_Tuple)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Capsule with a Capsule attrs"
+                                    + " that doesn't evaluate as a MD_Tuple."
+                            );
+                        }
+                        if (label.GetType().FullName == "System.String")
+                        {
+                            return m_memory.MD_Capsule(
+                                m_memory.MD_Attr_Name(m_memory.Codepoint_Array((String)label)),
+                                attrs_cv
+                            );
+                        }
+                        if (label.GetType().FullName == "System.String[]")
+                        {
+                            return m_memory.MD_Capsule(
+                                m_memory.MD_Array(new List<Core.MD_Any>(((String[])label).Select(
+                                    m => m_memory.MD_Attr_Name(m_memory.Codepoint_Array(m))
+                                ))),
+                                attrs_cv
+                            );
+                        }
+                        if (label.GetType().FullName.StartsWith("Muldis.D.Ref_Eng.Value."))
+                        {
+                            return m_memory.MD_Capsule(Core_MD_Any(label), attrs_cv);
+                        }
                     }
                     break;
                 default:
@@ -385,6 +433,72 @@ namespace Muldis.D.Ref_Eng
                     )
             );
         }
+
+        public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException("label");
+            }
+            if (attrs == null)
+            {
+                throw new ArgumentNullException("attrs");
+            }
+            return (IMD_Capsule)new MD_Capsule().init(m_machine,
+                Core_MD_Capsule(label, attrs));
+        }
+
+        public IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException("label");
+            }
+            if (attrs == null)
+            {
+                throw new ArgumentNullException("attrs");
+            }
+            return (IMD_Capsule)new MD_Capsule().init(m_machine,
+                Core_MD_Capsule(label, attrs));
+        }
+
+        public IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException("label");
+            }
+            if (attrs == null)
+            {
+                throw new ArgumentNullException("attrs");
+            }
+            return (IMD_Capsule)new MD_Capsule().init(m_machine,
+                Core_MD_Capsule(label, attrs));
+        }
+
+        private Core.MD_Any Core_MD_Capsule(IMD_Any label, IMD_Tuple attrs)
+        {
+            return m_memory.MD_Capsule(
+                ((MD_Any)label).m_value, ((MD_Any)attrs).m_value);
+        }
+
+        private Core.MD_Any Core_MD_Capsule(String label, IMD_Tuple attrs)
+        {
+            return m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array(label)),
+                ((MD_Any)attrs).m_value
+            );
+        }
+
+        private Core.MD_Any Core_MD_Capsule(String[] label, IMD_Tuple attrs)
+        {
+            return m_memory.MD_Capsule(
+                m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
+                    m => m_memory.MD_Attr_Name(m_memory.Codepoint_Array(m))
+                ))),
+                ((MD_Any)attrs).m_value
+            );
+        }
     }
 }
 
@@ -437,6 +551,10 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Tuple : MD_Any, IMD_Tuple
+    {
+    }
+
+    public class MD_Capsule : MD_Any, IMD_Capsule
     {
     }
 }
