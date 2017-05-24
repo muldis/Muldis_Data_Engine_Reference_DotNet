@@ -30,6 +30,12 @@ namespace Muldis.DBP
 
         IMD_Integer MD_Integer(Int32 value);
 
+        IMD_String MD_String(BigInteger[] members);
+
+        IMD_String MD_String(Int32[] members);
+
+        IMD_Array MD_Array(List<Object> members);
+
         IMD_Tuple MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
             Nullable<KeyValuePair<String,Object>> attr = null,
@@ -63,6 +69,14 @@ namespace Muldis.DBP
         BigInteger Export_BigInteger();
 
         Int32 Export_Int32();
+    }
+
+    public interface IMD_String : IMD_Array
+    {
+    }
+
+    public interface IMD_Array : IMD_Any
+    {
     }
 
     public interface IMD_Tuple : IMD_Any

@@ -95,6 +95,12 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Boolean)new MD_Boolean().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Integer:
                     return (IMD_Integer)new MD_Integer().init(m_machine, value);
+                case Core.MD_Foundation_Type.MD_Array:
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.String))
+                    {
+                        return (MD_String)new MD_String().init(m_machine, value);
+                    }
+                    return (IMD_Array)new MD_Array().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
@@ -160,6 +166,22 @@ namespace Muldis.D.Ref_Eng
                     if (type_name == "System.Numerics.BigInteger")
                     {
                         return Core_MD_Integer((BigInteger)v);
+                    }
+                    break;
+                case "String":
+                    if (type_name == "System.Int32[]")
+                    {
+                        return Core_MD_String((Int32[])v);
+                    }
+                    if (type_name == "System.Numerics.BigInteger[]")
+                    {
+                        return Core_MD_String((BigInteger[])v);
+                    }
+                    break;
+                case "Array":
+                    if (type_name.StartsWith("System.Collections.Generic.List`"))
+                    {
+                        return Core_MD_Array((List<Object>)v);
                     }
                     break;
                 case "Tuple":
@@ -260,6 +282,14 @@ namespace Muldis.D.Ref_Eng
             {
                 return Core_MD_Integer((BigInteger)value);
             }
+            if (type_name == "System.Int32[]")
+            {
+                return Core_MD_String((Int32[])value);
+            }
+            if (type_name == "System.Numerics.BigInteger[]")
+            {
+                return Core_MD_String((BigInteger[])value);
+            }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
 
@@ -293,6 +323,65 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Integer(BigInteger value)
         {
             return m_memory.MD_Integer(value);
+        }
+
+        public IMD_String MD_String(BigInteger[] members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_String)new MD_String().init(m_machine,
+                Core_MD_String(members));
+        }
+
+        public IMD_String MD_String(Int32[] members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_String)new MD_String().init(m_machine,
+                Core_MD_String(members));
+        }
+
+        private Core.MD_Any Core_MD_String(BigInteger[] members)
+        {
+            return m_memory.MD_Array(
+                members: new List<Core.MD_Any>(members.Select(
+                    m => m_memory.MD_Integer(m)
+                )),
+                known_is_string: true
+            );
+        }
+
+        private Core.MD_Any Core_MD_String(Int32[] members)
+        {
+            return m_memory.MD_Array(
+                members: new List<Core.MD_Any>(members.Select(
+                    m => m_memory.MD_Integer(m)
+                )),
+                known_is_string: true
+            );
+        }
+
+        public IMD_Array MD_Array(List<Object> members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Array)new MD_Array().init(m_machine,
+                Core_MD_Array(members));
+        }
+
+        private Core.MD_Any Core_MD_Array(List<Object> members)
+        {
+            return m_memory.MD_Array(
+                new List<Core.MD_Any>(members.Select(
+                    m => Core_MD_Any(m)
+                ))
+            );
         }
 
         public IMD_Tuple MD_Tuple(
@@ -612,6 +701,14 @@ namespace Muldis.D.Ref_Eng.Value
             // This will throw an OverflowException if the value is too large.
             return (Int32)m_value.AS.MD_Integer;
         }
+    }
+
+    public class MD_String : MD_Array, IMD_String
+    {
+    }
+
+    public class MD_Array : MD_Any, IMD_Array
+    {
     }
 
     public class MD_Tuple : MD_Any, IMD_Tuple
