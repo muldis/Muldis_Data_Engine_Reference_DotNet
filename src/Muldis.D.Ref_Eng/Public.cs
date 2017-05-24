@@ -105,6 +105,10 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Fraction))
+                    {
+                        return (MD_Fraction)new MD_Fraction().init(m_machine, value);
+                    }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Bits))
                     {
                         return (MD_Bits)new MD_Bits().init(m_machine, value);
@@ -179,6 +183,44 @@ namespace Muldis.D.Ref_Eng
                     if (type_name == "System.Numerics.BigInteger")
                     {
                         return Core_MD_Integer((BigInteger)v);
+                    }
+                    break;
+                case "Fraction":
+                    if (type_name == "System.Decimal")
+                    {
+                        return Core_MD_Fraction((Decimal)v);
+                    }
+                    if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                    {
+                        Object numerator   = ((KeyValuePair<Object,Object>)v).Key;
+                        Object denominator = ((KeyValuePair<Object,Object>)v).Value;
+                        // Note that .Net guarantees the .Key is never null.
+                        if (denominator == null)
+                        {
+                            throw new ArgumentNullException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Fraction with a null denominator."
+                            );
+                        }
+                        if (numerator.GetType().FullName == "System.Int32"
+                            && denominator.GetType().FullName == "System.Int32")
+                        {
+                            return Core_MD_Fraction((Int32)numerator, (Int32)denominator);
+                        }
+                        if (numerator.GetType().FullName == "System.Numerics.BigInteger"
+                            && denominator.GetType().FullName == "System.Numerics.BigInteger")
+                        {
+                            return Core_MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
+                        }
+                        if (numerator.GetType().FullName == "Muldis.D.Ref_Eng.Value.MD_Integer"
+                            && denominator.GetType().FullName == "Muldis.D.Ref_Eng.Value.MD_Integer")
+                        {
+                            return Core_MD_Fraction(
+                                ((MD_Integer)numerator  ).m_value.AS.MD_Integer,
+                                ((MD_Integer)denominator).m_value.AS.MD_Integer
+                            );
+                        }
                     }
                     break;
                 case "String":
@@ -313,6 +355,10 @@ namespace Muldis.D.Ref_Eng
             {
                 return Core_MD_Integer((BigInteger)value);
             }
+            if (type_name == "System.Decimal")
+            {
+                return Core_MD_Fraction((Decimal)value);
+            }
             if (type_name == "System.Int32[]")
             {
                 return Core_MD_String((Int32[])value);
@@ -366,6 +412,106 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Integer(BigInteger value)
         {
             return m_memory.MD_Integer(value);
+        }
+
+        public IMD_Fraction MD_Fraction(IMD_Integer numerator, IMD_Integer denominator)
+        {
+            if (numerator == null)
+            {
+                throw new ArgumentNullException("numerator");
+            }
+            if (denominator == null)
+            {
+                throw new ArgumentNullException("denominator");
+            }
+            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+                Core_MD_Fraction(
+                    ((MD_Integer)numerator  ).m_value.AS.MD_Integer,
+                    ((MD_Integer)denominator).m_value.AS.MD_Integer
+                )
+            );
+        }
+
+        public IMD_Fraction MD_Fraction(BigInteger numerator, BigInteger denominator)
+        {
+            if (numerator == null)
+            {
+                throw new ArgumentNullException("numerator");
+            }
+            if (denominator == null)
+            {
+                throw new ArgumentNullException("denominator");
+            }
+            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+                Core_MD_Fraction(numerator, denominator));
+        }
+
+        public IMD_Fraction MD_Fraction(Int32 numerator, Int32 denominator)
+        {
+            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+                Core_MD_Fraction(numerator, denominator));
+        }
+
+        public IMD_Fraction MD_Fraction(Decimal value)
+        {
+            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+                Core_MD_Fraction(value));
+        }
+
+        private Core.MD_Any Core_MD_Fraction(Decimal value)
+        {
+            Int32[] dec_bits = Decimal.GetBits(value);
+            // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
+            // The GetBits spec says that it returns 4 32-bit integers
+            // representing the 128 bits of the Decimal itself; of these,
+            // the first 3 integers' bits give the mantissa,
+            // the 4th integer's bits give the sign and the scale factor.
+            // "Bits 16 to 23 must contain an exponent between 0 and 28,
+            // which indicates the power of 10 to divide the integer number."
+            Int32 scale_factor_int = ((dec_bits[3] >> 16) & 0x7F);
+            Decimal denominator_dec = 1M;
+            // Decimal doesn't have exponentiation op so we do it manually.
+            for (Int32 i = 1; i <= scale_factor_int; i++)
+            {
+                denominator_dec = denominator_dec * 10M;
+            }
+            Decimal numerator_dec = value * denominator_dec;
+            return Core_MD_Fraction(new BigInteger(numerator_dec),
+                new BigInteger(denominator_dec));
+        }
+
+        private Core.MD_Any Core_MD_Fraction(BigInteger numerator, BigInteger denominator)
+        {
+            if (denominator == 0)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "denominator",
+                    message: "Can't select MD_Fraction with a denominator of zero."
+                );
+            }
+            // Note that GreatestCommonDivisor() always has a non-negative result.
+            BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
+            if (gcd > 1)
+            {
+                // Make the numerator and denominator coprime.
+                numerator   = (denominator > 0 ? numerator   : -numerator  ) / gcd;
+                denominator = (denominator > 0 ? denominator : -denominator) / gcd;
+            }
+            Core.MD_Any fraction = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Fraction")),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<Core.Codepoint_Array,Core.MD_Any>()
+                    {
+                        {m_memory.Codepoint_Array("numerator"),
+                            m_memory.MD_Integer(numerator)},
+                        {m_memory.Codepoint_Array("denominator"),
+                            m_memory.MD_Integer(denominator)},
+                    }
+                )
+            );
+            fraction.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Fraction);
+            return fraction;
         }
 
         public IMD_String MD_String(BigInteger[] members)
@@ -821,6 +967,10 @@ namespace Muldis.D.Ref_Eng.Value
             // This will throw an OverflowException if the value is too large.
             return (Int32)m_value.AS.MD_Integer;
         }
+    }
+
+    public class MD_Fraction : MD_Capsule, IMD_Fraction
+    {
     }
 
     public class MD_String : MD_Array, IMD_String

@@ -31,6 +31,14 @@ namespace Muldis.DBP
 
         IMD_Integer MD_Integer(Int32 value);
 
+        IMD_Fraction MD_Fraction(IMD_Integer numerator, IMD_Integer denominator);
+
+        IMD_Fraction MD_Fraction(BigInteger numerator, BigInteger denominator);
+
+        IMD_Fraction MD_Fraction(Int32 numerator, Int32 denominator);
+
+        IMD_Fraction MD_Fraction(Decimal value);
+
         IMD_String MD_String(BigInteger[] members);
 
         IMD_String MD_String(Int32[] members);
@@ -76,6 +84,10 @@ namespace Muldis.DBP
         BigInteger Export_BigInteger();
 
         Int32 Export_Int32();
+    }
+
+    public interface IMD_Fraction : IMD_Capsule
+    {
     }
 
     public interface IMD_String : IMD_Array
