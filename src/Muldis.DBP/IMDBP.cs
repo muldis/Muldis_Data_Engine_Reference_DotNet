@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -33,6 +34,12 @@ namespace Muldis.DBP
         IMD_String MD_String(BigInteger[] members);
 
         IMD_String MD_String(Int32[] members);
+
+        IMD_Bits MD_Bits(BitArray members);
+
+        IMD_Blob MD_Blob(Byte[] members);
+
+        IMD_Text MD_Text(String members);
 
         IMD_Array MD_Array(List<Object> members);
 
@@ -72,6 +79,18 @@ namespace Muldis.DBP
     }
 
     public interface IMD_String : IMD_Array
+    {
+    }
+
+    public interface IMD_Bits : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Blob : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Text : IMD_Capsule
     {
     }
 

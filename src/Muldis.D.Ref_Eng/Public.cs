@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -104,6 +105,18 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Tuple:
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Bits))
+                    {
+                        return (MD_Bits)new MD_Bits().init(m_machine, value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Blob))
+                    {
+                        return (MD_Blob)new MD_Blob().init(m_machine, value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Text))
+                    {
+                        return (MD_Text)new MD_Text().init(m_machine, value);
+                    }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
                         if (ReferenceEquals(value, Core_MD_Excuse("No_Reason")))
@@ -176,6 +189,24 @@ namespace Muldis.D.Ref_Eng
                     if (type_name == "System.Numerics.BigInteger[]")
                     {
                         return Core_MD_String((BigInteger[])v);
+                    }
+                    break;
+                case "Bits":
+                    if (type_name == "System.Collections.BitArray")
+                    {
+                        return Core_MD_Bits((BitArray)v);
+                    }
+                    break;
+                case "Blob":
+                    if (type_name == "System.Byte[]")
+                    {
+                        return Core_MD_Blob((Byte[])v);
+                    }
+                    break;
+                case "Text":
+                    if (type_name == "System.String")
+                    {
+                        return Core_MD_Text((String)v);
                     }
                     break;
                 case "Array":
@@ -290,6 +321,18 @@ namespace Muldis.D.Ref_Eng
             {
                 return Core_MD_String((BigInteger[])value);
             }
+            if (type_name == "System.Collections.BitArray")
+            {
+                return Core_MD_Bits((BitArray)value);
+            }
+            if (type_name == "System.Byte[]")
+            {
+                return Core_MD_Blob((Byte[])value);
+            }
+            if (type_name == "System.String")
+            {
+                return Core_MD_Text((String)value);
+            }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
 
@@ -363,6 +406,83 @@ namespace Muldis.D.Ref_Eng
                 )),
                 known_is_string: true
             );
+        }
+
+        public IMD_Bits MD_Bits(BitArray members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Bits)new MD_Bits().init(m_machine,
+                Core_MD_Bits(members));
+        }
+
+        private Core.MD_Any Core_MD_Bits(BitArray members)
+        {
+            // BitArrays are mutable so clone argument to protect our internals.
+            Core.MD_Any bits = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Bits")),
+                m_memory.MD_Tuple(
+                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
+                        m_memory.Codepoint_Array("bits"),
+                        m_memory.Bit_MD_String(new BitArray(members))
+                    )
+                )
+            );
+            bits.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Bits);
+            return bits;
+        }
+
+        public IMD_Blob MD_Blob(Byte[] members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Blob)new MD_Blob().init(m_machine,
+                Core_MD_Blob(members));
+        }
+
+        private Core.MD_Any Core_MD_Blob(Byte[] members)
+        {
+            // Arrays are mutable so clone argument to protect our internals.
+            Core.MD_Any blob = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Blob")),
+                m_memory.MD_Tuple(
+                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
+                        m_memory.Codepoint_Array("octets"),
+                        m_memory.Octet_MD_String(members.ToArray())
+                    )
+                )
+            );
+            blob.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Blob);
+            return blob;
+        }
+
+        public IMD_Text MD_Text(String members)
+        {
+            if (members == null)
+            {
+                throw new ArgumentNullException("members");
+            }
+            return (IMD_Text)new MD_Text().init(m_machine,
+                Core_MD_Text(members));
+        }
+
+        private Core.MD_Any Core_MD_Text(String members)
+        {
+            Core.MD_Any text = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Text")),
+                m_memory.MD_Tuple(
+                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
+                        m_memory.Codepoint_Array("maximal_chars"),
+                        m_memory.Codepoint_MD_String(m_memory.Codepoint_Array(members))
+                    )
+                )
+            );
+            text.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Text);
+            return text;
         }
 
         public IMD_Array MD_Array(List<Object> members)
@@ -704,6 +824,18 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_String : MD_Array, IMD_String
+    {
+    }
+
+    public class MD_Bits : MD_Capsule, IMD_Bits
+    {
+    }
+
+    public class MD_Blob : MD_Capsule, IMD_Blob
+    {
+    }
+
+    public class MD_Text : MD_Capsule, IMD_Text
     {
     }
 

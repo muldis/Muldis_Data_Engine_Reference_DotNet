@@ -70,7 +70,9 @@ namespace Muldis.D.Ref_Eng.Console
                 return;
             }
 
-            throw new NotImplementedException("TODO: Import user-specified source code into VM and run it.");
+            // Import the user-specified source code file's raw content into
+            // the MDBP-implementing virtual machine where it would be used.
+            IMD_Blob source_code_blob = machine.Importer().MD_Blob(source_code_file_content);
         }
     }
 }
