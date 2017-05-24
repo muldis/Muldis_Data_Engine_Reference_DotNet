@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 [assembly: CLSCompliant(true)]
@@ -28,6 +29,11 @@ namespace Muldis.DBP
         IMD_Integer MD_Integer(BigInteger value);
 
         IMD_Integer MD_Integer(Int32 value);
+
+        IMD_Tuple MD_Tuple(
+            Object a0 = null, Object a1 = null, Object a2 = null,
+            Nullable<KeyValuePair<String,Object>> attr = null,
+            Dictionary<String,Object> attrs = null);
     }
 
     public interface IMD_Any
@@ -45,5 +51,9 @@ namespace Muldis.DBP
         BigInteger Export_BigInteger();
 
         Int32 Export_Int32();
+    }
+
+    public interface IMD_Tuple : IMD_Any
+    {
     }
 }

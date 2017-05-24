@@ -95,6 +95,8 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Boolean)new MD_Boolean().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Integer:
                     return (IMD_Integer)new MD_Integer().init(m_machine, value);
+                case Core.MD_Foundation_Type.MD_Tuple:
+                    return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 default:
                     throw new NotImplementedException();
             }
@@ -147,6 +149,12 @@ namespace Muldis.D.Ref_Eng
                     if (type_name == "System.Numerics.BigInteger")
                     {
                         return Core_MD_Integer((BigInteger)v);
+                    }
+                    break;
+                case "Tuple":
+                    if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
+                    {
+                        return Core_MD_Tuple(attrs: (Dictionary<String,Object>)v);
                     }
                     break;
                 default:
@@ -215,6 +223,168 @@ namespace Muldis.D.Ref_Eng
         {
             return m_memory.MD_Integer(value);
         }
+
+        public IMD_Tuple MD_Tuple(
+            Object a0 = null, Object a1 = null, Object a2 = null,
+            Nullable<KeyValuePair<String,Object>> attr = null,
+            Dictionary<String,Object> attrs = null)
+        {
+            return (IMD_Tuple)new MD_Tuple().init(m_machine,
+                Core_MD_Tuple(a0, a1, a2, attr, attrs));
+        }
+
+        private Core.MD_Any Core_MD_Tuple(
+            Object a0 = null, Object a1 = null, Object a2 = null,
+            Nullable<KeyValuePair<String,Object>> attr = null,
+            Dictionary<String,Object> attrs = null)
+        {
+            // Start by normalizing the distribution of the attribute
+            // definitions among the arguments to match the distribution
+            // used by our internals, and check for duplicate names.
+            if (attr != null && attrs != null)
+            {
+                if (attrs.ContainsKey(attr.Value.Key))
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "attr",
+                        message: "Can't select MD_Tuple with same-named"
+                            + " attribute in both [attr] and [attrs] args."
+                    );
+                }
+            }
+            if (attr != null)
+            {
+                if (attr.Value.Key == "\u0000")
+                {
+                    if (a0 != null)
+                    {
+                        throw new ArgumentException
+                        (
+                            paramName: "attr",
+                            message: "Can't select MD_Tuple with same-named"
+                                + " attribute in both [a0] and [attr] args."
+                        );
+                    }
+                    a0 = attr.Value.Value;
+                    attr = null;
+                }
+                if (attr.Value.Key == "\u0001")
+                {
+                    if (a1 != null)
+                    {
+                        throw new ArgumentException
+                        (
+                            paramName: "attr",
+                            message: "Can't select MD_Tuple with same-named"
+                                + " attribute in both [a1] and [attr] args."
+                        );
+                    }
+                    a1 = attr.Value.Value;
+                    attr = null;
+                }
+                if (attr.Value.Key == "\u0002")
+                {
+                    if (a2 != null)
+                    {
+                        throw new ArgumentException
+                        (
+                            paramName: "attr",
+                            message: "Can't select MD_Tuple with same-named"
+                                + " attribute in both [a2] and [attr] args."
+                        );
+                    }
+                    a2 = attr.Value.Value;
+                    attr = null;
+                }
+            }
+            if (attrs != null)
+            {
+                if (attrs.ContainsKey("\u0000") || attrs.ContainsKey("\u0001")
+                    || attrs.ContainsKey("\u0002"))
+                {
+                    // Dictionary are mutable so clone argument to protect caller.
+                    attrs = new Dictionary<String,Object>(attrs);
+                    if (attrs.ContainsKey("\u0000"))
+                    {
+                        if (a0 != null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "attrs",
+                                message: "Can't select MD_Tuple with same-named"
+                                    + " attribute in both [a0] and [attrs] args."
+                            );
+                        }
+                        a0 = attrs["\u0000"];
+                        attrs.Remove("\u0000");
+                    }
+                    if (attrs.ContainsKey("\u0001"))
+                    {
+                        if (a1 != null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "attrs",
+                                message: "Can't select MD_Tuple with same-named"
+                                    + " attribute in both [a1] and [attrs] args."
+                            );
+                        }
+                        a1 = attrs["\u0001"];
+                        attrs.Remove("\u0001");
+                    }
+                    if (attrs.ContainsKey("\u0002"))
+                    {
+                        if (a2 != null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "attrs",
+                                message: "Can't select MD_Tuple with same-named"
+                                    + " attribute in both [a2] and [attrs] args."
+                            );
+                        }
+                        a2 = attrs["\u0002"];
+                        attrs.Remove("\u0002");
+                    }
+                }
+                if (attr != null && attrs.Count >= 1)
+                {
+                    // Dictionary are mutable so clone argument to protect caller.
+                    attrs = new Dictionary<String,Object>(attrs);
+                    attrs.Add(attr.Value.Key, attr.Value.Value);
+                    attr = null;
+                }
+                else if (attr == null && attrs.Count == 1)
+                {
+                    attr = Enumerable.Single(attrs);
+                    attrs = null;
+                }
+                else if (attrs.Count == 0)
+                {
+                    attrs = null;
+                }
+            }
+            // Now perform the attributes' importing proper.
+            return m_memory.MD_Tuple(
+                a0: a0 == null ? null : Core_MD_Any(a0),
+                a1: a1 == null ? null : Core_MD_Any(a1),
+                a2: a2 == null ? null : Core_MD_Any(a2),
+                only_oa: attr == null
+                    ? (Nullable<KeyValuePair<Core.Codepoint_Array,Core.MD_Any>>)null
+                    : new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
+                        m_memory.Codepoint_Array(attr.Value.Key),
+                        Core_MD_Any(attr.Value.Value)
+                    ),
+                multi_oa: attrs == null ? null
+                    : new Dictionary<Core.Codepoint_Array,Core.MD_Any>(
+                        attrs.ToDictionary(
+                            m => m_memory.Codepoint_Array(m.Key),
+                            m => Core_MD_Any(m.Value)
+                        )
+                    )
+            );
+        }
     }
 }
 
@@ -264,5 +434,9 @@ namespace Muldis.D.Ref_Eng.Value
             // This will throw an OverflowException if the value is too large.
             return (Int32)m_value.AS.MD_Integer;
         }
+    }
+
+    public class MD_Tuple : MD_Any, IMD_Tuple
+    {
     }
 }
