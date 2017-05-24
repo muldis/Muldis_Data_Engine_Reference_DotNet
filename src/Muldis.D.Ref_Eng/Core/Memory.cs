@@ -53,6 +53,9 @@ namespace Muldis.D.Ref_Eng.Core
         // Cache of MD_Tuple and Heading subtype Attr_Name values.
         // The set of values in here is a proper subset of m_nullary_tuple.
         private readonly Dictionary<Codepoint_Array,MD_Any> m_attr_name_tuples;
+        private readonly MD_Any m_attr_name_0;
+        private readonly MD_Any m_attr_name_1;
+        private readonly MD_Any m_attr_name_2;
 
         // MD_Capsule with False label and no attributes (type default value).
         private readonly MD_Any m_false_nullary_capsule;
@@ -133,12 +136,53 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
             } };
 
+            m_attr_name_tuples = new Dictionary<Codepoint_Array,MD_Any>()
+            {
+                {m_cpa_0, new MD_Any { AS = new MD_Any_Struct {
+                    Memory = this,
+                    MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                    MD_Tuple = new MD_Tuple_Struct {
+                        Degree = 1,
+                        A0 = m_false,
+                    },
+                    Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
+                            MD_Well_Known_Type.Attr_Name},
+                } } },
+                {m_cpa_1, new MD_Any { AS = new MD_Any_Struct {
+                    Memory = this,
+                    MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                    MD_Tuple = new MD_Tuple_Struct {
+                        Degree = 1,
+                        A1 = m_false,
+                    },
+                    Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
+                            MD_Well_Known_Type.Attr_Name},
+                } } },
+                {m_cpa_2, new MD_Any { AS = new MD_Any_Struct {
+                    Memory = this,
+                    MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                    MD_Tuple = new MD_Tuple_Struct {
+                        Degree = 1,
+                        A2 = m_false,
+                    },
+                    Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
+                            MD_Well_Known_Type.Attr_Name},
+                } } },
+            };
+            m_attr_name_0 = m_attr_name_tuples[m_cpa_0];
+            m_attr_name_1 = m_attr_name_tuples[m_cpa_1];
+            m_attr_name_2 = m_attr_name_tuples[m_cpa_2];
+
             m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
             {
                 {m_nullary_tuple, m_nullary_tuple},
+                {m_attr_name_0, m_attr_name_0},
+                {m_attr_name_1, m_attr_name_1},
+                {m_attr_name_2, m_attr_name_2},
             };
-
-            m_attr_name_tuples = new Dictionary<Codepoint_Array,MD_Any>();
 
             m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -347,53 +391,83 @@ namespace Muldis.D.Ref_Eng.Core
             return bag;
         }
 
-        internal MD_Any MD_Tuple(Dictionary<Codepoint_Array,MD_Any> attrs)
+        internal MD_Any MD_Tuple(
+            MD_Any a0 = null, MD_Any a1 = null, MD_Any a2 = null,
+            Nullable<KeyValuePair<Codepoint_Array,MD_Any>> only_oa = null,
+            Dictionary<Codepoint_Array,MD_Any> multi_oa = null)
         {
-            if (attrs.Count == 0)
+            Int32 degree = (a0 == null ? 0 : 1) + (a1 == null ? 0 : 1)
+                + (a2 == null ? 0 : 1) + (only_oa == null ? 0 : 1)
+                + (multi_oa == null ? 0 : multi_oa.Count);
+            if (degree == 0)
             {
                 return m_nullary_tuple;
             }
-            if (attrs.Count == 1)
+            if (degree == 1)
             {
-                KeyValuePair<Codepoint_Array,MD_Any> only_attr = Enumerable.Single(attrs);
-                if (Object.ReferenceEquals(only_attr.Value, m_false)
-                    && only_attr.Key.May_Cache()
-                    && m_attr_name_tuples.ContainsKey(only_attr.Key))
+                if (a0 != null && Object.ReferenceEquals(a0, m_false))
                 {
-                    return m_attr_name_tuples[only_attr.Key];
+                    return m_attr_name_0;
+                }
+                if (a1 != null && Object.ReferenceEquals(a1, m_false))
+                {
+                    return m_attr_name_1;
+                }
+                if (a2 != null && Object.ReferenceEquals(a2, m_false))
+                {
+                    return m_attr_name_2;
+                }
+                if (only_oa != null
+                    && Object.ReferenceEquals(only_oa.Value.Value, m_false)
+                    && only_oa.Value.Key.May_Cache()
+                    && m_attr_name_tuples.ContainsKey(only_oa.Value.Key))
+                {
+                    return m_attr_name_tuples[only_oa.Value.Key];
                 }
             }
             MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
-                    Degree = attrs.Count,
-                    Other_Attrs = attrs,
+                    Degree = degree,
+                    A0 = a0,
+                    A1 = a1,
+                    A2 = a2,
+                    Only_OA = only_oa,
+                    Multi_OA = multi_oa,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Tuple},
             } };
-            if (attrs.Count == 1)
+            if (degree == 1)
             {
-                KeyValuePair<Codepoint_Array,MD_Any> only_attr = Enumerable.Single(attrs);
-                if (Object.ReferenceEquals(only_attr.Value, m_false))
+                if (only_oa != null
+                    && Object.ReferenceEquals(only_oa.Value.Value, m_false))
                 {
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Attr_Name);
-                    if (only_attr.Key.May_Cache() && m_heading_tuples.Count < 10000)
+                    if (only_oa.Value.Key.May_Cache() && m_heading_tuples.Count < 10000)
                     {
                         m_heading_tuples.Add(tuple, tuple);
-                        m_attr_name_tuples.Add(only_attr.Key, tuple);
+                        m_attr_name_tuples.Add(only_oa.Value.Key, tuple);
                     }
                 }
                 return tuple;
             }
             // We only get here if the tuple degree >= 2.
-            if (Enumerable.All(attrs, attr => Object.ReferenceEquals(attr.Value, m_false)))
+            if ((a0 == null || Object.ReferenceEquals(a0, m_false))
+                && (a1 == null || Object.ReferenceEquals(a1, m_false))
+                && (a2 == null || Object.ReferenceEquals(a2, m_false))
+                && (only_oa == null || Object.ReferenceEquals(
+                    only_oa.Value.Value, m_false))
+                && (multi_oa == null || Enumerable.All(multi_oa,
+                    attr => Object.ReferenceEquals(attr.Value, m_false))))
             {
                 tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
-                if (attrs.Count <= 30
-                    && Enumerable.All(attrs, attr => attr.Key.May_Cache()))
+                if (degree <= 30
+                    && (only_oa == null || only_oa.Value.Key.May_Cache())
+                    && (multi_oa == null || Enumerable.All(multi_oa,
+                        attr => attr.Key.May_Cache())))
                 {
                     if (m_heading_tuples.ContainsKey(tuple))
                     {
@@ -406,33 +480,6 @@ namespace Muldis.D.Ref_Eng.Core
                 }
             }
             return tuple;
-        }
-
-        internal MD_Any MD_Tuple(MD_Any a0 = null, MD_Any a1 = null, MD_Any a2 = null)
-        {
-            if (a0 == null && a1 == null && a2 == null)
-            {
-                return m_nullary_tuple;
-            }
-            if (a1 == null && a2 == null && Object.ReferenceEquals(a0, m_false))
-            {
-                return MD_Attr_Name(m_cpa_0);
-            }
-            Dictionary<Codepoint_Array,MD_Any> attrs
-                = new Dictionary<Codepoint_Array,MD_Any>();
-            if (a0 != null)
-            {
-                attrs.Add(m_cpa_0, a0);
-            }
-            if (a1 != null)
-            {
-                attrs.Add(m_cpa_1, a1);
-            }
-            if (a2 != null)
-            {
-                attrs.Add(m_cpa_2, a2);
-            }
-            return MD_Tuple(attrs);
         }
 
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
@@ -548,10 +595,8 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
                     Degree = 1,
-                    Other_Attrs = new Dictionary<Codepoint_Array,MD_Any>()
-                    {
-                        {value, m_false},
-                    }
+                    Only_OA = new KeyValuePair<Codepoint_Array,MD_Any>(
+                        value, m_false),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                 {
@@ -578,7 +623,10 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "MD_Any is not a Muldis D Attr_Name."
                 );
             }
-            return Enumerable.Single(value.AS.MD_Tuple.Other_Attrs).Key;
+            return Object.ReferenceEquals(value, m_attr_name_0) ? m_cpa_0
+                 : Object.ReferenceEquals(value, m_attr_name_1) ? m_cpa_1
+                 : Object.ReferenceEquals(value, m_attr_name_2) ? m_cpa_2
+                 : value.AS.MD_Tuple.Only_OA.Value.Key;
         }
     }
 }

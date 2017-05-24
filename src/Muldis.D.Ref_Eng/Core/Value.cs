@@ -453,22 +453,25 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff Muldis D Tuple has attr named [0], this field has its asset.
         // This is the canonical name of a first conceptually-ordered attr.
-        internal MD_Any Attr_Named_0 { get; set; }
+        internal MD_Any A0 { get; set; }
 
         // Iff Muldis D Tuple has attr named [1], this field has its asset.
         // This is the canonical name of a second conceptually-ordered attr.
-        internal MD_Any Attr_Named_1 { get; set; }
+        internal MD_Any A1 { get; set; }
 
         // Iff Muldis D Tuple has attr named [2], this field has its asset.
         // This is the canonical name of a third conceptually-ordered attr.
-        internal MD_Any Attr_Named_2 { get; set; }
+        internal MD_Any A2 { get; set; }
 
-        // Iff Muldis D Tuple has at least 1 attribute with some other name
-        // than the ones handled above, those other attrs are represented
+        // Iff Muldis D Tuple has exactly 1 attribute with some other name
+        // than the [N] ones handled above, this other attr is represented
+        // by this field as a of name-asset pair.
+        internal Nullable<KeyValuePair<Codepoint_Array,MD_Any>> Only_OA { get; set; }
+
+        // Iff Muldis D Tuple has at least 2 attributes with some other name
+        // than the [N] ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        // TODO: ACTUALLY, all Tuple attributes are currently stored in here;
-        // making use of the Attr_Named_* is an optimization for later.
-        internal Dictionary<Codepoint_Array,MD_Any> Other_Attrs { get; set; }
+        internal Dictionary<Codepoint_Array,MD_Any> Multi_OA { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct
