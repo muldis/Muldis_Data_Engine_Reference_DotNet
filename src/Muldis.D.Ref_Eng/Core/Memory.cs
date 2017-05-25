@@ -143,7 +143,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A0 = m_false,
+                        A0 = m_true,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
@@ -154,7 +154,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A1 = m_false,
+                        A1 = m_true,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
@@ -165,7 +165,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A2 = m_false,
+                        A2 = m_true,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
@@ -405,20 +405,20 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (degree == 1)
             {
-                if (a0 != null && Object.ReferenceEquals(a0, m_false))
+                if (a0 != null && Object.ReferenceEquals(a0, m_true))
                 {
                     return m_attr_name_0;
                 }
-                if (a1 != null && Object.ReferenceEquals(a1, m_false))
+                if (a1 != null && Object.ReferenceEquals(a1, m_true))
                 {
                     return m_attr_name_1;
                 }
-                if (a2 != null && Object.ReferenceEquals(a2, m_false))
+                if (a2 != null && Object.ReferenceEquals(a2, m_true))
                 {
                     return m_attr_name_2;
                 }
                 if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, m_false)
+                    && Object.ReferenceEquals(only_oa.Value.Value, m_true)
                     && only_oa.Value.Key.May_Cache()
                     && m_attr_name_tuples.ContainsKey(only_oa.Value.Key))
                 {
@@ -442,7 +442,7 @@ namespace Muldis.D.Ref_Eng.Core
             if (degree == 1)
             {
                 if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, m_false))
+                    && Object.ReferenceEquals(only_oa.Value.Value, m_true))
                 {
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Attr_Name);
@@ -455,13 +455,13 @@ namespace Muldis.D.Ref_Eng.Core
                 return tuple;
             }
             // We only get here if the tuple degree >= 2.
-            if ((a0 == null || Object.ReferenceEquals(a0, m_false))
-                && (a1 == null || Object.ReferenceEquals(a1, m_false))
-                && (a2 == null || Object.ReferenceEquals(a2, m_false))
+            if ((a0 == null || Object.ReferenceEquals(a0, m_true))
+                && (a1 == null || Object.ReferenceEquals(a1, m_true))
+                && (a2 == null || Object.ReferenceEquals(a2, m_true))
                 && (only_oa == null || Object.ReferenceEquals(
-                    only_oa.Value.Value, m_false))
+                    only_oa.Value.Value, m_true))
                 && (multi_oa == null || Enumerable.All(multi_oa,
-                    attr => Object.ReferenceEquals(attr.Value, m_false))))
+                    attr => Object.ReferenceEquals(attr.Value, m_true))))
             {
                 tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
                 if (degree <= 30
@@ -596,7 +596,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Tuple = new MD_Tuple_Struct {
                     Degree = 1,
                     Only_OA = new KeyValuePair<Codepoint_Array,MD_Any>(
-                        value, m_false),
+                        value, m_true),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                 {
