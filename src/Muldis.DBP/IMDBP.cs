@@ -60,6 +60,11 @@ namespace Muldis.DBP
             Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null);
 
+        IMD_Heading MD_Heading(
+            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
+            Nullable<Boolean> a2 = null,
+            String attr_name = null, HashSet<String> attr_names = null);
+
         IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs);
 
         IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
@@ -123,6 +128,10 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Tuple : IMD_Any
+    {
+    }
+
+    public interface IMD_Heading : IMD_Tuple
     {
     }
 

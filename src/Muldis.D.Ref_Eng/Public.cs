@@ -105,6 +105,10 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Bag:
                     return (IMD_Bag)new MD_Bag().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Tuple:
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Heading))
+                    {
+                        return (MD_Heading)new MD_Heading().init(m_machine, value);
+                    }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Fraction))
@@ -279,6 +283,12 @@ namespace Muldis.D.Ref_Eng
                     if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                     {
                         return Core_MD_Tuple(attrs: (Dictionary<String,Object>)v);
+                    }
+                    break;
+                case "Heading":
+                    if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
+                    {
+                        return Core_MD_Heading(attr_names: (HashSet<String>)v);
                     }
                     break;
                 case "Capsule":
@@ -869,10 +879,37 @@ namespace Muldis.D.Ref_Eng
                 multi_oa: attrs == null ? null
                     : new Dictionary<Core.Codepoint_Array,Core.MD_Any>(
                         attrs.ToDictionary(
-                            m => m_memory.Codepoint_Array(m.Key),
-                            m => Core_MD_Any(m.Value)
+                            a => m_memory.Codepoint_Array(a.Key),
+                            a => Core_MD_Any(a.Value)
                         )
                     )
+            );
+        }
+
+        public IMD_Heading MD_Heading(
+            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
+            Nullable<Boolean> a2 = null,
+            String attr_name = null, HashSet<String> attr_names = null)
+        {
+            return (IMD_Heading)new MD_Heading().init(m_machine,
+                Core_MD_Heading(a0, a1, a2, attr_name, attr_names));
+        }
+
+        private Core.MD_Any Core_MD_Heading(
+            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
+            Nullable<Boolean> a2 = null,
+            String attr_name = null, HashSet<String> attr_names = null)
+        {
+            return Core_MD_Tuple(
+                a0: (a0 == null || a0 == false) ? (Object)null : true,
+                a1: (a1 == null || a1 == false) ? (Object)null : true,
+                a2: (a2 == null || a2 == false) ? (Object)null : true,
+                attr: attr_name == null
+                    ? (Nullable<KeyValuePair<String,Object>>)null
+                    : new KeyValuePair<String,Object>(attr_name, true),
+                attrs: attr_names == null ? null
+                    : new Dictionary<String,Object>(
+                        attr_names.ToDictionary(a => a, a => (Object)true))
             );
         }
 
@@ -1066,6 +1103,10 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Tuple : MD_Any, IMD_Tuple
+    {
+    }
+
+    public class MD_Heading : MD_Tuple, IMD_Heading
     {
     }
 
