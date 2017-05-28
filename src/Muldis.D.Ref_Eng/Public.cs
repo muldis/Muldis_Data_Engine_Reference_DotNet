@@ -318,7 +318,7 @@ namespace Muldis.D.Ref_Eng
                         if (label.GetType().FullName == "System.String")
                         {
                             return m_memory.MD_Capsule(
-                                m_memory.MD_Attr_Name(m_memory.Codepoint_Array((String)label)),
+                                m_memory.MD_Attr_Name((String)label),
                                 attrs_cv
                             );
                         }
@@ -326,7 +326,7 @@ namespace Muldis.D.Ref_Eng
                         {
                             return m_memory.MD_Capsule(
                                 m_memory.MD_Array(new List<Core.MD_Any>(((String[])label).Select(
-                                    m => m_memory.MD_Attr_Name(m_memory.Codepoint_Array(m))
+                                    m => m_memory.MD_Attr_Name(m)
                                 ))),
                                 attrs_cv
                             );
@@ -527,14 +527,12 @@ namespace Muldis.D.Ref_Eng
                 denominator = (denominator > 0 ? denominator : -denominator) / gcd;
             }
             Core.MD_Any fraction = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Fraction")),
+                m_memory.MD_Attr_Name("Fraction"),
                 m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<Core.Codepoint_Array,Core.MD_Any>()
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
                     {
-                        {m_memory.Codepoint_Array("numerator"),
-                            m_memory.MD_Integer(numerator)},
-                        {m_memory.Codepoint_Array("denominator"),
-                            m_memory.MD_Integer(denominator)},
+                        {"numerator"  , m_memory.MD_Integer(numerator  )},
+                        {"denominator", m_memory.MD_Integer(denominator)},
                     }
                 )
             );
@@ -574,12 +572,7 @@ namespace Muldis.D.Ref_Eng
 
         private Core.MD_Any Core_MD_String(Int32[] members)
         {
-            return m_memory.MD_Array(
-                members: new List<Core.MD_Any>(members.Select(
-                    m => m_memory.MD_Integer(m)
-                )),
-                known_is_string: true
-            );
+            return m_memory.Int32_MD_String(members.ToArray());
         }
 
         public IMD_Bits MD_Bits(BitArray members)
@@ -596,12 +589,10 @@ namespace Muldis.D.Ref_Eng
         {
             // BitArrays are mutable so clone argument to protect our internals.
             Core.MD_Any bits = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Bits")),
+                m_memory.MD_Attr_Name("Bits"),
                 m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
-                        m_memory.Codepoint_Array("bits"),
-                        m_memory.Bit_MD_String(new BitArray(members))
-                    )
+                    only_oa: new KeyValuePair<String,Core.MD_Any>("bits",
+                        m_memory.Bit_MD_String(new BitArray(members)))
                 )
             );
             bits.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Bits);
@@ -622,12 +613,10 @@ namespace Muldis.D.Ref_Eng
         {
             // Arrays are mutable so clone argument to protect our internals.
             Core.MD_Any blob = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Blob")),
+                m_memory.MD_Attr_Name("Blob"),
                 m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
-                        m_memory.Codepoint_Array("octets"),
-                        m_memory.Octet_MD_String(members.ToArray())
-                    )
+                    only_oa: new KeyValuePair<String,Core.MD_Any>("octets",
+                        m_memory.Octet_MD_String(members.ToArray()))
                 )
             );
             blob.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Blob);
@@ -647,11 +636,10 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Text(String members)
         {
             Core.MD_Any text = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Text")),
+                m_memory.MD_Attr_Name("Text"),
                 m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
-                        m_memory.Codepoint_Array("maximal_chars"),
-                        m_memory.Codepoint_MD_String(m_memory.Codepoint_Array(members))
+                    only_oa: new KeyValuePair<String,Core.MD_Any>(
+                        "maximal_chars", m_memory.Codepoint_MD_String(members)
                     )
                 )
             );
@@ -691,12 +679,10 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Set(List<Object> members)
         {
             Core.MD_Any set = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array("Set")),
+                m_memory.MD_Attr_Name("Set"),
                 m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
-                        m_memory.Codepoint_Array("members"),
-                        Core_MD_Bag(members: members, with_unique: true)
-                    )
+                    only_oa: new KeyValuePair<String,Core.MD_Any>("members",
+                        Core_MD_Bag(members: members, with_unique: true))
                 )
             );
             set.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Set);
@@ -871,18 +857,12 @@ namespace Muldis.D.Ref_Eng
                 a1: a1 == null ? null : Core_MD_Any(a1),
                 a2: a2 == null ? null : Core_MD_Any(a2),
                 only_oa: attr == null
-                    ? (Nullable<KeyValuePair<Core.Codepoint_Array,Core.MD_Any>>)null
-                    : new KeyValuePair<Core.Codepoint_Array,Core.MD_Any>(
-                        m_memory.Codepoint_Array(attr.Value.Key),
-                        Core_MD_Any(attr.Value.Value)
-                    ),
+                    ? (Nullable<KeyValuePair<String,Core.MD_Any>>)null
+                    : new KeyValuePair<String,Core.MD_Any>(
+                        attr.Value.Key, Core_MD_Any(attr.Value.Value)),
                 multi_oa: attrs == null ? null
-                    : new Dictionary<Core.Codepoint_Array,Core.MD_Any>(
-                        attrs.ToDictionary(
-                            a => m_memory.Codepoint_Array(a.Key),
-                            a => Core_MD_Any(a.Value)
-                        )
-                    )
+                    : new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                        a => a.Key, a => Core_MD_Any(a.Value)))
             );
         }
 
@@ -964,16 +944,14 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Capsule(String label, IMD_Tuple attrs)
         {
             return m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(m_memory.Codepoint_Array(label)),
-                ((MD_Any)attrs).m_value
-            );
+                m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value);
         }
 
         private Core.MD_Any Core_MD_Capsule(String[] label, IMD_Tuple attrs)
         {
             return m_memory.MD_Capsule(
                 m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
-                    m => m_memory.MD_Attr_Name(m_memory.Codepoint_Array(m))
+                    m => m_memory.MD_Attr_Name(m)
                 ))),
                 ((MD_Any)attrs).m_value
             );

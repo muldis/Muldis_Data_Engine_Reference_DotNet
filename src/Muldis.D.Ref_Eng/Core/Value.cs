@@ -159,7 +159,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (v.AS.Cached_MD_Any_Identity == null)
             {
-                v.AS.Cached_MD_Any_Identity = new Codepoint_Array(""); // TODO, fix this
+                v.AS.Cached_MD_Any_Identity = ""; // TODO, fix this
             }
             return v.AS.Cached_MD_Any_Identity.GetHashCode();
         }
@@ -210,7 +210,7 @@ namespace Muldis.D.Ref_Eng.Core
         // The serialization format either is or resembles a Muldis D Plain Text
         // literal for selecting the value, in the form of character strings
         // whose character codepoints are typically in the 0..127 range.
-        internal Codepoint_Array Cached_MD_Any_Identity { get; set; }
+        internal String Cached_MD_Any_Identity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
@@ -225,6 +225,7 @@ namespace Muldis.D.Ref_Eng.Core
         Unrestricted,
         Bit,
         Octet,
+        Int32,
         Codepoint,
     }
 
@@ -284,8 +285,6 @@ namespace Muldis.D.Ref_Eng.Core
         // A BitArray is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular bit string.
-        // TODO: Consider rolling this into Local_Octet_Members instead,
-        // where one octet represents one bit.
         internal BitArray Local_Bit_Members { get; set; }
 
         // Iff LWT is Octet, this field is the payload.
@@ -296,13 +295,39 @@ namespace Muldis.D.Ref_Eng.Core
         // This is the canonical storage type for a regular octet (byte) string.
         internal Byte[] Local_Octet_Members { get; set; }
 
-        // Iff LWT is Codepoint, this field is the payload.
+        // Iff LWT is Int32, this field is the payload.
         // Represents a Muldis D Array value where each member value is
         // a Muldis D Integer in the range -0x80000000..0x7FFFFFFF.
-        // A Codepoint_Array is the simplest storage representation for that
+        // A Int32[] is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        // This is the canonical storage type for a generic integer string
+        // where the integers are sufficiently small but not small enough
+        // or semantically appropriate to qualify for Bit/Octet/Codepoint.
+        internal Int32[] Local_Int32_Members { get; set; }
+
+        // Iff LWT is Codepoint, this field is the payload.
+        // Represents a Muldis D Array value where each member value is
+        // a Muldis D Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
+        // A String is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular character string.
-        internal Codepoint_Array Local_Codepoint_Members { get; set; }
+        // Each logical member represents a single Unicode standard character
+        // codepoint from either the Basic Multilingual Plane (BMP), which
+        // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
+        // or from either of the 16 supplementary planes, which is those
+        // member values in the range {0x10000..0x10FFFF}.
+        // Local_Codepoint_Members is represented using a standard .Net
+        // String value for simplicity but a String has a different native
+        // concept of components; it is formally an array of .Net Char
+        // each of which is either a whole BMP codepoint or half of a
+        // non-BMP codepoint; a non-BMP codepoint is represented by a pair
+        // of consecutive Char with numeric values in {0xD800..0xDFFF};
+        // therefore, the native "length" of a String only matches the
+        // "length" of the Muldis D Array when all codepoints are in the BMP.
+        // It is possible for a String to contain an isolated "surrogate"
+        // Char outside of a proper "surrogate pair", which is then
+        // malformed and not considered an actual codepoint array.
+        internal String Local_Codepoint_Members { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
@@ -466,12 +491,12 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff Muldis D Tuple has exactly 1 attribute with some other name
         // than the [N] ones handled above, this other attr is represented
         // by this field as a of name-asset pair.
-        internal Nullable<KeyValuePair<Codepoint_Array,MD_Any>> Only_OA { get; set; }
+        internal Nullable<KeyValuePair<String,MD_Any>> Only_OA { get; set; }
 
         // Iff Muldis D Tuple has at least 2 attributes with some other name
         // than the [N] ones handled above, those other attrs are represented
         // by this field as a set of name-asset pairs.
-        internal Dictionary<Codepoint_Array,MD_Any> Multi_OA { get; set; }
+        internal Dictionary<String,MD_Any> Multi_OA { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct
