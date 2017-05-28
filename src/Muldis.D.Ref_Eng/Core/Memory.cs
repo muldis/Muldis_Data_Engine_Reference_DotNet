@@ -24,8 +24,8 @@ namespace Muldis.D.Ref_Eng.Core
     internal class Memory
     {
         // MD_Boolean False (type default value) and True values.
-        private readonly MD_Any m_false;
-        private readonly MD_Any m_true;
+        internal readonly MD_Any MD_False;
+        internal readonly MD_Any MD_True;
 
         // MD_Integer value cache.
         // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
@@ -33,32 +33,32 @@ namespace Muldis.D.Ref_Eng.Core
         private readonly Dictionary<Int32,MD_Any> m_integers;
 
         // MD_Array with no members (type default value).
-        private readonly MD_Any m_empty_array;
+        internal readonly MD_Any MD_Array_C0;
 
         // MD_Bag with no members (type default value).
-        private readonly MD_Any m_empty_bag;
+        internal readonly MD_Any MD_Bag_C0;
 
         // MD_Tuple with no attributes (type default value).
-        private readonly MD_Any m_nullary_tuple;
+        internal readonly MD_Any MD_Tuple_D0;
         // Cache of MD_Tuple subtype Heading values (all Tuple attribute
         // assets are False), limited to 10K entries of shorter size.
         private readonly Dictionary<MD_Any,MD_Any> m_heading_tuples;
         // Cache of MD_Tuple and Heading subtype Attr_Name values.
-        // The set of values in here is a proper subset of m_nullary_tuple.
+        // The set of values in here is a proper subset of MD_Tuple_D0.
         private readonly Dictionary<String,MD_Any> m_attr_name_tuples;
-        private readonly MD_Any m_attr_name_0;
-        private readonly MD_Any m_attr_name_1;
-        private readonly MD_Any m_attr_name_2;
+        internal readonly MD_Any Attr_Name_0;
+        internal readonly MD_Any Attr_Name_1;
+        internal readonly MD_Any Attr_Name_2;
 
         // MD_Capsule with False label and no attributes (type default value).
         private readonly MD_Any m_false_nullary_capsule;
 
         // All well known MD_Excuse values.
-        private readonly Dictionary<String,MD_Any> m_well_known_excuses;
+        internal readonly Dictionary<String,MD_Any> Well_Known_Excuses;
 
         internal Memory()
         {
-            m_false = new MD_Any { AS = new MD_Any_Struct {
+            MD_False = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = false,
@@ -66,7 +66,7 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Boolean},
             } };
 
-            m_true = new MD_Any { AS = new MD_Any_Struct {
+            MD_True = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = true,
@@ -80,7 +80,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any v = MD_Integer(i);
             }
 
-            m_empty_array = new MD_Any { AS = new MD_Any_Struct {
+            MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
                 MD_Array = new MD_Array_Node {
@@ -94,7 +94,7 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
             } };
 
-            m_empty_bag = new MD_Any { AS = new MD_Any_Struct {
+            MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = new MD_Bag_Node {
@@ -108,7 +108,7 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Bag},
             } };
 
-            m_nullary_tuple = new MD_Any { AS = new MD_Any_Struct {
+            MD_Tuple_D0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
@@ -125,7 +125,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A0 = m_true,
+                        A0 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
@@ -136,7 +136,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A1 = m_true,
+                        A1 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
@@ -147,37 +147,37 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                     MD_Tuple = new MD_Tuple_Struct {
                         Degree = 1,
-                        A2 = m_true,
+                        A2 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
                         {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
                             MD_Well_Known_Type.Attr_Name},
                 } } },
             };
-            m_attr_name_0 = m_attr_name_tuples["\u0000"];
-            m_attr_name_1 = m_attr_name_tuples["\u0001"];
-            m_attr_name_2 = m_attr_name_tuples["\u0002"];
+            Attr_Name_0 = m_attr_name_tuples["\u0000"];
+            Attr_Name_1 = m_attr_name_tuples["\u0001"];
+            Attr_Name_2 = m_attr_name_tuples["\u0002"];
 
             m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
             {
-                {m_nullary_tuple, m_nullary_tuple},
-                {m_attr_name_0, m_attr_name_0},
-                {m_attr_name_1, m_attr_name_1},
-                {m_attr_name_2, m_attr_name_2},
+                {MD_Tuple_D0, MD_Tuple_D0},
+                {Attr_Name_0, Attr_Name_0},
+                {Attr_Name_1, Attr_Name_1},
+                {Attr_Name_2, Attr_Name_2},
             };
 
             m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
                 MD_Capsule = new MD_Capsule_Struct {
-                    Label = m_false,
-                    Attrs = m_nullary_tuple,
+                    Label = MD_False,
+                    Attrs = MD_Tuple_D0,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Capsule},
             } };
 
-            m_well_known_excuses = new Dictionary<String,MD_Any>();
+            Well_Known_Excuses = new Dictionary<String,MD_Any>();
             foreach (String s in new String[] {
                     "No_Reason",
                     "Before_All_Others",
@@ -190,13 +190,13 @@ namespace Muldis.D.Ref_Eng.Core
                     "Not_Same_Heading",
                 })
             {
-                m_well_known_excuses.Add(s, MD_Excuse(MD_Tuple(MD_Attr_Name(s))));
+                Well_Known_Excuses.Add(s, MD_Excuse(MD_Tuple(MD_Attr_Name(s))));
             }
         }
 
         internal MD_Any MD_Boolean(Boolean value)
         {
-            return value ? m_true : m_false;
+            return value ? MD_True : MD_False;
         }
 
         internal MD_Any MD_Integer(BigInteger value)
@@ -224,7 +224,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Count == 0)
             {
-                return m_empty_array;
+                return MD_Array_C0;
             }
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -249,7 +249,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Length == 0)
             {
-                return m_empty_array;
+                return MD_Array_C0;
             }
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -270,7 +270,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Length == 0)
             {
-                return m_empty_array;
+                return MD_Array_C0;
             }
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -291,7 +291,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Length == 0)
             {
-                return m_empty_array;
+                return MD_Array_C0;
             }
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -312,7 +312,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Length == 0)
             {
-                return m_empty_array;
+                return MD_Array_C0;
             }
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -333,7 +333,7 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (members.Count == 0)
             {
-                return m_empty_bag;
+                return MD_Bag_C0;
             }
             MD_Bag_Node arrayed_node = new MD_Bag_Node {
                 Local_Symbolic_Type = Symbolic_Value_Type.Arrayed,
@@ -368,24 +368,24 @@ namespace Muldis.D.Ref_Eng.Core
                 + (multi_oa == null ? 0 : multi_oa.Count);
             if (degree == 0)
             {
-                return m_nullary_tuple;
+                return MD_Tuple_D0;
             }
             if (degree == 1)
             {
-                if (a0 != null && Object.ReferenceEquals(a0, m_true))
+                if (a0 != null && Object.ReferenceEquals(a0, MD_True))
                 {
-                    return m_attr_name_0;
+                    return Attr_Name_0;
                 }
-                if (a1 != null && Object.ReferenceEquals(a1, m_true))
+                if (a1 != null && Object.ReferenceEquals(a1, MD_True))
                 {
-                    return m_attr_name_1;
+                    return Attr_Name_1;
                 }
-                if (a2 != null && Object.ReferenceEquals(a2, m_true))
+                if (a2 != null && Object.ReferenceEquals(a2, MD_True))
                 {
-                    return m_attr_name_2;
+                    return Attr_Name_2;
                 }
                 if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, m_true)
+                    && Object.ReferenceEquals(only_oa.Value.Value, MD_True)
                     && only_oa.Value.Key.Length <= 200
                     && m_attr_name_tuples.ContainsKey(only_oa.Value.Key))
                 {
@@ -409,7 +409,7 @@ namespace Muldis.D.Ref_Eng.Core
             if (degree == 1)
             {
                 if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, m_true))
+                    && Object.ReferenceEquals(only_oa.Value.Value, MD_True))
                 {
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
                     tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Attr_Name);
@@ -422,13 +422,13 @@ namespace Muldis.D.Ref_Eng.Core
                 return tuple;
             }
             // We only get here if the tuple degree >= 2.
-            if ((a0 == null || Object.ReferenceEquals(a0, m_true))
-                && (a1 == null || Object.ReferenceEquals(a1, m_true))
-                && (a2 == null || Object.ReferenceEquals(a2, m_true))
+            if ((a0 == null || Object.ReferenceEquals(a0, MD_True))
+                && (a1 == null || Object.ReferenceEquals(a1, MD_True))
+                && (a2 == null || Object.ReferenceEquals(a2, MD_True))
                 && (only_oa == null || Object.ReferenceEquals(
-                    only_oa.Value.Value, m_true))
+                    only_oa.Value.Value, MD_True))
                 && (multi_oa == null || Enumerable.All(multi_oa,
-                    attr => Object.ReferenceEquals(attr.Value, m_true))))
+                    attr => Object.ReferenceEquals(attr.Value, MD_True))))
             {
                 tuple.AS.Cached_WKT.Add(MD_Well_Known_Type.Heading);
                 if (degree <= 30
@@ -451,8 +451,8 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
         {
-            if (Object.ReferenceEquals(label, m_false)
-                && Object.ReferenceEquals(attrs, m_nullary_tuple))
+            if (Object.ReferenceEquals(label, MD_False)
+                && Object.ReferenceEquals(attrs, MD_Tuple_D0))
             {
                 return m_false_nullary_capsule;
             }
@@ -544,9 +544,9 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Simple_MD_Excuse(String value)
         {
-            if (m_well_known_excuses.ContainsKey(value))
+            if (Well_Known_Excuses.ContainsKey(value))
             {
-                return m_well_known_excuses[value];
+                return Well_Known_Excuses[value];
             }
             return MD_Excuse(MD_Tuple(MD_Attr_Name(value)));
         }
@@ -562,7 +562,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
                 MD_Tuple = new MD_Tuple_Struct {
                     Degree = 1,
-                    Only_OA = new KeyValuePair<String,MD_Any>(value, m_true),
+                    Only_OA = new KeyValuePair<String,MD_Any>(value, MD_True),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                 {
@@ -589,9 +589,9 @@ namespace Muldis.D.Ref_Eng.Core
                     message: "MD_Any is not a Muldis D Attr_Name."
                 );
             }
-            return Object.ReferenceEquals(value, m_attr_name_0) ? "\u0000"
-                 : Object.ReferenceEquals(value, m_attr_name_1) ? "\u0001"
-                 : Object.ReferenceEquals(value, m_attr_name_2) ? "\u0002"
+            return Object.ReferenceEquals(value, Attr_Name_0) ? "\u0000"
+                 : Object.ReferenceEquals(value, Attr_Name_1) ? "\u0001"
+                 : Object.ReferenceEquals(value, Attr_Name_2) ? "\u0002"
                  : value.AS.MD_Tuple.Only_OA.Value.Key;
         }
     }
