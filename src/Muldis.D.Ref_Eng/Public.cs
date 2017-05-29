@@ -153,6 +153,20 @@ namespace Muldis.D.Ref_Eng
                         return (MD_Excuse)new MD_Excuse().init(m_machine, value);
                     }
                     return (MD_Capsule)new MD_Capsule().init(m_machine, value);
+                case Core.MD_Foundation_Type.MD_Handle:
+                    switch (value.AS.MD_Handle.MD_Handle_Type)
+                    {
+                        case Core.MD_Handle_Type.MD_Variable:
+                            return (IMD_Variable)new MD_Variable().init(m_machine, value);
+                        case Core.MD_Handle_Type.MD_Process:
+                            return (MD_Process)new MD_Process().init(m_machine, value);
+                        case Core.MD_Handle_Type.MD_Stream:
+                            return (MD_Stream)new MD_Stream().init(m_machine, value);
+                        case Core.MD_Handle_Type.MD_External:
+                            return (MD_External)new MD_External().init(m_machine, value);
+                        default:
+                            throw new NotImplementedException();
+                    }
                 default:
                     throw new NotImplementedException();
             }
@@ -379,6 +393,26 @@ namespace Muldis.D.Ref_Eng
                         }
                     }
                     break;
+                case "New_Variable":
+                    if (type_name.StartsWith("Muldis.D.Ref_Eng.Value."))
+                    {
+                        return Core_MD_Variable((Muldis.D.Ref_Eng.Value.MD_Any)v);
+                    }
+                    break;
+                case "New_Process":
+                    if (v == null)
+                    {
+                        return Core_MD_Process();
+                    }
+                    break;
+                case "New_Stream":
+                    if (v == null)
+                    {
+                        return Core_MD_Stream();
+                    }
+                    break;
+                case "New_External":
+                    return Core_MD_External(v);
                 case "Excuse":
                     if (v == null)
                     {
@@ -1207,6 +1241,52 @@ namespace Muldis.D.Ref_Eng
             );
         }
 
+        public IMD_Variable New_MD_Variable(IMD_Any initial_current_value)
+        {
+            if (initial_current_value == null)
+            {
+                throw new ArgumentNullException("initial_current_value");
+            }
+            return (IMD_Variable)new MD_Variable().init(m_machine,
+                Core_MD_Variable(initial_current_value));
+        }
+
+        private Core.MD_Any Core_MD_Variable(IMD_Any initial_current_value)
+        {
+            return m_memory.New_MD_Variable(((MD_Any)initial_current_value).m_value);
+        }
+
+        public IMD_Process New_MD_Process()
+        {
+            return (IMD_Process)new MD_Process().init(m_machine, Core_MD_Process());
+        }
+
+        private Core.MD_Any Core_MD_Process()
+        {
+            return m_memory.New_MD_Process();
+        }
+
+        public IMD_Stream New_MD_Stream()
+        {
+            return (IMD_Stream)new MD_Stream().init(m_machine, Core_MD_Stream());
+        }
+
+        private Core.MD_Any Core_MD_Stream()
+        {
+            return m_memory.New_MD_Stream();
+        }
+
+        public IMD_External New_MD_External(Object value)
+        {
+            return (IMD_External)new MD_External().init(m_machine,
+                Core_MD_External(value));
+        }
+
+        private Core.MD_Any Core_MD_External(Object value)
+        {
+            return m_memory.New_MD_External(value);
+        }
+
         public IMD_Excuse MD_Excuse(IMD_Tuple attrs)
         {
             if (attrs == null)
@@ -1351,6 +1431,26 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Capsule : MD_Any, IMD_Capsule
+    {
+    }
+
+    public abstract class MD_Handle : MD_Any, IMD_Handle
+    {
+    }
+
+    public class MD_Variable : MD_Handle, IMD_Variable
+    {
+    }
+
+    public class MD_Process : MD_Handle, IMD_Process
+    {
+    }
+
+    public class MD_Stream : MD_Handle, IMD_Stream
+    {
+    }
+
+    public class MD_External : MD_Handle, IMD_External
     {
     }
 

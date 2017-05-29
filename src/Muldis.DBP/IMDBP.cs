@@ -83,6 +83,14 @@ namespace Muldis.DBP
 
         IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs);
 
+        IMD_Variable New_MD_Variable(IMD_Any initial_current_value);
+
+        IMD_Process New_MD_Process();
+
+        IMD_Stream New_MD_Stream();
+
+        IMD_External New_MD_External(Object value);
+
         IMD_Excuse MD_Excuse(IMD_Tuple attrs);
 
         IMD_Excuse MD_Excuse(String value);
@@ -160,6 +168,26 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Capsule : IMD_Any
+    {
+    }
+
+    public interface IMD_Handle : IMD_Any
+    {
+    }
+
+    public interface IMD_Variable : IMD_Handle
+    {
+    }
+
+    public interface IMD_Process : IMD_Handle
+    {
+    }
+
+    public interface IMD_Stream : IMD_Handle
+    {
+    }
+
+    public interface IMD_External : IMD_Handle
     {
     }
 

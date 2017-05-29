@@ -473,7 +473,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Variable(MD_Any current_value)
+        internal MD_Any New_MD_Variable(MD_Any initial_current_value)
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -481,7 +481,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Handle = new MD_Handle_Struct {
                     MD_Handle_Type = MD_Handle_Type.MD_Variable,
                     MD_Variable = new MD_Variable_Struct {
-                        Current_Value = current_value,
+                        Current_Value = initial_current_value,
                     },
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
@@ -489,7 +489,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Process()
+        internal MD_Any New_MD_Process()
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -503,7 +503,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Stream()
+        internal MD_Any New_MD_Stream()
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -517,7 +517,7 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_External(Object value)
+        internal MD_Any New_MD_External(Object value)
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
