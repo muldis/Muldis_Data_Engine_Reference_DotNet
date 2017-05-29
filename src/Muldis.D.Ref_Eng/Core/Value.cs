@@ -258,6 +258,14 @@ namespace Muldis.D.Ref_Eng.Core
         // the same value.
         internal Nullable<Boolean> Cached_Tree_All_Unique { get; set; }
 
+        // Nullable Boolean
+        // This is true iff we know that the Muldis D Array represented by
+        // this tree node (as with Tree_All_Unique) has no member that
+        // is not a Muldis D Tuple and has no 2 members that do not have
+        // the same heading; this is false iff we know that any member is
+        // not a Tuple or that any 2 members do not have the same heading.
+        internal Nullable<Boolean> Cached_Tree_Relational { get; set; }
+
         // Cached indication of the widest Local_Widest_Type in the tree,
         // and thus of the over-all type of the tree.
         internal Widest_Component_Type Tree_Widest_Type { get; set; }
@@ -271,6 +279,21 @@ namespace Muldis.D.Ref_Eng.Core
         // LWT indicates which of the Local_*_Members this node is using.
         // This is None iff Local_Multiplicity is zero.
         internal Widest_Component_Type Local_Widest_Type { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that no 2 members of the Muldis D Array
+        // represented by this tree node (specifically the Local_*_Members
+        // fields as they are defined in isolation) are the same value, and
+        // false iff we know that at least 2 members are the same value.
+        internal Nullable<Boolean> Cached_Local_All_Unique { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that the Muldis D Array represented by
+        // this tree node (as with Local_All_Unique) has no member that
+        // is not a Muldis D Tuple and has no 2 members that do not have
+        // the same heading; this is false iff we know that any member is
+        // not a Tuple or that any 2 members do not have the same heading.
+        internal Nullable<Boolean> Cached_Local_Relational { get; set; }
 
         // Iff LWT is Unrestricted, this field is the payload.
         // Represents a Muldis D Array value where each member value is
@@ -406,7 +429,16 @@ namespace Muldis.D.Ref_Eng.Core
         // the same value.
         internal Nullable<Boolean> Cached_Tree_All_Unique { get; set; }
 
+        // Nullable Boolean
+        // This is true iff we know that the Muldis D Bag represented by
+        // this tree node (as with Tree_All_Unique) has no member that
+        // is not a Muldis D Tuple and has no 2 members that do not have
+        // the same heading; this is false iff we know that any member is
+        // not a Tuple or that any 2 members do not have the same heading.
+        internal Nullable<Boolean> Cached_Tree_Relational { get; set; }
+
         // LST determines how to interpret most of the other fields.
+        // Iff LST is None, this node is explicitly a leaf node defining zero members.
         // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
         // Iff LST is Arrayed, Local_Arrayed_Members defines all of the Bag members.
         // Iff LST is Indexed, Local_Indexed_Members defines all of the Bag members.
@@ -439,6 +471,14 @@ namespace Muldis.D.Ref_Eng.Core
         // fields as they are defined in isolation) are the same value, and
         // false iff we know that at least 2 members are the same value.
         internal Nullable<Boolean> Cached_Local_All_Unique { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that the Muldis D Bag represented by
+        // this tree node (as with Local_All_Unique) has no member that
+        // is not a Muldis D Tuple and has no 2 members that do not have
+        // the same heading; this is false iff we know that any member is
+        // not a Tuple or that any 2 members do not have the same heading.
+        internal Nullable<Boolean> Cached_Local_Relational { get; set; }
 
         // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
         internal Multiplied_Member Local_Singular_Members { get; set; }

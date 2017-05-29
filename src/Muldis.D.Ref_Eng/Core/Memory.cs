@@ -86,9 +86,12 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Array = new MD_Array_Node {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
+                    Cached_Tree_Relational = true,
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
+                    Cached_Local_All_Unique = true,
+                    Cached_Local_Relational = true,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
@@ -100,9 +103,11 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Bag = new MD_Bag_Node {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
+                    Cached_Tree_Relational = true,
                     Local_Symbolic_Type = Symbolic_Value_Type.None,
                     Cached_Local_Member_Count = 0,
                     Cached_Local_All_Unique = true,
+                    Cached_Local_Relational = true,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
                     {MD_Well_Known_Type.Bag},
@@ -579,20 +584,376 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
-        internal String MD_Attr_Name_as_String(MD_Any value)
+        internal MD_Any Array__Pick_Random_Member(MD_Any array)
         {
-            if (!value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Attr_Name))
+            return Array__Pick_Random_Node_Member(array.AS.MD_Array);
+        }
+
+        private MD_Any Array__Pick_Random_Node_Member(MD_Array_Node node)
+        {
+            if (node.Cached_Tree_Member_Count == 0)
             {
-                throw new ArgumentException
-                (
-                    paramName: "value",
-                    message: "MD_Any is not a Muldis D Attr_Name."
-                );
+                return null;
             }
-            return Object.ReferenceEquals(value, Attr_Name_0) ? "\u0000"
-                 : Object.ReferenceEquals(value, Attr_Name_1) ? "\u0001"
-                 : Object.ReferenceEquals(value, Attr_Name_2) ? "\u0002"
-                 : value.AS.MD_Tuple.Only_OA.Value.Key;
+            switch (node.Local_Widest_Type)
+            {
+                case Widest_Component_Type.None:
+                    return (node.Pred_Members == null ? null
+                            : Array__Pick_Random_Node_Member(node.Pred_Members))
+                        ?? (node.Succ_Members == null ? null
+                            : Array__Pick_Random_Node_Member(node.Succ_Members));
+                case Widest_Component_Type.Unrestricted:
+                    return node.Local_Unrestricted_Members[0];
+                case Widest_Component_Type.Bit:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Octet:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Int32:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Codepoint:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        internal Boolean Array__Is_Relational(MD_Any array)
+        {
+            return Array__Tree_Relational(array.AS.MD_Array);
+        }
+
+        private Boolean Array__Tree_Relational(MD_Array_Node node)
+        {
+            if (node.Cached_Tree_Relational == null)
+            {
+                Boolean tr = Array__Local_Relational(node);
+                MD_Any m0 = Array__Pick_Random_Node_Member(node);
+                if (tr && node.Pred_Members != null)
+                {
+                    MD_Any pm0 = Array__Pick_Random_Node_Member(node.Pred_Members);
+                    if (pm0 != null)
+                    {
+                        tr = tr && Array__Tree_Relational(node.Pred_Members);
+                        if (tr && m0 != null)
+                        {
+                            tr = tr && Tuple__Same_Heading(pm0, m0);
+                        }
+                        m0 = pm0;
+                    }
+                }
+                if (tr && node.Succ_Members != null)
+                {
+                    MD_Any sm0 = Array__Pick_Random_Node_Member(node.Succ_Members);
+                    if (sm0 != null)
+                    {
+                        tr = tr && Array__Tree_Relational(node.Succ_Members);
+                        if (tr && m0 != null)
+                        {
+                            tr = tr && Tuple__Same_Heading(sm0, m0);
+                        }
+                    }
+                }
+                node.Cached_Tree_Relational = tr;
+            }
+            return (Boolean)node.Cached_Tree_Relational;
+        }
+
+        private Boolean Array__Local_Relational(MD_Array_Node node)
+        {
+            if (node.Cached_Local_Relational == null)
+            {
+                switch (node.Local_Widest_Type)
+                {
+                    case Widest_Component_Type.None:
+                        node.Cached_Local_Relational = true;
+                        break;
+                    case Widest_Component_Type.Unrestricted:
+                        MD_Any m0 = Array__Pick_Random_Node_Member(node);
+                        node.Cached_Local_Relational
+                            = m0.AS.MD_Foundation_Type
+                                == MD_Foundation_Type.MD_Tuple
+                            && Enumerable.All(
+                                node.Local_Unrestricted_Members,
+                                m => m.AS.MD_Foundation_Type
+                                        == MD_Foundation_Type.MD_Tuple
+                                    && Tuple__Same_Heading(m, m0)
+                            );
+                        break;
+                    case Widest_Component_Type.Bit:
+                    case Widest_Component_Type.Octet:
+                    case Widest_Component_Type.Int32:
+                    case Widest_Component_Type.Codepoint:
+                        node.Cached_Local_Relational = false;
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            return (Boolean)node.Cached_Local_Relational;
+        }
+
+        internal MD_Any Set__Pick_Random_Member(MD_Any set)
+        {
+            return Bag__Pick_Random_Member(
+                set.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value);
+        }
+
+        internal Boolean Set__Is_Relational(MD_Any set)
+        {
+            return Bag__Is_Relational(
+                set.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value);
+        }
+
+        internal MD_Any Bag__Pick_Random_Member(MD_Any bag)
+        {
+            return Bag__Pick_Random_Node_Member(bag.AS.MD_Bag);
+        }
+
+        private MD_Any Bag__Pick_Random_Node_Member(MD_Bag_Node node)
+        {
+            if (node.Cached_Tree_Member_Count == 0)
+            {
+                return null;
+            }
+            switch (node.Local_Symbolic_Type)
+            {
+                case Symbolic_Value_Type.None:
+                    return null;
+                case Symbolic_Value_Type.Singular:
+                    return node.Local_Singular_Members.Member;
+                case Symbolic_Value_Type.Arrayed:
+                    return node.Local_Arrayed_Members.Count == 0 ? null
+                        : node.Local_Arrayed_Members[0].Member;
+                case Symbolic_Value_Type.Indexed:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Unique:
+                    return Bag__Pick_Random_Node_Member(node.Primary_Arg);
+                case Symbolic_Value_Type.Insert_N:
+                    return node.Local_Singular_Members.Member;
+                case Symbolic_Value_Type.Remove_N:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Member_Plus:
+                    return Bag__Pick_Random_Node_Member(node.Primary_Arg)
+                        ?? Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                case Symbolic_Value_Type.Except:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Intersect:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Union:
+                    return Bag__Pick_Random_Node_Member(node.Primary_Arg)
+                        ?? Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                case Symbolic_Value_Type.Exclusive:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        internal Boolean Bag__Is_Relational(MD_Any bag)
+        {
+            return Bag__Tree_Relational(bag.AS.MD_Bag);
+        }
+
+        private Boolean Bag__Tree_Relational(MD_Bag_Node node)
+        {
+            if (node.Cached_Tree_Relational == null)
+            {
+                Boolean tr = true;
+                switch (node.Local_Symbolic_Type)
+                {
+                    case Symbolic_Value_Type.None:
+                    case Symbolic_Value_Type.Singular:
+                    case Symbolic_Value_Type.Arrayed:
+                    case Symbolic_Value_Type.Indexed:
+                        tr = Bag__Local_Relational(node);
+                        break;
+                    case Symbolic_Value_Type.Unique:
+                        tr = Bag__Tree_Relational(node.Primary_Arg);
+                        break;
+                    case Symbolic_Value_Type.Insert_N:
+                        tr = Bag__Local_Relational(node);
+                        MD_Any lsm = node.Local_Singular_Members.Member;
+                        MD_Any pm0 = Bag__Pick_Random_Node_Member(node.Primary_Arg);
+                        if (pm0 != null)
+                        {
+                            tr = tr && Bag__Tree_Relational(node.Primary_Arg)
+                                && Tuple__Same_Heading(pm0, lsm);
+                        }
+                        break;
+                    case Symbolic_Value_Type.Member_Plus:
+                    case Symbolic_Value_Type.Union:
+                        tr = Bag__Tree_Relational(node.Primary_Arg)
+                            && Bag__Tree_Relational(node.Extra_Arg);
+                        MD_Any pam0 = Bag__Pick_Random_Node_Member(node.Primary_Arg);
+                        MD_Any eam0 = Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                        if (pam0 != null && eam0 != null)
+                        {
+                            tr = tr && Tuple__Same_Heading(pam0, eam0);
+                        }
+                        break;
+                    case Symbolic_Value_Type.Remove_N:
+                    case Symbolic_Value_Type.Except:
+                    case Symbolic_Value_Type.Intersect:
+                    case Symbolic_Value_Type.Exclusive:
+                        throw new NotImplementedException();
+                    default:
+                        throw new NotImplementedException();
+                }
+                node.Cached_Tree_Relational = tr;
+            }
+            return (Boolean)node.Cached_Tree_Relational;
+        }
+
+        private Boolean Bag__Local_Relational(MD_Bag_Node node)
+        {
+            if (node.Cached_Local_Relational == null)
+            {
+                switch (node.Local_Symbolic_Type)
+                {
+                    case Symbolic_Value_Type.None:
+                    case Symbolic_Value_Type.Unique:
+                    case Symbolic_Value_Type.Member_Plus:
+                    case Symbolic_Value_Type.Except:
+                    case Symbolic_Value_Type.Intersect:
+                    case Symbolic_Value_Type.Union:
+                    case Symbolic_Value_Type.Exclusive:
+                        node.Cached_Local_Relational = true;
+                        break;
+                    case Symbolic_Value_Type.Singular:
+                    case Symbolic_Value_Type.Insert_N:
+                    case Symbolic_Value_Type.Remove_N:
+                        node.Cached_Local_Relational
+                            = node.Local_Singular_Members.Member.AS.MD_Foundation_Type
+                                == MD_Foundation_Type.MD_Tuple;
+                        break;
+                    case Symbolic_Value_Type.Arrayed:
+                        if (node.Local_Arrayed_Members.Count == 0)
+                        {
+                            node.Cached_Local_Relational = true;
+                        }
+                        else
+                        {
+                            MD_Any m0 = Bag__Pick_Random_Node_Member(node);
+                            node.Cached_Local_Relational
+                                = m0.AS.MD_Foundation_Type
+                                    == MD_Foundation_Type.MD_Tuple
+                                && Enumerable.All(
+                                    node.Local_Arrayed_Members,
+                                    m => m.Member.AS.MD_Foundation_Type
+                                            == MD_Foundation_Type.MD_Tuple
+                                        && Tuple__Same_Heading(m.Member, m0)
+                                );
+                        }
+                        break;
+                    case Symbolic_Value_Type.Indexed:
+                        throw new NotImplementedException();
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            return (Boolean)node.Cached_Local_Relational;
+        }
+
+        internal MD_Any Tuple__Heading(MD_Any tuple)
+        {
+            if (tuple.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
+            {
+                return tuple;
+            }
+            // If we get here, the Tuple/Heading degree is guaranteed > 0.
+            MD_Tuple_Struct ts = tuple.AS.MD_Tuple;
+            if (ts.Degree == 1)
+            {
+                if (ts.A0 != null)
+                {
+                    return Attr_Name_0;
+                }
+                if (ts.A1 != null)
+                {
+                    return Attr_Name_1;
+                }
+                if (ts.A2 != null)
+                {
+                    return Attr_Name_2;
+                }
+                if (ts.Only_OA != null
+                    && ts.Only_OA.Value.Key.Length <= 200
+                    && m_attr_name_tuples.ContainsKey(ts.Only_OA.Value.Key))
+                {
+                    return m_attr_name_tuples[ts.Only_OA.Value.Key];
+                }
+            }
+            MD_Any heading = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = ts.Degree,
+                    A0 = ts.A0 == null ? null : MD_True,
+                    A1 = ts.A1 == null ? null : MD_True,
+                    A2 = ts.A2 == null ? null : MD_True,
+                    Only_OA = ts.Only_OA == null
+                        ? (Nullable<KeyValuePair<String,MD_Any>>)null
+                        : new KeyValuePair<String,MD_Any>(
+                            ts.Only_OA.Value.Key, MD_True),
+                    Multi_OA = ts.Multi_OA == null ? null
+                        : new Dictionary<String,MD_Any>(
+                            ts.Multi_OA.ToDictionary(a => a.Key, a => MD_True)),
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+            } };
+            if (ts.Degree == 1)
+            {
+                if (ts.Only_OA != null)
+                {
+                    heading.AS.Cached_WKT.Add(MD_Well_Known_Type.Attr_Name);
+                    if (ts.Only_OA.Value.Key.Length <= 200 && m_heading_tuples.Count < 10000)
+                    {
+                        m_heading_tuples.Add(heading, heading);
+                        m_attr_name_tuples.Add(ts.Only_OA.Value.Key, heading);
+                    }
+                }
+                return heading;
+            }
+            // We only get here if the tuple degree >= 2.
+            if (ts.Degree <= 30
+                && (ts.Only_OA == null || ts.Only_OA.Value.Key.Length <= 200)
+                && (ts.Multi_OA == null || Enumerable.All(ts.Multi_OA,
+                    attr => attr.Key.Length <= 200)))
+            {
+                if (m_heading_tuples.ContainsKey(heading))
+                {
+                    return m_heading_tuples[heading];
+                }
+                if (m_heading_tuples.Count < 10000)
+                {
+                    m_heading_tuples.Add(heading, heading);
+                }
+            }
+            return heading;
+        }
+
+        internal Boolean Tuple__Same_Heading(MD_Any t1, MD_Any t2)
+        {
+            if (Object.ReferenceEquals(t1,t2)
+                || Object.ReferenceEquals(t1.AS,t2.AS))
+            {
+                return true;
+            }
+            MD_Tuple_Struct ts1 = t1.AS.MD_Tuple;
+            MD_Tuple_Struct ts2 = t2.AS.MD_Tuple;
+            return (ts1.Degree == ts2.Degree)
+                && ((ts1.A0 == null) == (ts2.A0 == null))
+                && ((ts1.A1 == null) == (ts2.A1 == null))
+                && ((ts1.A2 == null) == (ts2.A2 == null))
+                && ((ts1.Only_OA == null && ts2.Only_OA == null)
+                    || (ts1.Only_OA != null && ts2.Only_OA != null)
+                    && Object.ReferenceEquals(
+                        ts1.Only_OA.Value.Key, ts2.Only_OA.Value.Key))
+                && ((ts1.Multi_OA == null && ts2.Multi_OA == null)
+                    || (ts1.Multi_OA != null && ts2.Multi_OA != null)
+                    && Enumerable.All(ts1.Multi_OA,
+                        attr => ts2.Multi_OA.ContainsKey(attr.Key)));
         }
     }
 }
