@@ -131,6 +131,18 @@ namespace Muldis.D.Ref_Eng
                     {
                         return (MD_Set)new MD_Set().init(m_machine, value);
                     }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Array))
+                    {
+                        return (MD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Relation))
+                    {
+                        return (MD_Relation)new MD_Relation().init(m_machine, value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Bag))
+                    {
+                        return (MD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
+                    }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
                         if (ReferenceEquals(value, Core_MD_Excuse("No_Reason")))
@@ -289,6 +301,36 @@ namespace Muldis.D.Ref_Eng
                     if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                     {
                         return Core_MD_Heading(attr_names: (HashSet<String>)v);
+                    }
+                    break;
+                case "Tuple_Array":
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    {
+                        return Core_MD_Tuple_Array(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                    }
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    {
+                        return Core_MD_Tuple_Array(body: (Muldis.D.Ref_Eng.Value.MD_Array)v);
+                    }
+                    break;
+                case "Relation":
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    {
+                        return Core_MD_Relation(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                    }
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    {
+                        return Core_MD_Relation(body: (Muldis.D.Ref_Eng.Value.MD_Set)v);
+                    }
+                    break;
+                case "Tuple_Bag":
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    {
+                        return Core_MD_Tuple_Bag(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                    }
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    {
+                        return Core_MD_Tuple_Bag(body: (Muldis.D.Ref_Eng.Value.MD_Bag)v);
                     }
                     break;
                 case "Capsule":
@@ -893,6 +935,214 @@ namespace Muldis.D.Ref_Eng
             );
         }
 
+        public IMD_Tuple_Array MD_Tuple_Array(IMD_Heading heading)
+        {
+            if (heading == null)
+            {
+                throw new ArgumentNullException("heading");
+            }
+            return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine,
+                Core_MD_Tuple_Array(heading));
+        }
+
+        public IMD_Tuple_Array MD_Tuple_Array(IMD_Array body)
+        {
+            if (body == null)
+            {
+                throw new ArgumentNullException("body");
+            }
+            return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine,
+                Core_MD_Tuple_Array(body));
+        }
+
+        private Core.MD_Any Core_MD_Tuple_Array(IMD_Heading heading)
+        {
+            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any bv = m_memory.MD_Array_C0;
+            Core.MD_Any tuple_array = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Tuple_Array"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            tuple_array.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Array);
+            return tuple_array;
+        }
+
+        private Core.MD_Any Core_MD_Tuple_Array(IMD_Array body)
+        {
+            Core.MD_Any bv = ((MD_Array)body).m_value;
+            if (!m_memory.Array__Is_Relational(bv))
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Tuple_Array from a MD_Array whose"
+                        + " members aren't all MD_Tuple with a common heading."
+                );
+            }
+            Core.MD_Any hv = m_memory.Array__Pick_Random_Member(bv);
+            if (hv == null)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Tuple_Array from empty MD_Array."
+                );
+            }
+            Core.MD_Any tuple_array = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Tuple_Array"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            tuple_array.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Array);
+            return tuple_array;
+        }
+
+        public IMD_Relation MD_Relation(IMD_Heading heading)
+        {
+            if (heading == null)
+            {
+                throw new ArgumentNullException("heading");
+            }
+            return (IMD_Relation)new MD_Relation().init(m_machine,
+                Core_MD_Relation(heading));
+        }
+
+        public IMD_Relation MD_Relation(IMD_Set body)
+        {
+            if (body == null)
+            {
+                throw new ArgumentNullException("body");
+            }
+            return (IMD_Relation)new MD_Relation().init(m_machine,
+                Core_MD_Relation(body));
+        }
+
+        private Core.MD_Any Core_MD_Relation(IMD_Heading heading)
+        {
+            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any bv = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Set"),
+                m_memory.MD_Tuple(
+                    only_oa: new KeyValuePair<String,Core.MD_Any>("members",
+                        m_memory.MD_Bag_C0)
+                )
+            );
+            bv.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Set);
+            Core.MD_Any relation = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Relation"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            relation.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Relation);
+            return relation;
+        }
+
+        private Core.MD_Any Core_MD_Relation(IMD_Set body)
+        {
+            Core.MD_Any bv = ((MD_Set)body).m_value;
+            if (!m_memory.Set__Is_Relational(bv))
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Relation from a MD_Set whose"
+                        + " members aren't all MD_Tuple with a common heading."
+                );
+            }
+            Core.MD_Any hv = m_memory.Set__Pick_Random_Member(bv);
+            if (hv == null)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Relation from empty MD_Set."
+                );
+            }
+            Core.MD_Any relation = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Relation"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            relation.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Relation);
+            return relation;
+        }
+
+        public IMD_Tuple_Bag MD_Tuple_Bag(IMD_Heading heading)
+        {
+            if (heading == null)
+            {
+                throw new ArgumentNullException("heading");
+            }
+            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine,
+                Core_MD_Tuple_Bag(heading));
+        }
+
+        public IMD_Tuple_Bag MD_Tuple_Bag(IMD_Bag body)
+        {
+            if (body == null)
+            {
+                throw new ArgumentNullException("body");
+            }
+            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine,
+                Core_MD_Tuple_Bag(body));
+        }
+
+        private Core.MD_Any Core_MD_Tuple_Bag(IMD_Heading heading)
+        {
+            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any bv = m_memory.MD_Bag_C0;
+            Core.MD_Any tuple_bag = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Tuple_Bag"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            tuple_bag.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Bag);
+            return tuple_bag;
+        }
+
+        private Core.MD_Any Core_MD_Tuple_Bag(IMD_Bag body)
+        {
+            Core.MD_Any bv = ((MD_Bag)body).m_value;
+            if (!m_memory.Bag__Is_Relational(bv))
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Tuple_Bag from a MD_Bag whose"
+                        + " members aren't all MD_Tuple with a common heading."
+                );
+            }
+            Core.MD_Any hv = m_memory.Bag__Pick_Random_Member(bv);
+            if (hv == null)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "body",
+                    message: "Can't select MD_Tuple_Bag from empty MD_Bag."
+                );
+            }
+            Core.MD_Any tuple_bag = m_memory.MD_Capsule(
+                m_memory.MD_Attr_Name("Tuple_Bag"),
+                m_memory.MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                        {{"heading", hv}, {"body", bv}}
+                )
+            );
+            tuple_bag.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Bag);
+            return tuple_bag;
+        }
+
         public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)
         {
             if (label == null)
@@ -1085,6 +1335,18 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Heading : MD_Tuple, IMD_Heading
+    {
+    }
+
+    public class MD_Tuple_Array : MD_Capsule, IMD_Tuple_Array
+    {
+    }
+
+    public class MD_Relation : MD_Capsule, IMD_Relation
+    {
+    }
+
+    public class MD_Tuple_Bag : MD_Capsule, IMD_Tuple_Bag
     {
     }
 

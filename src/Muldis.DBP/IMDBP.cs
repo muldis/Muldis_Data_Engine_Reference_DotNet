@@ -65,6 +65,18 @@ namespace Muldis.DBP
             Nullable<Boolean> a2 = null,
             String attr_name = null, HashSet<String> attr_names = null);
 
+        IMD_Tuple_Array MD_Tuple_Array(IMD_Heading heading);
+
+        IMD_Tuple_Array MD_Tuple_Array(IMD_Array body);
+
+        IMD_Relation MD_Relation(IMD_Heading heading);
+
+        IMD_Relation MD_Relation(IMD_Set body);
+
+        IMD_Tuple_Bag MD_Tuple_Bag(IMD_Heading heading);
+
+        IMD_Tuple_Bag MD_Tuple_Bag(IMD_Bag body);
+
         IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs);
 
         IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
@@ -132,6 +144,18 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Heading : IMD_Tuple
+    {
+    }
+
+    public interface IMD_Tuple_Array : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Relation : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Tuple_Bag : IMD_Capsule
     {
     }
 
