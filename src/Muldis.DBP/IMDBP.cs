@@ -77,6 +77,9 @@ namespace Muldis.DBP
 
         IMD_Tuple_Bag MD_Tuple_Bag(IMD_Bag body);
 
+        IMD_Interval MD_Interval(IMD_Any min, IMD_Any max,
+            Boolean excludes_min = false, Boolean excludes_max = false);
+
         IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs);
 
         IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
@@ -164,6 +167,10 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Tuple_Bag : IMD_Capsule
+    {
+    }
+
+    public interface IMD_Interval : IMD_Capsule
     {
     }
 
