@@ -23,6 +23,10 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class Memory
     {
+        internal readonly Plain_Text.Identity_Generator Identity_Generator;
+
+        internal readonly Plain_Text.Preview_Generator Preview_Generator;
+
         // MD_Boolean False (type default value) and True values.
         internal readonly MD_Any MD_False;
         internal readonly MD_Any MD_True;
@@ -58,6 +62,10 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Memory()
         {
+            Identity_Generator = new Plain_Text.Identity_Generator();
+
+            Preview_Generator = new Plain_Text.Preview_Generator();
+
             MD_False = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,

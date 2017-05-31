@@ -99,7 +99,7 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Array:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.String))
                     {
-                        return (MD_String)new MD_String().init(m_machine, value);
+                        return (IMD_String)new MD_String().init(m_machine, value);
                     }
                     return (IMD_Array)new MD_Array().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Bag:
@@ -107,67 +107,67 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Tuple:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Heading))
                     {
-                        return (MD_Heading)new MD_Heading().init(m_machine, value);
+                        return (IMD_Heading)new MD_Heading().init(m_machine, value);
                     }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Capsule:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Fraction))
                     {
-                        return (MD_Fraction)new MD_Fraction().init(m_machine, value);
+                        return (IMD_Fraction)new MD_Fraction().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Bits))
                     {
-                        return (MD_Bits)new MD_Bits().init(m_machine, value);
+                        return (IMD_Bits)new MD_Bits().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Blob))
                     {
-                        return (MD_Blob)new MD_Blob().init(m_machine, value);
+                        return (IMD_Blob)new MD_Blob().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Text))
                     {
-                        return (MD_Text)new MD_Text().init(m_machine, value);
+                        return (IMD_Text)new MD_Text().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Set))
                     {
-                        return (MD_Set)new MD_Set().init(m_machine, value);
+                        return (IMD_Set)new MD_Set().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Array))
                     {
-                        return (MD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
+                        return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Relation))
                     {
-                        return (MD_Relation)new MD_Relation().init(m_machine, value);
+                        return (IMD_Relation)new MD_Relation().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Bag))
                     {
-                        return (MD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
+                        return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Interval))
                     {
-                        return (MD_Interval)new MD_Interval().init(m_machine, value);
+                        return (IMD_Interval)new MD_Interval().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
                         if (ReferenceEquals(value, Core_MD_Excuse("No_Reason")))
                         {
-                            return (MD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                            return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
                                 .init(m_machine, value);
                         }
-                        return (MD_Excuse)new MD_Excuse().init(m_machine, value);
+                        return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
                     }
-                    return (MD_Capsule)new MD_Capsule().init(m_machine, value);
+                    return (IMD_Capsule)new MD_Capsule().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Handle:
                     switch (value.AS.MD_Handle.MD_Handle_Type)
                     {
                         case Core.MD_Handle_Type.MD_Variable:
                             return (IMD_Variable)new MD_Variable().init(m_machine, value);
                         case Core.MD_Handle_Type.MD_Process:
-                            return (MD_Process)new MD_Process().init(m_machine, value);
+                            return (IMD_Process)new MD_Process().init(m_machine, value);
                         case Core.MD_Handle_Type.MD_Stream:
-                            return (MD_Stream)new MD_Stream().init(m_machine, value);
+                            return (IMD_Stream)new MD_Stream().init(m_machine, value);
                         case Core.MD_Handle_Type.MD_External:
-                            return (MD_External)new MD_External().init(m_machine, value);
+                            return (IMD_External)new MD_External().init(m_machine, value);
                         default:
                             throw new NotImplementedException();
                     }
@@ -1429,6 +1429,11 @@ namespace Muldis.D.Ref_Eng.Value
             m_machine = machine;
             m_value   = value;
             return this;
+        }
+
+        public override String ToString()
+        {
+            return m_value.ToString();
         }
 
         public IMachine Machine()

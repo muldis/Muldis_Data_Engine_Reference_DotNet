@@ -128,6 +128,18 @@ namespace Muldis.D.Ref_Eng.Core
     internal class MD_Any
     {
         internal MD_Any_Struct AS { get; set; }
+
+        internal String MD_Any_Identity()
+        {
+            // This called function will test if AS.Cached_MD_Any_Identity
+            // is null and assign it a value if so and use its value if not.
+            return AS.Memory.Identity_Generator.MD_Any_to_Identity_String(this);
+        }
+
+        public override String ToString()
+        {
+            return AS.Memory.Preview_Generator.MD_Any_To_Preview_String(this);
+        }
     }
 
     internal class MD_Any_Comparer : EqualityComparer<MD_Any>
@@ -147,6 +159,21 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
+            if (Object.ReferenceEquals(v1.AS, v2.AS))
+            {
+                return true;
+            }
+            if (v1.AS.MD_Foundation_Type != v2.AS.MD_Foundation_Type)
+            {
+                return false;
+            }
+            if (v1.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                || v2.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle)
+            {
+                // Every Muldis D Handle object is always distinct from every other one.
+                return false;
+            }
+            // return v1.MD_Any_Identity() == v2.MD_Any_Identity();
             return false;  // TODO; meanwhile we compare like a reference type
         }
 
@@ -157,11 +184,7 @@ namespace Muldis.D.Ref_Eng.Core
                 // Would we ever get here?
                 return 0;
             }
-            if (v.AS.Cached_MD_Any_Identity == null)
-            {
-                v.AS.Cached_MD_Any_Identity = ""; // TODO, fix this
-            }
-            return v.AS.Cached_MD_Any_Identity.GetHashCode();
+            return v.MD_Any_Identity().GetHashCode();
         }
     }
 
