@@ -258,7 +258,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any Bit_MD_String(BitArray members)
+        internal MD_Any Bit_MD_Array(BitArray members)
         {
             if (members.Length == 0)
             {
@@ -279,7 +279,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any Octet_MD_String(Byte[] members)
+        internal MD_Any Octet_MD_Array(Byte[] members)
         {
             if (members.Length == 0)
             {
@@ -300,28 +300,7 @@ namespace Muldis.D.Ref_Eng.Core
             return array;
         }
 
-        internal MD_Any Int32_MD_String(Int32[] members)
-        {
-            if (members.Length == 0)
-            {
-                return MD_Array_C0;
-            }
-            MD_Any array = new MD_Any { AS = new MD_Any_Struct {
-                Memory = this,
-                MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
-                    Tree_Widest_Type = Widest_Component_Type.Int32,
-                    Local_Multiplicity = 1,
-                    Local_Widest_Type = Widest_Component_Type.Int32,
-                    Local_Int32_Members = members,
-                },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
-            } };
-            return array;
-        }
-
-        internal MD_Any Codepoint_MD_String(String members)
+        internal MD_Any Codepoint_MD_Array(String members)
         {
             if (members.Length == 0)
             {
@@ -616,8 +595,6 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new NotImplementedException();
                 case Widest_Component_Type.Octet:
                     throw new NotImplementedException();
-                case Widest_Component_Type.Int32:
-                    throw new NotImplementedException();
                 case Widest_Component_Type.Codepoint:
                     throw new NotImplementedException();
                 default:
@@ -689,7 +666,6 @@ namespace Muldis.D.Ref_Eng.Core
                         break;
                     case Widest_Component_Type.Bit:
                     case Widest_Component_Type.Octet:
-                    case Widest_Component_Type.Int32:
                     case Widest_Component_Type.Codepoint:
                         node.Cached_Local_Relational = false;
                         break;

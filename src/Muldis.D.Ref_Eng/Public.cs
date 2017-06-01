@@ -97,10 +97,6 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Foundation_Type.MD_Integer:
                     return (IMD_Integer)new MD_Integer().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Array:
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.String))
-                    {
-                        return (IMD_String)new MD_String().init(m_machine, value);
-                    }
                     return (IMD_Array)new MD_Array().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Bag:
                     return (IMD_Bag)new MD_Bag().init(m_machine, value);
@@ -261,16 +257,6 @@ namespace Muldis.D.Ref_Eng
                                 ((MD_Integer)denominator).m_value.AS.MD_Integer
                             );
                         }
-                    }
-                    break;
-                case "String":
-                    if (type_name == "System.Int32[]")
-                    {
-                        return Core_MD_String((Int32[])v);
-                    }
-                    if (type_name == "System.Numerics.BigInteger[]")
-                    {
-                        return Core_MD_String((BigInteger[])v);
                     }
                     break;
                 case "Bits":
@@ -509,14 +495,6 @@ namespace Muldis.D.Ref_Eng
             {
                 return Core_MD_Fraction((Decimal)value);
             }
-            if (type_name == "System.Int32[]")
-            {
-                return Core_MD_String((Int32[])value);
-            }
-            if (type_name == "System.Numerics.BigInteger[]")
-            {
-                return Core_MD_String((BigInteger[])value);
-            }
             if (type_name == "System.Collections.BitArray")
             {
                 return Core_MD_Bits((BitArray)value);
@@ -662,41 +640,6 @@ namespace Muldis.D.Ref_Eng
             return fraction;
         }
 
-        public IMD_String MD_String(BigInteger[] members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            return (IMD_String)new MD_String().init(m_machine,
-                Core_MD_String(members));
-        }
-
-        public IMD_String MD_String(Int32[] members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            return (IMD_String)new MD_String().init(m_machine,
-                Core_MD_String(members));
-        }
-
-        private Core.MD_Any Core_MD_String(BigInteger[] members)
-        {
-            return m_memory.MD_Array(
-                members: new List<Core.MD_Any>(members.Select(
-                    m => m_memory.MD_Integer(m)
-                )),
-                known_is_string: true
-            );
-        }
-
-        private Core.MD_Any Core_MD_String(Int32[] members)
-        {
-            return m_memory.Int32_MD_String(members.ToArray());
-        }
-
         public IMD_Bits MD_Bits(BitArray members)
         {
             if (members == null)
@@ -714,7 +657,7 @@ namespace Muldis.D.Ref_Eng
                 m_memory.MD_Attr_Name("Bits"),
                 m_memory.MD_Tuple(
                     only_oa: new KeyValuePair<String,Core.MD_Any>("bits",
-                        m_memory.Bit_MD_String(new BitArray(members)))
+                        m_memory.Bit_MD_Array(new BitArray(members)))
                 )
             );
             bits.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Bits);
@@ -738,7 +681,7 @@ namespace Muldis.D.Ref_Eng
                 m_memory.MD_Attr_Name("Blob"),
                 m_memory.MD_Tuple(
                     only_oa: new KeyValuePair<String,Core.MD_Any>("octets",
-                        m_memory.Octet_MD_String(members.ToArray()))
+                        m_memory.Octet_MD_Array(members.ToArray()))
                 )
             );
             blob.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Blob);
@@ -761,7 +704,7 @@ namespace Muldis.D.Ref_Eng
                 m_memory.MD_Attr_Name("Text"),
                 m_memory.MD_Tuple(
                     only_oa: new KeyValuePair<String,Core.MD_Any>(
-                        "maximal_chars", m_memory.Codepoint_MD_String(members)
+                        "maximal_chars", m_memory.Codepoint_MD_Array(members)
                     )
                 )
             );
@@ -1465,10 +1408,6 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Fraction : MD_Capsule, IMD_Fraction
-    {
-    }
-
-    public class MD_String : MD_Array, IMD_String
     {
     }
 

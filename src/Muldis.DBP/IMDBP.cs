@@ -39,10 +39,6 @@ namespace Muldis.DBP
 
         IMD_Fraction MD_Fraction(Decimal value);
 
-        IMD_String MD_String(BigInteger[] members);
-
-        IMD_String MD_String(Int32[] members);
-
         IMD_Bits MD_Bits(BitArray members);
 
         IMD_Blob MD_Blob(Byte[] members);
@@ -119,10 +115,6 @@ namespace Muldis.DBP
     }
 
     public interface IMD_Fraction : IMD_Capsule
-    {
-    }
-
-    public interface IMD_String : IMD_Array
     {
     }
 

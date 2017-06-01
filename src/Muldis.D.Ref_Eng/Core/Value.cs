@@ -248,7 +248,6 @@ namespace Muldis.D.Ref_Eng.Core
         Unrestricted,
         Bit,
         Octet,
-        Int32,
         Codepoint,
     }
 
@@ -340,16 +339,6 @@ namespace Muldis.D.Ref_Eng.Core
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular octet (byte) string.
         internal Byte[] Local_Octet_Members { get; set; }
-
-        // Iff LWT is Int32, this field is the payload.
-        // Represents a Muldis D Array value where each member value is
-        // a Muldis D Integer in the range -0x80000000..0x7FFFFFFF.
-        // A Int32[] is the simplest storage representation for that
-        // type which doesn't internally use trees for sharing or multipliers.
-        // This is the canonical storage type for a generic integer string
-        // where the integers are sufficiently small but not small enough
-        // or semantically appropriate to qualify for Bit/Octet/Codepoint.
-        internal Int32[] Local_Int32_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
