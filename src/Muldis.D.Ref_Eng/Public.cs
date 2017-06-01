@@ -145,7 +145,7 @@ namespace Muldis.D.Ref_Eng
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
-                        if (ReferenceEquals(value, Core_MD_Excuse("No_Reason")))
+                        if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
                         {
                             return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
                                 .init(m_machine, value);
@@ -208,23 +208,23 @@ namespace Muldis.D.Ref_Eng
                 case "Boolean":
                     if (type_name == "System.Boolean")
                     {
-                        return Core_MD_Boolean((Boolean)v);
+                        return m_memory.MD_Boolean((Boolean)v);
                     }
                     break;
                 case "Integer":
                     if (type_name == "System.Int32")
                     {
-                        return Core_MD_Integer((Int32)v);
+                        return m_memory.MD_Integer((Int32)v);
                     }
                     if (type_name == "System.Numerics.BigInteger")
                     {
-                        return Core_MD_Integer((BigInteger)v);
+                        return m_memory.MD_Integer((BigInteger)v);
                     }
                     break;
                 case "Fraction":
                     if (type_name == "System.Decimal")
                     {
-                        return Core_MD_Fraction((Decimal)v);
+                        return m_memory.MD_Fraction((Decimal)v);
                     }
                     if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                     {
@@ -262,19 +262,21 @@ namespace Muldis.D.Ref_Eng
                 case "Bits":
                     if (type_name == "System.Collections.BitArray")
                     {
-                        return Core_MD_Bits((BitArray)v);
+                        // BitArrays are mutable so clone argument to protect our internals.
+                        return m_memory.MD_Bits(new BitArray((BitArray)v));
                     }
                     break;
                 case "Blob":
                     if (type_name == "System.Byte[]")
                     {
-                        return Core_MD_Blob((Byte[])v);
+                        // Arrays are mutable so clone argument to protect our internals.
+                        return m_memory.MD_Blob(((Byte[])v).ToArray());
                     }
                     break;
                 case "Text":
                     if (type_name == "System.String")
                     {
-                        return Core_MD_Text((String)v);
+                        return m_memory.MD_Text((String)v);
                     }
                     break;
                 case "Array":
@@ -369,7 +371,7 @@ namespace Muldis.D.Ref_Eng
                                 message: "Can't select MD_Interval with a non-Boolean [excludes_max]."
                             );
                         }
-                        return Core_MD_Interval(
+                        return m_memory.MD_Interval(
                             min: Core_MD_Any(attrs["min"]),
                             max: Core_MD_Any(attrs["max"]),
                             excludes_min: attrs.ContainsKey("excludes_min")
@@ -428,35 +430,36 @@ namespace Muldis.D.Ref_Eng
                 case "New_Variable":
                     if (type_name.StartsWith("Muldis.D.Ref_Eng.Value."))
                     {
-                        return Core_MD_Variable((Muldis.D.Ref_Eng.Value.MD_Any)v);
+                        return m_memory.New_MD_Variable(
+                            ((Muldis.D.Ref_Eng.Value.MD_Any)v).m_value);
                     }
                     break;
                 case "New_Process":
                     if (v == null)
                     {
-                        return Core_MD_Process();
+                        return m_memory.New_MD_Process();
                     }
                     break;
                 case "New_Stream":
                     if (v == null)
                     {
-                        return Core_MD_Stream();
+                        return m_memory.New_MD_Stream();
                     }
                     break;
                 case "New_External":
-                    return Core_MD_External(v);
+                    return m_memory.New_MD_External(v);
                 case "Excuse":
                     if (v == null)
                     {
-                        return Core_MD_Excuse("No_Reason");
+                        return m_memory.Simple_MD_Excuse("No_Reason");
                     }
                     if (type_name == "System.DBNull")
                     {
-                        return Core_MD_Excuse("No_Reason");
+                        return m_memory.Simple_MD_Excuse("No_Reason");
                     }
                     if (type_name == "System.String")
                     {
-                        return Core_MD_Excuse((String)v);
+                        return m_memory.Simple_MD_Excuse((String)v);
                     }
                     throw new NotImplementedException();
                 default:
@@ -472,40 +475,42 @@ namespace Muldis.D.Ref_Eng
         {
             if (value == null)
             {
-                return Core_MD_Excuse("No_Reason");
+                return m_memory.Simple_MD_Excuse("No_Reason");
             }
             String type_name = value.GetType().FullName;
             if (type_name == "System.DBNull")
             {
-                return Core_MD_Excuse("No_Reason");
+                return m_memory.Simple_MD_Excuse("No_Reason");
             }
             if (type_name == "System.Boolean")
             {
-                return Core_MD_Boolean((Boolean)value);
+                return m_memory.MD_Boolean((Boolean)value);
             }
             if (type_name == "System.Int32")
             {
-                return Core_MD_Integer((Int32)value);
+                return m_memory.MD_Integer((Int32)value);
             }
             if (type_name == "System.Numerics.BigInteger")
             {
-                return Core_MD_Integer((BigInteger)value);
+                return m_memory.MD_Integer((BigInteger)value);
             }
             if (type_name == "System.Decimal")
             {
-                return Core_MD_Fraction((Decimal)value);
+                return m_memory.MD_Fraction((Decimal)value);
             }
             if (type_name == "System.Collections.BitArray")
             {
-                return Core_MD_Bits((BitArray)value);
+                // BitArrays are mutable so clone argument to protect our internals.
+                return m_memory.MD_Bits(new BitArray((BitArray)value));
             }
             if (type_name == "System.Byte[]")
             {
-                return Core_MD_Blob((Byte[])value);
+                // Arrays are mutable so clone argument to protect our internals.
+                return m_memory.MD_Blob(((Byte[])value).ToArray());
             }
             if (type_name == "System.String")
             {
-                return Core_MD_Text((String)value);
+                return m_memory.MD_Text((String)value);
             }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
@@ -513,12 +518,7 @@ namespace Muldis.D.Ref_Eng
         public IMD_Boolean MD_Boolean(Boolean value)
         {
             return (IMD_Boolean)new MD_Boolean().init(m_machine,
-                Core_MD_Boolean(value));
-        }
-
-        private Core.MD_Any Core_MD_Boolean(Boolean value)
-        {
-            return m_memory.MD_Boolean(value);
+                m_memory.MD_Boolean(value));
         }
 
         public IMD_Integer MD_Integer(BigInteger value)
@@ -528,18 +528,13 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("value");
             }
             return (IMD_Integer)new MD_Integer().init(m_machine,
-                Core_MD_Integer(value));
+                m_memory.MD_Integer(value));
         }
 
         public IMD_Integer MD_Integer(Int32 value)
         {
             return (IMD_Integer)new MD_Integer().init(m_machine,
-                Core_MD_Integer(value));
-        }
-
-        private Core.MD_Any Core_MD_Integer(BigInteger value)
-        {
-            return m_memory.MD_Integer(value);
+                m_memory.MD_Integer(value));
         }
 
         public IMD_Fraction MD_Fraction(IMD_Integer numerator, IMD_Integer denominator)
@@ -583,12 +578,7 @@ namespace Muldis.D.Ref_Eng
         public IMD_Fraction MD_Fraction(Decimal value)
         {
             return (IMD_Fraction)new MD_Fraction().init(m_machine,
-                Core_MD_Fraction(value));
-        }
-
-        private Core.MD_Any Core_MD_Fraction(Decimal value)
-        {
-            return m_memory.MD_Fraction(value);
+                m_memory.MD_Fraction(value));
         }
 
         private Core.MD_Any Core_MD_Fraction(BigInteger numerator, BigInteger denominator)
@@ -610,14 +600,9 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("members");
             }
-            return (IMD_Bits)new MD_Bits().init(m_machine,
-                Core_MD_Bits(members));
-        }
-
-        private Core.MD_Any Core_MD_Bits(BitArray members)
-        {
             // BitArrays are mutable so clone argument to protect our internals.
-            return m_memory.MD_Bits(new BitArray(members));
+            return (IMD_Bits)new MD_Bits().init(m_machine,
+                m_memory.MD_Bits(new BitArray(members)));
         }
 
         public IMD_Blob MD_Blob(Byte[] members)
@@ -626,14 +611,9 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("members");
             }
-            return (IMD_Blob)new MD_Blob().init(m_machine,
-                Core_MD_Blob(members));
-        }
-
-        private Core.MD_Any Core_MD_Blob(Byte[] members)
-        {
             // Arrays are mutable so clone argument to protect our internals.
-            return m_memory.MD_Blob(members.ToArray());
+            return (IMD_Blob)new MD_Blob().init(m_machine,
+                m_memory.MD_Blob(members.ToArray()));
         }
 
         public IMD_Text MD_Text(String members)
@@ -643,12 +623,7 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("members");
             }
             return (IMD_Text)new MD_Text().init(m_machine,
-                Core_MD_Text(members));
-        }
-
-        private Core.MD_Any Core_MD_Text(String members)
-        {
-            return m_memory.MD_Text(members);
+                m_memory.MD_Text(members));
         }
 
         public IMD_Array MD_Array(List<Object> members)
@@ -1055,14 +1030,8 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("max");
             }
             return (IMD_Interval)new MD_Interval().init(m_machine,
-                Core_MD_Interval(((MD_Any)min).m_value,
+                m_memory.MD_Interval(((MD_Any)min).m_value,
                     ((MD_Any)max).m_value, excludes_min, excludes_max));
-        }
-
-        private Core.MD_Any Core_MD_Interval(Core.MD_Any min, Core.MD_Any max,
-            Boolean excludes_min = false, Boolean excludes_max = false)
-        {
-            return m_memory.MD_Interval(min, max, excludes_min, excludes_max);
         }
 
         public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)
@@ -1076,7 +1045,10 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("attrs");
             }
             return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                Core_MD_Capsule(label, attrs));
+                m_memory.MD_Capsule(
+                    ((MD_Any)label).m_value, ((MD_Any)attrs).m_value
+                )
+            );
         }
 
         public IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs)
@@ -1090,7 +1062,10 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("attrs");
             }
             return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                Core_MD_Capsule(label, attrs));
+                m_memory.MD_Capsule(
+                    m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value
+                )
+            );
         }
 
         public IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs)
@@ -1104,29 +1079,12 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("attrs");
             }
             return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                Core_MD_Capsule(label, attrs));
-        }
-
-        private Core.MD_Any Core_MD_Capsule(IMD_Any label, IMD_Tuple attrs)
-        {
-            return m_memory.MD_Capsule(
-                ((MD_Any)label).m_value, ((MD_Any)attrs).m_value);
-        }
-
-        private Core.MD_Any Core_MD_Capsule(String label, IMD_Tuple attrs)
-        {
-            return m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value);
-        }
-
-        private Core.MD_Any Core_MD_Capsule(String[] label, IMD_Tuple attrs)
-        {
-            return m_memory.MD_Capsule(
-                m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
-                    m => m_memory.MD_Attr_Name(m)
-                ))),
-                ((MD_Any)attrs).m_value
-            );
+                m_memory.MD_Capsule(
+                    m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
+                        m => m_memory.MD_Attr_Name(m)
+                    ))),
+                    ((MD_Any)attrs).m_value
+                ));
         }
 
         public IMD_Variable New_MD_Variable(IMD_Any initial_current_value)
@@ -1136,43 +1094,25 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("initial_current_value");
             }
             return (IMD_Variable)new MD_Variable().init(m_machine,
-                Core_MD_Variable(initial_current_value));
-        }
-
-        private Core.MD_Any Core_MD_Variable(IMD_Any initial_current_value)
-        {
-            return m_memory.New_MD_Variable(((MD_Any)initial_current_value).m_value);
+                m_memory.New_MD_Variable(((MD_Any)initial_current_value).m_value));
         }
 
         public IMD_Process New_MD_Process()
         {
-            return (IMD_Process)new MD_Process().init(m_machine, Core_MD_Process());
-        }
-
-        private Core.MD_Any Core_MD_Process()
-        {
-            return m_memory.New_MD_Process();
+            return (IMD_Process)new MD_Process().init(m_machine,
+                m_memory.New_MD_Process());
         }
 
         public IMD_Stream New_MD_Stream()
         {
-            return (IMD_Stream)new MD_Stream().init(m_machine, Core_MD_Stream());
-        }
-
-        private Core.MD_Any Core_MD_Stream()
-        {
-            return m_memory.New_MD_Stream();
+            return (IMD_Stream)new MD_Stream().init(m_machine,
+                m_memory.New_MD_Stream());
         }
 
         public IMD_External New_MD_External(Object value)
         {
             return (IMD_External)new MD_External().init(m_machine,
-                Core_MD_External(value));
-        }
-
-        private Core.MD_Any Core_MD_External(Object value)
-        {
-            return m_memory.New_MD_External(value);
+                m_memory.New_MD_External(value));
         }
 
         public IMD_Excuse MD_Excuse(IMD_Tuple attrs)
@@ -1182,7 +1122,7 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentNullException("attrs");
             }
             return (IMD_Excuse)new MD_Excuse().init(m_machine,
-                Core_MD_Excuse(attrs));
+                m_memory.MD_Excuse(((MD_Tuple)attrs).m_value));
         }
 
         public IMD_Excuse MD_Excuse(String value)
@@ -1194,26 +1134,16 @@ namespace Muldis.D.Ref_Eng
             if (value == "No_Reason")
             {
                 return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
-                    .init(m_machine, Core_MD_Excuse("No_Reason"));
+                    .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
             }
             return (IMD_Excuse)new MD_Excuse().init(m_machine,
-                Core_MD_Excuse(value));
-        }
-
-        private Core.MD_Any Core_MD_Excuse(IMD_Tuple attrs)
-        {
-            return m_memory.MD_Excuse(((MD_Tuple)attrs).m_value);
-        }
-
-        private Core.MD_Any Core_MD_Excuse(String value)
-        {
-            return m_memory.Simple_MD_Excuse(value);
+                m_memory.Simple_MD_Excuse(value));
         }
 
         public IMD_Excuse_No_Reason MD_Excuse_No_Reason()
         {
             return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
-                .init(m_machine, Core_MD_Excuse("No_Reason"));
+                .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
         }
     }
 }
