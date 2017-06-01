@@ -588,24 +588,7 @@ namespace Muldis.D.Ref_Eng
 
         private Core.MD_Any Core_MD_Fraction(Decimal value)
         {
-            Int32[] dec_bits = Decimal.GetBits(value);
-            // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
-            // The GetBits spec says that it returns 4 32-bit integers
-            // representing the 128 bits of the Decimal itself; of these,
-            // the first 3 integers' bits give the mantissa,
-            // the 4th integer's bits give the sign and the scale factor.
-            // "Bits 16 to 23 must contain an exponent between 0 and 28,
-            // which indicates the power of 10 to divide the integer number."
-            Int32 scale_factor_int = ((dec_bits[3] >> 16) & 0x7F);
-            Decimal denominator_dec = 1M;
-            // Decimal doesn't have exponentiation op so we do it manually.
-            for (Int32 i = 1; i <= scale_factor_int; i++)
-            {
-                denominator_dec = denominator_dec * 10M;
-            }
-            Decimal numerator_dec = value * denominator_dec;
-            return Core_MD_Fraction(new BigInteger(numerator_dec),
-                new BigInteger(denominator_dec));
+            return m_memory.MD_Fraction(value);
         }
 
         private Core.MD_Any Core_MD_Fraction(BigInteger numerator, BigInteger denominator)
@@ -618,26 +601,7 @@ namespace Muldis.D.Ref_Eng
                     message: "Can't select MD_Fraction with a denominator of zero."
                 );
             }
-            // Note that GreatestCommonDivisor() always has a non-negative result.
-            BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
-            if (gcd > 1)
-            {
-                // Make the numerator and denominator coprime.
-                numerator   = (denominator > 0 ? numerator   : -numerator  ) / gcd;
-                denominator = (denominator > 0 ? denominator : -denominator) / gcd;
-            }
-            Core.MD_Any fraction = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Fraction"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                    {
-                        {"numerator"  , m_memory.MD_Integer(numerator  )},
-                        {"denominator", m_memory.MD_Integer(denominator)},
-                    }
-                )
-            );
-            fraction.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Fraction);
-            return fraction;
+            return m_memory.MD_Fraction(numerator, denominator);
         }
 
         public IMD_Bits MD_Bits(BitArray members)
@@ -653,15 +617,7 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Bits(BitArray members)
         {
             // BitArrays are mutable so clone argument to protect our internals.
-            Core.MD_Any bits = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Bits"),
-                m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<String,Core.MD_Any>("bits",
-                        m_memory.Bit_MD_Array(new BitArray(members)))
-                )
-            );
-            bits.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Bits);
-            return bits;
+            return m_memory.MD_Bits(new BitArray(members));
         }
 
         public IMD_Blob MD_Blob(Byte[] members)
@@ -677,15 +633,7 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Blob(Byte[] members)
         {
             // Arrays are mutable so clone argument to protect our internals.
-            Core.MD_Any blob = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Blob"),
-                m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<String,Core.MD_Any>("octets",
-                        m_memory.Octet_MD_Array(members.ToArray()))
-                )
-            );
-            blob.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Blob);
-            return blob;
+            return m_memory.MD_Blob(members.ToArray());
         }
 
         public IMD_Text MD_Text(String members)
@@ -700,16 +648,7 @@ namespace Muldis.D.Ref_Eng
 
         private Core.MD_Any Core_MD_Text(String members)
         {
-            Core.MD_Any text = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Text"),
-                m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<String,Core.MD_Any>(
-                        "maximal_chars", m_memory.Codepoint_MD_Array(members)
-                    )
-                )
-            );
-            text.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Text);
-            return text;
+            return m_memory.MD_Text(members);
         }
 
         public IMD_Array MD_Array(List<Object> members)
@@ -743,15 +682,8 @@ namespace Muldis.D.Ref_Eng
 
         private Core.MD_Any Core_MD_Set(List<Object> members)
         {
-            Core.MD_Any set = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Set"),
-                m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<String,Core.MD_Any>("members",
-                        Core_MD_Bag(members: members, with_unique: true))
-                )
-            );
-            set.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Set);
-            return set;
+            Core.MD_Any bag = Core_MD_Bag(members: members, with_unique: true);
+            return m_memory.MD_Set(bag);
         }
 
         public IMD_Bag MD_Bag(List<Object> members)
@@ -982,15 +914,7 @@ namespace Muldis.D.Ref_Eng
         {
             Core.MD_Any hv = ((MD_Heading)heading).m_value;
             Core.MD_Any bv = m_memory.MD_Array_C0;
-            Core.MD_Any tuple_array = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Tuple_Array"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            tuple_array.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Array);
-            return tuple_array;
+            return m_memory.MD_Tuple_Array(hv, bv);
         }
 
         private Core.MD_Any Core_MD_Tuple_Array(IMD_Array body)
@@ -1014,15 +938,7 @@ namespace Muldis.D.Ref_Eng
                     message: "Can't select MD_Tuple_Array from empty MD_Array."
                 );
             }
-            Core.MD_Any tuple_array = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Tuple_Array"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            tuple_array.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Array);
-            return tuple_array;
+            return m_memory.MD_Tuple_Array(hv, bv);
         }
 
         public IMD_Relation MD_Relation(IMD_Heading heading)
@@ -1048,23 +964,8 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Relation(IMD_Heading heading)
         {
             Core.MD_Any hv = ((MD_Heading)heading).m_value;
-            Core.MD_Any bv = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Set"),
-                m_memory.MD_Tuple(
-                    only_oa: new KeyValuePair<String,Core.MD_Any>("members",
-                        m_memory.MD_Bag_C0)
-                )
-            );
-            bv.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Set);
-            Core.MD_Any relation = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Relation"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            relation.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Relation);
-            return relation;
+            Core.MD_Any bv = m_memory.MD_Set_C0;
+            return m_memory.MD_Relation(hv, bv);
         }
 
         private Core.MD_Any Core_MD_Relation(IMD_Set body)
@@ -1088,15 +989,7 @@ namespace Muldis.D.Ref_Eng
                     message: "Can't select MD_Relation from empty MD_Set."
                 );
             }
-            Core.MD_Any relation = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Relation"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            relation.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Relation);
-            return relation;
+            return m_memory.MD_Relation(hv, bv);
         }
 
         public IMD_Tuple_Bag MD_Tuple_Bag(IMD_Heading heading)
@@ -1123,15 +1016,7 @@ namespace Muldis.D.Ref_Eng
         {
             Core.MD_Any hv = ((MD_Heading)heading).m_value;
             Core.MD_Any bv = m_memory.MD_Bag_C0;
-            Core.MD_Any tuple_bag = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Tuple_Bag"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            tuple_bag.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Bag);
-            return tuple_bag;
+            return m_memory.MD_Tuple_Bag(hv, bv);
         }
 
         private Core.MD_Any Core_MD_Tuple_Bag(IMD_Bag body)
@@ -1155,15 +1040,7 @@ namespace Muldis.D.Ref_Eng
                     message: "Can't select MD_Tuple_Bag from empty MD_Bag."
                 );
             }
-            Core.MD_Any tuple_bag = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Tuple_Bag"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                        {{"heading", hv}, {"body", bv}}
-                )
-            );
-            tuple_bag.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Tuple_Bag);
-            return tuple_bag;
+            return m_memory.MD_Tuple_Bag(hv, bv);
         }
 
         public IMD_Interval MD_Interval(IMD_Any min, IMD_Any max,
@@ -1185,20 +1062,7 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Core_MD_Interval(Core.MD_Any min, Core.MD_Any max,
             Boolean excludes_min = false, Boolean excludes_max = false)
         {
-            Core.MD_Any interval = m_memory.MD_Capsule(
-                m_memory.MD_Attr_Name("Interval"),
-                m_memory.MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                    {
-                        {"min", min},
-                        {"max", max},
-                        {"excludes_min", m_memory.MD_Boolean(excludes_min)},
-                        {"excludes_max", m_memory.MD_Boolean(excludes_max)},
-                    }
-                )
-            );
-            interval.AS.Cached_WKT.Add(Core.MD_Well_Known_Type.Interval);
-            return interval;
+            return m_memory.MD_Interval(min, max, excludes_min, excludes_max);
         }
 
         public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)

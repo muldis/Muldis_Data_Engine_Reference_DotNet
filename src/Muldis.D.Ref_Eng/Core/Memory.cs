@@ -36,8 +36,14 @@ namespace Muldis.D.Ref_Eng.Core
         // The MD_Integer 0 is the type default value.
         private readonly Dictionary<Int32,MD_Any> m_integers;
 
+        // TODO: Consider adding singles/caches for empty or nearby values of:
+        // Fraction, Bits, Blob, Text, Tuple_Array, Relation, Tuple_Bag.
+
         // MD_Array with no members (type default value).
         internal readonly MD_Any MD_Array_C0;
+
+        // MD_Set with no members (type default value).
+        internal readonly MD_Any MD_Set_C0;
 
         // MD_Bag with no members (type default value).
         internal readonly MD_Any MD_Bag_C0;
@@ -190,6 +196,15 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Capsule},
             } };
 
+            MD_Set_C0 = MD_Capsule(
+                MD_Attr_Name("Set"),
+                MD_Tuple(
+                    only_oa: new KeyValuePair<String,MD_Any>(
+                        "members", MD_Bag_C0)
+                )
+            );
+            MD_Set_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Set);
+
             Well_Known_Excuses = new Dictionary<String,MD_Any>();
             foreach (String s in new String[] {
                     "No_Reason",
@@ -219,7 +234,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return m_integers[(Int32)value];
             }
-            MD_Any v = new MD_Any { AS = new MD_Any_Struct {
+            MD_Any integer = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = value,
@@ -228,9 +243,95 @@ namespace Muldis.D.Ref_Eng.Core
             } };
             if (may_cache && m_integers.Count < 10000)
             {
-                m_integers.Add((Int32)value, v);
+                m_integers.Add((Int32)value, integer);
             }
-            return v;
+            return integer;
+        }
+
+        internal MD_Any MD_Fraction(BigInteger numerator, BigInteger denominator)
+        {
+            // Note we assume our caller has already ensured denominator is not zero.
+            // Note that GreatestCommonDivisor() always has a non-negative result.
+            BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
+            if (gcd > 1)
+            {
+                // Make the numerator and denominator coprime.
+                numerator   = (denominator > 0 ? numerator   : -numerator  ) / gcd;
+                denominator = (denominator > 0 ? denominator : -denominator) / gcd;
+            }
+            MD_Any fraction = MD_Capsule(
+                MD_Attr_Name("Fraction"),
+                MD_Tuple(
+                    multi_oa: new Dictionary<String,MD_Any>()
+                    {
+                        {"numerator"  , MD_Integer(numerator  )},
+                        {"denominator", MD_Integer(denominator)},
+                    }
+                )
+            );
+            fraction.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
+            return fraction;
+        }
+
+        internal MD_Any MD_Fraction(Decimal value)
+        {
+            Int32[] dec_bits = Decimal.GetBits(value);
+            // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
+            // The GetBits spec says that it returns 4 32-bit integers
+            // representing the 128 bits of the Decimal itself; of these,
+            // the first 3 integers' bits give the mantissa,
+            // the 4th integer's bits give the sign and the scale factor.
+            // "Bits 16 to 23 must contain an exponent between 0 and 28,
+            // which indicates the power of 10 to divide the integer number."
+            Int32 scale_factor_int = ((dec_bits[3] >> 16) & 0x7F);
+            Decimal denominator_dec = 1M;
+            // Decimal doesn't have exponentiation op so we do it manually.
+            for (Int32 i = 1; i <= scale_factor_int; i++)
+            {
+                denominator_dec = denominator_dec * 10M;
+            }
+            Decimal numerator_dec = value * denominator_dec;
+            return MD_Fraction(new BigInteger(numerator_dec),
+                new BigInteger(denominator_dec));
+        }
+
+        internal MD_Any MD_Bits(BitArray members)
+        {
+            MD_Any bits = MD_Capsule(
+                MD_Attr_Name("Bits"),
+                MD_Tuple(
+                    only_oa: new KeyValuePair<String,MD_Any>(
+                        "bits", Bit_MD_Array(members))
+                )
+            );
+            bits.AS.Cached_WKT.Add(MD_Well_Known_Type.Bits);
+            return bits;
+        }
+
+        internal MD_Any MD_Blob(Byte[] members)
+        {
+            MD_Any blob = MD_Capsule(
+                MD_Attr_Name("Blob"),
+                MD_Tuple(
+                    only_oa: new KeyValuePair<String,MD_Any>(
+                        "octets", Octet_MD_Array(members))
+                )
+            );
+            blob.AS.Cached_WKT.Add(MD_Well_Known_Type.Blob);
+            return blob;
+        }
+
+        internal MD_Any MD_Text(String members)
+        {
+            MD_Any text = MD_Capsule(
+                MD_Attr_Name("Text"),
+                MD_Tuple(
+                    only_oa: new KeyValuePair<String,MD_Any>(
+                        "maximal_chars", Codepoint_MD_Array(members))
+                )
+            );
+            text.AS.Cached_WKT.Add(MD_Well_Known_Type.Text);
+            return text;
         }
 
         internal MD_Any MD_Array(List<MD_Any> members, Boolean known_is_string = false)
@@ -319,6 +420,25 @@ namespace Muldis.D.Ref_Eng.Core
                     {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
             } };
             return array;
+        }
+
+        internal MD_Any MD_Set(MD_Any bag)
+        {
+            // We assume our caller has already made sure that the MD_Bag
+            // we were given logically has no duplicate members, such as
+            // because it was selected using with_unique=true.
+            if (Object.ReferenceEquals(bag, MD_Bag_C0))
+            {
+                return MD_Set_C0;
+            }
+            MD_Any set = MD_Capsule(
+                MD_Attr_Name("Set"),
+                MD_Tuple(
+                    only_oa: new KeyValuePair<String,MD_Any>("members", bag)
+                )
+            );
+            set.AS.Cached_WKT.Add(MD_Well_Known_Type.Set);
+            return set;
         }
 
         internal MD_Any MD_Bag(List<Multiplied_Member> members, Boolean with_unique = false)
@@ -439,6 +559,64 @@ namespace Muldis.D.Ref_Eng.Core
                 }
             }
             return tuple;
+        }
+
+        internal MD_Any MD_Tuple_Array(MD_Any heading, MD_Any body)
+        {
+            MD_Any tuple_array = MD_Capsule(
+                MD_Attr_Name("Tuple_Array"),
+                MD_Tuple(
+                    multi_oa: new Dictionary<String,MD_Any>()
+                        {{"heading", heading}, {"body", body}}
+                )
+            );
+            tuple_array.AS.Cached_WKT.Add(MD_Well_Known_Type.Tuple_Array);
+            return tuple_array;
+        }
+
+        internal MD_Any MD_Relation(MD_Any heading, MD_Any body)
+        {
+            MD_Any relation = MD_Capsule(
+                MD_Attr_Name("Relation"),
+                MD_Tuple(
+                    multi_oa: new Dictionary<String,MD_Any>()
+                        {{"heading", heading}, {"body", body}}
+                )
+            );
+            relation.AS.Cached_WKT.Add(MD_Well_Known_Type.Relation);
+            return relation;
+        }
+
+        internal MD_Any MD_Tuple_Bag(MD_Any heading, MD_Any body)
+        {
+            MD_Any tuple_bag = MD_Capsule(
+                MD_Attr_Name("Tuple_Bag"),
+                MD_Tuple(
+                    multi_oa: new Dictionary<String,MD_Any>()
+                        {{"heading", heading}, {"body", body}}
+                )
+            );
+            tuple_bag.AS.Cached_WKT.Add(MD_Well_Known_Type.Tuple_Bag);
+            return tuple_bag;
+        }
+
+        internal MD_Any MD_Interval(MD_Any min, MD_Any max,
+            Boolean excludes_min = false, Boolean excludes_max = false)
+        {
+            MD_Any interval = MD_Capsule(
+                MD_Attr_Name("Interval"),
+                MD_Tuple(
+                    multi_oa: new Dictionary<String,Core.MD_Any>()
+                    {
+                        {"min", min},
+                        {"max", max},
+                        {"excludes_min", MD_Boolean(excludes_min)},
+                        {"excludes_max", MD_Boolean(excludes_max)},
+                    }
+                )
+            );
+            interval.AS.Cached_WKT.Add(MD_Well_Known_Type.Interval);
+            return interval;
         }
 
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
