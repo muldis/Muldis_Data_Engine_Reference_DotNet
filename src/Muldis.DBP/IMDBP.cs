@@ -114,19 +114,19 @@ namespace Muldis.DBP
         Int32 Export_Int32();
     }
 
-    public interface IMD_Fraction : IMD_Capsule
+    public interface IMD_Fraction : IMD_Any
     {
     }
 
-    public interface IMD_Bits : IMD_Capsule
+    public interface IMD_Bits : IMD_Any
     {
     }
 
-    public interface IMD_Blob : IMD_Capsule
+    public interface IMD_Blob : IMD_Any
     {
     }
 
-    public interface IMD_Text : IMD_Capsule
+    public interface IMD_Text : IMD_Any
     {
     }
 
@@ -134,7 +134,7 @@ namespace Muldis.DBP
     {
     }
 
-    public interface IMD_Set : IMD_Capsule
+    public interface IMD_Set : IMD_Any
     {
     }
 
@@ -146,23 +146,23 @@ namespace Muldis.DBP
     {
     }
 
-    public interface IMD_Heading : IMD_Tuple
+    public interface IMD_Heading : IMD_Any
     {
     }
 
-    public interface IMD_Tuple_Array : IMD_Capsule
+    public interface IMD_Tuple_Array : IMD_Any
     {
     }
 
-    public interface IMD_Relation : IMD_Capsule
+    public interface IMD_Relation : IMD_Any
     {
     }
 
-    public interface IMD_Tuple_Bag : IMD_Capsule
+    public interface IMD_Tuple_Bag : IMD_Any
     {
     }
 
-    public interface IMD_Interval : IMD_Capsule
+    public interface IMD_Interval : IMD_Any
     {
     }
 
@@ -190,7 +190,7 @@ namespace Muldis.DBP
     {
     }
 
-    public interface IMD_Excuse : IMD_Capsule
+    public interface IMD_Excuse : IMD_Any
     {
     }
 
