@@ -39,17 +39,53 @@ namespace Muldis.D.Ref_Eng
 
     public class Machine : IMachine
     {
-        internal Core.Memory m_memory;
+        internal Core.Memory   m_memory;
+        internal Core.Executor m_executor;
 
         internal Machine init()
         {
-            m_memory = new Core.Memory();
+            m_memory   = new Core.Memory();
+            m_executor = m_memory.Executor;
             return this;
+        }
+
+        public IExecutor Executor()
+        {
+            return new Executor().init(this);
         }
 
         public IImporter Importer()
         {
             return new Importer().init(this);
+        }
+    }
+
+    public class Executor : IExecutor
+    {
+        internal Machine       m_machine;
+        internal Core.Executor m_executor;
+
+        internal Executor init(Machine machine)
+        {
+            m_machine  = machine;
+            m_executor = machine.m_executor;
+            return this;
+        }
+
+        public IMachine Machine()
+        {
+            return m_machine;
+        }
+
+        public IMD_Any Evaluates(IMD_Any function, IMD_Any args = null)
+        {
+            return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
+                m_executor.Evaluates(((MD_Any)function).m_value, ((MD_Any)args).m_value));
+        }
+
+        public void Performs(IMD_Any procedure, IMD_Any args = null)
+        {
+            m_executor.Performs(((MD_Any)procedure).m_value, ((MD_Any)args).m_value);
         }
     }
 

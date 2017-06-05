@@ -44,6 +44,11 @@ namespace Muldis.D.Ref_Eng.Core
     {
         internal MD_Any_Struct AS { get; set; }
 
+        internal Boolean Same(MD_Any value)
+        {
+            return AS.Memory.Executor.Any__same(this, value);
+        }
+
         internal String MD_Any_Identity()
         {
             // This called function will test if AS.Cached_MD_Any_Identity
@@ -70,26 +75,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return false;
             }
-            if (Object.ReferenceEquals(v1, v2))
-            {
-                return true;
-            }
-            if (Object.ReferenceEquals(v1.AS, v2.AS))
-            {
-                return true;
-            }
-            if (v1.AS.MD_Foundation_Type != v2.AS.MD_Foundation_Type)
-            {
-                return false;
-            }
-            if (v1.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
-                || v2.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle)
-            {
-                // Every Muldis D Handle object is always distinct from every other one.
-                return false;
-            }
-            // return v1.MD_Any_Identity() == v2.MD_Any_Identity();
-            return false;  // TODO; meanwhile we compare like a reference type
+            return v1.Same(v2);
         }
 
         public override Int32 GetHashCode(MD_Any v)

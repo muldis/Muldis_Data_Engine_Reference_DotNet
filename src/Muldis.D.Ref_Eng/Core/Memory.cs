@@ -27,6 +27,8 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal readonly Plain_Text.Preview_Generator Preview_Generator;
 
+        internal readonly Executor Executor;
+
         // MD_Boolean False (type default value) and True values.
         internal readonly MD_Any MD_False;
         internal readonly MD_Any MD_True;
@@ -59,6 +61,10 @@ namespace Muldis.D.Ref_Eng.Core
         internal readonly MD_Any Attr_Name_0;
         internal readonly MD_Any Attr_Name_1;
         internal readonly MD_Any Attr_Name_2;
+        internal readonly MD_Any Heading_0_1;
+        internal readonly MD_Any Heading_0_2;
+        internal readonly MD_Any Heading_1_2;
+        internal readonly MD_Any Heading_0_1_2;
 
         // MD_Capsule with False label and no attributes (type default value).
         private readonly MD_Any m_false_nullary_capsule;
@@ -71,6 +77,8 @@ namespace Muldis.D.Ref_Eng.Core
             Identity_Generator = new Plain_Text.Identity_Generator();
 
             Preview_Generator = new Plain_Text.Preview_Generator();
+
+            Executor = new Executor();
 
             MD_False = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -177,13 +185,69 @@ namespace Muldis.D.Ref_Eng.Core
             Attr_Name_1 = m_attr_name_tuples["\u0001"];
             Attr_Name_2 = m_attr_name_tuples["\u0002"];
 
+            Heading_0_1 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = 2,
+                    A0 = MD_True,
+                    A1 = MD_True,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+            } };
+            Heading_0_2 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = 2,
+                    A0 = MD_True,
+                    A2 = MD_True,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+            } };
+            Heading_1_2 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = 2,
+                    A1 = MD_True,
+                    A2 = MD_True,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+            } };
+
+            Heading_0_1_2 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
+                MD_Tuple = new MD_Tuple_Struct {
+                    Degree = 3,
+                    A0 = MD_True,
+                    A1 = MD_True,
+                    A2 = MD_True,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>()
+                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+            } };
+
             m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
             {
                 {MD_Tuple_D0, MD_Tuple_D0},
                 {Attr_Name_0, Attr_Name_0},
                 {Attr_Name_1, Attr_Name_1},
                 {Attr_Name_2, Attr_Name_2},
+                {Heading_0_1, Heading_0_1},
+                {Heading_0_2, Heading_0_2},
+                {Heading_1_2, Heading_1_2},
+                {Heading_0_1_2, Heading_0_1_2},
             };
+
+            foreach (String s in Constants.Strings__Seeded_Non_Positional_Attr_Names())
+            {
+                MD_Any an = MD_Attr_Name(s);
+            }
 
             m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,

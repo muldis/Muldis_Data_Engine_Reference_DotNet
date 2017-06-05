@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Muldis.DBP;
 
@@ -73,6 +74,14 @@ namespace Muldis.D.Ref_Eng.Console
             // Import the user-specified source code file's raw content into
             // the MDBP-implementing virtual machine where it would be used.
             IMD_Blob source_code_blob = machine.Importer().MD_Blob(source_code_file_content);
+
+            // Temporary Executor test.
+            IImporter i = machine.Importer();
+            IMD_Integer sum = (IMD_Integer)machine.Executor().Evaluates(
+                i.MD_Attr_Name_List(new String[] {"foundation", "Integer_plus"}),
+                i.MD_Tuple(27,39)
+            );
+            IMD_Tuple that = i.MD_Tuple(27,39);
         }
     }
 }
