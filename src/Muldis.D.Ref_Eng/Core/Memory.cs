@@ -206,17 +206,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Set_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Set);
 
             Well_Known_Excuses = new Dictionary<String,MD_Any>();
-            foreach (String s in new String[] {
-                    "No_Reason",
-                    "Before_All_Others",
-                    "After_All_Others",
-                    "Div_By_Zero",
-                    "Zero_To_The_Zero",
-                    "No_Empty_Value",
-                    "No_Such_Ord_Pos",
-                    "No_Such_Attr_Name",
-                    "Not_Same_Heading",
-                })
+            foreach (String s in Constants.Strings__Well_Known_Excuses())
             {
                 Well_Known_Excuses.Add(s, MD_Excuse(MD_Tuple(MD_Attr_Name(s))));
             }
