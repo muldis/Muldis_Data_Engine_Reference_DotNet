@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Muldis.D.Ref_Eng.Core;
 
 namespace Muldis.D.Ref_Eng.Core.Plain_Text
@@ -34,6 +36,173 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
     internal abstract class Generator
     {
+        protected abstract String Any_Selector(MD_Any value);
+
+        protected String Any_Selector_Foundation_Dispatch(MD_Any value)
+        {
+            switch (value.AS.MD_Foundation_Type)
+            {
+                case MD_Foundation_Type.MD_Boolean:
+                    return Boolean_Literal(value);
+                case MD_Foundation_Type.MD_Integer:
+                    return Integer_Literal(value);
+                case MD_Foundation_Type.MD_Array:
+                    return Array_Selector(value);
+                case MD_Foundation_Type.MD_Bag:
+                    return Bag_Selector(value);
+                case MD_Foundation_Type.MD_Tuple:
+                    return Tuple_Selector(value);
+                case MD_Foundation_Type.MD_Capsule:
+                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
+                    {
+                        return Fraction_Literal(value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Bits))
+                    {
+                        return Bits_Literal(value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Blob))
+                    {
+                        return Blob_Literal(value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Text))
+                    {
+                        return Text_Literal(value);
+                    }
+                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Set))
+                    {
+                        return Set_Selector(value);
+                    }
+                    return Capsule_Selector(value);
+                case MD_Foundation_Type.MD_Handle:
+                    // We display something useful for debugging purposes, but no
+                    // (transient) MD_Handle can actually be rendered as Muldis D Plain Text.
+                    switch (value.AS.MD_Handle.MD_Handle_Type)
+                    {
+                        case MD_Handle_Type.MD_Variable:
+                            return "`Some IMD_Variable value is here.`";
+                        case MD_Handle_Type.MD_Process:
+                            return "`Some IMD_Process value is here.`";
+                        case MD_Handle_Type.MD_Stream:
+                            return "`Some IMD_Stream value is here.`";
+                        case MD_Handle_Type.MD_External:
+                            return "`Some IMD_External value is here.`";
+                        default:
+                            return "DIE UN-HANDLED HANDLE TYPE"
+                                + " [" + value.AS.MD_Handle.MD_Handle_Type.ToString() + "]";
+                    }
+                default:
+                    return "DIE UN-HANDLED FOUNDATION TYPE"
+                        + " [" + value.AS.MD_Foundation_Type.ToString() + "]";
+            }
+        }
+
+        private String Boolean_Literal(MD_Any value)
+        {
+            return value.AS.MD_Boolean ? "True" : "False";
+        }
+
+        private String Integer_Literal(MD_Any value)
+        {
+            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
+            return value.AS.MD_Integer.ToString();
+        }
+
+        private String Fraction_Literal(MD_Any value)
+        {
+            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
+            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
+            return ca.Multi_OA["numerator"].AS.MD_Integer.ToString()
+                + "/" + ca.Multi_OA["denominator"].AS.MD_Integer.ToString();
+        }
+
+        private String Bits_Literal(MD_Any value)
+        {
+            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
+            return "a not yet specified IMD_Bits value";
+        }
+
+        private String Blob_Literal(MD_Any value)
+        {
+            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
+            return "a not yet specified IMD_Blob value";
+        }
+
+        private String Text_Literal(MD_Any value)
+        {
+            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
+            return "a not yet specified IMD_Text value";
+        }
+
+        private String Heading_Literal(MD_Any value)
+        {
+            Memory m = value.AS.Memory;
+            MD_Tuple_Struct ts = value.AS.MD_Tuple;
+            if (ts.Degree == 1)
+            {
+                return Object.ReferenceEquals(value, m.Attr_Name_0) ? @"\0"
+                     : Object.ReferenceEquals(value, m.Attr_Name_1) ? @"\1"
+                     : Object.ReferenceEquals(value, m.Attr_Name_2) ? @"\2"
+                     : @"\" + ts.Only_OA.Value.Key;
+            }
+            return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
+                : @"\@("
+                    + (ts.A0 == null ? "" : "0,")
+                    + (ts.A1 == null ? "" : "1,")
+                    + (ts.A2 == null ? "" : "2,")
+                    + (ts.Only_OA == null ? ""
+                        : ts.Only_OA.Value.Key + ",")
+                    + (ts.Multi_OA == null ? ""
+                        : String.Join("", Enumerable.Select(
+                            Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
+                            a => a.Key + ",")))
+                    + ")";
+        }
+
+        private String Array_Selector(MD_Any value)
+        {
+            return "a not yet specified IMD_Array value";
+        }
+
+        private String Set_Selector(MD_Any value)
+        {
+            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
+            return "a not yet specified IMD_Set value";
+        }
+
+        private String Bag_Selector(MD_Any value)
+        {
+            return "a not yet specified IMD_Bag value";
+        }
+
+        private String Tuple_Selector(MD_Any value)
+        {
+            if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
+            {
+                return Heading_Literal(value);
+            }
+            Memory m = value.AS.Memory;
+            MD_Tuple_Struct ts = value.AS.MD_Tuple;
+            return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
+                : "("
+                    + (ts.A0 == null ? "" : "0 : " + Any_Selector(ts.A0) + ", ")
+                    + (ts.A1 == null ? "" : "1 : " + Any_Selector(ts.A1) + ", ")
+                    + (ts.A2 == null ? "" : "2 : " + Any_Selector(ts.A2) + ", ")
+                    + (ts.Only_OA == null ? ""
+                        : ts.Only_OA.Value.Key + " : "
+                            + Any_Selector(ts.Only_OA.Value.Value) + ", ")
+                    + (ts.Multi_OA == null ? ""
+                        : String.Join("", Enumerable.Select(
+                            Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
+                            a => a.Key + " : " + a.Value + ", ")))
+                    + ")";
+        }
+
+        private String Capsule_Selector(MD_Any value)
+        {
+            // TODO: Dig for cases where we have a well-known subtype not marked as such.
+            return "a not yet specified IMD_Capsule value";
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.Plain_Text.Standard_Generator
@@ -56,8 +225,13 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     {
         internal MD_Any MD_Package_to_MDPT_MD_Text(MD_Any package)
         {
-            // TODO: Everything.
-            return package.AS.Memory.Well_Known_Excuses["No_Reason"];
+            // TODO: Various customizability.
+            return package.AS.Memory.MD_Text(Any_Selector(package));
+        }
+
+        protected override String Any_Selector(MD_Any value)
+        {
+            return Any_Selector_Foundation_Dispatch(value);
         }
     }
 
@@ -91,12 +265,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return Any_Selector(value);
         }
 
-        private String Any_Selector(MD_Any value)
+        protected override String Any_Selector(MD_Any value)
         {
             if (value.AS.Cached_MD_Any_Identity == null)
             {
-                // TODO: Everything.
-                value.AS.Cached_MD_Any_Identity = "42";
+                value.AS.Cached_MD_Any_Identity
+                    = Any_Selector_Foundation_Dispatch(value);
             }
             return value.AS.Cached_MD_Any_Identity;
         }
@@ -126,10 +300,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return Any_Selector(value);
         }
 
-        private String Any_Selector(MD_Any value)
+        protected override String Any_Selector(MD_Any value)
         {
-            // TODO: Everything.
-            return "a not yet specified IMD_Any value";
+            return Any_Selector_Foundation_Dispatch(value);
         }
     }
 }
