@@ -1099,13 +1099,12 @@ namespace Muldis.D.Ref_Eng.Core
                 && ((ts1.A1 == null) == (ts2.A1 == null))
                 && ((ts1.A2 == null) == (ts2.A2 == null))
                 && ((ts1.Only_OA == null && ts2.Only_OA == null)
-                    || (ts1.Only_OA != null && ts2.Only_OA != null)
-                    && Object.ReferenceEquals(
-                        ts1.Only_OA.Value.Key, ts2.Only_OA.Value.Key))
+                    || (ts1.Only_OA != null && ts2.Only_OA != null
+                    && ts1.Only_OA.Value.Key == ts2.Only_OA.Value.Key))
                 && ((ts1.Multi_OA == null && ts2.Multi_OA == null)
-                    || (ts1.Multi_OA != null && ts2.Multi_OA != null)
+                    || (ts1.Multi_OA != null && ts2.Multi_OA != null
                     && Enumerable.All(ts1.Multi_OA,
-                        attr => ts2.Multi_OA.ContainsKey(attr.Key)));
+                        attr => ts2.Multi_OA.ContainsKey(attr.Key))));
         }
     }
 }

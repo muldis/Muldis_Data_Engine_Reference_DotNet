@@ -462,6 +462,20 @@ namespace Muldis.D.Ref_Eng
                         return m_memory.Simple_MD_Excuse((String)v);
                     }
                     throw new NotImplementedException();
+                case "Attr_Name":
+                    if (type_name == "System.String")
+                    {
+                        return m_memory.MD_Attr_Name((String)v);
+                    }
+                    break;
+                case "Attr_Name_List":
+                    if (type_name == "System.String[]")
+                    {
+                        return m_memory.MD_Array(new List<Core.MD_Any>(((String[])v).Select(
+                            m => m_memory.MD_Attr_Name(m)
+                        )));
+                    }
+                    break;
                 default:
                     throw new NotImplementedException(
                         "Unhandled MDBP value type ["+value.Key+"]+["+type_name+"].");
@@ -1145,6 +1159,30 @@ namespace Muldis.D.Ref_Eng
             return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
                 .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
         }
+
+        public IMD_Heading MD_Attr_Name(String label)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException("label");
+            }
+            return (IMD_Heading)new MD_Heading().init(m_machine,
+                m_memory.MD_Attr_Name(label)
+            );
+        }
+
+        public IMD_Array MD_Attr_Name_List(String[] label)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException("label");
+            }
+            return (IMD_Array)new MD_Array().init(m_machine,
+                m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
+                    m => m_memory.MD_Attr_Name(m)
+                )))
+            );
+        }
     }
 }
 
@@ -1263,6 +1301,20 @@ namespace Muldis.D.Ref_Eng.Value
 
     public class MD_Variable : MD_Handle, IMD_Variable
     {
+        public IMD_Any Current()
+        {
+            return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
+                m_value.AS.MD_Handle.MD_Variable.Current_Value);
+        }
+
+        public void Assign(IMD_Any value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            m_value.AS.MD_Handle.MD_Variable.Current_Value = ((MD_Any)value).m_value;
+        }
     }
 
     public class MD_Process : MD_Handle, IMD_Process
@@ -1275,6 +1327,10 @@ namespace Muldis.D.Ref_Eng.Value
 
     public class MD_External : MD_Handle, IMD_External
     {
+        public Object Export_External_Object()
+        {
+            return m_value.AS.MD_Handle.MD_External.Value;
+        }
     }
 
     public class MD_Excuse : MD_Capsule, IMD_Excuse

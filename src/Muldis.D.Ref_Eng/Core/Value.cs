@@ -203,8 +203,9 @@ namespace Muldis.D.Ref_Eng.Core
         // not a Tuple or that any 2 members do not have the same heading.
         internal Nullable<Boolean> Cached_Tree_Relational { get; set; }
 
-        // Cached indication of the widest Local_Widest_Type in the tree,
-        // and thus of the over-all type of the tree.
+        // Tree_Widest_Type indicates the widest Local_Widest_Type in the
+        // tree, and thus of the over-all type of the tree.
+        // This can be calculated from other fields, but is always defined.
         internal Widest_Component_Type Tree_Widest_Type { get; set; }
 
         // Iff this is zero, then there are zero "local" members;
@@ -321,16 +322,10 @@ namespace Muldis.D.Ref_Eng.Core
         // The count of members of this multiset.
         internal Int64 Multiplicity { get; set; }
 
-        internal Multiplied_Member(MD_Any member, Int64 multiplicity)
+        internal Multiplied_Member(MD_Any member, Int64 multiplicity = 1)
         {
             Member       = member;
             Multiplicity = multiplicity;
-        }
-
-        internal Multiplied_Member(MD_Any member)
-        {
-            Member       = member;
-            Multiplicity = 1;
         }
     }
 
@@ -440,7 +435,8 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal class MD_Tuple_Struct
     {
-        // Cached count of attributes of the Muldis D Tuple.
+        // Count of attributes of the Muldis D Tuple.
+        // This can be calculated from other fields, but is always defined.
         internal Int32 Degree { get; set; }
 
         // Iff Muldis D Tuple has attr named [0], this field has its asset.

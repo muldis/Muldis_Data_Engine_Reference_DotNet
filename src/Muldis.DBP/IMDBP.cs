@@ -95,6 +95,10 @@ namespace Muldis.DBP
         IMD_Excuse MD_Excuse(String value);
 
         IMD_Excuse_No_Reason MD_Excuse_No_Reason();
+
+        IMD_Heading MD_Attr_Name(String label);
+
+        IMD_Array MD_Attr_Name_List(String[] label);
     }
 
     public interface IMD_Any
@@ -176,6 +180,9 @@ namespace Muldis.DBP
 
     public interface IMD_Variable : IMD_Handle
     {
+        IMD_Any Current();
+
+        void Assign(IMD_Any value);
     }
 
     public interface IMD_Process : IMD_Handle
@@ -188,6 +195,7 @@ namespace Muldis.DBP
 
     public interface IMD_External : IMD_Handle
     {
+        Object Export_External_Object();
     }
 
     public interface IMD_Excuse : IMD_Any
