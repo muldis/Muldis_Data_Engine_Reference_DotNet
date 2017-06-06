@@ -170,7 +170,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         // Cached count of members of the Muldis D Array represented by
         // this tree node including those defined by it and child nodes.
-        // Equals count(Local_*_Members) x Local_Multiplicity
+        // Equals Cached_Local_Member_Count
         // + Pred_Members.Cached_Tree_Member_Count + Succ_Members.Cached_Tree_Member_Count.
         internal Nullable<Int64> Cached_Tree_Member_Count { get; set; }
 
@@ -203,6 +203,11 @@ namespace Muldis.D.Ref_Eng.Core
         // LWT indicates which of the Local_*_Members this node is using.
         // This is None iff Local_Multiplicity is zero.
         internal Widest_Component_Type Local_Widest_Type { get; set; }
+
+        // Cached count of members defined by the Local_*_Members fields as
+        // they are defined in isolation.
+        // Equals count(Local_*_Members) x Local_Multiplicity.
+        internal Nullable<Int64> Cached_Local_Member_Count { get; set; }
 
         // Nullable Boolean
         // This is true iff we know that no 2 members of the Muldis D Array
@@ -265,6 +270,19 @@ namespace Muldis.D.Ref_Eng.Core
         // Char outside of a proper "surrogate pair", which is then
         // malformed and not considered an actual codepoint array.
         internal String Local_Codepoint_Members { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that at least 1 Codepoint member is NOT
+        // in the Basic Multilingual Plane (BMP); this is false iff we know
+        // that there is no such Codepoint member.  In other words with
+        // respect to a .Net String, this is true iff we know the String
+        // has at least 1 "surrogate" Char {0xD800..0xDFFF}, either in the
+        // form of a proper "surrogate pair" (well formed) or on its own
+        // (not valid Unicode); this is false iff we know the string has no
+        // "surrogate" Char.  We cache this knowledge because a .Net String
+        // with any non-BMP Char is more complicated to count the members
+        // of or access members by ordinal position or do some other stuff.
+        internal Nullable<Boolean> Cached_Local_Any_Non_BMP { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.

@@ -78,7 +78,7 @@ namespace Muldis.D.Ref_Eng.Core
 
             Preview_Generator = new Plain_Text.Preview_Generator();
 
-            Executor = new Executor();
+            Executor = new Executor(this);
 
             MD_False = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -112,6 +112,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Tree_Widest_Type = Widest_Component_Type.None,
                     Local_Multiplicity = 0,
                     Local_Widest_Type = Widest_Component_Type.None,
+                    Cached_Local_Member_Count = 0,
                     Cached_Local_All_Unique = true,
                     Cached_Local_Relational = true,
                 },

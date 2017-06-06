@@ -7,9 +7,16 @@ namespace Muldis.D.Ref_Eng.Core
 {
     internal class Executor
     {
+        internal readonly Memory Memory;
+
+        internal Executor(Memory memory)
+        {
+            Memory = memory;
+        }
+
         internal MD_Any Evaluates(MD_Any function, MD_Any args = null)
         {
-            Memory m = function.AS.Memory;
+            Memory m = Memory;
             if (args == null)
             {
                 args = m.MD_Tuple_D0;
@@ -69,7 +76,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal void Performs(MD_Any procedure, MD_Any args = null)
         {
-            Memory m = procedure.AS.Memory;
+            Memory m = Memory;
             if (args == null)
             {
                 args = m.MD_Tuple_D0;
@@ -83,7 +90,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any evaluate_foundation_function(MD_Any func_name, MD_Any args)
         {
-            Memory m = func_name.AS.Memory;
+            Memory m = Memory;
             String func_name_s
                 = Object.ReferenceEquals(func_name, m.Attr_Name_0) ? "\u0000"
                 : Object.ReferenceEquals(func_name, m.Attr_Name_1) ? "\u0001"
@@ -497,41 +504,93 @@ namespace Muldis.D.Ref_Eng.Core
 
         private Int64 Array__count(MD_Any array)
         {
-            return Array__node__count(array.AS.MD_Array);
+            return Array__node__tree_member_count(array.AS.MD_Array);
         }
 
-        private Int64 Array__node__count(MD_Array_Node node)
+        private Int64 Array__node__tree_member_count(MD_Array_Node node)
         {
             if (node.Cached_Tree_Member_Count == null)
             {
                 node.Cached_Tree_Member_Count
                     = Array__node__local_member_count(node)
                         + (node.Pred_Members == null ? 0
-                            : Array__node__count(node.Pred_Members))
+                            : Array__node__tree_member_count(node.Pred_Members))
                         + (node.Succ_Members == null ? 0
-                            : Array__node__count(node.Succ_Members));
+                            : Array__node__tree_member_count(node.Succ_Members));
             }
             return (Int64)node.Cached_Tree_Member_Count;
         }
 
         private Int64 Array__node__local_member_count(MD_Array_Node node)
         {
-            Int64 lm = node.Local_Multiplicity;
-            switch (node.Local_Widest_Type)
+            if (node.Cached_Local_Member_Count == null)
             {
-                case Widest_Component_Type.None:
-                    return 0;
-                case Widest_Component_Type.Unrestricted:
-                    return lm * node.Local_Unrestricted_Members.Count;
-                case Widest_Component_Type.Bit:
-                    return lm * node.Local_Bit_Members.Length;
-                case Widest_Component_Type.Octet:
-                    return lm * node.Local_Octet_Members.Length;
-                case Widest_Component_Type.Codepoint:
-                    return lm * node.Local_Codepoint_Members.Length;
-                default:
-                    throw new NotImplementedException();
+                Int64 lm = node.Local_Multiplicity;
+                switch (node.Local_Widest_Type)
+                {
+                    case Widest_Component_Type.None:
+                        node.Cached_Local_Member_Count = 0;
+                        break;
+                    case Widest_Component_Type.Unrestricted:
+                        node.Cached_Local_Member_Count
+                            = lm * node.Local_Unrestricted_Members.Count;
+                        break;
+                    case Widest_Component_Type.Bit:
+                        node.Cached_Local_Member_Count
+                            = lm * node.Local_Bit_Members.Length;
+                        break;
+                    case Widest_Component_Type.Octet:
+                        node.Cached_Local_Member_Count
+                            = lm * node.Local_Octet_Members.Length;
+                        break;
+                    case Widest_Component_Type.Codepoint:
+                        if (Array__node__local_any_non_BMP(node))
+                        {
+                            String s = node.Local_Codepoint_Members;
+                            Int32 count = 0;
+                            for (Int32 i = 0; i < s.Length; i++)
+                            {
+                                count++;
+                                if ((i+1) < s.Length
+                                    && Char.IsSurrogatePair(s[i], s[i+1]))
+                                {
+                                    i++;
+                                }
+                            }
+                            node.Cached_Local_Member_Count = lm * count;
+                        }
+                        else
+                        {
+                            node.Cached_Local_Member_Count
+                                = lm * node.Local_Codepoint_Members.Length;
+                        }
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
+            return (Int64)node.Cached_Local_Member_Count;
+        }
+
+        private Boolean Array__node__local_any_non_BMP(MD_Array_Node node)
+        {
+            // This function is only valid to call when we already know
+            // that the node's Local_Widest_Type is Codepoint.
+            if (node.Cached_Local_Any_Non_BMP == null)
+            {
+                String s = node.Local_Codepoint_Members;
+                Boolean any_non_BMP = false;
+                for (Int32 i = 0; i < s.Length; i++)
+                {
+                    if (Char.IsSurrogate(s[i]))
+                    {
+                        any_non_BMP = true;
+                        break;
+                    }
+                }
+                node.Cached_Local_Any_Non_BMP = any_non_BMP;
+            }
+            return (Boolean)node.Cached_Local_Any_Non_BMP;
         }
 
         private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)
@@ -554,7 +613,7 @@ namespace Muldis.D.Ref_Eng.Core
                 {
                     return maybe_member;
                 }
-                maybe_last_ord_pos_seen += Array__node__count(node.Pred_Members);
+                maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Pred_Members);
                 if (ord_pos <= maybe_last_ord_pos_seen)
                 {
                     return null;
@@ -578,11 +637,39 @@ namespace Muldis.D.Ref_Eng.Core
                         case Widest_Component_Type.Unrestricted:
                             return node.Local_Unrestricted_Members[(Int32)ord_pos_within_local];
                         case Widest_Component_Type.Bit:
-                            throw new NotImplementedException();
+                            return Memory.MD_Integer(
+                                node.Local_Bit_Members[(Int32)ord_pos_within_local]
+                                ? 0 : 1);
                         case Widest_Component_Type.Octet:
-                            throw new NotImplementedException();
+                            return Memory.MD_Integer(
+                                node.Local_Octet_Members[(Int32)ord_pos_within_local]);
                         case Widest_Component_Type.Codepoint:
-                            throw new NotImplementedException();
+                            if (Array__node__local_any_non_BMP(node))
+                            {
+                                String s = node.Local_Codepoint_Members;
+                                Int64 logical_i = 0;
+                                for (Int32 i = 0; i < s.Length; i++)
+                                {
+                                    if (logical_i == ord_pos_within_local)
+                                    {
+                                        if ((i+1) < s.Length
+                                            && Char.IsSurrogatePair(s[i], s[i+1]))
+                                        {
+                                            return Memory.MD_Integer(
+                                                Char.ConvertToUtf32(s[i], s[i+1]));
+                                        }
+                                        return Memory.MD_Integer(s[i]);
+                                    }
+                                    logical_i++;
+                                    if ((i+1) < s.Length
+                                        && Char.IsSurrogatePair(s[i], s[i+1]))
+                                    {
+                                        i++;
+                                    }
+                                }
+                            }
+                            return Memory.MD_Integer(
+                                node.Local_Codepoint_Members[(Int32)ord_pos_within_local]);
                         default:
                             throw new NotImplementedException();
                     }

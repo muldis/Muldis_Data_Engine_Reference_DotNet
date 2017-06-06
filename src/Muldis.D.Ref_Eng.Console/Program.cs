@@ -82,6 +82,7 @@ namespace Muldis.D.Ref_Eng.Console
                 i.MD_Tuple(27,39)
             );
             IMD_Tuple that = i.MD_Tuple(27,39);
+            IMD_Text the_other = i.MD_Text("Fr ⊂ ac 💩 ti ÷ on");
         }
     }
 }
