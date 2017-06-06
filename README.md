@@ -25,6 +25,12 @@ The Muldis D language itself has as a primary influence the work of Chris
 Date (C.J. Date) and Hugh Darwen whose home website is
 [http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
 
+This distribution bundles a non-canonical copy of the library
+named ```Muldis.DBP``` / ```IMDBP.cs``` for build-out-of-the-box
+convenience in the short term while the latter is not yet published as a
+NuGet package; see [https://github.com/muldis/Muldis-DBP-DotNet](
+https://github.com/muldis/Muldis-DBP-DotNet) for the canonical copy.
+
 *This documentation is pending.*
 
 # DEPENDENCIES
