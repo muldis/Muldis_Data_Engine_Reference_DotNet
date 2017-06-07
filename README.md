@@ -136,19 +136,13 @@ Muldis.D.Ref\_Eng is Copyright © 2015-2017, Muldis Data Systems, Inc.
 [http://www.muldis.com/](http://www.muldis.com/)
 
 Muldis.D.Ref\_Eng is free software; you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License (LGPL) as
-published by the Free Software Foundation
-([http://www.fsf.org/](http://www.fsf.org/)); either
-version 3 of the License, or (at your option) any later version.  You
-should have received a copy of the LGPL as part of the Muldis.D.Ref\_Eng
-distribution, in the files named "LICENSE/LGPL" and "LICENSE/GPL" (the
-LGPLv3 is defined as the terms of the GPLv3 plus extra permissions); if
-not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
-
-If it is not feasible for you to employ Muldis.D.Ref\_Eng subject to the
-terms of the LGPL, then the copyright holder of Muldis.D.Ref\_Eng can
-provide you a customized proprietary license, often at no cost, so that it
-is still possible for you to employ Muldis.D.Ref\_Eng to meet your needs.
+it under the terms of the Artistic License version 2 (AL2) as published by
+the Perl Foundation ([http://www.perlfoundation.org/](
+http://www.perlfoundation.org/)).  You should have received a copy of the
+AL2 as part of the Muldis.D.Ref\_Eng distribution, in the file named
+"LICENSE/artistic-2\_0.txt"; if not, see
+[http://www.perlfoundation.org/attachment/legal/artistic-2\_0.txt](
+http://www.perlfoundation.org/attachment/legal/artistic-2\_0.txt).
 
 Any versions of Muldis.D.Ref\_Eng that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
