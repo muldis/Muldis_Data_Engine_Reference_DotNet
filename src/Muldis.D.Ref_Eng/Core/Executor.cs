@@ -639,7 +639,7 @@ namespace Muldis.D.Ref_Eng.Core
                         case Widest_Component_Type.Bit:
                             return Memory.MD_Integer(
                                 node.Local_Bit_Members[(Int32)ord_pos_within_local]
-                                ? 0 : 1);
+                                ? 1 : 0);
                         case Widest_Component_Type.Octet:
                             return Memory.MD_Integer(
                                 node.Local_Octet_Members[(Int32)ord_pos_within_local]);

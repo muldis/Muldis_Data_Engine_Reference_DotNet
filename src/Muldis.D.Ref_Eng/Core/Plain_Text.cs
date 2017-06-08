@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Muldis.D.Ref_Eng.Core;
 
 namespace Muldis.D.Ref_Eng.Core.Plain_Text
@@ -108,6 +110,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return value.AS.MD_Integer.ToString();
         }
 
+        private String Integer_Literal(Int32 value)
+        {
+            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
+            return value.ToString();
+        }
+
         private String Fraction_Literal(MD_Any value)
         {
             // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
@@ -118,24 +126,179 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Bits_Literal(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
-            return "a not yet specified IMD_Bits value";
+            Memory m = value.AS.Memory;
+            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~?''"
+                : @"\~?'0b" + Bits_Literal__node__tree(array.AS.MD_Array) + "'";
+        }
+
+        private String Bits_Literal__node__tree(MD_Array_Node node)
+        {
+            String pred = (node.Pred_Members == null ? ""
+                : Bits_Literal__node__tree(node.Pred_Members));
+            String curr = Bits_Literal__node__local(node);
+            String succ = (node.Succ_Members == null ? ""
+                : Bits_Literal__node__tree(node.Succ_Members));
+            return pred + curr + succ;
+        }
+
+        private String Bits_Literal__node__local(MD_Array_Node node)
+        {
+            switch (node.Local_Widest_Type)
+            {
+                case Widest_Component_Type.None:
+                    return "";
+                case Widest_Component_Type.Unrestricted:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Bit:
+                    System.Collections.IEnumerator e
+                        = node.Local_Bit_Members.GetEnumerator();
+                    List<Boolean> list = new List<Boolean>();
+                    while (e.MoveNext())
+                    {
+                        list.Add((Boolean)e.Current);
+                    }
+                    return String.Concat(Enumerable.Select(
+                        list, m => m ? "1" : "0"));
+                case Widest_Component_Type.Octet:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Codepoint:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private String Blob_Literal(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
-            return "a not yet specified IMD_Blob value";
+            Memory m = value.AS.Memory;
+            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~+''"
+                : @"\~+'0x" + Blob_Literal__node__tree(array.AS.MD_Array) + "'";
+        }
+
+        private String Blob_Literal__node__tree(MD_Array_Node node)
+        {
+            String pred = (node.Pred_Members == null ? ""
+                : Blob_Literal__node__tree(node.Pred_Members));
+            String curr = Blob_Literal__node__local(node);
+            String succ = (node.Succ_Members == null ? ""
+                : Blob_Literal__node__tree(node.Succ_Members));
+            return pred + curr + succ;
+        }
+
+        private String Blob_Literal__node__local(MD_Array_Node node)
+        {
+            switch (node.Local_Widest_Type)
+            {
+                case Widest_Component_Type.None:
+                    return "";
+                case Widest_Component_Type.Unrestricted:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Bit:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Octet:
+                    return String.Concat(Enumerable.Select(
+                        node.Local_Octet_Members,
+                        m => m.ToString("X2")));
+                case Widest_Component_Type.Codepoint:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private String Text_Literal(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
-            return "a not yet specified IMD_Text value";
+            Memory m = value.AS.Memory;
+            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            return Object.ReferenceEquals(array, m.MD_Array_C0) ? "''"
+                : "'" + Quoted_Name_Or_Text_Segment_Content(
+                    Text_Literal__node__tree(array.AS.MD_Array)) + "'";
+        }
+
+        private String Text_Literal__node__tree(MD_Array_Node node)
+        {
+            String pred = (node.Pred_Members == null ? ""
+                : Text_Literal__node__tree(node.Pred_Members));
+            String curr = Text_Literal__node__local(node);
+            String succ = (node.Succ_Members == null ? ""
+                : Text_Literal__node__tree(node.Succ_Members));
+            return pred + curr + succ;
+        }
+
+        private String Text_Literal__node__local(MD_Array_Node node)
+        {
+            switch (node.Local_Widest_Type)
+            {
+                case Widest_Component_Type.None:
+                    return "";
+                case Widest_Component_Type.Unrestricted:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Bit:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Octet:
+                    throw new NotImplementedException();
+                case Widest_Component_Type.Codepoint:
+                    return node.Local_Codepoint_Members;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private String Quoted_Name_Or_Text_Segment_Content(String value)
+        {
+            if (value == "" || !Regex.IsMatch(value,
+                "[\"\'`\\\u0000-\u001F\u0080-\u009F]"))
+            {
+                return value;
+            }
+            StringBuilder sb = new StringBuilder(value.Length);
+            sb.Append(@"\");
+            for (Int32 i = 0; i < value.Length; i++)
+            {
+                Char c = value[i];
+                switch ((Int32)c)
+                {
+                    case 0x22:
+                        sb.Append(@"\q");
+                        break;
+                    case 0x27:
+                        sb.Append(@"\a");
+                        break;
+                    case 0x60:
+                        sb.Append(@"\g");
+                        break;
+                    case 0x5C:
+                        sb.Append(@"\b");
+                        break;
+                    case 0x9:
+                        sb.Append(@"\t");
+                        break;
+                    case 0xA:
+                        sb.Append(@"\n");
+                        break;
+                    case 0xD:
+                        sb.Append(@"\r");
+                        break;
+                    default:
+                        if (c <= 0x1F || (c >= 0x80 && c <= 0x9F))
+                        {
+                            sb.Append(@"\c<" + Integer_Literal((Int32)c) + ">");
+                        }
+                        else
+                        {
+                            sb.Append(c);
+                        }
+                        break;
+                }
+            }
+            return sb.ToString();
         }
 
         private String Heading_Literal(MD_Any value)
         {
+            // TODO: Quote attribute names where appropriate.
             Memory m = value.AS.Memory;
             MD_Tuple_Struct ts = value.AS.MD_Tuple;
             if (ts.Degree == 1)
@@ -153,7 +316,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     + (ts.Only_OA == null ? ""
                         : ts.Only_OA.Value.Key + ",")
                     + (ts.Multi_OA == null ? ""
-                        : String.Join("", Enumerable.Select(
+                        : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
                             a => a.Key + ",")))
                     + ")";
@@ -161,7 +324,67 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Array_Selector(MD_Any value)
         {
-            return "a not yet specified IMD_Array value";
+            Memory m = value.AS.Memory;
+            return Object.ReferenceEquals(value, m.MD_Array_C0) ? "[]"
+                : "[" + Array_Selector__node__tree(value.AS.MD_Array) + "]";
+        }
+
+        private String Array_Selector__node__tree(MD_Array_Node node)
+        {
+            String pred = (node.Pred_Members == null ? ""
+                : Array_Selector__node__tree(node.Pred_Members));
+            String curr = Array_Selector__node__local(node);
+            String succ = (node.Succ_Members == null ? ""
+                : Array_Selector__node__tree(node.Succ_Members));
+            return pred + (pred != "" && curr != "" ? ", " : "")
+                + curr + (curr != "" && succ != "" ? ", " : "") + succ;
+        }
+
+        private String Array_Selector__node__local(MD_Array_Node node)
+        {
+            switch (node.Local_Widest_Type)
+            {
+                case Widest_Component_Type.None:
+                    return "";
+                case Widest_Component_Type.Unrestricted:
+                    return String.Concat(Enumerable.Select(
+                        node.Local_Unrestricted_Members,
+                        m => Any_Selector(m) + ", "));
+                case Widest_Component_Type.Bit:
+                    System.Collections.IEnumerator e
+                        = node.Local_Bit_Members.GetEnumerator();
+                    List<Boolean> list = new List<Boolean>();
+                    while (e.MoveNext())
+                    {
+                        list.Add((Boolean)e.Current);
+                    }
+                    return String.Concat(Enumerable.Select(
+                        list, m => Integer_Literal(m ? 1 : 0) + ", "));
+                case Widest_Component_Type.Octet:
+                    return String.Concat(Enumerable.Select(
+                        node.Local_Octet_Members,
+                        m => Integer_Literal(m) + ", "));
+                case Widest_Component_Type.Codepoint:
+                    String s = node.Local_Codepoint_Members;
+                    List<Int32> cpa = new List<Int32>(s.Length);
+                    for (Int32 i = 0; i < s.Length; i++)
+                    {
+                        if ((i+1) < s.Length
+                            && Char.IsSurrogatePair(s[i], s[i+1]))
+                        {
+                            cpa.Add(Char.ConvertToUtf32(s[i], s[i+1]));
+                            i++;
+                        }
+                        else
+                        {
+                            cpa.Add(s[i]);
+                        }
+                    }
+                    return String.Concat(Enumerable.Select(
+                        cpa, m => Integer_Literal(m) + ", "));
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private String Set_Selector(MD_Any value)
@@ -177,6 +400,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Tuple_Selector(MD_Any value)
         {
+            // TODO: Quote attribute names where appropriate.
             if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
             {
                 return Heading_Literal(value);
@@ -192,9 +416,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         : ts.Only_OA.Value.Key + " : "
                             + Any_Selector(ts.Only_OA.Value.Value) + ", ")
                     + (ts.Multi_OA == null ? ""
-                        : String.Join("", Enumerable.Select(
+                        : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                            a => a.Key + " : " + a.Value + ", ")))
+                            a => a.Key + " : " + Any_Selector(a.Value) + ", ")))
                     + ")";
         }
 
