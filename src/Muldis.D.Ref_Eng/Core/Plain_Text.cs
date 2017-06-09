@@ -7,6 +7,11 @@ using Muldis.D.Ref_Eng.Core;
 
 namespace Muldis.D.Ref_Eng.Core.Plain_Text
 {
+    // Muldis.D.Ref_Eng.Core.Plain_Text.Parser
+    // Provides common implementation code for all other *_Parser
+    // classes where they don't have reason to differ.
+    // Or it would if there was more than one *_Parser, which there isn't.
+
     internal abstract class Parser
     {
     }
@@ -25,6 +30,17 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     // by code such as the X or Y classes below.
     // This class is completely deterministic and its exact output Muldis D
     // Package/etc values are determined entirely by its input Text/etc values.
+    // Standard_Parser accepts input in the full Muldis_D_Plain_Text
+    // grammar, not just the "foundational" subset that Standard_Generator
+    // outputs.  However, Standard_Parser expressly does not retain any
+    // parsing meta-data as new decorations on the output code, such as
+    // which exact numeric or string formats or whitespace was used.
+    // This is so that the Muldis_D_Foundation has a competent parsing
+    // capability built-in, and any more complicated alternate parsers can
+    // be written in Muldis D and bootstrapped by it; those alternate
+    // parsers are free to create decorations to support perfect
+    // round-tripping from plain text source to identical plain-text source.
+    // Similarly, Standard_Parser has zero configuration options.
 
     internal class Standard_Parser : Parser
     {
@@ -35,6 +51,13 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return parsing_unit.AS.Memory.Well_Known_Excuses["No_Reason"];
         }
     }
+
+    // Muldis.D.Ref_Eng.Core.Plain_Text.Generator
+    // Provides common implementation code for all other *_Generator
+    // classes where they don't have reason to differ.
+    // In fact, presently all inheriting classes actually have identical
+    // output, which is deterministic and valid Standard_Parser input;
+    // this is subject to change later.
 
     internal abstract class Generator
     {
@@ -106,19 +129,16 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Integer_Literal(MD_Any value)
         {
-            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
             return value.AS.MD_Integer.ToString();
         }
 
         private String Integer_Literal(Int32 value)
         {
-            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
             return value.ToString();
         }
 
         private String Fraction_Literal(MD_Any value)
         {
-            // TODO: Standard will need ad-hoc customizability eg base 10 vs 16 vs etc.
             MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
             return ca.Multi_OA["numerator"].AS.MD_Integer.ToString()
                 + "/" + ca.Multi_OA["denominator"].AS.MD_Integer.ToString();
@@ -134,12 +154,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Bits_Literal__node__tree(MD_Array_Node node)
         {
-            String pred = (node.Pred_Members == null ? ""
-                : Bits_Literal__node__tree(node.Pred_Members));
-            String curr = Bits_Literal__node__local(node);
-            String succ = (node.Succ_Members == null ? ""
-                : Bits_Literal__node__tree(node.Succ_Members));
-            return pred + curr + succ;
+            return (node.Pred_Members == null ? ""
+                    : Bits_Literal__node__tree(node.Pred_Members))
+                + Bits_Literal__node__local(node)
+                + (node.Succ_Members == null ? ""
+                    : Bits_Literal__node__tree(node.Succ_Members));
         }
 
         private String Bits_Literal__node__local(MD_Array_Node node)
@@ -179,12 +198,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Blob_Literal__node__tree(MD_Array_Node node)
         {
-            String pred = (node.Pred_Members == null ? ""
-                : Blob_Literal__node__tree(node.Pred_Members));
-            String curr = Blob_Literal__node__local(node);
-            String succ = (node.Succ_Members == null ? ""
-                : Blob_Literal__node__tree(node.Succ_Members));
-            return pred + curr + succ;
+            return (node.Pred_Members == null ? ""
+                    : Blob_Literal__node__tree(node.Pred_Members))
+                + Blob_Literal__node__local(node)
+                + (node.Succ_Members == null ? ""
+                    : Blob_Literal__node__tree(node.Succ_Members));
         }
 
         private String Blob_Literal__node__local(MD_Array_Node node)
@@ -219,12 +237,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Text_Literal__node__tree(MD_Array_Node node)
         {
-            String pred = (node.Pred_Members == null ? ""
-                : Text_Literal__node__tree(node.Pred_Members));
-            String curr = Text_Literal__node__local(node);
-            String succ = (node.Succ_Members == null ? ""
-                : Text_Literal__node__tree(node.Succ_Members));
-            return pred + curr + succ;
+            return (node.Pred_Members == null ? ""
+                    : Text_Literal__node__tree(node.Pred_Members))
+                + Text_Literal__node__local(node)
+                + (node.Succ_Members == null ? ""
+                    : Text_Literal__node__tree(node.Succ_Members));
         }
 
         private String Text_Literal__node__local(MD_Array_Node node)
@@ -331,13 +348,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Array_Selector__node__tree(MD_Array_Node node)
         {
-            String pred = (node.Pred_Members == null ? ""
-                : Array_Selector__node__tree(node.Pred_Members));
-            String curr = Array_Selector__node__local(node);
-            String succ = (node.Succ_Members == null ? ""
-                : Array_Selector__node__tree(node.Succ_Members));
-            return pred + (pred != "" && curr != "" ? ", " : "")
-                + curr + (curr != "" && succ != "" ? ", " : "") + succ;
+            return (node.Pred_Members == null ? ""
+                    : Array_Selector__node__tree(node.Pred_Members))
+                + Array_Selector__node__local(node)
+                + (node.Succ_Members == null ? ""
+                    : Array_Selector__node__tree(node.Succ_Members));
         }
 
         private String Array_Selector__node__local(MD_Array_Node node)
@@ -349,7 +364,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case Widest_Component_Type.Unrestricted:
                     return String.Concat(Enumerable.Select(
                         node.Local_Unrestricted_Members,
-                        m => Any_Selector(m) + ", "));
+                        m => Any_Selector(m) + ",\u000A"));
                 case Widest_Component_Type.Bit:
                     System.Collections.IEnumerator e
                         = node.Local_Bit_Members.GetEnumerator();
@@ -359,11 +374,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         list.Add((Boolean)e.Current);
                     }
                     return String.Concat(Enumerable.Select(
-                        list, m => Integer_Literal(m ? 1 : 0) + ", "));
+                        list, m => Integer_Literal(m ? 1 : 0) + ",\u000A"));
                 case Widest_Component_Type.Octet:
                     return String.Concat(Enumerable.Select(
                         node.Local_Octet_Members,
-                        m => Integer_Literal(m) + ", "));
+                        m => Integer_Literal(m) + ",\u000A"));
                 case Widest_Component_Type.Codepoint:
                     String s = node.Local_Codepoint_Members;
                     List<Int32> cpa = new List<Int32>(s.Length);
@@ -381,7 +396,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         }
                     }
                     return String.Concat(Enumerable.Select(
-                        cpa, m => Integer_Literal(m) + ", "));
+                        cpa, m => Integer_Literal(m) + ",\u000A"));
                 default:
                     throw new NotImplementedException();
             }
@@ -409,16 +424,16 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             MD_Tuple_Struct ts = value.AS.MD_Tuple;
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
                 : "("
-                    + (ts.A0 == null ? "" : "0 : " + Any_Selector(ts.A0) + ", ")
-                    + (ts.A1 == null ? "" : "1 : " + Any_Selector(ts.A1) + ", ")
-                    + (ts.A2 == null ? "" : "2 : " + Any_Selector(ts.A2) + ", ")
+                    + (ts.A0 == null ? "" : "0 : " + Any_Selector(ts.A0) + ",\u000A")
+                    + (ts.A1 == null ? "" : "1 : " + Any_Selector(ts.A1) + ",\u000A")
+                    + (ts.A2 == null ? "" : "2 : " + Any_Selector(ts.A2) + ",\u000A")
                     + (ts.Only_OA == null ? ""
                         : ts.Only_OA.Value.Key + " : "
-                            + Any_Selector(ts.Only_OA.Value.Value) + ", ")
+                            + Any_Selector(ts.Only_OA.Value.Value) + ",\u000A")
                     + (ts.Multi_OA == null ? ""
                         : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                            a => a.Key + " : " + Any_Selector(a.Value) + ", ")))
+                            a => a.Key + " : " + Any_Selector(a.Value) + ",\u000A")))
                     + ")";
         }
 
@@ -438,19 +453,50 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     // for external use, whether for storage in foo.mdpt disk files or
     // other places, viewing by users, and reading by other programs, as a
     // means of interchange with any other system conforming to the spec.
-    // This generator will output all code annotations attached to the
-    // regular semantic code and will also respect any relevant attached
-    // code decorations where possible, or it otherwise has some
-    // configuration options for pretty-printing the output code strings.
+    // This generator actually handles any Muldis D "value", not just a "Package".
     // This class is completely deterministic and its exact output Muldis D
     // Text/etc values are determined entirely by its input Package/etc values.
+    // This generator is expressly kept as simple as possible such that it
+    // has zero configuration options and only does simple pretty-printing;
+    // it is only meant so that the Muldis_D_Foundation has a competent
+    // serialization capability built-in whose result is easy enough to
+    // read and that is easy to diff changes for.
+    // This generator makes only the "foundational" flavor of
+    // Muldis_D_Plain_Text and provides a literal serialization, including
+    // that all annotation and decoration values are output verbatim, with
+    // no interpretation and with nothing left out.  Round-tripping will
+    // only work as intended with a parser that doesn't produce decorations.
+    // Typically it is up to bootstrapped higher-level libraries written in
+    // Muldis D to provide other generating options that are better
+    // pretty-printed or provide any configuration or that serialize with
+    // non-foundational Muldis_D_Plain_Text or interpret decorations.
+    // While this generator's output includes a "parsing unit predicate" on
+    // request (its optionality is the sole configuration option), that
+    // does not include any preceeding "shebang line", which is up to the
+    // caller where such is desired.
 
     internal class Standard_Generator : Generator
     {
-        internal MD_Any MD_Package_to_MDPT_MD_Text(MD_Any package)
+        internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
         {
-            // TODO: Various customizability.
-            return package.AS.Memory.MD_Text(Any_Selector(package));
+            return value.AS.Memory.MD_Text(
+                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
+                + "meta foundational\u000A"
+                + Any_Selector(value) + "\u000A"
+            );
+        }
+
+        internal MD_Any MD_Text_MDPT_Parsing_Unit_Predicate(Memory memory)
+        {
+            return memory.MD_Text(
+                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
+                + "meta foundational\u000A"
+            );
+        }
+
+        internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit_Subject(MD_Any value)
+        {
+            return value.AS.Memory.MD_Text(Any_Selector(value) + "\u000A");
         }
 
         protected override String Any_Selector(MD_Any value)
@@ -477,7 +523,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     // The outputs of this class may possibly conform to the
     // Muldis_D_Plain_Text specification and be parseable to yield the
     // original input values, but that is not guaranteed; even if that is
-    // the case, the outputs would be considerably less "pretty" as a
+    // the case, the outputs might be considerably less "pretty" as a
     // trade-off to make the generating faster and less error-prone.
     // A normal side effect of using Identity_Generator on a MD_Any/etc
     // value is to update a cache therein to hold the serialization result.
