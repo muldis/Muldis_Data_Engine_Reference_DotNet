@@ -7,18 +7,15 @@ namespace Muldis.D.Ref_Eng.Core
     // Enumerates Muldis D types that are considered well-known to this
     // Muldis D language implementation.  Typically these are defined in
     // the Muldis D Foundation language spec even if most of their related
-    // operators are not.  Typically each one is either equal to one of the
-    // 7 Muldis D Foundation types or it is a Capsule subtype whose label
-    // is a simple unqualified Attr_Name.  Typically a given Muldis D value
-    // would be a member of several of these types rather than just one.
-    // The Muldis D "Any" type is omitted as it implicitly always applies;
-    // this omission is subject to be changed.
+    // operators are not.  Typically each one is a Capsule subtype.
+    // This set excludes on purpose the subset of well-known types that
+    // should be trivial to test membership of by other means; in
+    // particular it excludes {Any,None}, the 7 MD_Foundation_Type,
+    // the 4 MD_Handle_Type; types not excluded are more work to test.
 
     internal enum MD_Well_Known_Type
     {
         Excuse,
-        Boolean,
-        Integer,
         Integer_NN,
         Integer_P,
         Fraction,
@@ -27,21 +24,12 @@ namespace Muldis.D.Ref_Eng.Core
         Text,
         Text__Unicode,
         Text__ASCII,
-        Array,
         String,
         Set,
-        Bag,
-        Tuple,
         Tuple_Array,
         Relation,
         Tuple_Bag,
         Interval,
-        Capsule,
-        Handle,
-        Variable,
-        Process,
-        Stream,
-        External,
         Package,
         Function,
         Procedure,

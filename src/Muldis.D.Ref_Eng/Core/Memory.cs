@@ -84,16 +84,14 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = false,
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Boolean},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             MD_True = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
                 MD_Boolean = true,
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Boolean},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             m_integers = new Dictionary<Int32,MD_Any>();
@@ -117,7 +115,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Local_Relational = true,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
+                    {MD_Well_Known_Type.String},
             } };
 
             MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
@@ -132,8 +130,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Local_All_Unique = true,
                     Cached_Local_Relational = true,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Bag},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             MD_Tuple_D0 = new MD_Any { AS = new MD_Any_Struct {
@@ -143,7 +140,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Degree = 0,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
 
             m_attr_name_tuples = new Dictionary<String,MD_Any>()
@@ -156,8 +153,7 @@ namespace Muldis.D.Ref_Eng.Core
                         A0 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
-                            MD_Well_Known_Type.Attr_Name},
+                        {MD_Well_Known_Type.Heading, MD_Well_Known_Type.Attr_Name},
                 } } },
                 {"\u0001", new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
@@ -167,8 +163,7 @@ namespace Muldis.D.Ref_Eng.Core
                         A1 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
-                            MD_Well_Known_Type.Attr_Name},
+                        {MD_Well_Known_Type.Heading, MD_Well_Known_Type.Attr_Name},
                 } } },
                 {"\u0002", new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
@@ -178,8 +173,7 @@ namespace Muldis.D.Ref_Eng.Core
                         A2 = MD_True,
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                        {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading,
-                            MD_Well_Known_Type.Attr_Name},
+                        {MD_Well_Known_Type.Heading, MD_Well_Known_Type.Attr_Name},
                 } } },
             };
             Attr_Name_0 = m_attr_name_tuples["\u0000"];
@@ -195,7 +189,7 @@ namespace Muldis.D.Ref_Eng.Core
                     A1 = MD_True,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
             Heading_0_2 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -206,7 +200,7 @@ namespace Muldis.D.Ref_Eng.Core
                     A2 = MD_True,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
             Heading_1_2 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
@@ -217,7 +211,7 @@ namespace Muldis.D.Ref_Eng.Core
                     A2 = MD_True,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
 
             Heading_0_1_2 = new MD_Any { AS = new MD_Any_Struct {
@@ -230,7 +224,7 @@ namespace Muldis.D.Ref_Eng.Core
                     A2 = MD_True,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
 
             m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
@@ -257,8 +251,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Label = MD_False,
                     Attrs = MD_Tuple_D0,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Capsule},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             MD_Set_C0 = MD_Capsule(
@@ -293,8 +286,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
                 MD_Integer = value,
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Integer},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             if (may_cache && m_integers.Count < 10000)
             {
@@ -404,8 +396,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Widest_Type = Widest_Component_Type.Unrestricted,
                     Local_Unrestricted_Members = members,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             if (known_is_string)
             {
@@ -430,7 +421,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Bit_Members = members,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
+                    {MD_Well_Known_Type.String},
             } };
             return array;
         }
@@ -451,7 +442,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Octet_Members = members,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
+                    {MD_Well_Known_Type.String},
             } };
             return array;
         }
@@ -472,7 +463,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Codepoint_Members = members,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Array, MD_Well_Known_Type.String},
+                    {MD_Well_Known_Type.String},
             } };
             return array;
         }
@@ -519,8 +510,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
                 MD_Bag = root_node,
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Bag},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             return bag;
         }
@@ -570,8 +560,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Only_OA = only_oa,
                     Multi_OA = multi_oa,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             if (degree == 1)
             {
@@ -688,8 +677,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Label = label,
                     Attrs = attrs,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Capsule},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -704,8 +692,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Current_Value = initial_current_value,
                     },
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Handle, MD_Well_Known_Type.Variable},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -718,8 +705,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Handle_Type = MD_Handle_Type.MD_Process,
                     MD_Process = new MD_Process_Struct {},
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Handle, MD_Well_Known_Type.Process},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -732,8 +718,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_Handle_Type = MD_Handle_Type.MD_Stream,
                     MD_Stream = new MD_Stream_Struct {},
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Handle, MD_Well_Known_Type.Stream},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -748,8 +733,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Value = value,
                     },
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Handle, MD_Well_Known_Type.External},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -763,7 +747,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Attrs = attrs,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Capsule, MD_Well_Known_Type.Excuse},
+                    {MD_Well_Known_Type.Excuse},
             } };
         }
 
@@ -790,11 +774,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Only_OA = new KeyValuePair<String,MD_Any>(value, MD_True),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                {
-                    MD_Well_Known_Type.Tuple,
-                    MD_Well_Known_Type.Heading,
-                    MD_Well_Known_Type.Attr_Name,
-                },
+                    {MD_Well_Known_Type.Heading, MD_Well_Known_Type.Attr_Name},
             } };
             if (value.Length <= 200 && m_heading_tuples.Count < 10000)
             {
@@ -1117,7 +1097,7 @@ namespace Muldis.D.Ref_Eng.Core
                             ts.Multi_OA.ToDictionary(a => a.Key, a => MD_True)),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Tuple, MD_Well_Known_Type.Heading},
+                    {MD_Well_Known_Type.Heading},
             } };
             if (ts.Degree == 1)
             {

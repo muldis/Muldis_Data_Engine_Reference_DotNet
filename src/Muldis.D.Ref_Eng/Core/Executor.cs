@@ -236,8 +236,7 @@ namespace Muldis.D.Ref_Eng.Core
                                 Local_Symbolic_Type = Symbolic_Value_Type.Unique,
                                 Primary_Arg = v.AS.MD_Bag,
                             },
-                            Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                                {MD_Well_Known_Type.Bag},
+                            Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } };
                     case "Tuple_degree":
                         if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
