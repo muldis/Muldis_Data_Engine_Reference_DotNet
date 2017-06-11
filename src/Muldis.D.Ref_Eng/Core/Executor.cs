@@ -501,7 +501,7 @@ namespace Muldis.D.Ref_Eng.Core
             return result;
         }
 
-        private Int64 Array__count(MD_Any array)
+        internal Int64 Array__count(MD_Any array)
         {
             return Array__node__tree_member_count(array.AS.MD_Array);
         }
