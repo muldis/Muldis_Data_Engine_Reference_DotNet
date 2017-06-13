@@ -968,6 +968,113 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
+        internal void Bag__Collapse(MD_Any bag, Boolean want_indexed = false)
+        {
+            bag.AS.MD_Bag = Bag__Collapsed_Node(bag.AS.MD_Bag, want_indexed);
+        }
+
+        private MD_Bag_Node Bag__Collapsed_Node(MD_Bag_Node node,
+            Boolean want_indexed = false)
+        {
+            // Note: want_indexed only causes Indexed result when Arrayed
+            // otherwise would be used; None/Singular still also used.
+            switch (node.Local_Symbolic_Type)
+            {
+                case Symbolic_Value_Type.None:
+                    // Node is already collapsed.
+                    // In theory we should never get here assuming that any
+                    // operations which would knowingly result in the empty
+                    // Bag are optimized to return MD_Bag_C0 directly.
+                    return MD_Bag_C0.AS.MD_Bag;
+                case Symbolic_Value_Type.Singular:
+                    // Node is already collapsed.
+                    return node;
+                case Symbolic_Value_Type.Arrayed:
+                    if (!want_indexed)
+                    {
+                        // Node is already collapsed.
+                        return node;
+                    }
+                    List<Multiplied_Member> ary_src_list = node.Local_Arrayed_Members;
+                    Dictionary<MD_Any,Multiplied_Member> ary_res_dict
+                        = new Dictionary<MD_Any,Multiplied_Member>();
+                    foreach (Multiplied_Member m in ary_src_list)
+                    {
+                        if (!ary_res_dict.ContainsKey(m.Member))
+                        {
+                            ary_res_dict.Add(m.Member, m.Clone());
+                        }
+                        else
+                        {
+                            ary_res_dict[m.Member].Multiplicity ++;
+                        }
+                    }
+                    return new MD_Bag_Node {
+                        Cached_Tree_Member_Count = ary_src_list.Count,
+                        Cached_Tree_All_Unique = node.Cached_Local_All_Unique,
+                        Cached_Tree_Relational = node.Cached_Local_Relational,
+                        Local_Symbolic_Type = Symbolic_Value_Type.Indexed,
+                        Cached_Local_Member_Count = ary_src_list.Count,
+                        Cached_Local_All_Unique = node.Cached_Local_All_Unique,
+                        Cached_Local_Relational = node.Cached_Local_Relational,
+                        Local_Indexed_Members = ary_res_dict,
+                    };
+                case Symbolic_Value_Type.Indexed:
+                    // Node is already collapsed.
+                    return node;
+                case Symbolic_Value_Type.Unique:
+                    MD_Bag_Node uni_pa = Bag__Collapsed_Node(
+                        node: node.Primary_Arg, want_indexed: true);
+                    if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.None)
+                    {
+                        return uni_pa;
+                    }
+                    if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.Singular)
+                    {
+                        return new MD_Bag_Node {
+                            Cached_Tree_Member_Count = 1,
+                            Cached_Tree_All_Unique = true,
+                            Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
+                            Local_Symbolic_Type = Symbolic_Value_Type.Singular,
+                            Cached_Local_Member_Count = 1,
+                            Cached_Local_All_Unique = true,
+                            Cached_Local_Relational = uni_pa.Cached_Local_Relational,
+                            Local_Singular_Members = new Multiplied_Member(
+                                uni_pa.Local_Singular_Members.Member),
+                        };
+                    }
+                    Dictionary<MD_Any,Multiplied_Member> uni_src_dict
+                        = uni_pa.Local_Indexed_Members;
+                    return new MD_Bag_Node {
+                        Cached_Tree_Member_Count = uni_src_dict.Count,
+                        Cached_Tree_All_Unique = true,
+                        Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
+                        Local_Symbolic_Type = Symbolic_Value_Type.Indexed,
+                        Cached_Local_Member_Count = uni_src_dict.Count,
+                        Cached_Local_All_Unique = true,
+                        Cached_Local_Relational = uni_pa.Cached_Local_Relational,
+                        Local_Indexed_Members = uni_src_dict.ToDictionary(
+                            m => m.Key, m => new Multiplied_Member(m.Key, 1)),
+                    };
+                case Symbolic_Value_Type.Insert_N:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Remove_N:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Member_Plus:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Except:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Intersect:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Union:
+                    throw new NotImplementedException();
+                case Symbolic_Value_Type.Exclusive:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         internal MD_Any Array__Pick_Random_Member(MD_Any array)
         {
             return Array__Pick_Random_Node_Member(array.AS.MD_Array);

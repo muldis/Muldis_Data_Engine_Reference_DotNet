@@ -132,7 +132,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return value.AS.MD_Integer.ToString();
         }
 
-        private String Integer_Literal(Int32 value)
+        private String Integer_Literal(Int64 value)
         {
             return value.ToString();
         }
@@ -301,7 +301,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     default:
                         if (c <= 0x1F || (c >= 0x80 && c <= 0x9F))
                         {
-                            sb.Append(@"\c<" + Integer_Literal((Int32)c) + ">");
+                            sb.Append(@"\c<" + Integer_Literal((Int64)c) + ">");
                         }
                         else
                         {
@@ -404,13 +404,47 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Set_Selector(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
-            return "a not yet specified IMD_Set value";
+            MD_Any bag = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            value.AS.Memory.Bag__Collapse(bag: bag, want_indexed: true);
+            MD_Bag_Node node = bag.AS.MD_Bag;
+            switch (node.Local_Symbolic_Type)
+            {
+                case Symbolic_Value_Type.None:
+                    return "{}";
+                case Symbolic_Value_Type.Singular:
+                    Multiplied_Member lsm = node.Local_Singular_Members;
+                    return "{" + Any_Selector(lsm.Member) + ",\u000A}";
+                case Symbolic_Value_Type.Indexed:
+                    return "{" + String.Concat(Enumerable.Select(
+                        Enumerable.OrderBy(node.Local_Indexed_Members, m => m.Key),
+                        m => Any_Selector(m.Key) + ",\u000A"
+                    )) + "}";
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private String Bag_Selector(MD_Any value)
         {
-            return "a not yet specified IMD_Bag value";
+            value.AS.Memory.Bag__Collapse(bag: value, want_indexed: true);
+            MD_Bag_Node node = value.AS.MD_Bag;
+            switch (node.Local_Symbolic_Type)
+            {
+                case Symbolic_Value_Type.None:
+                    return "{0:0}";
+                case Symbolic_Value_Type.Singular:
+                    Multiplied_Member lsm = node.Local_Singular_Members;
+                    return "{" + Any_Selector(lsm.Member) + " : "
+                        + Integer_Literal(lsm.Multiplicity) + ",\u000A}";
+                case Symbolic_Value_Type.Indexed:
+                    return "{" + String.Concat(Enumerable.Select(
+                        Enumerable.OrderBy(node.Local_Indexed_Members, m => m.Key),
+                        m => Any_Selector(m.Key) + " : "
+                            + Integer_Literal(m.Value.Multiplicity) + ",\u000A"
+                    )) + "}";
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private String Tuple_Selector(MD_Any value)
@@ -440,7 +474,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Capsule_Selector(MD_Any value)
         {
             // TODO: Dig for cases where we have a well-known subtype not marked as such.
-            return "a not yet specified IMD_Capsule value";
+            return "(" + Any_Selector(value.AS.MD_Capsule.Label) + " : "
+                + Any_Selector(value.AS.MD_Capsule.Attrs) + ")";
         }
     }
 

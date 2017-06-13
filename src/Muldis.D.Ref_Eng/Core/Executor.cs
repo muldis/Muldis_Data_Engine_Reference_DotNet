@@ -353,6 +353,11 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Foundation_Type.MD_Array:
                     MD_Array_Node n0 = a0.AS.MD_Array;
                     MD_Array_Node n1 = a1.AS.MD_Array;
+                    if (Object.ReferenceEquals(n0, n1))
+                    {
+                        result = true;
+                        break;
+                    }
                     if (n0.Tree_Widest_Type == Widest_Component_Type.None
                         && n1.Tree_Widest_Type == Widest_Component_Type.None)
                     {
@@ -403,6 +408,11 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Foundation_Type.MD_Bag:
                     MD_Bag_Node bn0 = a0.AS.MD_Bag;
                     MD_Bag_Node bn1 = a1.AS.MD_Bag;
+                    if (Object.ReferenceEquals(bn0, bn1))
+                    {
+                        result = true;
+                        break;
+                    }
                     if (bn0.Local_Symbolic_Type != bn1.Local_Symbolic_Type)
                     {
                         // For now skip the more complicated cases where

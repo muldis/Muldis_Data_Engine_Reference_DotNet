@@ -335,6 +335,11 @@ namespace Muldis.D.Ref_Eng.Core
             Member       = member;
             Multiplicity = multiplicity;
         }
+
+        internal Multiplied_Member Clone()
+        {
+            return (Multiplied_Member)this.MemberwiseClone();
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Bag_Node
