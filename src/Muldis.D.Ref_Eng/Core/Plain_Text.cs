@@ -61,9 +61,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
     internal abstract class Generator
     {
-        protected abstract String Any_Selector(MD_Any value);
+        protected abstract String Any_Selector(MD_Any value, String indent);
 
-        protected String Any_Selector_Foundation_Dispatch(MD_Any value)
+        protected String Any_Selector_Foundation_Dispatch(MD_Any value, String indent)
         {
             switch (value.AS.MD_Foundation_Type)
             {
@@ -72,11 +72,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case MD_Foundation_Type.MD_Integer:
                     return Integer_Literal(value);
                 case MD_Foundation_Type.MD_Array:
-                    return Array_Selector(value);
+                    return Array_Selector(value, indent);
                 case MD_Foundation_Type.MD_Bag:
-                    return Bag_Selector(value);
+                    return Bag_Selector(value, indent);
                 case MD_Foundation_Type.MD_Tuple:
-                    return Tuple_Selector(value);
+                    return Tuple_Selector(value, indent);
                 case MD_Foundation_Type.MD_Capsule:
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
                     {
@@ -96,9 +96,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     }
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Set))
                     {
-                        return Set_Selector(value);
+                        return Set_Selector(value, indent);
                     }
-                    return Capsule_Selector(value);
+                    return Capsule_Selector(value, indent);
                 case MD_Foundation_Type.MD_Handle:
                     // We display something useful for debugging purposes, but no
                     // (transient) MD_Handle can actually be rendered as Muldis D Plain Text.
@@ -339,23 +339,25 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     + ")";
         }
 
-        private String Array_Selector(MD_Any value)
+        private String Array_Selector(MD_Any value, String indent)
         {
+            String mei = indent + "\u0009";
             Memory m = value.AS.Memory;
             return Object.ReferenceEquals(value, m.MD_Array_C0) ? "[]"
-                : "[" + Array_Selector__node__tree(value.AS.MD_Array) + "]";
+                : "[\u000A" + Array_Selector__node__tree(
+                    value.AS.MD_Array, mei) + indent + "]";
         }
 
-        private String Array_Selector__node__tree(MD_Array_Node node)
+        private String Array_Selector__node__tree(MD_Array_Node node, String indent)
         {
             return (node.Pred_Members == null ? ""
-                    : Array_Selector__node__tree(node.Pred_Members))
-                + Array_Selector__node__local(node)
+                    : Array_Selector__node__tree(node.Pred_Members, indent))
+                + Array_Selector__node__local(node, indent)
                 + (node.Succ_Members == null ? ""
-                    : Array_Selector__node__tree(node.Succ_Members));
+                    : Array_Selector__node__tree(node.Succ_Members, indent));
         }
 
-        private String Array_Selector__node__local(MD_Array_Node node)
+        private String Array_Selector__node__local(MD_Array_Node node, String indent)
         {
             switch (node.Local_Widest_Type)
             {
@@ -364,7 +366,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case Widest_Component_Type.Unrestricted:
                     return String.Concat(Enumerable.Select(
                         node.Local_Unrestricted_Members,
-                        m => Any_Selector(m) + ",\u000A"));
+                        m => indent + Any_Selector(m, indent) + ",\u000A"));
                 case Widest_Component_Type.Bit:
                     System.Collections.IEnumerator e
                         = node.Local_Bit_Members.GetEnumerator();
@@ -374,11 +376,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         list.Add((Boolean)e.Current);
                     }
                     return String.Concat(Enumerable.Select(
-                        list, m => Integer_Literal(m ? 1 : 0) + ",\u000A"));
+                        list, m => indent + Integer_Literal(m ? 1 : 0) + ",\u000A"));
                 case Widest_Component_Type.Octet:
                     return String.Concat(Enumerable.Select(
                         node.Local_Octet_Members,
-                        m => Integer_Literal(m) + ",\u000A"));
+                        m => indent + Integer_Literal(m) + ",\u000A"));
                 case Widest_Component_Type.Codepoint:
                     String s = node.Local_Codepoint_Members;
                     List<Int32> cpa = new List<Int32>(s.Length);
@@ -396,14 +398,15 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         }
                     }
                     return String.Concat(Enumerable.Select(
-                        cpa, m => Integer_Literal(m) + ",\u000A"));
+                        cpa, m => indent + Integer_Literal(m) + ",\u000A"));
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private String Set_Selector(MD_Any value)
+        private String Set_Selector(MD_Any value, String indent)
         {
+            String mei = indent + "\u0009";
             MD_Any bag = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
             value.AS.Memory.Bag__Collapse(bag: bag, want_indexed: true);
             MD_Bag_Node node = bag.AS.MD_Bag;
@@ -413,19 +416,20 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return "{}";
                 case Symbolic_Value_Type.Singular:
                     Multiplied_Member lsm = node.Local_Singular_Members;
-                    return "{" + Any_Selector(lsm.Member) + ",\u000A}";
+                    return "{\u000A" + mei + Any_Selector(lsm.Member, mei) + ",\u000A" + indent + "}";
                 case Symbolic_Value_Type.Indexed:
-                    return "{" + String.Concat(Enumerable.Select(
+                    return "{\u000A" + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(node.Local_Indexed_Members, m => m.Key),
-                        m => Any_Selector(m.Key) + ",\u000A"
-                    )) + "}";
+                        m => mei + Any_Selector(m.Key, mei) + ",\u000A"
+                    )) + indent + "}";
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private String Bag_Selector(MD_Any value)
+        private String Bag_Selector(MD_Any value, String indent)
         {
+            String mei = indent + "\u0009";
             value.AS.Memory.Bag__Collapse(bag: value, want_indexed: true);
             MD_Bag_Node node = value.AS.MD_Bag;
             switch (node.Local_Symbolic_Type)
@@ -434,48 +438,53 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return "{0:0}";
                 case Symbolic_Value_Type.Singular:
                     Multiplied_Member lsm = node.Local_Singular_Members;
-                    return "{" + Any_Selector(lsm.Member) + " : "
-                        + Integer_Literal(lsm.Multiplicity) + ",\u000A}";
+                    return "{\u000A" + mei + Any_Selector(lsm.Member, mei) + " : "
+                        + Integer_Literal(lsm.Multiplicity) + ",\u000A" + indent + "}";
                 case Symbolic_Value_Type.Indexed:
-                    return "{" + String.Concat(Enumerable.Select(
+                    return "{\u000A" + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(node.Local_Indexed_Members, m => m.Key),
-                        m => Any_Selector(m.Key) + " : "
+                        m => mei + Any_Selector(m.Key, mei) + " : "
                             + Integer_Literal(m.Value.Multiplicity) + ",\u000A"
-                    )) + "}";
+                    )) + indent + "}";
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private String Tuple_Selector(MD_Any value)
+        private String Tuple_Selector(MD_Any value, String indent)
         {
             // TODO: Quote attribute names where appropriate.
             if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
             {
                 return Heading_Literal(value);
             }
+            String ati = indent + "\u0009";
             Memory m = value.AS.Memory;
             MD_Tuple_Struct ts = value.AS.MD_Tuple;
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
-                : "("
-                    + (ts.A0 == null ? "" : "0 : " + Any_Selector(ts.A0) + ",\u000A")
-                    + (ts.A1 == null ? "" : "1 : " + Any_Selector(ts.A1) + ",\u000A")
-                    + (ts.A2 == null ? "" : "2 : " + Any_Selector(ts.A2) + ",\u000A")
+                : "(\u000A"
+                    + (ts.A0 == null ? "" : ati + "0 : "
+                        + Any_Selector(ts.A0, ati) + ",\u000A")
+                    + (ts.A1 == null ? "" : ati + "1 : "
+                        + Any_Selector(ts.A1, ati) + ",\u000A")
+                    + (ts.A2 == null ? "" : ati + "2 : "
+                        + Any_Selector(ts.A2, ati) + ",\u000A")
                     + (ts.Only_OA == null ? ""
-                        : ts.Only_OA.Value.Key + " : "
-                            + Any_Selector(ts.Only_OA.Value.Value) + ",\u000A")
+                        : ati + ts.Only_OA.Value.Key + " : "
+                            + Any_Selector(ts.Only_OA.Value.Value, ati) + ",\u000A")
                     + (ts.Multi_OA == null ? ""
                         : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                            a => a.Key + " : " + Any_Selector(a.Value) + ",\u000A")))
-                    + ")";
+                            a => ati + a.Key + " : "
+                                + Any_Selector(a.Value, ati) + ",\u000A")))
+                    + indent + ")";
         }
 
-        private String Capsule_Selector(MD_Any value)
+        private String Capsule_Selector(MD_Any value, String indent)
         {
             // TODO: Dig for cases where we have a well-known subtype not marked as such.
-            return "(" + Any_Selector(value.AS.MD_Capsule.Label) + " : "
-                + Any_Selector(value.AS.MD_Capsule.Attrs) + ")";
+            return "(" + Any_Selector(value.AS.MD_Capsule.Label, indent) + " : "
+                + Any_Selector(value.AS.MD_Capsule.Attrs, indent) + ")";
         }
     }
 
@@ -517,7 +526,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return value.AS.Memory.MD_Text(
                 "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
                 + "meta foundational\u000A"
-                + Any_Selector(value) + "\u000A"
+                + Any_Selector(value, "") + "\u000A"
             );
         }
 
@@ -531,12 +540,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit_Subject(MD_Any value)
         {
-            return value.AS.Memory.MD_Text(Any_Selector(value) + "\u000A");
+            return value.AS.Memory.MD_Text(Any_Selector(value, "") + "\u000A");
         }
 
-        protected override String Any_Selector(MD_Any value)
+        protected override String Any_Selector(MD_Any value, String indent)
         {
-            return Any_Selector_Foundation_Dispatch(value);
+            return Any_Selector_Foundation_Dispatch(value, indent);
         }
     }
 
@@ -567,15 +576,15 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     {
         internal String MD_Any_to_Identity_String(MD_Any value)
         {
-            return Any_Selector(value);
+            return Any_Selector(value, "");
         }
 
-        protected override String Any_Selector(MD_Any value)
+        protected override String Any_Selector(MD_Any value, String indent)
         {
             if (value.AS.Cached_MD_Any_Identity == null)
             {
                 value.AS.Cached_MD_Any_Identity
-                    = Any_Selector_Foundation_Dispatch(value);
+                    = Any_Selector_Foundation_Dispatch(value, indent);
             }
             return value.AS.Cached_MD_Any_Identity;
         }
@@ -602,12 +611,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     {
         internal String MD_Any_To_Preview_String(MD_Any value)
         {
-            return Any_Selector(value);
+            return Any_Selector(value, "");
         }
 
-        protected override String Any_Selector(MD_Any value)
+        protected override String Any_Selector(MD_Any value, String indent)
         {
-            return Any_Selector_Foundation_Dispatch(value);
+            return Any_Selector_Foundation_Dispatch(value, indent);
         }
     }
 }
