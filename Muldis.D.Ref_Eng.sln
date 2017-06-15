@@ -15,10 +15,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Muldis.D.Ref_Eng", "src\Mul
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Muldis.D.Ref_Eng.Console", "src\Muldis.D.Ref_Eng.Console\Muldis.D.Ref_Eng.Console.xproj", "{B5672A90-7005-4AFF-B0BC-4513BFBF05E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F880A31D-4CE0-4F86-960A-B8FE120D1031}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.D.Ref_Eng.Test", "test\Muldis.D.Ref_Eng.Test\Muldis.D.Ref_Eng.Test.csproj", "{B9971BD0-C70F-4BF4-B192-3F24A00B37EC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +33,6 @@ Global
 		{B5672A90-7005-4AFF-B0BC-4513BFBF05E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5672A90-7005-4AFF-B0BC-4513BFBF05E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5672A90-7005-4AFF-B0BC-4513BFBF05E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +41,5 @@ Global
 		{0FD6B0FB-C6A6-4A87-A7C2-44223B9937F6} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
 		{29436A84-0CA2-4384-B56C-42458DC57897} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
 		{B5672A90-7005-4AFF-B0BC-4513BFBF05E8} = {A2B475A7-D062-4179-9757-CCC78CA5ED65}
-		{B9971BD0-C70F-4BF4-B192-3F24A00B37EC} = {F880A31D-4CE0-4F86-960A-B8FE120D1031}
 	EndGlobalSection
 EndGlobal
