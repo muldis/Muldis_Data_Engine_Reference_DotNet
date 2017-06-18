@@ -33,70 +33,85 @@ https://github.com/muldis/Muldis-DBP-DotNet) for the canonical copy.
 
 *This documentation is pending.*
 
-# DEPENDENCIES
+# DEPENDENCIES AND COMPATIBILITY
 
-Muldis.D.Ref\_Eng requires any version of .Net that is at least 1.0 plus any
-version of the .Net Core framework that is at least 1.0 plus the
-appropriate runtime.  *(TODO: Check / flesh out the details of this.)*
+Muldis.D.Ref\_Eng is intended to be published as a NuGet package in the
+near future, and that is intended to be the way that "normal" users consume
+the library.  Until then, all users consume it as ```*.cs``` source files
+that they include in and compile with their own projects.
 
-*Since this project was first created, a newer version of the .Net Core and
-tooling has been released, but this project will not currently work with
-that new version 1.1 without tweaks to its configuration files, which still
-specify version 1.0; a relevant configuration update is pending.*
+Muldis.D.Ref\_Eng is defined in terms of Microsoft's .Net API and is
+intended to be portable across a wide range of implementations of that API.
+
+The set of C\# source files comprising Muldis.D.Ref\_Eng, when taken in
+isolation, should work as-is with all of:  .Net Framework versions 4.0
+(2010) and above (versions less than 4.0 are known to lack required
+features), .Net Core versions 1.0 (2016) and above, .Net Standard versions
+1.0 (2016) and above, Mono versions 2.8 (2010) and above, anything else
+listed at [https://docs.microsoft.com/en-us/dotnet/standard/library](
+https://docs.microsoft.com/en-us/dotnet/standard/library) as supported
+platforms for .Net Standard versions 1.0 and above, and also a variety of
+older Portable Class Library profiles pre-dating .Net Standard.
+
+Between the above options, particularly .Net Core, Muldis.D.Ref\_Eng is
+cross-platform and should be immediately usable on Microsoft Windows or
+Apple MacOS or various Linux flavors or other operating systems, either
+desktop computers or mobile devices etc.
+
+The C\# source files explicitly declare that they are ```CLSCompliant```
+and so should be useable with code written in any language that compiles to
+Microsoft's CLR, including both C\# and Visual Basic.
+
+That all being said, however, the solution/project metadata profiles that
+the canonical Muldis.D.Ref\_Eng GitHub repository includes are of a modern
+format that only tooling from early 2017 understands how to read.  If you
+have the 2017-plus-era tooling then you can use the whole of the given
+Muldis.D.Ref\_Eng directly, widely cross-platform; otherwise you would need
+to take all the C\# files and use your own solution/project metadata files.
 
 See [https://www.microsoft.com/net/core](https://www.microsoft.com/net/core)
 for instructions on how to install the dependencies.  These instructions
 are further interpreted in the following sections.
 
-In theory, Muldis.D.Ref\_Eng could also be made to work without too much
-trouble on either older .Net Framework versions like 4.5 or on Mono,
-however the author is using .Net Core canonically because it is a decent
-modern cross-platform foundation.  Patches to support the others welcome!
-
-It appears that .Net Framework 4.0 would be the practical minimum
-dependency as that version is what introduced the BigInteger type we use
-as well as several other things we use.
-
 ## Installation of Dependencies Under Microsoft Windows
 
-To build and run Muldis.D.Ref\_Eng on a Microsoft Windows OS, the following
-procedure has been successfully used by the author.
+To build and run Muldis.D.Ref\_Eng on a Microsoft Windows OS, the best
+solution is to download and install MS Visual Studio 2017, which is the
+first version with the tooling to understand the ```Muldis.D.Ref_Eng.sln```
+and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.
 
-1. MS Windows 8.1 was the foundation; other Windows versions weren't tried.
+The alternate best solution is to download and install Microsoft's .Net
+Core SDK, a command-line development tool which should understand the same
+solution/project files.
 
-1. Download and install MS Visual Studio 2015 with Update 3, which is the
-minimum required Visual Studio version, or a newer version.  To be
-specific, ```en_visual_studio_enterprise_2015_with_update_3_x86_x64_dvd_8923288.iso```
-was the installer used by the author.
+Otherwise, any version of MS Visual Studio back to MS Visual Studio 2010
+should in theory handle the ```*.cs``` files with your own Visual Studio
+solution and project files.
 
-1. Download and install the .Net Core tooling for VS 2015.  To be
-specific, ```DotNetCore.1.0.0-VS2015Tools.Preview2.0.1.exe``` was the
-installer used by the author.
-
-1. Open the solution file ```Muldis.D.Ref_Eng.sln``` in Visual Studio.
-
-1. Set ```Muldis.D.Ref_Eng.Console``` to be the start project.
-
-There are various altneratives to the above instructions for those who are
-savvy or prefer other development environments; Visual Studio is optional.
+Set ```Muldis.D.Ref_Eng.Console``` as the start project if you want to use
+this standalone Muldis D source file executor.
 
 ## Installation of Dependencies Under Apple Mac OS
 
-To build and run Muldis.D.Ref\_Eng on an Apple Mac OS, the following
-procedure has been successfully used by the author.
+To build and run Muldis.D.Ref\_Eng on an Apple Mac OS, the canonical
+solution is to download and install Microsoft's .Net Core SDK, a
+command-line tool that understands the ```Muldis.D.Ref_Eng.sln```
+and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.
 
-1. Mac OS 10.9.5 was the foundation on the first try; Mac OS 10.12.1 was
-the foundation on the second try; other Mac OS versions weren't tried.
+The following procedure has been successfully used by the author.
+
+1. Mac OS 10.12.5 was the foundation for the specific .Net Core installer
+indicated next; other Mac OS versions weren't tried.
 
 2. Download and install the .Net Core SDK, which provides the command-line
 tool ```dotnet``` for building and running the .Net code.  To be
-specific, ```dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg``` was the
+specific, ```dotnet-dev-osx-x64.1.0.4.pkg``` was the
 installer used by the author.
 
-Microsoft also provides the free .Net Code IDE but it is not required, and
-the author did not install it, preferring to use BBEdit instead.
+NOTE: THE FOLLOWING SECTION MIGHT ACTUALLY BE OBSOLETE.  IT WAS NEEDED FOR
+THE PREVIEW 2 OF .NET CORE BUT VERSION 1.0.4 RAN WITHOUT DOING THE LAST STEP.
 
-To actually use the .Net Core SDK on the Mac OS. a newer version of OpenSSL
+To actually use the .Net Core SDK on the Mac OS a newer version of OpenSSL
 must be installed than what Apple bundles with the Mac OS.  For this, the
 following procedure has been successfully used by the author, which also
 involved installing the Homebrew package manager.
@@ -116,14 +131,29 @@ cautious by not making a system global change, so only the .Net Core SDK is
 setup to use the newly installed OpenSSL, and anything else that was using
 Apple's system-provided OpenSSL continues to get that one.
 
+END OF THE POSSIBLY OBSOLETE SECTION.
+
+Running ```dotnet help``` is quite helpful in general.
+
+To prepare to run Muldis.D.Ref\_Eng, at the command line, first cd
+into its root directory and then run ```dotnet restore```.  This causes
+NuGet to fetch and make available the core .Net libraries, without which
+attempting to run a program gets errors like ```System``` can't be found.
+
 To build/run Muldis.D.Ref\_Eng, at the command line, first cd
 into ```src/Muldis.D.Ref_Eng.Console``` and then run ```dotnet run```.
+
+Another good solution is to use Microsoft's free Visual Studio Community
+for Mac which provides a GUI and debugger and is otherwise a lot like the
+Visual Studio for MS Windows.  It also understands the ```Muldis.D.Ref_Eng.sln```
+and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.  See
+[https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/).
 
 ## Installation of Dependencies Under Other Operating Systems
 
 Microsoft's .Net Core has official support for various Linux flavors also,
 but the author has not tried using Muldis.D.Ref\_Eng there and so has no
-customized instructions to offer, but see the above Microsoft url.
+customized instructions to offer, but see the above Microsoft .Net Core url.
 
 # AUTHOR
 
