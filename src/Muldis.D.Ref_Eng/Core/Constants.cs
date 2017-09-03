@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace Muldis.D.Ref_Eng.Core
 {
+    internal enum Dot_Net_String_Unicode_Test_Result
+    {
+        Valid_Is_All_BMP,
+        Valid_Has_Non_BMP,
+        Is_Malformed,
+    }
+
     // Muldis.D.Ref_Eng.Core.MD_Well_Known_Type
     // Enumerates Muldis D types that are considered well-known to this
     // Muldis D language implementation.  Typically these are defined in
@@ -24,7 +31,6 @@ namespace Muldis.D.Ref_Eng.Core
         Text,
         Text__Unicode,
         Text__ASCII,
-        String,
         Set,
         Tuple_Array,
         Relation,

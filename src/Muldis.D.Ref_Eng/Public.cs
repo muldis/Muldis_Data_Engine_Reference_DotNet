@@ -308,7 +308,19 @@ namespace Muldis.D.Ref_Eng
                 case "Text":
                     if (type_name == "System.String")
                     {
-                        return m_memory.MD_Text((String)v);
+                        Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)v);
+                        if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Text with a malformed .Net String."
+                            );
+                        }
+                        return m_memory.MD_Text(
+                            (String)v,
+                            (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                        );
                     }
                     break;
                 case "Array":
@@ -397,6 +409,16 @@ namespace Muldis.D.Ref_Eng
                         }
                         if (label.GetType().FullName == "System.String")
                         {
+                            if (m_memory.Test_Dot_Net_String((String)label)
+                                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Capsule with label"
+                                        + " that is a malformed .Net String."
+                                );
+                            }
                             return m_memory.MD_Capsule(
                                 m_memory.MD_Attr_Name((String)label),
                                 attrs_cv
@@ -404,6 +426,19 @@ namespace Muldis.D.Ref_Eng
                         }
                         if (label.GetType().FullName == "System.String[]")
                         {
+                            foreach (String s in ((String[])label))
+                            {
+                                if (m_memory.Test_Dot_Net_String(s)
+                                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                                {
+                                    throw new ArgumentException
+                                    (
+                                        paramName: "value",
+                                        message: "Can't select MD_Capsule with label"
+                                            + " that includes a malformed .Net String."
+                                    );
+                                }
+                            }
                             return m_memory.MD_Capsule(
                                 m_memory.MD_Array(new List<Core.MD_Any>(((String[])label).Select(
                                     m => m_memory.MD_Attr_Name(m)
@@ -449,18 +484,50 @@ namespace Muldis.D.Ref_Eng
                     }
                     if (type_name == "System.String")
                     {
+                        if (m_memory.Test_Dot_Net_String((String)v)
+                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Excuse with label"
+                                    + " that is a malformed .Net String."
+                            );
+                        }
                         return m_memory.Simple_MD_Excuse((String)v);
                     }
                     throw new NotImplementedException();
                 case "Attr_Name":
                     if (type_name == "System.String")
                     {
+                        if (m_memory.Test_Dot_Net_String((String)v)
+                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Attr_Name with a malformed .Net String."
+                            );
+                        }
                         return m_memory.MD_Attr_Name((String)v);
                     }
                     break;
                 case "Attr_Name_List":
                     if (type_name == "System.String[]")
                     {
+                        foreach (String s in ((String[])v))
+                        {
+                            if (m_memory.Test_Dot_Net_String(s)
+                                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Attr_Name_List with"
+                                        + " member that is a malformed .Net String."
+                                );
+                            }
+                        }
                         return m_memory.MD_Array(new List<Core.MD_Any>(((String[])v).Select(
                             m => m_memory.MD_Attr_Name(m)
                         )));
@@ -514,7 +581,19 @@ namespace Muldis.D.Ref_Eng
             }
             if (type_name == "System.String")
             {
-                return m_memory.MD_Text((String)value);
+                Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)value);
+                if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "value",
+                        message: "Can't select MD_Text with a malformed .Net String."
+                    );
+                }
+                return m_memory.MD_Text(
+                    (String)value,
+                    (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                );
             }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
@@ -626,8 +705,21 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("members");
             }
+            Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String(members);
+            if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "members",
+                    message: "Can't select MD_Text with a malformed .Net String."
+                );
+            }
             return (IMD_Text)new MD_Text().init(m_machine,
-                m_memory.MD_Text(members));
+                m_memory.MD_Text(
+                    members,
+                    (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                )
+            );
         }
 
         public IMD_Array MD_Array(List<Object> members)
@@ -700,6 +792,35 @@ namespace Muldis.D.Ref_Eng
             Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null)
         {
+            if (attr != null)
+            {
+                if (m_memory.Test_Dot_Net_String(attr.Value.Key)
+                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "attr",
+                        message: "Can't select MD_Tuple with attribute"
+                            + " name that is a malformed .Net String."
+                    );
+                }
+            }
+            if (attrs != null)
+            {
+                foreach (String atnm in attrs.Keys)
+                {
+                    if (m_memory.Test_Dot_Net_String(atnm)
+                        == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    {
+                        throw new ArgumentException
+                        (
+                            paramName: "attrs",
+                            message: "Can't select MD_Tuple with attribute"
+                                + " name that is a malformed .Net String."
+                        );
+                    }
+                }
+            }
             // Start by normalizing the distribution of the attribute
             // definitions among the arguments to match the distribution
             // used by our internals, and check for duplicate names.
@@ -1045,6 +1166,16 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("label");
             }
+            if (m_memory.Test_Dot_Net_String(label)
+                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "label",
+                    message: "Can't select MD_Capsule with label"
+                        + " that is a malformed .Net String."
+                );
+            }
             if (attrs == null)
             {
                 throw new ArgumentNullException("attrs");
@@ -1061,6 +1192,19 @@ namespace Muldis.D.Ref_Eng
             if (label == null)
             {
                 throw new ArgumentNullException("label");
+            }
+            foreach (String s in label)
+            {
+                if (m_memory.Test_Dot_Net_String(s)
+                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "label",
+                        message: "Can't select MD_Capsule with label"
+                            + " that includes a malformed .Net String."
+                    );
+                }
             }
             if (attrs == null)
             {
@@ -1124,6 +1268,16 @@ namespace Muldis.D.Ref_Eng
                 return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
                     .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
             }
+            if (m_memory.Test_Dot_Net_String(value)
+                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "value",
+                    message: "Can't select MD_Excuse with label"
+                        + " that is a malformed .Net String."
+                );
+            }
             return (IMD_Excuse)new MD_Excuse().init(m_machine,
                 m_memory.Simple_MD_Excuse(value));
         }
@@ -1140,6 +1294,15 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("label");
             }
+            if (m_memory.Test_Dot_Net_String(label)
+                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            {
+                throw new ArgumentException
+                (
+                    paramName: "label",
+                    message: "Can't select MD_Attr_Name with a malformed .Net String."
+                );
+            }
             return (IMD_Heading)new MD_Heading().init(m_machine,
                 m_memory.MD_Attr_Name(label)
             );
@@ -1150,6 +1313,19 @@ namespace Muldis.D.Ref_Eng
             if (label == null)
             {
                 throw new ArgumentNullException("label");
+            }
+            foreach (String s in label)
+            {
+                if (m_memory.Test_Dot_Net_String(s)
+                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "label",
+                        message: "Can't select MD_Attr_Name_List with"
+                            + " member that is a malformed .Net String."
+                    );
+                }
             }
             return (IMD_Array)new MD_Array().init(m_machine,
                 m_memory.MD_Array(new List<Core.MD_Any>(label.Select(

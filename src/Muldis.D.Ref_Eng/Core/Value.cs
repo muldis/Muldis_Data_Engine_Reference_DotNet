@@ -254,7 +254,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
         // a Muldis D Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
-        // A String is the simplest storage representation for that
+        // A .Net String is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular character string.
         // Each logical member represents a single Unicode standard character
@@ -270,20 +270,18 @@ namespace Muldis.D.Ref_Eng.Core
         // of consecutive Char with numeric values in {0xD800..0xDFFF};
         // therefore, the native "length" of a String only matches the
         // "length" of the Muldis D Array when all codepoints are in the BMP.
-        // It is possible for a String to contain an isolated "surrogate"
-        // Char outside of a proper "surrogate pair", which is then
-        // malformed and not considered an actual codepoint array.
+        // While it is possible for a .Net String to contain an isolated
+        // "surrogate" Char outside of a proper "surrogate pair", both
+        // Muldis.DBP and Muldis.D.Ref_Eng forbid such a malformed String
+        // from either being used internally or being passed in by the API.
         internal String Local_Codepoint_Members { get; set; }
 
         // Nullable Boolean
         // This is true iff we know that at least 1 Codepoint member is NOT
         // in the Basic Multilingual Plane (BMP); this is false iff we know
-        // that there is no such Codepoint member.  In other words with
-        // respect to a .Net String, this is true iff we know the String
-        // has at least 1 "surrogate" Char {0xD800..0xDFFF}, either in the
-        // form of a proper "surrogate pair" (well formed) or on its own
-        // (not valid Unicode); this is false iff we know the string has no
-        // "surrogate" Char.  We cache this knowledge because a .Net String
+        // that there is no such Codepoint member.  That is, with respect
+        // to a .Net String, this is true iff we know the String has at least
+        // 1 "surrogate pair".  We cache this knowledge because a .Net String
         // with any non-BMP Char is more complicated to count the members
         // of or access members by ordinal position or do some other stuff.
         internal Nullable<Boolean> Cached_Local_Any_Non_BMP { get; set; }

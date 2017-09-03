@@ -139,8 +139,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Local_All_Unique = true,
                     Cached_Local_Relational = true,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.String},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
@@ -313,7 +312,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Attr_Name("Text"),
                 MD_Tuple(
                     only_oa: new KeyValuePair<String,MD_Any>(
-                        "maximal_chars", MD_Array_C0)
+                        "unicode_codes", MD_Array_C0)
                 )
             );
             MD_Text_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Text);
@@ -524,8 +523,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Widest_Type = Widest_Component_Type.Bit,
                     Local_Bit_Members = members,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.String},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             MD_Any bits = MD_Capsule(
                 MD_Attr_Name("Bits"),
@@ -552,8 +550,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Widest_Type = Widest_Component_Type.Octet,
                     Local_Octet_Members = members,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.String},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             MD_Any blob = MD_Capsule(
                 MD_Attr_Name("Blob"),
@@ -565,7 +562,7 @@ namespace Muldis.D.Ref_Eng.Core
             return blob;
         }
 
-        internal MD_Any MD_Text(String members)
+        internal MD_Any MD_Text(String members, Nullable<Boolean> has_any_non_BMP = null)
         {
             if (members == "")
             {
@@ -579,22 +576,22 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Codepoint,
                     Local_Codepoint_Members = members,
+                    Cached_Local_Any_Non_BMP = has_any_non_BMP,
                 },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.String},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             MD_Any text = MD_Capsule(
                 MD_Attr_Name("Text"),
                 MD_Tuple(
                     only_oa: new KeyValuePair<String,MD_Any>(
-                        "maximal_chars", array)
+                        "unicode_codes", array)
                 )
             );
             text.AS.Cached_WKT.Add(MD_Well_Known_Type.Text);
             return text;
         }
 
-        internal MD_Any MD_Array(List<MD_Any> members, Boolean known_is_string = false)
+        internal MD_Any MD_Array(List<MD_Any> members)
         {
             if (members.Count == 0)
             {
@@ -611,10 +608,6 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
-            if (known_is_string)
-            {
-                array.AS.Cached_WKT.Add(MD_Well_Known_Type.String);
-            }
             return array;
         }
 
@@ -923,6 +916,29 @@ namespace Muldis.D.Ref_Eng.Core
                 return Well_Known_Excuses[value];
             }
             return MD_Excuse(MD_Tuple(MD_Attr_Name(value)));
+        }
+
+        internal Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)
+        {
+            Dot_Net_String_Unicode_Test_Result ok_result
+                = Dot_Net_String_Unicode_Test_Result.Valid_Is_All_BMP;
+            for (Int32 i = 0; i < value.Length; i++)
+            {
+                if (Char.IsSurrogate(value[i]))
+                {
+                    if ((i+1) < value.Length
+                        && Char.IsSurrogatePair(value[i], value[i+1]))
+                    {
+                        ok_result = Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP;
+                        i++;
+                    }
+                    else
+                    {
+                        return Dot_Net_String_Unicode_Test_Result.Is_Malformed;
+                    }
+                }
+            }
+            return ok_result;
         }
 
         internal MD_Any MD_Attr_Name(String value)
