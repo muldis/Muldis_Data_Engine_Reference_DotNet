@@ -175,10 +175,6 @@ namespace Muldis.D.Ref_Eng
                     {
                         return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
                     }
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Interval))
-                    {
-                        return (IMD_Interval)new MD_Interval().init(m_machine, value);
-                    }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
                     {
                         if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
@@ -373,48 +369,6 @@ namespace Muldis.D.Ref_Eng
                     if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
                     {
                         return Core_MD_Tuple_Bag(body: (Muldis.D.Ref_Eng.Value.MD_Bag)v);
-                    }
-                    break;
-                case "Interval":
-                    if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
-                    {
-                        Dictionary<String,Object> attrs = (Dictionary<String,Object>)v;
-                        if (!attrs.ContainsKey("min"))
-                        {
-                            throw new KeyNotFoundException(
-                                "Can't select MD_Interval without a [min] value.");
-                        }
-                        if (!attrs.ContainsKey("max"))
-                        {
-                            throw new KeyNotFoundException(
-                                "Can't select MD_Interval without a [max] value.");
-                        }
-                        if (attrs.ContainsKey("excludes_min")
-                            && attrs["excludes_min"].GetType().FullName != "System.Boolean")
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "value",
-                                message: "Can't select MD_Interval with a non-Boolean [excludes_min]."
-                            );
-                        }
-                        if (attrs.ContainsKey("excludes_max")
-                            && attrs["excludes_max"].GetType().FullName != "System.Boolean")
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "value",
-                                message: "Can't select MD_Interval with a non-Boolean [excludes_max]."
-                            );
-                        }
-                        return m_memory.MD_Interval(
-                            min: Core_MD_Any(attrs["min"]),
-                            max: Core_MD_Any(attrs["max"]),
-                            excludes_min: attrs.ContainsKey("excludes_min")
-                                ? (Boolean)attrs["excludes_min"] : false,
-                            excludes_max: attrs.ContainsKey("excludes_max")
-                                ? (Boolean)attrs["excludes_max"] : false
-                        );
                     }
                     break;
                 case "Capsule":
@@ -1068,22 +1022,6 @@ namespace Muldis.D.Ref_Eng
             return m_memory.MD_Tuple_Bag(hv, bv);
         }
 
-        public IMD_Interval MD_Interval(IMD_Any min, IMD_Any max,
-            Boolean excludes_min = false, Boolean excludes_max = false)
-        {
-            if (min == null)
-            {
-                throw new ArgumentNullException("min");
-            }
-            if (max == null)
-            {
-                throw new ArgumentNullException("max");
-            }
-            return (IMD_Interval)new MD_Interval().init(m_machine,
-                m_memory.MD_Interval(((MD_Any)min).m_value,
-                    ((MD_Any)max).m_value, excludes_min, excludes_max));
-        }
-
         public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)
         {
             if (label == null)
@@ -1320,10 +1258,6 @@ namespace Muldis.D.Ref_Eng.Value
     }
 
     public class MD_Tuple_Bag : MD_Capsule, IMD_Tuple_Bag
-    {
-    }
-
-    public class MD_Interval : MD_Capsule, IMD_Interval
     {
     }
 

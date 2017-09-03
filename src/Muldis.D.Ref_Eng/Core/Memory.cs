@@ -828,25 +828,6 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple_bag;
         }
 
-        internal MD_Any MD_Interval(MD_Any min, MD_Any max,
-            Boolean excludes_min = false, Boolean excludes_max = false)
-        {
-            MD_Any interval = MD_Capsule(
-                MD_Attr_Name("Interval"),
-                MD_Tuple(
-                    multi_oa: new Dictionary<String,Core.MD_Any>()
-                    {
-                        {"min", min},
-                        {"max", max},
-                        {"excludes_min", MD_Boolean(excludes_min)},
-                        {"excludes_max", MD_Boolean(excludes_max)},
-                    }
-                )
-            );
-            interval.AS.Cached_WKT.Add(MD_Well_Known_Type.Interval);
-            return interval;
-        }
-
         internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
         {
             if (Object.ReferenceEquals(label, MD_False)
