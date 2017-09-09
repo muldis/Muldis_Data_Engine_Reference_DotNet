@@ -124,7 +124,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Boolean_Literal(MD_Any value)
         {
-            return value.AS.MD_Boolean ? "True" : "False";
+            return value.AS.MD_Boolean.Value ? "True" : "False";
         }
 
         private String Integer_Literal(MD_Any value)

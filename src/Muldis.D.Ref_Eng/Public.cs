@@ -1371,7 +1371,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
         public Boolean Export_Boolean()
         {
-            return m_value.AS.MD_Boolean;
+            return m_value.AS.MD_Boolean.Value;
         }
     }
 

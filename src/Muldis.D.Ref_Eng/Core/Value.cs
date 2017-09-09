@@ -101,7 +101,7 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Foundation_Type MD_Foundation_Type { get; set; }
 
         // Iff MDFT is MD_Boolean, this field is the payload.
-        internal Boolean MD_Boolean { get; set; }
+        internal Nullable<Boolean> MD_Boolean { get; set; }
 
         // Iff MDFT is MD_Integer, this field is the payload.
         // While we conceptually could special case smaller integers with
