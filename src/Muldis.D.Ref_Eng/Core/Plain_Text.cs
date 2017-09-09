@@ -152,7 +152,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 : @"\~?'0b" + Bits_Literal__node__tree(array.AS.MD_Array) + "'";
         }
 
-        private String Bits_Literal__node__tree(MD_Array_Node node)
+        private String Bits_Literal__node__tree(MD_Array_Struct node)
         {
             return (node.Pred_Members == null ? ""
                     : Bits_Literal__node__tree(node.Pred_Members))
@@ -161,7 +161,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     : Bits_Literal__node__tree(node.Succ_Members));
         }
 
-        private String Bits_Literal__node__local(MD_Array_Node node)
+        private String Bits_Literal__node__local(MD_Array_Struct node)
         {
             switch (node.Local_Widest_Type)
             {
@@ -196,7 +196,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 : @"\~+'0x" + Blob_Literal__node__tree(array.AS.MD_Array) + "'";
         }
 
-        private String Blob_Literal__node__tree(MD_Array_Node node)
+        private String Blob_Literal__node__tree(MD_Array_Struct node)
         {
             return (node.Pred_Members == null ? ""
                     : Blob_Literal__node__tree(node.Pred_Members))
@@ -205,7 +205,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     : Blob_Literal__node__tree(node.Succ_Members));
         }
 
-        private String Blob_Literal__node__local(MD_Array_Node node)
+        private String Blob_Literal__node__local(MD_Array_Struct node)
         {
             switch (node.Local_Widest_Type)
             {
@@ -235,7 +235,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     Text_Literal__node__tree(array.AS.MD_Array)) + "'";
         }
 
-        private String Text_Literal__node__tree(MD_Array_Node node)
+        private String Text_Literal__node__tree(MD_Array_Struct node)
         {
             return (node.Pred_Members == null ? ""
                     : Text_Literal__node__tree(node.Pred_Members))
@@ -244,7 +244,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     : Text_Literal__node__tree(node.Succ_Members));
         }
 
-        private String Text_Literal__node__local(MD_Array_Node node)
+        private String Text_Literal__node__local(MD_Array_Struct node)
         {
             switch (node.Local_Widest_Type)
             {
@@ -348,7 +348,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     value.AS.MD_Array, mei) + indent + "]";
         }
 
-        private String Array_Selector__node__tree(MD_Array_Node node, String indent)
+        private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
         {
             return (node.Pred_Members == null ? ""
                     : Array_Selector__node__tree(node.Pred_Members, indent))
@@ -357,7 +357,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     : Array_Selector__node__tree(node.Succ_Members, indent));
         }
 
-        private String Array_Selector__node__local(MD_Array_Node node, String indent)
+        private String Array_Selector__node__local(MD_Array_Struct node, String indent)
         {
             switch (node.Local_Widest_Type)
             {
@@ -409,7 +409,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             String mei = indent + "\u0009";
             MD_Any bag = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
             value.AS.Memory.Bag__Collapse(bag: bag, want_indexed: true);
-            MD_Bag_Node node = bag.AS.MD_Bag;
+            MD_Bag_Struct node = bag.AS.MD_Bag;
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Value_Type.None:
@@ -431,7 +431,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         {
             String mei = indent + "\u0009";
             value.AS.Memory.Bag__Collapse(bag: value, want_indexed: true);
-            MD_Bag_Node node = value.AS.MD_Bag;
+            MD_Bag_Struct node = value.AS.MD_Bag;
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Value_Type.None:

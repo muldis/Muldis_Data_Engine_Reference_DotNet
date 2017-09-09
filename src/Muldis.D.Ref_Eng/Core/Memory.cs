@@ -128,7 +128,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
+                MD_Array = new MD_Array_Struct {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
                     Cached_Tree_Relational = true,
@@ -145,7 +145,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                MD_Bag = new MD_Bag_Node {
+                MD_Bag = new MD_Bag_Struct {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
                     Cached_Tree_Relational = true,
@@ -344,7 +344,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {"body", new MD_Any { AS = new MD_Any_Struct {
                             Memory = this,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                            MD_Array = new MD_Array_Node {
+                            MD_Array = new MD_Array_Struct {
                                 Cached_Tree_Member_Count = 1,
                                 Cached_Tree_All_Unique = true,
                                 Cached_Tree_Relational = true,
@@ -384,7 +384,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {"body", new MD_Any { AS = new MD_Any_Struct {
                             Memory = this,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                            MD_Bag = new MD_Bag_Node {
+                            MD_Bag = new MD_Bag_Struct {
                                 Cached_Tree_Member_Count = 1,
                                 Cached_Tree_All_Unique = true,
                                 Cached_Tree_Relational = true,
@@ -517,7 +517,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
+                MD_Array = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Bit,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Bit,
@@ -544,7 +544,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
+                MD_Array = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Octet,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Octet,
@@ -571,7 +571,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
+                MD_Array = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Codepoint,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Codepoint,
@@ -600,7 +600,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Node {
+                MD_Array = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Unrestricted,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Unrestricted,
@@ -636,14 +636,14 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Bag_C0;
             }
-            MD_Bag_Node arrayed_node = new MD_Bag_Node {
+            MD_Bag_Struct arrayed_node = new MD_Bag_Struct {
                 Local_Symbolic_Type = Symbolic_Value_Type.Arrayed,
                 Local_Arrayed_Members = members,
             };
-            MD_Bag_Node root_node = arrayed_node;
+            MD_Bag_Struct root_node = arrayed_node;
             if (with_unique)
             {
-                root_node = new MD_Bag_Node {
+                root_node = new MD_Bag_Struct {
                     Cached_Tree_All_Unique = true,
                     Local_Symbolic_Type = Symbolic_Value_Type.Unique,
                     Primary_Arg = arrayed_node,
@@ -967,10 +967,10 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal void Bag__Collapse(MD_Any bag, Boolean want_indexed = false)
         {
-            bag.AS.MD_Bag = Bag__Collapsed_Node(bag.AS.MD_Bag, want_indexed);
+            bag.AS.MD_Bag = Bag__Collapsed_Struct(bag.AS.MD_Bag, want_indexed);
         }
 
-        private MD_Bag_Node Bag__Collapsed_Node(MD_Bag_Node node,
+        private MD_Bag_Struct Bag__Collapsed_Struct(MD_Bag_Struct node,
             Boolean want_indexed = false)
         {
             // Note: want_indexed only causes Indexed result when Arrayed
@@ -1006,7 +1006,7 @@ namespace Muldis.D.Ref_Eng.Core
                             ary_res_dict[m.Member].Multiplicity ++;
                         }
                     }
-                    return new MD_Bag_Node {
+                    return new MD_Bag_Struct {
                         Cached_Tree_Member_Count = ary_src_list.Count,
                         Cached_Tree_All_Unique = node.Cached_Local_All_Unique,
                         Cached_Tree_Relational = node.Cached_Local_Relational,
@@ -1020,7 +1020,7 @@ namespace Muldis.D.Ref_Eng.Core
                     // Node is already collapsed.
                     return node;
                 case Symbolic_Value_Type.Unique:
-                    MD_Bag_Node uni_pa = Bag__Collapsed_Node(
+                    MD_Bag_Struct uni_pa = Bag__Collapsed_Struct(
                         node: node.Primary_Arg, want_indexed: true);
                     if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.None)
                     {
@@ -1028,7 +1028,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.Singular)
                     {
-                        return new MD_Bag_Node {
+                        return new MD_Bag_Struct {
                             Cached_Tree_Member_Count = 1,
                             Cached_Tree_All_Unique = true,
                             Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
@@ -1042,7 +1042,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     Dictionary<MD_Any,Multiplied_Member> uni_src_dict
                         = uni_pa.Local_Indexed_Members;
-                    return new MD_Bag_Node {
+                    return new MD_Bag_Struct {
                         Cached_Tree_Member_Count = uni_src_dict.Count,
                         Cached_Tree_All_Unique = true,
                         Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
@@ -1074,10 +1074,10 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Array__Pick_Random_Member(MD_Any array)
         {
-            return Array__Pick_Random_Node_Member(array.AS.MD_Array);
+            return Array__Pick_Random_Struct_Member(array.AS.MD_Array);
         }
 
-        private MD_Any Array__Pick_Random_Node_Member(MD_Array_Node node)
+        private MD_Any Array__Pick_Random_Struct_Member(MD_Array_Struct node)
         {
             if (node.Cached_Tree_Member_Count == 0)
             {
@@ -1087,9 +1087,9 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 case Widest_Component_Type.None:
                     return (node.Pred_Members == null ? null
-                            : Array__Pick_Random_Node_Member(node.Pred_Members))
+                            : Array__Pick_Random_Struct_Member(node.Pred_Members))
                         ?? (node.Succ_Members == null ? null
-                            : Array__Pick_Random_Node_Member(node.Succ_Members));
+                            : Array__Pick_Random_Struct_Member(node.Succ_Members));
                 case Widest_Component_Type.Unrestricted:
                     return node.Local_Unrestricted_Members[0];
                 case Widest_Component_Type.Bit:
@@ -1108,15 +1108,15 @@ namespace Muldis.D.Ref_Eng.Core
             return Array__Tree_Relational(array.AS.MD_Array);
         }
 
-        private Boolean Array__Tree_Relational(MD_Array_Node node)
+        private Boolean Array__Tree_Relational(MD_Array_Struct node)
         {
             if (node.Cached_Tree_Relational == null)
             {
                 Boolean tr = Array__Local_Relational(node);
-                MD_Any m0 = Array__Pick_Random_Node_Member(node);
+                MD_Any m0 = Array__Pick_Random_Struct_Member(node);
                 if (tr && node.Pred_Members != null)
                 {
-                    MD_Any pm0 = Array__Pick_Random_Node_Member(node.Pred_Members);
+                    MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Pred_Members);
                     if (pm0 != null)
                     {
                         tr = tr && Array__Tree_Relational(node.Pred_Members);
@@ -1129,7 +1129,7 @@ namespace Muldis.D.Ref_Eng.Core
                 }
                 if (tr && node.Succ_Members != null)
                 {
-                    MD_Any sm0 = Array__Pick_Random_Node_Member(node.Succ_Members);
+                    MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Succ_Members);
                     if (sm0 != null)
                     {
                         tr = tr && Array__Tree_Relational(node.Succ_Members);
@@ -1144,7 +1144,7 @@ namespace Muldis.D.Ref_Eng.Core
             return (Boolean)node.Cached_Tree_Relational;
         }
 
-        private Boolean Array__Local_Relational(MD_Array_Node node)
+        private Boolean Array__Local_Relational(MD_Array_Struct node)
         {
             if (node.Cached_Local_Relational == null)
             {
@@ -1154,7 +1154,7 @@ namespace Muldis.D.Ref_Eng.Core
                         node.Cached_Local_Relational = true;
                         break;
                     case Widest_Component_Type.Unrestricted:
-                        MD_Any m0 = Array__Pick_Random_Node_Member(node);
+                        MD_Any m0 = Array__Pick_Random_Struct_Member(node);
                         node.Cached_Local_Relational
                             = m0.AS.MD_Foundation_Type
                                 == MD_Foundation_Type.MD_Tuple
@@ -1191,10 +1191,10 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Bag__Pick_Random_Member(MD_Any bag)
         {
-            return Bag__Pick_Random_Node_Member(bag.AS.MD_Bag);
+            return Bag__Pick_Random_Struct_Member(bag.AS.MD_Bag);
         }
 
-        private MD_Any Bag__Pick_Random_Node_Member(MD_Bag_Node node)
+        private MD_Any Bag__Pick_Random_Struct_Member(MD_Bag_Struct node)
         {
             if (node.Cached_Tree_Member_Count == 0)
             {
@@ -1212,21 +1212,21 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Value_Type.Indexed:
                     throw new NotImplementedException();
                 case Symbolic_Value_Type.Unique:
-                    return Bag__Pick_Random_Node_Member(node.Primary_Arg);
+                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg);
                 case Symbolic_Value_Type.Insert_N:
                     return node.Local_Singular_Members.Member;
                 case Symbolic_Value_Type.Remove_N:
                     throw new NotImplementedException();
                 case Symbolic_Value_Type.Member_Plus:
-                    return Bag__Pick_Random_Node_Member(node.Primary_Arg)
-                        ?? Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
+                        ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
                 case Symbolic_Value_Type.Except:
                     throw new NotImplementedException();
                 case Symbolic_Value_Type.Intersect:
                     throw new NotImplementedException();
                 case Symbolic_Value_Type.Union:
-                    return Bag__Pick_Random_Node_Member(node.Primary_Arg)
-                        ?? Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
+                        ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
                 case Symbolic_Value_Type.Exclusive:
                     throw new NotImplementedException();
                 default:
@@ -1239,7 +1239,7 @@ namespace Muldis.D.Ref_Eng.Core
             return Bag__Tree_Relational(bag.AS.MD_Bag);
         }
 
-        private Boolean Bag__Tree_Relational(MD_Bag_Node node)
+        private Boolean Bag__Tree_Relational(MD_Bag_Struct node)
         {
             if (node.Cached_Tree_Relational == null)
             {
@@ -1258,7 +1258,7 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Value_Type.Insert_N:
                         tr = Bag__Local_Relational(node);
                         MD_Any lsm = node.Local_Singular_Members.Member;
-                        MD_Any pm0 = Bag__Pick_Random_Node_Member(node.Primary_Arg);
+                        MD_Any pm0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
                         if (pm0 != null)
                         {
                             tr = tr && Bag__Tree_Relational(node.Primary_Arg)
@@ -1269,8 +1269,8 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Value_Type.Union:
                         tr = Bag__Tree_Relational(node.Primary_Arg)
                             && Bag__Tree_Relational(node.Extra_Arg);
-                        MD_Any pam0 = Bag__Pick_Random_Node_Member(node.Primary_Arg);
-                        MD_Any eam0 = Bag__Pick_Random_Node_Member(node.Extra_Arg);
+                        MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
+                        MD_Any eam0 = Bag__Pick_Random_Struct_Member(node.Extra_Arg);
                         if (pam0 != null && eam0 != null)
                         {
                             tr = tr && Tuple__Same_Heading(pam0, eam0);
@@ -1289,7 +1289,7 @@ namespace Muldis.D.Ref_Eng.Core
             return (Boolean)node.Cached_Tree_Relational;
         }
 
-        private Boolean Bag__Local_Relational(MD_Bag_Node node)
+        private Boolean Bag__Local_Relational(MD_Bag_Struct node)
         {
             if (node.Cached_Local_Relational == null)
             {
@@ -1318,7 +1318,7 @@ namespace Muldis.D.Ref_Eng.Core
                         }
                         else
                         {
-                            MD_Any m0 = Bag__Pick_Random_Node_Member(node);
+                            MD_Any m0 = Bag__Pick_Random_Struct_Member(node);
                             node.Cached_Local_Relational
                                 = m0.AS.MD_Foundation_Type
                                     == MD_Foundation_Type.MD_Tuple

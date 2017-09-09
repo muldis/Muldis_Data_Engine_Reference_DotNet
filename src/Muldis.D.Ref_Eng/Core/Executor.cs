@@ -231,7 +231,7 @@ namespace Muldis.D.Ref_Eng.Core
                         return new MD_Any { AS = new MD_Any_Struct {
                             Memory = m,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                            MD_Bag = new MD_Bag_Node {
+                            MD_Bag = new MD_Bag_Struct {
                                 Cached_Tree_All_Unique = true,
                                 Local_Symbolic_Type = Symbolic_Value_Type.Unique,
                                 Primary_Arg = v.AS.MD_Bag,
@@ -351,8 +351,8 @@ namespace Muldis.D.Ref_Eng.Core
                     result = a0.AS.MD_Integer == a1.AS.MD_Integer;
                     break;
                 case MD_Foundation_Type.MD_Array:
-                    MD_Array_Node n0 = a0.AS.MD_Array;
-                    MD_Array_Node n1 = a1.AS.MD_Array;
+                    MD_Array_Struct n0 = a0.AS.MD_Array;
+                    MD_Array_Struct n1 = a1.AS.MD_Array;
                     if (Object.ReferenceEquals(n0, n1))
                     {
                         result = true;
@@ -406,8 +406,8 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     break;
                 case MD_Foundation_Type.MD_Bag:
-                    MD_Bag_Node bn0 = a0.AS.MD_Bag;
-                    MD_Bag_Node bn1 = a1.AS.MD_Bag;
+                    MD_Bag_Struct bn0 = a0.AS.MD_Bag;
+                    MD_Bag_Struct bn1 = a1.AS.MD_Bag;
                     if (Object.ReferenceEquals(bn0, bn1))
                     {
                         result = true;
@@ -516,7 +516,7 @@ namespace Muldis.D.Ref_Eng.Core
             return Array__node__tree_member_count(array.AS.MD_Array);
         }
 
-        private Int64 Array__node__tree_member_count(MD_Array_Node node)
+        private Int64 Array__node__tree_member_count(MD_Array_Struct node)
         {
             if (node.Cached_Tree_Member_Count == null)
             {
@@ -530,7 +530,7 @@ namespace Muldis.D.Ref_Eng.Core
             return (Int64)node.Cached_Tree_Member_Count;
         }
 
-        private Int64 Array__node__local_member_count(MD_Array_Node node)
+        private Int64 Array__node__local_member_count(MD_Array_Struct node)
         {
             if (node.Cached_Local_Member_Count == null)
             {
@@ -581,7 +581,7 @@ namespace Muldis.D.Ref_Eng.Core
             return (Int64)node.Cached_Local_Member_Count;
         }
 
-        private Boolean Array__node__local_any_non_BMP(MD_Array_Node node)
+        private Boolean Array__node__local_any_non_BMP(MD_Array_Struct node)
         {
             // This function is only valid to call when we already know
             // that the node's Local_Widest_Type is Codepoint.
@@ -607,7 +607,7 @@ namespace Muldis.D.Ref_Eng.Core
             return Array__node__maybe_at(array.AS.MD_Array, ord_pos);
         }
 
-        private MD_Any Array__node__maybe_at(MD_Array_Node node, Int64 ord_pos)
+        private MD_Any Array__node__maybe_at(MD_Array_Struct node, Int64 ord_pos)
         {
             if (node.Cached_Tree_Member_Count == 0)
             {

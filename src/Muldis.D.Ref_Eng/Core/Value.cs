@@ -110,10 +110,10 @@ namespace Muldis.D.Ref_Eng.Core
         internal BigInteger MD_Integer { get; set; }
 
         // Iff MDFT is MD_Array, this field is the payload.
-        internal MD_Array_Node MD_Array { get; set; }
+        internal MD_Array_Struct MD_Array { get; set; }
 
         // Iff MDFT is MD_Bag, this field is the payload.
-        internal MD_Bag_Node MD_Bag { get; set; }
+        internal MD_Bag_Struct MD_Bag { get; set; }
 
         // Iff MDFT is MD_Tuple, this field is the payload.
         internal MD_Tuple_Struct MD_Tuple { get; set; }
@@ -156,21 +156,21 @@ namespace Muldis.D.Ref_Eng.Core
         Codepoint,
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Array_Node
+    // Muldis.D.Ref_Eng.Core.MD_Array_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
-    // an MD_Array_Node is used by it to hold the MD_Array-specific details.
+    // an MD_Array_Struct is used by it to hold the MD_Array-specific details.
     // It takes the form of a tree of its own kind to aid in reusability
     // of common substrings of members of distinct MD_Array values;
     // the actual members of the MD_Array value are, in order, any members
     // specified by Pred_Members, then any Local_*_Members, then
-    // Succ_Members.  A MD_Array_Node also uses run-length encoding to
+    // Succ_Members.  A MD_Array_Struct also uses run-length encoding to
     // optimize storage, such that the actual "local" members of a node are
     // defined as the sequence in Local_*_Members repeated the number of
     // times specified by Local_Multiplicity.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
 
-    internal class MD_Array_Node
+    internal class MD_Array_Struct
     {
         // Cached count of members of the Muldis D Array represented by
         // this tree node including those defined by it and child nodes.
@@ -288,11 +288,11 @@ namespace Muldis.D.Ref_Eng.Core
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.
-        internal MD_Array_Node Pred_Members { get; set; }
+        internal MD_Array_Struct Pred_Members { get; set; }
 
         // Iff there is at least 1 successor member of the "local" ones,
         // this subtree says what they are.
-        internal MD_Array_Node Succ_Members { get; set; }
+        internal MD_Array_Struct Succ_Members { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.Symbolic_Value_Type
@@ -340,16 +340,16 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Bag_Node
+    // Muldis.D.Ref_Eng.Core.MD_Bag_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Bag,
-    // a MD_Bag_Node is used by it to hold the MD_Bag-specific details.
+    // a MD_Bag_Struct is used by it to hold the MD_Bag-specific details.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
     // Note that MD_Bag is the most complicated Muldis D Foundation type to
     // implement while at the same time is the least critical to the
     // internals; it is mainly just used for user data.
 
-    internal class MD_Bag_Node
+    internal class MD_Bag_Struct
     {
         // Cached count of members of the Muldis D Bag represented by
         // this tree node including those defined by it and child nodes.
@@ -427,11 +427,11 @@ namespace Muldis.D.Ref_Eng.Core
 
         // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
         // Member_Plus, Except, Intersect, Union, Exclusive}.
-        internal MD_Bag_Node Primary_Arg { get; set; }
+        internal MD_Bag_Struct Primary_Arg { get; set; }
 
         // This field is used iff LST is one of
         // {Member_Plus, Except, Intersect, Union, Exclusive}.
-        internal MD_Bag_Node Extra_Arg { get; set; }
+        internal MD_Bag_Struct Extra_Arg { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Tuple_Struct
