@@ -5,11 +5,18 @@ using System.Numerics;
 
 namespace Muldis.D.Ref_Eng.Core
 {
-    // Muldis.D.Ref_Eng.Core.MD_Foundation_Type
-    // Enumerates the Muldis D Foundation data types, which are mutually
-    // exclusive; every Muldis D value is a member of exactly one of these.
+    // Muldis.D.Ref_Eng.Core.MD_MSBT
+    // Enumerates Muldis D base types that are considered well-known to
+    // this Muldis D language implementation, and that in particular have
+    // their own dedicated handling code or formats in the implementation.
+    // Every one of these types is either disjoint from or a proper subtype
+    // or proper supertype of each of the others of these types, and in
+    // particular many of these are proper subtypes of Capsule; however,
+    // every Muldis D value is considered to have a best fit into exactly
+    // one of these types and that value is expected to be normalized
+    // towards its best fit storage format.
 
-    internal enum MD_Foundation_Type
+    internal enum MD_Well_Known_Base_Type
     {
         MD_Boolean,
         MD_Integer,
@@ -94,31 +101,31 @@ namespace Muldis.D.Ref_Eng.Core
         // Memory pool this Muldis D "value" lives in.
         internal Memory Memory { get; set; }
 
-        // Muldis D Foundation data type (MDFT) this "value" is a member of.
-        // This field determines how to interpret most of the other fields.
+        // Muldis D most specific well known base data type (MSBT) this
+        // "value" is a member of.  Determines interpreting Details field.
         // Some of these types have their own subset of specialized
         // representation formats for the sake of optimization.
-        internal MD_Foundation_Type MD_Foundation_Type { get; set; }
+        internal MD_Well_Known_Base_Type MD_MSBT { get; set; }
 
         // Details of this Muldis D "value", in one of several possible
         // specialized representation formats depending on the data type.
-        // Iff MDFT is MD_Boolean, this field holds a Nullable<Boolean>.
-        // Iff MDFT is MD_Integer, this field holds a BigInteger.
+        // Iff MSBT is MD_Boolean, this field holds a Nullable<Boolean>.
+        // Iff MSBT is MD_Integer, this field holds a BigInteger.
             // While we conceptually could special case smaller integers with
             // additional fields for performance, we won't, mainly to keep
             // things simpler, and because BigInteger special-cases internally.
-        // Iff MDFT is MD_Array, this field holds a MD_Array_Struct.
-        // Iff MDFT is MD_Bag, this field holds a MD_Bag_Struct.
-        // Iff MDFT is MD_Tuple, this field holds a MD_Tuple_Struct.
-        // Iff MDFT is MD_Capsule, this field holds a MD_Capsule_Struct.
-        // Iff MDFT is MD_Handle, this field holds a MD_Handle_Struct.
+        // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
+        // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
+        // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
+        // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
+        // Iff MSBT is MD_Handle, this field holds a MD_Handle_Struct.
         internal Object Details { get; set; }
 
         // Set of well-known Muldis D types that this value is known to be
         // a member of.  This is calculated semi-lazily as needed.
         // This set excludes on purpose the subset of well-known types that
         // should be trivial to test membership of by other means; in
-        // particular it excludes {Any,None}, the 7 MD_Foundation_Type,
+        // particular it excludes {Any,None}, the MD_Well_Known_Base_Type,
         // the 4 MD_Handle_Type; types not excluded are more work to test.
         internal HashSet<MD_Well_Known_Type> Cached_WKT { get; set; }
 

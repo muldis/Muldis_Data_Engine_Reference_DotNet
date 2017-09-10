@@ -65,19 +65,19 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         protected String Any_Selector_Foundation_Dispatch(MD_Any value, String indent)
         {
-            switch (value.AS.MD_Foundation_Type)
+            switch (value.AS.MD_MSBT)
             {
-                case MD_Foundation_Type.MD_Boolean:
+                case MD_Well_Known_Base_Type.MD_Boolean:
                     return Boolean_Literal(value);
-                case MD_Foundation_Type.MD_Integer:
+                case MD_Well_Known_Base_Type.MD_Integer:
                     return Integer_Literal(value);
-                case MD_Foundation_Type.MD_Array:
+                case MD_Well_Known_Base_Type.MD_Array:
                     return Array_Selector(value, indent);
-                case MD_Foundation_Type.MD_Bag:
+                case MD_Well_Known_Base_Type.MD_Bag:
                     return Bag_Selector(value, indent);
-                case MD_Foundation_Type.MD_Tuple:
+                case MD_Well_Known_Base_Type.MD_Tuple:
                     return Tuple_Selector(value, indent);
-                case MD_Foundation_Type.MD_Capsule:
+                case MD_Well_Known_Base_Type.MD_Capsule:
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
                     {
                         return Fraction_Literal(value);
@@ -99,7 +99,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         return Set_Selector(value, indent);
                     }
                     return Capsule_Selector(value, indent);
-                case MD_Foundation_Type.MD_Handle:
+                case MD_Well_Known_Base_Type.MD_Handle:
                     // We display something useful for debugging purposes, but no
                     // (transient) MD_Handle can actually be rendered as Muldis D Plain Text.
                     switch (value.AS.MD_Handle().MD_Handle_Type)
@@ -118,7 +118,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     }
                 default:
                     return "DIE UN-HANDLED FOUNDATION TYPE"
-                        + " [" + value.AS.MD_Foundation_Type.ToString() + "]";
+                        + " [" + value.AS.MD_MSBT.ToString() + "]";
             }
         }
 

@@ -126,23 +126,23 @@ namespace Muldis.D.Ref_Eng
 
         internal IMD_Any Best_Fit_Public_Value(Core.MD_Any value)
         {
-            switch (value.AS.MD_Foundation_Type)
+            switch (value.AS.MD_MSBT)
             {
-                case Core.MD_Foundation_Type.MD_Boolean:
+                case Core.MD_Well_Known_Base_Type.MD_Boolean:
                     return (IMD_Boolean)new MD_Boolean().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Integer:
+                case Core.MD_Well_Known_Base_Type.MD_Integer:
                     return (IMD_Integer)new MD_Integer().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Array:
+                case Core.MD_Well_Known_Base_Type.MD_Array:
                     return (IMD_Array)new MD_Array().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Bag:
+                case Core.MD_Well_Known_Base_Type.MD_Bag:
                     return (IMD_Bag)new MD_Bag().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Tuple:
+                case Core.MD_Well_Known_Base_Type.MD_Tuple:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Heading))
                     {
                         return (IMD_Heading)new MD_Heading().init(m_machine, value);
                     }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Capsule:
+                case Core.MD_Well_Known_Base_Type.MD_Capsule:
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Fraction))
                     {
                         return (IMD_Fraction)new MD_Fraction().init(m_machine, value);
@@ -185,7 +185,7 @@ namespace Muldis.D.Ref_Eng
                         return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
                     }
                     return (IMD_Capsule)new MD_Capsule().init(m_machine, value);
-                case Core.MD_Foundation_Type.MD_Handle:
+                case Core.MD_Well_Known_Base_Type.MD_Handle:
                     switch (value.AS.MD_Handle().MD_Handle_Type)
                     {
                         case Core.MD_Handle_Type.MD_Variable:
@@ -398,7 +398,7 @@ namespace Muldis.D.Ref_Eng
                             );
                         }
                         Core.MD_Any attrs_cv = Core_MD_Any(attrs);
-                        if (attrs_cv.AS.MD_Foundation_Type != Core.MD_Foundation_Type.MD_Tuple)
+                        if (attrs_cv.AS.MD_MSBT != Core.MD_Well_Known_Base_Type.MD_Tuple)
                         {
                             throw new ArgumentException
                             (

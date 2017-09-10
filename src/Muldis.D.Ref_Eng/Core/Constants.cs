@@ -17,7 +17,7 @@ namespace Muldis.D.Ref_Eng.Core
     // operators are not.  Typically each one is a Capsule subtype.
     // This set excludes on purpose the subset of well-known types that
     // should be trivial to test membership of by other means; in
-    // particular it excludes {Any,None}, the 7 MD_Foundation_Type,
+    // particular it excludes {Any,None}, the MD_Well_Known_Base_Type,
     // the 4 MD_Handle_Type; types not excluded are more work to test.
 
     internal enum MD_Well_Known_Type

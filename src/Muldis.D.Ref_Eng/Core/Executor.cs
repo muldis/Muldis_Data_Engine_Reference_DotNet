@@ -21,14 +21,14 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 args = m.MD_Tuple_D0;
             }
-            if (args.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
+            if (args.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
             {
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Args_Not_Tuple").ToString());
             }
-            switch (function.AS.MD_Foundation_Type)
+            switch (function.AS.MD_MSBT)
             {
-                case MD_Foundation_Type.MD_Array:
+                case MD_Well_Known_Base_Type.MD_Array:
                     // Try to use as a Muldis D Absolute_Name value where
                     // that specifies the qualified name of a function to call.
                     MD_Any maybe_first = Array__maybe_at(function, 0);
@@ -51,7 +51,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Malformed_Function_Call").ToString());
-                case MD_Foundation_Type.MD_Capsule:
+                case MD_Well_Known_Base_Type.MD_Capsule:
                     MD_Any label = function.AS.MD_Capsule().Label;
                     MD_Any attrs = function.AS.MD_Capsule().Attrs;
                     if (Object.ReferenceEquals(label, m.MD_Attr_Name("Routine_Call")))
@@ -81,7 +81,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 args = m.MD_Tuple_D0;
             }
-            if (args.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
+            if (args.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
             {
                 throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
             }
@@ -118,53 +118,53 @@ namespace Muldis.D.Ref_Eng.Core
 
                     case "Boolean":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Boolean
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Boolean
                         );
                     case "Integer":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Integer
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer
                         );
                     case "Array":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Array
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Array
                         );
                     case "Bag":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Bag
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Bag
                         );
                     case "Tuple":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Tuple
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                         );
                     case "Capsule":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Capsule
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Capsule
                         );
                     case "Handle":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
                         );
 
                     // HANDLE SUBTYPE DEFINERS
 
                     case "Variable":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
                                 && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Variable
                         );
                     case "Process":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
                                 && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Process
                         );
                     case "Stream":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
                                 && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Stream
                         );
                     case "External":
                         return m.MD_Boolean(
-                            v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
                                 && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_External
                         );
 
@@ -192,21 +192,21 @@ namespace Muldis.D.Ref_Eng.Core
                 switch (func_name_s)
                 {
                     case "Integer_opposite":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                         }
                         return m.MD_Integer(-v.AS.MD_Integer());
                     case "Integer_modulus":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                         }
                         return m.MD_Integer(BigInteger.Abs(v.AS.MD_Integer()));
                     case "Integer_factorial":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
                             || v.AS.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
@@ -216,21 +216,21 @@ namespace Muldis.D.Ref_Eng.Core
                         // with a Factorial(n) so we have to do it ourselves.
                         return m.MD_Integer(Integer__factorial(v.AS.MD_Integer()));
                     case "Array_count":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Array)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_count_Arg_0_Not_Array").ToString());
                         }
                         return m.MD_Integer(Array__count(v));
                     case "Bag_unique":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Bag)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Bag)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Bag_unique_Arg_0_Not_Bag").ToString());
                         }
                         return new MD_Any { AS = new MD_Any_Struct {
                             Memory = m,
-                            MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
+                            MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
                                 Cached_Tree_All_Unique = true,
                                 Local_Symbolic_Type = Symbolic_Value_Type.Unique,
@@ -239,14 +239,14 @@ namespace Muldis.D.Ref_Eng.Core
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } };
                     case "Tuple_degree":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                         }
                         return m.MD_Integer(v.AS.MD_Tuple().Degree);
                     case "Tuple_heading":
-                        if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
@@ -273,24 +273,24 @@ namespace Muldis.D.Ref_Eng.Core
                     case "same":
                         return m.MD_Boolean(Any__same(a0, a1));
                     case "Integer_plus":
-                        if (a0.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
+                        if (a0.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_plus_Arg_0_Not_Integer").ToString());
                         }
-                        if (a1.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
+                        if (a1.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_plus_Arg_1_Not_Integer").ToString());
                         }
                         return m.MD_Integer(a0.AS.MD_Integer() + a1.AS.MD_Integer());
                     case "Array_at":
-                        if (a0.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Array)
+                        if (a0.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_at_Arg_0_Not_Array").ToString());
                         }
-                        if (a1.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer
+                        if (a1.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
                             || a1.AS.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
@@ -338,19 +338,19 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
-            if (a0.AS.MD_Foundation_Type != a1.AS.MD_Foundation_Type)
+            if (a0.AS.MD_MSBT != a1.AS.MD_MSBT)
             {
                 return false;
             }
             Boolean result;
-            switch (a0.AS.MD_Foundation_Type)
+            switch (a0.AS.MD_MSBT)
             {
-                case MD_Foundation_Type.MD_Boolean:
+                case MD_Well_Known_Base_Type.MD_Boolean:
                     return a0.AS.MD_Boolean() == a1.AS.MD_Boolean();
-                case MD_Foundation_Type.MD_Integer:
+                case MD_Well_Known_Base_Type.MD_Integer:
                     result = a0.AS.MD_Integer() == a1.AS.MD_Integer();
                     break;
-                case MD_Foundation_Type.MD_Array:
+                case MD_Well_Known_Base_Type.MD_Array:
                     MD_Array_Struct n0 = a0.AS.MD_Array();
                     MD_Array_Struct n1 = a1.AS.MD_Array();
                     if (Object.ReferenceEquals(n0, n1))
@@ -405,7 +405,7 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new NotImplementedException();
                     }
                     break;
-                case MD_Foundation_Type.MD_Bag:
+                case MD_Well_Known_Base_Type.MD_Bag:
                     MD_Bag_Struct bn0 = a0.AS.MD_Bag();
                     MD_Bag_Struct bn1 = a1.AS.MD_Bag();
                     if (Object.ReferenceEquals(bn0, bn1))
@@ -455,7 +455,7 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new NotImplementedException();
                     }
                     break;
-                case MD_Foundation_Type.MD_Tuple:
+                case MD_Well_Known_Base_Type.MD_Tuple:
                     MD_Tuple_Struct ts0 = a0.AS.MD_Tuple();
                     MD_Tuple_Struct ts1 = a1.AS.MD_Tuple();
                     // First test just that the Tuple headings are the same,
@@ -478,11 +478,11 @@ namespace Muldis.D.Ref_Eng.Core
                             ts0.Only_OA.Value.Value, ts1.Only_OA.Value.Value))
                         && (ts0.Multi_OA == null || Enumerable.All(ts0.Multi_OA,
                             attr => Any__same(attr.Value, ts1.Multi_OA[attr.Key])));
-                case MD_Foundation_Type.MD_Capsule:
+                case MD_Well_Known_Base_Type.MD_Capsule:
                     result = Any__same(a0.AS.MD_Capsule().Label, a1.AS.MD_Capsule().Label)
                           && Any__same(a0.AS.MD_Capsule().Attrs, a1.AS.MD_Capsule().Attrs);
                     break;
-                case MD_Foundation_Type.MD_Handle:
+                case MD_Well_Known_Base_Type.MD_Handle:
                     // Every Muldis D Handle object is always distinct from every other one.
                     return false;
                 default:
