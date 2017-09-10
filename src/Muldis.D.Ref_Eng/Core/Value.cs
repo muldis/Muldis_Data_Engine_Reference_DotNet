@@ -24,7 +24,10 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Bag,
         MD_Tuple,
         MD_Capsule,
-        MD_Handle,
+        MD_Variable,
+        MD_Process,
+        MD_Stream,
+        MD_External,
     };
 
     // Muldis.D.Ref_Eng.Core.MD_Any
@@ -118,15 +121,18 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
         // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
-        // Iff MSBT is MD_Handle, this field holds a MD_Handle_Struct.
+        // Iff MSBT is MD_Variable, this field holds a MD_Variable_Struct.
+        // Iff MSBT is MD_Process, this field holds a MD_Process_Struct.
+        // Iff MSBT is MD_Stream, this field holds a MD_Stream_Struct.
+        // Iff MSBT is MD_External, this field holds a MD_External_Struct.
         internal Object Details { get; set; }
 
         // Set of well-known Muldis D types that this value is known to be
         // a member of.  This is calculated semi-lazily as needed.
         // This set excludes on purpose the subset of well-known types that
         // should be trivial to test membership of by other means; in
-        // particular it excludes {Any,None}, the MD_Well_Known_Base_Type,
-        // the 4 MD_Handle_Type; types not excluded are more work to test.
+        // particular it excludes {Any,None}, the MD_Well_Known_Base_Type;
+        // types not excluded are more work to test.
         internal HashSet<MD_Well_Known_Type> Cached_WKT { get; set; }
 
         // Normalized serialization of the Muldis D "value" that its host
@@ -167,9 +173,24 @@ namespace Muldis.D.Ref_Eng.Core
             return (MD_Capsule_Struct)Details;
         }
 
-        internal MD_Handle_Struct MD_Handle()
+        internal MD_Variable_Struct MD_Variable()
         {
-            return (MD_Handle_Struct)Details;
+            return (MD_Variable_Struct)Details;
+        }
+
+        internal MD_Process_Struct MD_Process()
+        {
+            return (MD_Process_Struct)Details;
+        }
+
+        internal MD_Stream_Struct MD_Stream()
+        {
+            return (MD_Stream_Struct)Details;
+        }
+
+        internal MD_External_Struct MD_External()
+        {
+            return (MD_External_Struct)Details;
         }
     }
 
@@ -516,44 +537,6 @@ namespace Muldis.D.Ref_Eng.Core
 
         // The Muldis D value that is the "attributes" of this MD_Capsule value.
         internal MD_Any Attrs { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Handle_Type
-    // Enumerates the Muldis D Handle data types, which are for now mutually
-    // exclusive; every Muldis D Handle value is a member of exactly one of
-    // these, though that is subject to change in the future.
-
-    internal enum MD_Handle_Type
-    {
-        MD_Variable,
-        MD_Process,
-        MD_Stream,
-        MD_External,
-    };
-
-    // Muldis.D.Ref_Eng.Core.MD_Handle_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Handle,
-    // a MD_Reference_Struct is used by it to hold the MD_Handle-specific details.
-
-    internal class MD_Handle_Struct
-    {
-        // Muldis D Handle data type (MDHT) this Handle "value" is a member of.
-        // This field determines how to interpret most of the other fields.
-        // Some of these types have their own subset of specialized
-        // representation formats for the sake of optimization.
-        internal MD_Handle_Type MD_Handle_Type { get; set; }
-
-        // Iff MDHT is MD_Variable, this field is the payload.
-        internal MD_Variable_Struct MD_Variable { get; set; }
-
-        // Iff MDHT is MD_Process, this field is the payload.
-        internal MD_Process_Struct MD_Process { get; set; }
-
-        // Iff MDHT is MD_Stream, this field is the payload.
-        internal MD_Stream_Struct MD_Stream { get; set; }
-
-        // Iff MDHT is MD_External, this field is the payload.
-        internal MD_External_Struct MD_External { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Variable_Struct

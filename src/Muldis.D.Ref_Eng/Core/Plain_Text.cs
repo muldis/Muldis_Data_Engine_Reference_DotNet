@@ -99,23 +99,22 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                         return Set_Selector(value, indent);
                     }
                     return Capsule_Selector(value, indent);
-                case MD_Well_Known_Base_Type.MD_Handle:
+                case MD_Well_Known_Base_Type.MD_Variable:
                     // We display something useful for debugging purposes, but no
-                    // (transient) MD_Handle can actually be rendered as Muldis D Plain Text.
-                    switch (value.AS.MD_Handle().MD_Handle_Type)
-                    {
-                        case MD_Handle_Type.MD_Variable:
-                            return "`Some IMD_Variable value is here.`";
-                        case MD_Handle_Type.MD_Process:
-                            return "`Some IMD_Process value is here.`";
-                        case MD_Handle_Type.MD_Stream:
-                            return "`Some IMD_Stream value is here.`";
-                        case MD_Handle_Type.MD_External:
-                            return "`Some IMD_External value is here.`";
-                        default:
-                            return "DIE UN-HANDLED HANDLE TYPE"
-                                + " [" + value.AS.MD_Handle().MD_Handle_Type.ToString() + "]";
-                    }
+                    // (transient) MD_Variable can actually be rendered as Muldis D Plain Text.
+                    return "`Some IMD_Variable value is here.`";
+                case MD_Well_Known_Base_Type.MD_Process:
+                    // We display something useful for debugging purposes, but no
+                    // (transient) MD_Process can actually be rendered as Muldis D Plain Text.
+                    return "`Some IMD_Process value is here.`";
+                case MD_Well_Known_Base_Type.MD_Stream:
+                    // We display something useful for debugging purposes, but no
+                    // (transient) MD_Stream can actually be rendered as Muldis D Plain Text.
+                    return "`Some IMD_Stream value is here.`";
+                case MD_Well_Known_Base_Type.MD_External:
+                    // We display something useful for debugging purposes, but no
+                    // (transient) MD_External can actually be rendered as Muldis D Plain Text.
+                    return "`Some IMD_External value is here.`";
                 default:
                     return "DIE UN-HANDLED FOUNDATION TYPE"
                         + " [" + value.AS.MD_MSBT.ToString() + "]";

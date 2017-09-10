@@ -142,30 +142,29 @@ namespace Muldis.D.Ref_Eng.Core
                         );
                     case "Handle":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
+                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
+                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
+                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_External
                         );
 
                     // HANDLE SUBTYPE DEFINERS
 
                     case "Variable":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
-                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Variable
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
                         );
                     case "Process":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
-                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Process
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
                         );
                     case "Stream":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
-                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Stream
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
                         );
                     case "External":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Handle
-                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_External
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_External
                         );
 
                     // ARRAY SUBTYPE DEFINERS
@@ -482,7 +481,10 @@ namespace Muldis.D.Ref_Eng.Core
                     result = Any__same(a0.AS.MD_Capsule().Label, a1.AS.MD_Capsule().Label)
                           && Any__same(a0.AS.MD_Capsule().Attrs, a1.AS.MD_Capsule().Attrs);
                     break;
-                case MD_Well_Known_Base_Type.MD_Handle:
+                case MD_Well_Known_Base_Type.MD_Variable:
+                case MD_Well_Known_Base_Type.MD_Process:
+                case MD_Well_Known_Base_Type.MD_Stream:
+                case MD_Well_Known_Base_Type.MD_External:
                     // Every Muldis D Handle object is always distinct from every other one.
                     return false;
                 default:
