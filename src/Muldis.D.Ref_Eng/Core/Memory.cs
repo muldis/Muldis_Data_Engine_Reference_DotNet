@@ -108,14 +108,14 @@ namespace Muldis.D.Ref_Eng.Core
             MD_False = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
-                MD_Boolean = false,
+                Details = false,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
             MD_True = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Boolean,
-                MD_Boolean = true,
+                Details = true,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
@@ -128,7 +128,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Struct {
+                Details = new MD_Array_Struct {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
                     Cached_Tree_Relational = true,
@@ -145,7 +145,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                MD_Bag = new MD_Bag_Struct {
+                Details = new MD_Bag_Struct {
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
                     Cached_Tree_Relational = true,
@@ -160,7 +160,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Tuple_D0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 0,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>()
@@ -172,7 +172,7 @@ namespace Muldis.D.Ref_Eng.Core
                 {"\u0000", new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                    MD_Tuple = new MD_Tuple_Struct {
+                    Details = new MD_Tuple_Struct {
                         Degree = 1,
                         A0 = MD_True,
                     },
@@ -182,7 +182,7 @@ namespace Muldis.D.Ref_Eng.Core
                 {"\u0001", new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                    MD_Tuple = new MD_Tuple_Struct {
+                    Details = new MD_Tuple_Struct {
                         Degree = 1,
                         A1 = MD_True,
                     },
@@ -192,7 +192,7 @@ namespace Muldis.D.Ref_Eng.Core
                 {"\u0002", new MD_Any { AS = new MD_Any_Struct {
                     Memory = this,
                     MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                    MD_Tuple = new MD_Tuple_Struct {
+                    Details = new MD_Tuple_Struct {
                         Degree = 1,
                         A2 = MD_True,
                     },
@@ -207,7 +207,7 @@ namespace Muldis.D.Ref_Eng.Core
             Heading_0_1 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 2,
                     A0 = MD_True,
                     A1 = MD_True,
@@ -218,7 +218,7 @@ namespace Muldis.D.Ref_Eng.Core
             Heading_0_2 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 2,
                     A0 = MD_True,
                     A2 = MD_True,
@@ -229,7 +229,7 @@ namespace Muldis.D.Ref_Eng.Core
             Heading_1_2 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 2,
                     A1 = MD_True,
                     A2 = MD_True,
@@ -241,7 +241,7 @@ namespace Muldis.D.Ref_Eng.Core
             Heading_0_1_2 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 3,
                     A0 = MD_True,
                     A1 = MD_True,
@@ -271,7 +271,7 @@ namespace Muldis.D.Ref_Eng.Core
             m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
-                MD_Capsule = new MD_Capsule_Struct {
+                Details = new MD_Capsule_Struct {
                     Label = MD_False,
                     Attrs = MD_Tuple_D0,
                 },
@@ -344,7 +344,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {"body", new MD_Any { AS = new MD_Any_Struct {
                             Memory = this,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                            MD_Array = new MD_Array_Struct {
+                            Details = new MD_Array_Struct {
                                 Cached_Tree_Member_Count = 1,
                                 Cached_Tree_All_Unique = true,
                                 Cached_Tree_Relational = true,
@@ -384,7 +384,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {"body", new MD_Any { AS = new MD_Any_Struct {
                             Memory = this,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                            MD_Bag = new MD_Bag_Struct {
+                            Details = new MD_Bag_Struct {
                                 Cached_Tree_Member_Count = 1,
                                 Cached_Tree_All_Unique = true,
                                 Cached_Tree_Relational = true,
@@ -418,8 +418,8 @@ namespace Muldis.D.Ref_Eng.Core
                     multi_oa: new Dictionary<String,MD_Any>()
                     {
                         {"heading", MD_Tuple_D0},
-                        {"body", MD_Set(MD_Tuple_Bag_D0C1.AS.MD_Capsule.Attrs
-                            .AS.MD_Tuple.Multi_OA["body"])},
+                        {"body", MD_Set(MD_Tuple_Bag_D0C1.AS.MD_Capsule().Attrs
+                            .AS.MD_Tuple().Multi_OA["body"])},
                     }
                 )
             );
@@ -447,7 +447,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any integer = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Integer,
-                MD_Integer = value,
+                Details = value,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             if (may_cache && m_integers.Count < 10000)
@@ -517,7 +517,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Struct {
+                Details = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Bit,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Bit,
@@ -544,7 +544,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Struct {
+                Details = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Octet,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Octet,
@@ -571,7 +571,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Struct {
+                Details = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Codepoint,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Codepoint,
@@ -600,7 +600,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any array = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Array,
-                MD_Array = new MD_Array_Struct {
+                Details = new MD_Array_Struct {
                     Tree_Widest_Type = Widest_Component_Type.Unrestricted,
                     Local_Multiplicity = 1,
                     Local_Widest_Type = Widest_Component_Type.Unrestricted,
@@ -652,7 +652,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any bag = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                MD_Bag = root_node,
+                Details = root_node,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
             return bag;
@@ -695,7 +695,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = degree,
                     A0 = a0,
                     A1 = a1,
@@ -831,7 +831,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
-                MD_Capsule = new MD_Capsule_Struct {
+                Details = new MD_Capsule_Struct {
                     Label = label,
                     Attrs = attrs,
                 },
@@ -844,7 +844,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Handle,
-                MD_Handle = new MD_Handle_Struct {
+                Details = new MD_Handle_Struct {
                     MD_Handle_Type = MD_Handle_Type.MD_Variable,
                     MD_Variable = new MD_Variable_Struct {
                         Current_Value = initial_current_value,
@@ -859,7 +859,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Handle,
-                MD_Handle = new MD_Handle_Struct {
+                Details = new MD_Handle_Struct {
                     MD_Handle_Type = MD_Handle_Type.MD_Process,
                     MD_Process = new MD_Process_Struct {},
                 },
@@ -872,7 +872,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Handle,
-                MD_Handle = new MD_Handle_Struct {
+                Details = new MD_Handle_Struct {
                     MD_Handle_Type = MD_Handle_Type.MD_Stream,
                     MD_Stream = new MD_Stream_Struct {},
                 },
@@ -885,7 +885,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Handle,
-                MD_Handle = new MD_Handle_Struct {
+                Details = new MD_Handle_Struct {
                     MD_Handle_Type = MD_Handle_Type.MD_External,
                     MD_External = new MD_External_Struct {
                         Value = value,
@@ -900,7 +900,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Capsule,
-                MD_Capsule = new MD_Capsule_Struct {
+                Details = new MD_Capsule_Struct {
                     Label = MD_Attr_Name("Excuse"),
                     Attrs = attrs,
                 },
@@ -950,7 +950,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = 1,
                     Only_OA = new KeyValuePair<String,MD_Any>(value, MD_True),
                 },
@@ -967,7 +967,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal void Bag__Collapse(MD_Any bag, Boolean want_indexed = false)
         {
-            bag.AS.MD_Bag = Bag__Collapsed_Struct(bag.AS.MD_Bag, want_indexed);
+            bag.AS.Details = Bag__Collapsed_Struct(bag.AS.MD_Bag(), want_indexed);
         }
 
         private MD_Bag_Struct Bag__Collapsed_Struct(MD_Bag_Struct node,
@@ -982,7 +982,7 @@ namespace Muldis.D.Ref_Eng.Core
                     // In theory we should never get here assuming that any
                     // operations which would knowingly result in the empty
                     // Bag are optimized to return MD_Bag_C0 directly.
-                    return MD_Bag_C0.AS.MD_Bag;
+                    return MD_Bag_C0.AS.MD_Bag();
                 case Symbolic_Value_Type.Singular:
                     // Node is already collapsed.
                     return node;
@@ -1074,7 +1074,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Array__Pick_Random_Member(MD_Any array)
         {
-            return Array__Pick_Random_Struct_Member(array.AS.MD_Array);
+            return Array__Pick_Random_Struct_Member(array.AS.MD_Array());
         }
 
         private MD_Any Array__Pick_Random_Struct_Member(MD_Array_Struct node)
@@ -1105,7 +1105,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Array__Is_Relational(MD_Any array)
         {
-            return Array__Tree_Relational(array.AS.MD_Array);
+            return Array__Tree_Relational(array.AS.MD_Array());
         }
 
         private Boolean Array__Tree_Relational(MD_Array_Struct node)
@@ -1180,18 +1180,18 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any Set__Pick_Random_Member(MD_Any set)
         {
             return Bag__Pick_Random_Member(
-                set.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value);
+                set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
         }
 
         internal Boolean Set__Is_Relational(MD_Any set)
         {
             return Bag__Is_Relational(
-                set.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value);
+                set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
         }
 
         internal MD_Any Bag__Pick_Random_Member(MD_Any bag)
         {
-            return Bag__Pick_Random_Struct_Member(bag.AS.MD_Bag);
+            return Bag__Pick_Random_Struct_Member(bag.AS.MD_Bag());
         }
 
         private MD_Any Bag__Pick_Random_Struct_Member(MD_Bag_Struct node)
@@ -1236,7 +1236,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Bag__Is_Relational(MD_Any bag)
         {
-            return Bag__Tree_Relational(bag.AS.MD_Bag);
+            return Bag__Tree_Relational(bag.AS.MD_Bag());
         }
 
         private Boolean Bag__Tree_Relational(MD_Bag_Struct node)
@@ -1346,7 +1346,7 @@ namespace Muldis.D.Ref_Eng.Core
                 return tuple;
             }
             // If we get here, the Tuple/Heading degree is guaranteed > 0.
-            MD_Tuple_Struct ts = tuple.AS.MD_Tuple;
+            MD_Tuple_Struct ts = tuple.AS.MD_Tuple();
             if (ts.Degree == 1)
             {
                 if (ts.A0 != null)
@@ -1371,7 +1371,7 @@ namespace Muldis.D.Ref_Eng.Core
             MD_Any heading = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_Foundation_Type = MD_Foundation_Type.MD_Tuple,
-                MD_Tuple = new MD_Tuple_Struct {
+                Details = new MD_Tuple_Struct {
                     Degree = ts.Degree,
                     A0 = ts.A0 == null ? null : MD_True,
                     A1 = ts.A1 == null ? null : MD_True,
@@ -1425,8 +1425,8 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
-            MD_Tuple_Struct ts1 = t1.AS.MD_Tuple;
-            MD_Tuple_Struct ts2 = t2.AS.MD_Tuple;
+            MD_Tuple_Struct ts1 = t1.AS.MD_Tuple();
+            MD_Tuple_Struct ts2 = t2.AS.MD_Tuple();
             return (ts1.Degree == ts2.Degree)
                 && ((ts1.A0 == null) == (ts2.A0 == null))
                 && ((ts1.A1 == null) == (ts2.A1 == null))

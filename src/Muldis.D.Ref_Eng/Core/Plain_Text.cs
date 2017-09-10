@@ -102,7 +102,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case MD_Foundation_Type.MD_Handle:
                     // We display something useful for debugging purposes, but no
                     // (transient) MD_Handle can actually be rendered as Muldis D Plain Text.
-                    switch (value.AS.MD_Handle.MD_Handle_Type)
+                    switch (value.AS.MD_Handle().MD_Handle_Type)
                     {
                         case MD_Handle_Type.MD_Variable:
                             return "`Some IMD_Variable value is here.`";
@@ -114,7 +114,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                             return "`Some IMD_External value is here.`";
                         default:
                             return "DIE UN-HANDLED HANDLE TYPE"
-                                + " [" + value.AS.MD_Handle.MD_Handle_Type.ToString() + "]";
+                                + " [" + value.AS.MD_Handle().MD_Handle_Type.ToString() + "]";
                     }
                 default:
                     return "DIE UN-HANDLED FOUNDATION TYPE"
@@ -124,12 +124,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Boolean_Literal(MD_Any value)
         {
-            return value.AS.MD_Boolean.Value ? "True" : "False";
+            return value.AS.MD_Boolean().Value ? "True" : "False";
         }
 
         private String Integer_Literal(MD_Any value)
         {
-            return value.AS.MD_Integer.ToString();
+            return value.AS.MD_Integer().ToString();
         }
 
         private String Integer_Literal(Int64 value)
@@ -139,17 +139,17 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Fraction_Literal(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule.Attrs.AS.MD_Tuple;
-            return ca.Multi_OA["numerator"].AS.MD_Integer.ToString()
-                + "/" + ca.Multi_OA["denominator"].AS.MD_Integer.ToString();
+            MD_Tuple_Struct ca = value.AS.MD_Capsule().Attrs.AS.MD_Tuple();
+            return ca.Multi_OA["numerator"].AS.MD_Integer().ToString()
+                + "/" + ca.Multi_OA["denominator"].AS.MD_Integer().ToString();
         }
 
         private String Bits_Literal(MD_Any value)
         {
             Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
             return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~?''"
-                : @"\~?'0b" + Bits_Literal__node__tree(array.AS.MD_Array) + "'";
+                : @"\~?'0b" + Bits_Literal__node__tree(array.AS.MD_Array()) + "'";
         }
 
         private String Bits_Literal__node__tree(MD_Array_Struct node)
@@ -191,9 +191,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Blob_Literal(MD_Any value)
         {
             Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
             return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~+''"
-                : @"\~+'0x" + Blob_Literal__node__tree(array.AS.MD_Array) + "'";
+                : @"\~+'0x" + Blob_Literal__node__tree(array.AS.MD_Array()) + "'";
         }
 
         private String Blob_Literal__node__tree(MD_Array_Struct node)
@@ -229,10 +229,10 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Text_Literal(MD_Any value)
         {
             Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
             return Object.ReferenceEquals(array, m.MD_Array_C0) ? "''"
                 : "'" + Quoted_Name_Or_Text_Segment_Content(
-                    Text_Literal__node__tree(array.AS.MD_Array)) + "'";
+                    Text_Literal__node__tree(array.AS.MD_Array())) + "'";
         }
 
         private String Text_Literal__node__tree(MD_Array_Struct node)
@@ -317,7 +317,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         {
             // TODO: Quote attribute names where appropriate.
             Memory m = value.AS.Memory;
-            MD_Tuple_Struct ts = value.AS.MD_Tuple;
+            MD_Tuple_Struct ts = value.AS.MD_Tuple();
             if (ts.Degree == 1)
             {
                 return Object.ReferenceEquals(value, m.Attr_Name_0) ? @"\0"
@@ -345,7 +345,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             Memory m = value.AS.Memory;
             return Object.ReferenceEquals(value, m.MD_Array_C0) ? "[]"
                 : "[\u000A" + Array_Selector__node__tree(
-                    value.AS.MD_Array, mei) + indent + "]";
+                    value.AS.MD_Array(), mei) + indent + "]";
         }
 
         private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
@@ -407,9 +407,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Set_Selector(MD_Any value, String indent)
         {
             String mei = indent + "\u0009";
-            MD_Any bag = value.AS.MD_Capsule.Attrs.AS.MD_Tuple.Only_OA.Value.Value;
+            MD_Any bag = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
             value.AS.Memory.Bag__Collapse(bag: bag, want_indexed: true);
-            MD_Bag_Struct node = bag.AS.MD_Bag;
+            MD_Bag_Struct node = bag.AS.MD_Bag();
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Value_Type.None:
@@ -431,7 +431,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         {
             String mei = indent + "\u0009";
             value.AS.Memory.Bag__Collapse(bag: value, want_indexed: true);
-            MD_Bag_Struct node = value.AS.MD_Bag;
+            MD_Bag_Struct node = value.AS.MD_Bag();
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Value_Type.None:
@@ -460,7 +460,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             }
             String ati = indent + "\u0009";
             Memory m = value.AS.Memory;
-            MD_Tuple_Struct ts = value.AS.MD_Tuple;
+            MD_Tuple_Struct ts = value.AS.MD_Tuple();
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
                 : "(\u000A"
                     + (ts.A0 == null ? "" : ati + "0 : "
@@ -483,8 +483,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Capsule_Selector(MD_Any value, String indent)
         {
             // TODO: Dig for cases where we have a well-known subtype not marked as such.
-            return "(" + Any_Selector(value.AS.MD_Capsule.Label, indent) + " : "
-                + Any_Selector(value.AS.MD_Capsule.Attrs, indent) + ")";
+            return "(" + Any_Selector(value.AS.MD_Capsule().Label, indent) + " : "
+                + Any_Selector(value.AS.MD_Capsule().Attrs, indent) + ")";
         }
     }
 

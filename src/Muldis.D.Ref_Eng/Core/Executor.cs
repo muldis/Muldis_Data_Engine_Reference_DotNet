@@ -52,8 +52,8 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Malformed_Function_Call").ToString());
                 case MD_Foundation_Type.MD_Capsule:
-                    MD_Any label = function.AS.MD_Capsule.Label;
-                    MD_Any attrs = function.AS.MD_Capsule.Attrs;
+                    MD_Any label = function.AS.MD_Capsule().Label;
+                    MD_Any attrs = function.AS.MD_Capsule().Attrs;
                     if (Object.ReferenceEquals(label, m.MD_Attr_Name("Routine_Call")))
                     {
                         throw new NotImplementedException();
@@ -95,7 +95,7 @@ namespace Muldis.D.Ref_Eng.Core
                 = Object.ReferenceEquals(func_name, m.Attr_Name_0) ? "\u0000"
                 : Object.ReferenceEquals(func_name, m.Attr_Name_1) ? "\u0001"
                 : Object.ReferenceEquals(func_name, m.Attr_Name_2) ? "\u0002"
-                : func_name.AS.MD_Tuple.Only_OA.Value.Key;
+                : func_name.AS.MD_Tuple().Only_OA.Value.Key;
 
             // TYPE DEFINERS
 
@@ -106,7 +106,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple.A0;
+                MD_Any v = args.AS.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     case "Any":
@@ -150,22 +150,22 @@ namespace Muldis.D.Ref_Eng.Core
                     case "Variable":
                         return m.MD_Boolean(
                             v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
-                                && v.AS.MD_Handle.MD_Handle_Type == MD_Handle_Type.MD_Variable
+                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Variable
                         );
                     case "Process":
                         return m.MD_Boolean(
                             v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
-                                && v.AS.MD_Handle.MD_Handle_Type == MD_Handle_Type.MD_Process
+                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Process
                         );
                     case "Stream":
                         return m.MD_Boolean(
                             v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
-                                && v.AS.MD_Handle.MD_Handle_Type == MD_Handle_Type.MD_Stream
+                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_Stream
                         );
                     case "External":
                         return m.MD_Boolean(
                             v.AS.MD_Foundation_Type == MD_Foundation_Type.MD_Handle
-                                && v.AS.MD_Handle.MD_Handle_Type == MD_Handle_Type.MD_External
+                                && v.AS.MD_Handle().MD_Handle_Type == MD_Handle_Type.MD_External
                         );
 
                     // ARRAY SUBTYPE DEFINERS
@@ -188,7 +188,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple.A0;
+                MD_Any v = args.AS.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     case "Integer_opposite":
@@ -197,24 +197,24 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(-v.AS.MD_Integer);
+                        return m.MD_Integer(-v.AS.MD_Integer());
                     case "Integer_modulus":
                         if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(BigInteger.Abs(v.AS.MD_Integer));
+                        return m.MD_Integer(BigInteger.Abs(v.AS.MD_Integer()));
                     case "Integer_factorial":
                         if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer
-                            || v.AS.MD_Integer < 0)
+                            || v.AS.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                         }
                         // Note that System.Numerics.BigInteger doesn't come
                         // with a Factorial(n) so we have to do it ourselves.
-                        return m.MD_Integer(Integer__factorial(v.AS.MD_Integer));
+                        return m.MD_Integer(Integer__factorial(v.AS.MD_Integer()));
                     case "Array_count":
                         if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Array)
                         {
@@ -231,10 +231,10 @@ namespace Muldis.D.Ref_Eng.Core
                         return new MD_Any { AS = new MD_Any_Struct {
                             Memory = m,
                             MD_Foundation_Type = MD_Foundation_Type.MD_Bag,
-                            MD_Bag = new MD_Bag_Struct {
+                            Details = new MD_Bag_Struct {
                                 Cached_Tree_All_Unique = true,
                                 Local_Symbolic_Type = Symbolic_Value_Type.Unique,
-                                Primary_Arg = v.AS.MD_Bag,
+                                Primary_Arg = v.AS.MD_Bag(),
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } };
@@ -244,7 +244,7 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                         }
-                        return m.MD_Integer(v.AS.MD_Tuple.Degree);
+                        return m.MD_Integer(v.AS.MD_Tuple().Degree);
                     case "Tuple_heading":
                         if (v.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Tuple)
                         {
@@ -266,8 +266,8 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Binary_Function_Args_Not_Heading_0_1").ToString());
                 }
-                MD_Any a0 = args.AS.MD_Tuple.A0;
-                MD_Any a1 = args.AS.MD_Tuple.A1;
+                MD_Any a0 = args.AS.MD_Tuple().A0;
+                MD_Any a1 = args.AS.MD_Tuple().A1;
                 switch (func_name_s)
                 {
                     case "same":
@@ -283,7 +283,7 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_plus_Arg_1_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(a0.AS.MD_Integer + a1.AS.MD_Integer);
+                        return m.MD_Integer(a0.AS.MD_Integer() + a1.AS.MD_Integer());
                     case "Array_at":
                         if (a0.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Array)
                         {
@@ -291,12 +291,12 @@ namespace Muldis.D.Ref_Eng.Core
                                 "X_Array_at_Arg_0_Not_Array").ToString());
                         }
                         if (a1.AS.MD_Foundation_Type != MD_Foundation_Type.MD_Integer
-                            || a1.AS.MD_Integer < 0)
+                            || a1.AS.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                         }
-                        MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.AS.MD_Integer);
+                        MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.AS.MD_Integer());
                         if (maybe_member == null)
                         {
                             throw new ArgumentException(
@@ -317,7 +317,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple.A0;
+                MD_Any v = args.AS.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     default:
@@ -346,13 +346,13 @@ namespace Muldis.D.Ref_Eng.Core
             switch (a0.AS.MD_Foundation_Type)
             {
                 case MD_Foundation_Type.MD_Boolean:
-                    return a0.AS.MD_Boolean == a1.AS.MD_Boolean;
+                    return a0.AS.MD_Boolean() == a1.AS.MD_Boolean();
                 case MD_Foundation_Type.MD_Integer:
-                    result = a0.AS.MD_Integer == a1.AS.MD_Integer;
+                    result = a0.AS.MD_Integer() == a1.AS.MD_Integer();
                     break;
                 case MD_Foundation_Type.MD_Array:
-                    MD_Array_Struct n0 = a0.AS.MD_Array;
-                    MD_Array_Struct n1 = a1.AS.MD_Array;
+                    MD_Array_Struct n0 = a0.AS.MD_Array();
+                    MD_Array_Struct n1 = a1.AS.MD_Array();
                     if (Object.ReferenceEquals(n0, n1))
                     {
                         result = true;
@@ -406,8 +406,8 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     break;
                 case MD_Foundation_Type.MD_Bag:
-                    MD_Bag_Struct bn0 = a0.AS.MD_Bag;
-                    MD_Bag_Struct bn1 = a1.AS.MD_Bag;
+                    MD_Bag_Struct bn0 = a0.AS.MD_Bag();
+                    MD_Bag_Struct bn1 = a1.AS.MD_Bag();
                     if (Object.ReferenceEquals(bn0, bn1))
                     {
                         result = true;
@@ -456,8 +456,8 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     break;
                 case MD_Foundation_Type.MD_Tuple:
-                    MD_Tuple_Struct ts0 = a0.AS.MD_Tuple;
-                    MD_Tuple_Struct ts1 = a1.AS.MD_Tuple;
+                    MD_Tuple_Struct ts0 = a0.AS.MD_Tuple();
+                    MD_Tuple_Struct ts1 = a1.AS.MD_Tuple();
                     // First test just that the Tuple headings are the same,
                     // and only if they are, compare the attribute values.
                     return (ts0.Degree == ts1.Degree)
@@ -479,8 +479,8 @@ namespace Muldis.D.Ref_Eng.Core
                         && (ts0.Multi_OA == null || Enumerable.All(ts0.Multi_OA,
                             attr => Any__same(attr.Value, ts1.Multi_OA[attr.Key])));
                 case MD_Foundation_Type.MD_Capsule:
-                    result = Any__same(a0.AS.MD_Capsule.Label, a1.AS.MD_Capsule.Label)
-                          && Any__same(a0.AS.MD_Capsule.Attrs, a1.AS.MD_Capsule.Attrs);
+                    result = Any__same(a0.AS.MD_Capsule().Label, a1.AS.MD_Capsule().Label)
+                          && Any__same(a0.AS.MD_Capsule().Attrs, a1.AS.MD_Capsule().Attrs);
                     break;
                 case MD_Foundation_Type.MD_Handle:
                     // Every Muldis D Handle object is always distinct from every other one.
@@ -513,7 +513,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Int64 Array__count(MD_Any array)
         {
-            return Array__node__tree_member_count(array.AS.MD_Array);
+            return Array__node__tree_member_count(array.AS.MD_Array());
         }
 
         private Int64 Array__node__tree_member_count(MD_Array_Struct node)
@@ -604,7 +604,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)
         {
-            return Array__node__maybe_at(array.AS.MD_Array, ord_pos);
+            return Array__node__maybe_at(array.AS.MD_Array(), ord_pos);
         }
 
         private MD_Any Array__node__maybe_at(MD_Array_Struct node, Int64 ord_pos)

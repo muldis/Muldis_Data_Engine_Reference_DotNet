@@ -186,7 +186,7 @@ namespace Muldis.D.Ref_Eng
                     }
                     return (IMD_Capsule)new MD_Capsule().init(m_machine, value);
                 case Core.MD_Foundation_Type.MD_Handle:
-                    switch (value.AS.MD_Handle.MD_Handle_Type)
+                    switch (value.AS.MD_Handle().MD_Handle_Type)
                     {
                         case Core.MD_Handle_Type.MD_Variable:
                             return (IMD_Variable)new MD_Variable().init(m_machine, value);
@@ -285,8 +285,8 @@ namespace Muldis.D.Ref_Eng
                             && denominator.GetType().FullName == "Muldis.D.Ref_Eng.Value.MD_Integer")
                         {
                             return Core_MD_Fraction(
-                                ((MD_Integer)numerator  ).m_value.AS.MD_Integer,
-                                ((MD_Integer)denominator).m_value.AS.MD_Integer
+                                ((MD_Integer)numerator  ).m_value.AS.MD_Integer(),
+                                ((MD_Integer)denominator).m_value.AS.MD_Integer()
                             );
                         }
                     }
@@ -632,8 +632,8 @@ namespace Muldis.D.Ref_Eng
             }
             return (IMD_Fraction)new MD_Fraction().init(m_machine,
                 Core_MD_Fraction(
-                    ((MD_Integer)numerator  ).m_value.AS.MD_Integer,
-                    ((MD_Integer)denominator).m_value.AS.MD_Integer
+                    ((MD_Integer)numerator  ).m_value.AS.MD_Integer(),
+                    ((MD_Integer)denominator).m_value.AS.MD_Integer()
                 )
             );
         }
@@ -1371,7 +1371,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
         public Boolean Export_Boolean()
         {
-            return m_value.AS.MD_Boolean.Value;
+            return m_value.AS.MD_Boolean().Value;
         }
     }
 
@@ -1379,13 +1379,13 @@ namespace Muldis.D.Ref_Eng.Value
     {
         public BigInteger Export_BigInteger()
         {
-            return m_value.AS.MD_Integer;
+            return m_value.AS.MD_Integer();
         }
 
         public Int32 Export_Int32()
         {
             // This will throw an OverflowException if the value is too large.
-            return (Int32)m_value.AS.MD_Integer;
+            return (Int32)m_value.AS.MD_Integer();
         }
     }
 
@@ -1450,7 +1450,7 @@ namespace Muldis.D.Ref_Eng.Value
         public IMD_Any Current()
         {
             return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
-                m_value.AS.MD_Handle.MD_Variable.Current_Value);
+                m_value.AS.MD_Handle().MD_Variable.Current_Value);
         }
 
         public void Assign(IMD_Any value)
@@ -1459,7 +1459,7 @@ namespace Muldis.D.Ref_Eng.Value
             {
                 throw new ArgumentNullException("value");
             }
-            m_value.AS.MD_Handle.MD_Variable.Current_Value = ((MD_Any)value).m_value;
+            m_value.AS.MD_Handle().MD_Variable.Current_Value = ((MD_Any)value).m_value;
         }
     }
 
@@ -1475,7 +1475,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
         public Object Export_External_Object()
         {
-            return m_value.AS.MD_Handle.MD_External.Value;
+            return m_value.AS.MD_Handle().MD_External.Value;
         }
     }
 

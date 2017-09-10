@@ -100,29 +100,19 @@ namespace Muldis.D.Ref_Eng.Core
         // representation formats for the sake of optimization.
         internal MD_Foundation_Type MD_Foundation_Type { get; set; }
 
-        // Iff MDFT is MD_Boolean, this field is the payload.
-        internal Nullable<Boolean> MD_Boolean { get; set; }
-
-        // Iff MDFT is MD_Integer, this field is the payload.
-        // While we conceptually could special case smaller integers with
-        // additional fields for performance, we won't, mainly to keep
-        // things simpler, and because BigInteger special-cases internally.
-        internal BigInteger MD_Integer { get; set; }
-
-        // Iff MDFT is MD_Array, this field is the payload.
-        internal MD_Array_Struct MD_Array { get; set; }
-
-        // Iff MDFT is MD_Bag, this field is the payload.
-        internal MD_Bag_Struct MD_Bag { get; set; }
-
-        // Iff MDFT is MD_Tuple, this field is the payload.
-        internal MD_Tuple_Struct MD_Tuple { get; set; }
-
-        // Iff MDFT is MD_Capsule, this field is the payload.
-        internal MD_Capsule_Struct MD_Capsule { get; set; }
-
-        // Iff MDFT is MD_Handle, this field is the payload.
-        internal MD_Handle_Struct MD_Handle { get; set; }
+        // Details of this Muldis D "value", in one of several possible
+        // specialized representation formats depending on the data type.
+        // Iff MDFT is MD_Boolean, this field holds a Nullable<Boolean>.
+        // Iff MDFT is MD_Integer, this field holds a BigInteger.
+            // While we conceptually could special case smaller integers with
+            // additional fields for performance, we won't, mainly to keep
+            // things simpler, and because BigInteger special-cases internally.
+        // Iff MDFT is MD_Array, this field holds a MD_Array_Struct.
+        // Iff MDFT is MD_Bag, this field holds a MD_Bag_Struct.
+        // Iff MDFT is MD_Tuple, this field holds a MD_Tuple_Struct.
+        // Iff MDFT is MD_Capsule, this field holds a MD_Capsule_Struct.
+        // Iff MDFT is MD_Handle, this field holds a MD_Handle_Struct.
+        internal Object Details { get; set; }
 
         // Set of well-known Muldis D types that this value is known to be
         // a member of.  This is calculated semi-lazily as needed.
@@ -139,6 +129,41 @@ namespace Muldis.D.Ref_Eng.Core
         // literal for selecting the value, in the form of character strings
         // whose character codepoints are typically in the 0..127 range.
         internal String Cached_MD_Any_Identity { get; set; }
+
+        internal Nullable<Boolean> MD_Boolean()
+        {
+            return (Nullable<Boolean>)Details;
+        }
+
+        internal BigInteger MD_Integer()
+        {
+            return (BigInteger)Details;
+        }
+
+        internal MD_Array_Struct MD_Array()
+        {
+            return (MD_Array_Struct)Details;
+        }
+
+        internal MD_Bag_Struct MD_Bag()
+        {
+            return (MD_Bag_Struct)Details;
+        }
+
+        internal MD_Tuple_Struct MD_Tuple()
+        {
+            return (MD_Tuple_Struct)Details;
+        }
+
+        internal MD_Capsule_Struct MD_Capsule()
+        {
+            return (MD_Capsule_Struct)Details;
+        }
+
+        internal MD_Handle_Struct MD_Handle()
+        {
+            return (MD_Handle_Struct)Details;
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
