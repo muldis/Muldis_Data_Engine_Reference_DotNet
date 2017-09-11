@@ -73,6 +73,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Integer_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Bits:
                     return Bits_Literal(value);
+                case MD_Well_Known_Base_Type.MD_Blob:
+                    return Blob_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Array:
                     return Array_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Bag:
@@ -83,10 +85,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
                     {
                         return Fraction_Literal(value);
-                    }
-                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Blob))
-                    {
-                        return Blob_Literal(value);
                     }
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Text))
                     {
@@ -160,38 +158,13 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Blob_Literal(MD_Any value)
         {
-            Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
-            return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~+''"
-                : @"\~+'0x" + Blob_Literal__node__tree(array.AS.MD_Array()) + "'";
-        }
-
-        private String Blob_Literal__node__tree(MD_Array_Struct node)
-        {
-            return (node.Pred_Members == null ? ""
-                    : Blob_Literal__node__tree(node.Pred_Members))
-                + Blob_Literal__node__local(node)
-                + (node.Succ_Members == null ? ""
-                    : Blob_Literal__node__tree(node.Succ_Members));
-        }
-
-        private String Blob_Literal__node__local(MD_Array_Struct node)
-        {
-            switch (node.Local_Widest_Type)
+            if (Object.ReferenceEquals(value, value.AS.Memory.MD_Blob_C0))
             {
-                case Widest_Component_Type.None:
-                    return "";
-                case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Octet:
-                    return String.Concat(Enumerable.Select(
-                        node.Local_Octet_Members,
-                        m => m.ToString("X2")));
-                case Widest_Component_Type.Codepoint:
-                    throw new NotImplementedException();
-                default:
-                    throw new NotImplementedException();
+                return @"\~+''";
             }
+            return @"\~+'0x" + String.Concat(
+                    Enumerable.Select(value.AS.MD_Blob(), m => m.ToString("X2"))
+                ) + "'";
         }
 
         private String Text_Literal(MD_Any value)
@@ -219,8 +192,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case Widest_Component_Type.None:
                     return "";
                 case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Octet:
                     throw new NotImplementedException();
                 case Widest_Component_Type.Codepoint:
                     return node.Local_Codepoint_Members;
@@ -333,10 +304,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return String.Concat(Enumerable.Select(
                         node.Local_Unrestricted_Members,
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
-                case Widest_Component_Type.Octet:
-                    return String.Concat(Enumerable.Select(
-                        node.Local_Octet_Members,
-                        m => indent + Integer_Literal(m) + ",\u000A"));
                 case Widest_Component_Type.Codepoint:
                     String s = node.Local_Codepoint_Members;
                     List<Int32> cpa = new List<Int32>(s.Length);

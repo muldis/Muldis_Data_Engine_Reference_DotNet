@@ -132,6 +132,13 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
+            MD_Blob_C0 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
+                Details = new Byte[] {},
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
+
             MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
@@ -296,15 +303,6 @@ namespace Muldis.D.Ref_Eng.Core
                 )
             );
             MD_Fraction_0.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
-
-            MD_Blob_C0 = MD_Capsule(
-                MD_Attr_Name("Blob"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>(
-                        "octets", MD_Array_C0)
-                )
-            );
-            MD_Blob_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Blob);
 
             MD_Text_C0 = MD_Capsule(
                 MD_Attr_Name("Text"),
@@ -526,25 +524,12 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Blob_C0;
             }
-            MD_Any array = new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
-                Details = new MD_Array_Struct {
-                    Tree_Widest_Type = Widest_Component_Type.Octet,
-                    Local_Multiplicity = 1,
-                    Local_Widest_Type = Widest_Component_Type.Octet,
-                    Local_Octet_Members = members,
-                },
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
+                Details = members,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
-            MD_Any blob = MD_Capsule(
-                MD_Attr_Name("Blob"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>("octets", array)
-                )
-            );
-            blob.AS.Cached_WKT.Add(MD_Well_Known_Type.Blob);
-            return blob;
         }
 
         internal MD_Any MD_Text(String members, Nullable<Boolean> has_any_non_BMP = null)
@@ -1065,8 +1050,6 @@ namespace Muldis.D.Ref_Eng.Core
                             : Array__Pick_Random_Struct_Member(node.Succ_Members));
                 case Widest_Component_Type.Unrestricted:
                     return node.Local_Unrestricted_Members[0];
-                case Widest_Component_Type.Octet:
-                    throw new NotImplementedException();
                 case Widest_Component_Type.Codepoint:
                     throw new NotImplementedException();
                 default:
@@ -1136,7 +1119,6 @@ namespace Muldis.D.Ref_Eng.Core
                                     && Tuple__Same_Heading(m, m0)
                             );
                         break;
-                    case Widest_Component_Type.Octet:
                     case Widest_Component_Type.Codepoint:
                         node.Cached_Local_Relational = false;
                         break;

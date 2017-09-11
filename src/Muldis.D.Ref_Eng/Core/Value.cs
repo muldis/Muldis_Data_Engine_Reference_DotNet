@@ -21,6 +21,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Boolean,
         MD_Integer,
         MD_Bits,
+        MD_Blob,
         MD_Array,
         MD_Bag,
         MD_Tuple,
@@ -120,6 +121,8 @@ namespace Muldis.D.Ref_Eng.Core
             // things simpler, and because BigInteger special-cases internally.
         // Iff MSBT is MD_Bits, this field holds a BitArray.
             // Consider a MD_Bits_Struct if we want symbolic like MD_Array.
+        // Iff MSBT is MD_Blob, this field holds a Byte[].
+            // Consider a MD_Blob_Struct if we want symbolic like MD_Array.
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
@@ -159,6 +162,11 @@ namespace Muldis.D.Ref_Eng.Core
         internal BitArray MD_Bits()
         {
             return (BitArray)Details;
+        }
+
+        internal Byte[] MD_Blob()
+        {
+            return (Byte[])Details;
         }
 
         internal MD_Array_Struct MD_Array()
@@ -212,7 +220,6 @@ namespace Muldis.D.Ref_Eng.Core
     {
         None,
         Unrestricted,
-        Octet,
         Codepoint,
     }
 
@@ -294,14 +301,6 @@ namespace Muldis.D.Ref_Eng.Core
         // A List<MD_Any> is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         internal List<MD_Any> Local_Unrestricted_Members { get; set; }
-
-        // Iff LWT is Octet, this field is the payload.
-        // Represents a Muldis D Array value where each member value is
-        // a Muldis D Integer in the range 0..255.
-        // A Byte[] is the simplest storage representation for that
-        // type which doesn't internally use trees for sharing or multipliers.
-        // This is the canonical storage type for a regular octet (byte) string.
-        internal Byte[] Local_Octet_Members { get; set; }
 
         // Iff LWT is Codepoint, this field is the payload.
         // Represents a Muldis D Array value where each member value is
