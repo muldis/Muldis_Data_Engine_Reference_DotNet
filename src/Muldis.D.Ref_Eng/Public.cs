@@ -136,6 +136,8 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Bits)new MD_Bits().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Blob:
                     return (IMD_Blob)new MD_Blob().init(m_machine, value);
+                case Core.MD_Well_Known_Base_Type.MD_Text:
+                    return (IMD_Text)new MD_Text().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Array:
                     return (IMD_Array)new MD_Array().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Bag:
@@ -150,10 +152,6 @@ namespace Muldis.D.Ref_Eng
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Fraction))
                     {
                         return (IMD_Fraction)new MD_Fraction().init(m_machine, value);
-                    }
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Text))
-                    {
-                        return (IMD_Text)new MD_Text().init(m_machine, value);
                     }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Set))
                     {

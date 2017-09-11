@@ -75,6 +75,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Bits_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Blob:
                     return Blob_Literal(value);
+                case MD_Well_Known_Base_Type.MD_Text:
+                    return Text_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Array:
                     return Array_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Bag:
@@ -85,10 +87,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
                     {
                         return Fraction_Literal(value);
-                    }
-                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Text))
-                    {
-                        return Text_Literal(value);
                     }
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Set))
                     {
@@ -169,35 +167,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Text_Literal(MD_Any value)
         {
-            Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
-            return Object.ReferenceEquals(array, m.MD_Array_C0) ? "''"
-                : "'" + Quoted_Name_Or_Text_Segment_Content(
-                    Text_Literal__node__tree(array.AS.MD_Array())) + "'";
-        }
-
-        private String Text_Literal__node__tree(MD_Array_Struct node)
-        {
-            return (node.Pred_Members == null ? ""
-                    : Text_Literal__node__tree(node.Pred_Members))
-                + Text_Literal__node__local(node)
-                + (node.Succ_Members == null ? ""
-                    : Text_Literal__node__tree(node.Succ_Members));
-        }
-
-        private String Text_Literal__node__local(MD_Array_Struct node)
-        {
-            switch (node.Local_Widest_Type)
+            if (Object.ReferenceEquals(value, value.AS.Memory.MD_Text_C0))
             {
-                case Widest_Component_Type.None:
-                    return "";
-                case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Codepoint:
-                    return node.Local_Codepoint_Members;
-                default:
-                    throw new NotImplementedException();
+                return "''";
             }
+            return "'" + Quoted_Name_Or_Text_Segment_Content(
+                value.AS.MD_Text().Codepoint_Members) + "'";
         }
 
         private String Quoted_Name_Or_Text_Segment_Content(String value)
@@ -304,24 +279,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return String.Concat(Enumerable.Select(
                         node.Local_Unrestricted_Members,
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
-                case Widest_Component_Type.Codepoint:
-                    String s = node.Local_Codepoint_Members;
-                    List<Int32> cpa = new List<Int32>(s.Length);
-                    for (Int32 i = 0; i < s.Length; i++)
-                    {
-                        if ((i+1) < s.Length
-                            && Char.IsSurrogatePair(s[i], s[i+1]))
-                        {
-                            cpa.Add(Char.ConvertToUtf32(s[i], s[i+1]));
-                            i++;
-                        }
-                        else
-                        {
-                            cpa.Add(s[i]);
-                        }
-                    }
-                    return String.Concat(Enumerable.Select(
-                        cpa, m => indent + Integer_Literal(m) + ",\u000A"));
                 default:
                     throw new NotImplementedException();
             }
@@ -449,7 +406,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return value.AS.Memory.MD_Text(
                 "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
                 + "meta foundational\u000A"
-                + Any_Selector(value, "") + "\u000A"
+                + Any_Selector(value, "") + "\u000A",
+                false
             );
         }
 
@@ -457,13 +415,19 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         {
             return memory.MD_Text(
                 "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
-                + "meta foundational\u000A"
+                + "meta foundational\u000A",
+                false
             );
         }
 
         internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit_Subject(MD_Any value)
         {
-            return value.AS.Memory.MD_Text(Any_Selector(value, "") + "\u000A");
+            String s = Any_Selector(value, "") + "\u000A";
+            return value.AS.Memory.MD_Text(
+                s,
+                (value.AS.Memory.Test_Dot_Net_String(s)
+                    == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+            );
         }
 
         protected override String Any_Selector(MD_Any value, String indent)

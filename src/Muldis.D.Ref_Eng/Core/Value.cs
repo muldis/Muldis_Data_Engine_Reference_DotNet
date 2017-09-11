@@ -22,6 +22,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Integer,
         MD_Bits,
         MD_Blob,
+        MD_Text,
         MD_Array,
         MD_Bag,
         MD_Tuple,
@@ -123,6 +124,7 @@ namespace Muldis.D.Ref_Eng.Core
             // Consider a MD_Bits_Struct if we want symbolic like MD_Array.
         // Iff MSBT is MD_Blob, this field holds a Byte[].
             // Consider a MD_Blob_Struct if we want symbolic like MD_Array.
+        // Iff MSBT is MD_Text, this field holds a MD_Text_Struct.
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
@@ -169,6 +171,11 @@ namespace Muldis.D.Ref_Eng.Core
             return (Byte[])Details;
         }
 
+        internal MD_Text_Struct MD_Text()
+        {
+            return (MD_Text_Struct)Details;
+        }
+
         internal MD_Array_Struct MD_Array()
         {
             return (MD_Array_Struct)Details;
@@ -210,6 +217,53 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
+    // Muldis.D.Ref_Eng.Core.MD_Text_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Text,
+    // an MD_Text_Struct is used by it to hold the MD_Text-specific details.
+
+    internal class MD_Text_Struct
+    {
+        // Represents a Muldis D Text value where each member value is
+        // a Muldis D Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
+        // A .Net String is the simplest storage representation for that
+        // type which doesn't internally use trees for sharing or multipliers.
+        // This is the canonical storage type for a regular character string.
+        // Each logical member represents a single Unicode standard character
+        // codepoint from either the Basic Multilingual Plane (BMP), which
+        // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
+        // or from either of the 16 supplementary planes, which is those
+        // member values in the range {0x10000..0x10FFFF}.
+        // Codepoint_Members is represented using a standard .Net
+        // String value for simplicity but a String has a different native
+        // concept of components; it is formally an array of .Net Char
+        // each of which is either a whole BMP codepoint or half of a
+        // non-BMP codepoint; a non-BMP codepoint is represented by a pair
+        // of consecutive Char with numeric values in {0xD800..0xDFFF};
+        // therefore, the native "length" of a String only matches the
+        // "length" of the Muldis D Text when all codepoints are in the BMP.
+        // While it is possible for a .Net String to contain an isolated
+        // "surrogate" Char outside of a proper "surrogate pair", both
+        // Muldis.DBP and Muldis.D.Ref_Eng forbid such a malformed String
+        // from either being used internally or being passed in by the API.
+        internal String Codepoint_Members { get; set; }
+
+        // Nullable Boolean
+        // This is true iff we know that at least 1 Codepoint member is NOT
+        // in the Basic Multilingual Plane (BMP); this is false iff we know
+        // that there is no such Codepoint member.  That is, with respect
+        // to a .Net String, this is true iff we know the String has at least
+        // 1 "surrogate pair".  We cache this knowledge because a .Net String
+        // with any non-BMP Char is more complicated to count the members
+        // of or access members by ordinal position or do some other stuff.
+        // This field is always defined as a side-effect of Muldis.D.Ref_Eng
+        // forbidding a malformed String and so they are always tested at
+        // the borders, that test also revealing if a String has non-BMP chars.
+        internal Boolean Has_Any_Non_BMP { get; set; }
+
+        // Cached count of codepoint members of the Muldis D Text.
+        internal Nullable<Int64> Cached_Member_Count { get; set; }
+    }
+
     // Muldis.D.Ref_Eng.Core.Widest_Component_Type
     // Enumerates the levels of restriction that a collection's elements
     // would conform to, which can help set an optimized storage strategy.
@@ -220,7 +274,6 @@ namespace Muldis.D.Ref_Eng.Core
     {
         None,
         Unrestricted,
-        Codepoint,
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Struct
@@ -301,41 +354,6 @@ namespace Muldis.D.Ref_Eng.Core
         // A List<MD_Any> is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         internal List<MD_Any> Local_Unrestricted_Members { get; set; }
-
-        // Iff LWT is Codepoint, this field is the payload.
-        // Represents a Muldis D Array value where each member value is
-        // a Muldis D Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
-        // A .Net String is the simplest storage representation for that
-        // type which doesn't internally use trees for sharing or multipliers.
-        // This is the canonical storage type for a regular character string.
-        // Each logical member represents a single Unicode standard character
-        // codepoint from either the Basic Multilingual Plane (BMP), which
-        // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
-        // or from either of the 16 supplementary planes, which is those
-        // member values in the range {0x10000..0x10FFFF}.
-        // Local_Codepoint_Members is represented using a standard .Net
-        // String value for simplicity but a String has a different native
-        // concept of components; it is formally an array of .Net Char
-        // each of which is either a whole BMP codepoint or half of a
-        // non-BMP codepoint; a non-BMP codepoint is represented by a pair
-        // of consecutive Char with numeric values in {0xD800..0xDFFF};
-        // therefore, the native "length" of a String only matches the
-        // "length" of the Muldis D Array when all codepoints are in the BMP.
-        // While it is possible for a .Net String to contain an isolated
-        // "surrogate" Char outside of a proper "surrogate pair", both
-        // Muldis.DBP and Muldis.D.Ref_Eng forbid such a malformed String
-        // from either being used internally or being passed in by the API.
-        internal String Local_Codepoint_Members { get; set; }
-
-        // Nullable Boolean
-        // This is true iff we know that at least 1 Codepoint member is NOT
-        // in the Basic Multilingual Plane (BMP); this is false iff we know
-        // that there is no such Codepoint member.  That is, with respect
-        // to a .Net String, this is true iff we know the String has at least
-        // 1 "surrogate pair".  We cache this knowledge because a .Net String
-        // with any non-BMP Char is more complicated to count the members
-        // of or access members by ordinal position or do some other stuff.
-        internal Nullable<Boolean> Cached_Local_Any_Non_BMP { get; set; }
 
         // Iff there is at least 1 predecessor member of the "local" ones,
         // this subtree says what they are.

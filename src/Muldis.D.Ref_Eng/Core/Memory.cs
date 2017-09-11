@@ -139,6 +139,17 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
+            MD_Text_C0 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
+                Details = new MD_Text_Struct {
+                    Codepoint_Members = "",
+                    Has_Any_Non_BMP = false,
+                    Cached_Member_Count = 0,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
+
             MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
@@ -303,15 +314,6 @@ namespace Muldis.D.Ref_Eng.Core
                 )
             );
             MD_Fraction_0.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
-
-            MD_Text_C0 = MD_Capsule(
-                MD_Attr_Name("Text"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>(
-                        "unicode_codes", MD_Array_C0)
-                )
-            );
-            MD_Text_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Text);
 
             MD_Set_C0 = MD_Capsule(
                 MD_Attr_Name("Set"),
@@ -532,33 +534,21 @@ namespace Muldis.D.Ref_Eng.Core
             } };
         }
 
-        internal MD_Any MD_Text(String members, Nullable<Boolean> has_any_non_BMP = null)
+        internal MD_Any MD_Text(String members, Boolean has_any_non_BMP)
         {
             if (members == "")
             {
                 return MD_Text_C0;
             }
-            MD_Any array = new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
-                Details = new MD_Array_Struct {
-                    Tree_Widest_Type = Widest_Component_Type.Codepoint,
-                    Local_Multiplicity = 1,
-                    Local_Widest_Type = Widest_Component_Type.Codepoint,
-                    Local_Codepoint_Members = members,
-                    Cached_Local_Any_Non_BMP = has_any_non_BMP,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
+                Details = new MD_Text_Struct {
+                    Codepoint_Members = members,
+                    Has_Any_Non_BMP = has_any_non_BMP,
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
-            MD_Any text = MD_Capsule(
-                MD_Attr_Name("Text"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>(
-                        "unicode_codes", array)
-                )
-            );
-            text.AS.Cached_WKT.Add(MD_Well_Known_Type.Text);
-            return text;
         }
 
         internal MD_Any MD_Array(List<MD_Any> members)
@@ -1050,8 +1040,6 @@ namespace Muldis.D.Ref_Eng.Core
                             : Array__Pick_Random_Struct_Member(node.Succ_Members));
                 case Widest_Component_Type.Unrestricted:
                     return node.Local_Unrestricted_Members[0];
-                case Widest_Component_Type.Codepoint:
-                    throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
             }
@@ -1118,9 +1106,6 @@ namespace Muldis.D.Ref_Eng.Core
                                         == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m, m0)
                             );
-                        break;
-                    case Widest_Component_Type.Codepoint:
-                        node.Cached_Local_Relational = false;
                         break;
                     default:
                         throw new NotImplementedException();
