@@ -232,7 +232,7 @@ namespace Muldis.D.Ref_Eng.Core
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
                                 Cached_Tree_All_Unique = true,
-                                Local_Symbolic_Type = Symbolic_Value_Type.Unique,
+                                Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                                 Primary_Arg = v.AS.MD_Bag(),
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -419,28 +419,28 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     switch (bn0.Local_Symbolic_Type)
                     {
-                        case Symbolic_Value_Type.None:
+                        case Symbolic_Bag_Type.None:
                             // In theory we should never get here assuming that
                             // the empty Bag is optimized to return a constant
                             // at selection time, but we will check anyway.
                             result = true;
                             break;
-                        case Symbolic_Value_Type.Singular:
+                        case Symbolic_Bag_Type.Singular:
                             result = ((bn0.Local_Singular_Members.Multiplicity
                                     == bn1.Local_Singular_Members.Multiplicity)
                                 && Any__same(bn0.Local_Singular_Members.Member,
                                     bn1.Local_Singular_Members.Member));
                             break;
-                        case Symbolic_Value_Type.Arrayed:
-                        case Symbolic_Value_Type.Indexed:
-                        case Symbolic_Value_Type.Unique:
-                        case Symbolic_Value_Type.Insert_N:
-                        case Symbolic_Value_Type.Remove_N:
-                        case Symbolic_Value_Type.Member_Plus:
-                        case Symbolic_Value_Type.Except:
-                        case Symbolic_Value_Type.Intersect:
-                        case Symbolic_Value_Type.Union:
-                        case Symbolic_Value_Type.Exclusive:
+                        case Symbolic_Bag_Type.Arrayed:
+                        case Symbolic_Bag_Type.Indexed:
+                        case Symbolic_Bag_Type.Unique:
+                        case Symbolic_Bag_Type.Insert_N:
+                        case Symbolic_Bag_Type.Remove_N:
+                        case Symbolic_Bag_Type.Member_Plus:
+                        case Symbolic_Bag_Type.Except:
+                        case Symbolic_Bag_Type.Intersect:
+                        case Symbolic_Bag_Type.Union:
+                        case Symbolic_Bag_Type.Exclusive:
                             // For now skip the more complicated cases where
                             // further processing is required in order to
                             // properly compare the 2 Bag for logical equality.

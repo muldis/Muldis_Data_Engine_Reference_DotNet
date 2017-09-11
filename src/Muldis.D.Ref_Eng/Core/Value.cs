@@ -364,12 +364,12 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Array_Struct Succ_Members { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Symbolic_Value_Type
-    // Enumerates the various ways that a collection can be defined
+    // Muldis.D.Ref_Eng.Core.Symbolic_Bag_Type
+    // Enumerates the various ways that a MD_Bag collection can be defined
     // symbolically in terms of other collections.
     // None means the collection simply has zero members.
 
-    internal enum Symbolic_Value_Type
+    internal enum Symbolic_Bag_Type
     {
         None,
         Singular,
@@ -460,7 +460,7 @@ namespace Muldis.D.Ref_Eng.Core
         // the multiset union of Primary_Arg and Extra_Arg.
         // Iff LST is Exclusive, this Bag's members are defined as
         // the multiset symmetric difference of Primary_Arg and Extra_Arg.
-        internal Symbolic_Value_Type Local_Symbolic_Type { get; set; }
+        internal Symbolic_Bag_Type Local_Symbolic_Type { get; set; }
 
         // Cached count of members defined by the Local_*_Members fields as
         // they are defined in isolation, meaning it is positive (or zero)

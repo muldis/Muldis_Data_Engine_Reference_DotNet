@@ -174,7 +174,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Cached_Tree_Member_Count = 0,
                     Cached_Tree_All_Unique = true,
                     Cached_Tree_Relational = true,
-                    Local_Symbolic_Type = Symbolic_Value_Type.None,
+                    Local_Symbolic_Type = Symbolic_Bag_Type.None,
                     Cached_Local_Member_Count = 0,
                     Cached_Local_All_Unique = true,
                     Cached_Local_Relational = true,
@@ -387,7 +387,7 @@ namespace Muldis.D.Ref_Eng.Core
                                 Cached_Tree_All_Unique = true,
                                 Cached_Tree_Relational = true,
                                 Local_Symbolic_Type
-                                    = Symbolic_Value_Type.Singular,
+                                    = Symbolic_Bag_Type.Singular,
                                 Cached_Local_Member_Count = 1,
                                 Cached_Local_All_Unique = true,
                                 Cached_Local_Relational = true,
@@ -597,7 +597,7 @@ namespace Muldis.D.Ref_Eng.Core
                 return MD_Bag_C0;
             }
             MD_Bag_Struct arrayed_node = new MD_Bag_Struct {
-                Local_Symbolic_Type = Symbolic_Value_Type.Arrayed,
+                Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
                 Local_Arrayed_Members = members,
             };
             MD_Bag_Struct root_node = arrayed_node;
@@ -605,7 +605,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 root_node = new MD_Bag_Struct {
                     Cached_Tree_All_Unique = true,
-                    Local_Symbolic_Type = Symbolic_Value_Type.Unique,
+                    Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                     Primary_Arg = arrayed_node,
                 };
             }
@@ -925,16 +925,16 @@ namespace Muldis.D.Ref_Eng.Core
             // otherwise would be used; None/Singular still also used.
             switch (node.Local_Symbolic_Type)
             {
-                case Symbolic_Value_Type.None:
+                case Symbolic_Bag_Type.None:
                     // Node is already collapsed.
                     // In theory we should never get here assuming that any
                     // operations which would knowingly result in the empty
                     // Bag are optimized to return MD_Bag_C0 directly.
                     return MD_Bag_C0.AS.MD_Bag();
-                case Symbolic_Value_Type.Singular:
+                case Symbolic_Bag_Type.Singular:
                     // Node is already collapsed.
                     return node;
-                case Symbolic_Value_Type.Arrayed:
+                case Symbolic_Bag_Type.Arrayed:
                     if (!want_indexed)
                     {
                         // Node is already collapsed.
@@ -958,29 +958,29 @@ namespace Muldis.D.Ref_Eng.Core
                         Cached_Tree_Member_Count = ary_src_list.Count,
                         Cached_Tree_All_Unique = node.Cached_Local_All_Unique,
                         Cached_Tree_Relational = node.Cached_Local_Relational,
-                        Local_Symbolic_Type = Symbolic_Value_Type.Indexed,
+                        Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
                         Cached_Local_Member_Count = ary_src_list.Count,
                         Cached_Local_All_Unique = node.Cached_Local_All_Unique,
                         Cached_Local_Relational = node.Cached_Local_Relational,
                         Local_Indexed_Members = ary_res_dict,
                     };
-                case Symbolic_Value_Type.Indexed:
+                case Symbolic_Bag_Type.Indexed:
                     // Node is already collapsed.
                     return node;
-                case Symbolic_Value_Type.Unique:
+                case Symbolic_Bag_Type.Unique:
                     MD_Bag_Struct uni_pa = Bag__Collapsed_Struct(
                         node: node.Primary_Arg, want_indexed: true);
-                    if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.None)
+                    if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.None)
                     {
                         return uni_pa;
                     }
-                    if (uni_pa.Local_Symbolic_Type == Symbolic_Value_Type.Singular)
+                    if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.Singular)
                     {
                         return new MD_Bag_Struct {
                             Cached_Tree_Member_Count = 1,
                             Cached_Tree_All_Unique = true,
                             Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
-                            Local_Symbolic_Type = Symbolic_Value_Type.Singular,
+                            Local_Symbolic_Type = Symbolic_Bag_Type.Singular,
                             Cached_Local_Member_Count = 1,
                             Cached_Local_All_Unique = true,
                             Cached_Local_Relational = uni_pa.Cached_Local_Relational,
@@ -994,26 +994,26 @@ namespace Muldis.D.Ref_Eng.Core
                         Cached_Tree_Member_Count = uni_src_dict.Count,
                         Cached_Tree_All_Unique = true,
                         Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
-                        Local_Symbolic_Type = Symbolic_Value_Type.Indexed,
+                        Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
                         Cached_Local_Member_Count = uni_src_dict.Count,
                         Cached_Local_All_Unique = true,
                         Cached_Local_Relational = uni_pa.Cached_Local_Relational,
                         Local_Indexed_Members = uni_src_dict.ToDictionary(
                             m => m.Key, m => new Multiplied_Member(m.Key, 1)),
                     };
-                case Symbolic_Value_Type.Insert_N:
+                case Symbolic_Bag_Type.Insert_N:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Remove_N:
+                case Symbolic_Bag_Type.Remove_N:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Member_Plus:
+                case Symbolic_Bag_Type.Member_Plus:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Except:
+                case Symbolic_Bag_Type.Except:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Intersect:
+                case Symbolic_Bag_Type.Intersect:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Union:
+                case Symbolic_Bag_Type.Union:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Exclusive:
+                case Symbolic_Bag_Type.Exclusive:
                     throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
@@ -1139,32 +1139,32 @@ namespace Muldis.D.Ref_Eng.Core
             }
             switch (node.Local_Symbolic_Type)
             {
-                case Symbolic_Value_Type.None:
+                case Symbolic_Bag_Type.None:
                     return null;
-                case Symbolic_Value_Type.Singular:
+                case Symbolic_Bag_Type.Singular:
                     return node.Local_Singular_Members.Member;
-                case Symbolic_Value_Type.Arrayed:
+                case Symbolic_Bag_Type.Arrayed:
                     return node.Local_Arrayed_Members.Count == 0 ? null
                         : node.Local_Arrayed_Members[0].Member;
-                case Symbolic_Value_Type.Indexed:
+                case Symbolic_Bag_Type.Indexed:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Unique:
+                case Symbolic_Bag_Type.Unique:
                     return Bag__Pick_Random_Struct_Member(node.Primary_Arg);
-                case Symbolic_Value_Type.Insert_N:
+                case Symbolic_Bag_Type.Insert_N:
                     return node.Local_Singular_Members.Member;
-                case Symbolic_Value_Type.Remove_N:
+                case Symbolic_Bag_Type.Remove_N:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Member_Plus:
+                case Symbolic_Bag_Type.Member_Plus:
                     return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
                         ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
-                case Symbolic_Value_Type.Except:
+                case Symbolic_Bag_Type.Except:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Intersect:
+                case Symbolic_Bag_Type.Intersect:
                     throw new NotImplementedException();
-                case Symbolic_Value_Type.Union:
+                case Symbolic_Bag_Type.Union:
                     return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
                         ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
-                case Symbolic_Value_Type.Exclusive:
+                case Symbolic_Bag_Type.Exclusive:
                     throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
@@ -1183,16 +1183,16 @@ namespace Muldis.D.Ref_Eng.Core
                 Boolean tr = true;
                 switch (node.Local_Symbolic_Type)
                 {
-                    case Symbolic_Value_Type.None:
-                    case Symbolic_Value_Type.Singular:
-                    case Symbolic_Value_Type.Arrayed:
-                    case Symbolic_Value_Type.Indexed:
+                    case Symbolic_Bag_Type.None:
+                    case Symbolic_Bag_Type.Singular:
+                    case Symbolic_Bag_Type.Arrayed:
+                    case Symbolic_Bag_Type.Indexed:
                         tr = Bag__Local_Relational(node);
                         break;
-                    case Symbolic_Value_Type.Unique:
+                    case Symbolic_Bag_Type.Unique:
                         tr = Bag__Tree_Relational(node.Primary_Arg);
                         break;
-                    case Symbolic_Value_Type.Insert_N:
+                    case Symbolic_Bag_Type.Insert_N:
                         tr = Bag__Local_Relational(node);
                         MD_Any lsm = node.Local_Singular_Members.Member;
                         MD_Any pm0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
@@ -1202,8 +1202,8 @@ namespace Muldis.D.Ref_Eng.Core
                                 && Tuple__Same_Heading(pm0, lsm);
                         }
                         break;
-                    case Symbolic_Value_Type.Member_Plus:
-                    case Symbolic_Value_Type.Union:
+                    case Symbolic_Bag_Type.Member_Plus:
+                    case Symbolic_Bag_Type.Union:
                         tr = Bag__Tree_Relational(node.Primary_Arg)
                             && Bag__Tree_Relational(node.Extra_Arg);
                         MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
@@ -1213,10 +1213,10 @@ namespace Muldis.D.Ref_Eng.Core
                             tr = tr && Tuple__Same_Heading(pam0, eam0);
                         }
                         break;
-                    case Symbolic_Value_Type.Remove_N:
-                    case Symbolic_Value_Type.Except:
-                    case Symbolic_Value_Type.Intersect:
-                    case Symbolic_Value_Type.Exclusive:
+                    case Symbolic_Bag_Type.Remove_N:
+                    case Symbolic_Bag_Type.Except:
+                    case Symbolic_Bag_Type.Intersect:
+                    case Symbolic_Bag_Type.Exclusive:
                         throw new NotImplementedException();
                     default:
                         throw new NotImplementedException();
@@ -1232,23 +1232,23 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 switch (node.Local_Symbolic_Type)
                 {
-                    case Symbolic_Value_Type.None:
-                    case Symbolic_Value_Type.Unique:
-                    case Symbolic_Value_Type.Member_Plus:
-                    case Symbolic_Value_Type.Except:
-                    case Symbolic_Value_Type.Intersect:
-                    case Symbolic_Value_Type.Union:
-                    case Symbolic_Value_Type.Exclusive:
+                    case Symbolic_Bag_Type.None:
+                    case Symbolic_Bag_Type.Unique:
+                    case Symbolic_Bag_Type.Member_Plus:
+                    case Symbolic_Bag_Type.Except:
+                    case Symbolic_Bag_Type.Intersect:
+                    case Symbolic_Bag_Type.Union:
+                    case Symbolic_Bag_Type.Exclusive:
                         node.Cached_Local_Relational = true;
                         break;
-                    case Symbolic_Value_Type.Singular:
-                    case Symbolic_Value_Type.Insert_N:
-                    case Symbolic_Value_Type.Remove_N:
+                    case Symbolic_Bag_Type.Singular:
+                    case Symbolic_Bag_Type.Insert_N:
+                    case Symbolic_Bag_Type.Remove_N:
                         node.Cached_Local_Relational
                             = node.Local_Singular_Members.Member.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
-                    case Symbolic_Value_Type.Arrayed:
+                    case Symbolic_Bag_Type.Arrayed:
                         if (node.Local_Arrayed_Members.Count == 0)
                         {
                             node.Cached_Local_Relational = true;
@@ -1267,7 +1267,7 @@ namespace Muldis.D.Ref_Eng.Core
                                 );
                         }
                         break;
-                    case Symbolic_Value_Type.Indexed:
+                    case Symbolic_Bag_Type.Indexed:
                         throw new NotImplementedException();
                     default:
                         throw new NotImplementedException();
