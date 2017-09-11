@@ -349,6 +349,9 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Well_Known_Base_Type.MD_Integer:
                     result = a0.AS.MD_Integer() == a1.AS.MD_Integer();
                     break;
+                case MD_Well_Known_Base_Type.MD_Bits:
+                    //throw new NotImplementedException();
+                    return false;  // TODO; meanwhile we compare like a reference type
                 case MD_Well_Known_Base_Type.MD_Array:
                     MD_Array_Struct n0 = a0.AS.MD_Array();
                     MD_Array_Struct n1 = a1.AS.MD_Array();
@@ -389,9 +392,6 @@ namespace Muldis.D.Ref_Eng.Core
                                 n0.Local_Unrestricted_Members,
                                 n1.Local_Unrestricted_Members);
                             break;
-                        case Widest_Component_Type.Bit:
-                            //throw new NotImplementedException();
-                            return false;  // TODO; meanwhile we compare like a reference type
                         case Widest_Component_Type.Octet:
                             result = Enumerable.SequenceEqual(
                                 n0.Local_Octet_Members, n1.Local_Octet_Members);
@@ -513,6 +513,11 @@ namespace Muldis.D.Ref_Eng.Core
             return result;
         }
 
+        internal Int64 Bits__count(MD_Any bits)
+        {
+            return bits.AS.MD_Bits().Length;
+        }
+
         internal Int64 Array__count(MD_Any array)
         {
             return Array__node__tree_member_count(array.AS.MD_Array());
@@ -545,10 +550,6 @@ namespace Muldis.D.Ref_Eng.Core
                     case Widest_Component_Type.Unrestricted:
                         node.Cached_Local_Member_Count
                             = lm * node.Local_Unrestricted_Members.Count;
-                        break;
-                    case Widest_Component_Type.Bit:
-                        node.Cached_Local_Member_Count
-                            = lm * node.Local_Bit_Members.Length;
                         break;
                     case Widest_Component_Type.Octet:
                         node.Cached_Local_Member_Count
@@ -604,6 +605,11 @@ namespace Muldis.D.Ref_Eng.Core
             return (Boolean)node.Cached_Local_Any_Non_BMP;
         }
 
+        private MD_Any Bits__maybe_at(MD_Any bits, Int64 ord_pos)
+        {
+            return Memory.MD_Integer(bits.AS.MD_Bits()[(Int32)ord_pos] ? 1 : 0);
+        }
+
         private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)
         {
             return Array__node__maybe_at(array.AS.MD_Array(), ord_pos);
@@ -647,10 +653,6 @@ namespace Muldis.D.Ref_Eng.Core
                     {
                         case Widest_Component_Type.Unrestricted:
                             return node.Local_Unrestricted_Members[(Int32)ord_pos_within_local];
-                        case Widest_Component_Type.Bit:
-                            return Memory.MD_Integer(
-                                node.Local_Bit_Members[(Int32)ord_pos_within_local]
-                                ? 1 : 0);
                         case Widest_Component_Type.Octet:
                             return Memory.MD_Integer(
                                 node.Local_Octet_Members[(Int32)ord_pos_within_local]);

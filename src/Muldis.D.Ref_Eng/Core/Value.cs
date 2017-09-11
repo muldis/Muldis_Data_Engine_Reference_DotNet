@@ -20,6 +20,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         MD_Boolean,
         MD_Integer,
+        MD_Bits,
         MD_Array,
         MD_Bag,
         MD_Tuple,
@@ -117,6 +118,8 @@ namespace Muldis.D.Ref_Eng.Core
             // While we conceptually could special case smaller integers with
             // additional fields for performance, we won't, mainly to keep
             // things simpler, and because BigInteger special-cases internally.
+        // Iff MSBT is MD_Bits, this field holds a BitArray.
+            // Consider a MD_Bits_Struct if we want symbolic like MD_Array.
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
@@ -151,6 +154,11 @@ namespace Muldis.D.Ref_Eng.Core
         internal BigInteger MD_Integer()
         {
             return (BigInteger)Details;
+        }
+
+        internal BitArray MD_Bits()
+        {
+            return (BitArray)Details;
         }
 
         internal MD_Array_Struct MD_Array()
@@ -204,7 +212,6 @@ namespace Muldis.D.Ref_Eng.Core
     {
         None,
         Unrestricted,
-        Bit,
         Octet,
         Codepoint,
     }
@@ -287,14 +294,6 @@ namespace Muldis.D.Ref_Eng.Core
         // A List<MD_Any> is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         internal List<MD_Any> Local_Unrestricted_Members { get; set; }
-
-        // Iff LWT is Bit, this field is the payload.
-        // Represents a Muldis D Array value where each member value is
-        // a Muldis D Integer in the range 0..1.
-        // A BitArray is the simplest storage representation for that
-        // type which doesn't internally use trees for sharing or multipliers.
-        // This is the canonical storage type for a regular bit string.
-        internal BitArray Local_Bit_Members { get; set; }
 
         // Iff LWT is Octet, this field is the payload.
         // Represents a Muldis D Array value where each member value is

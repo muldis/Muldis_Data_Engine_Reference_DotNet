@@ -26,7 +26,6 @@ namespace Muldis.D.Ref_Eng.Core
         Integer_NN,
         Integer_P,
         Fraction,
-        Bits,
         Blob,
         Text,
         Text__Unicode,

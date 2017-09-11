@@ -125,6 +125,13 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any v = MD_Integer(i);
             }
 
+            MD_Bits_C0 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
+                Details = new BitArray(0),
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
+
             MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
@@ -289,15 +296,6 @@ namespace Muldis.D.Ref_Eng.Core
                 )
             );
             MD_Fraction_0.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
-
-            MD_Bits_C0 = MD_Capsule(
-                MD_Attr_Name("Bits"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>(
-                        "bits", MD_Array_C0)
-                )
-            );
-            MD_Bits_C0.AS.Cached_WKT.Add(MD_Well_Known_Type.Bits);
 
             MD_Blob_C0 = MD_Capsule(
                 MD_Attr_Name("Blob"),
@@ -514,25 +512,12 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Bits_C0;
             }
-            MD_Any array = new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
-                Details = new MD_Array_Struct {
-                    Tree_Widest_Type = Widest_Component_Type.Bit,
-                    Local_Multiplicity = 1,
-                    Local_Widest_Type = Widest_Component_Type.Bit,
-                    Local_Bit_Members = members,
-                },
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
+                Details = members,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
-            MD_Any bits = MD_Capsule(
-                MD_Attr_Name("Bits"),
-                MD_Tuple(
-                    only_oa: new KeyValuePair<String,MD_Any>("bits", array)
-                )
-            );
-            bits.AS.Cached_WKT.Add(MD_Well_Known_Type.Bits);
-            return bits;
         }
 
         internal MD_Any MD_Blob(Byte[] members)
@@ -1080,8 +1065,6 @@ namespace Muldis.D.Ref_Eng.Core
                             : Array__Pick_Random_Struct_Member(node.Succ_Members));
                 case Widest_Component_Type.Unrestricted:
                     return node.Local_Unrestricted_Members[0];
-                case Widest_Component_Type.Bit:
-                    throw new NotImplementedException();
                 case Widest_Component_Type.Octet:
                     throw new NotImplementedException();
                 case Widest_Component_Type.Codepoint:
@@ -1153,7 +1136,6 @@ namespace Muldis.D.Ref_Eng.Core
                                     && Tuple__Same_Heading(m, m0)
                             );
                         break;
-                    case Widest_Component_Type.Bit:
                     case Widest_Component_Type.Octet:
                     case Widest_Component_Type.Codepoint:
                         node.Cached_Local_Relational = false;

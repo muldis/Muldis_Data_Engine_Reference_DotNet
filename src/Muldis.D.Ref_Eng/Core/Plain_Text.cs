@@ -71,6 +71,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Boolean_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Integer:
                     return Integer_Literal(value);
+                case MD_Well_Known_Base_Type.MD_Bits:
+                    return Bits_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Array:
                     return Array_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Bag:
@@ -81,10 +83,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
                     {
                         return Fraction_Literal(value);
-                    }
-                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Bits))
-                    {
-                        return Bits_Literal(value);
                     }
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Blob))
                     {
@@ -145,46 +143,19 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Bits_Literal(MD_Any value)
         {
-            Memory m = value.AS.Memory;
-            MD_Any array = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
-            return Object.ReferenceEquals(array, m.MD_Array_C0) ? @"\~?''"
-                : @"\~?'0b" + Bits_Literal__node__tree(array.AS.MD_Array()) + "'";
-        }
-
-        private String Bits_Literal__node__tree(MD_Array_Struct node)
-        {
-            return (node.Pred_Members == null ? ""
-                    : Bits_Literal__node__tree(node.Pred_Members))
-                + Bits_Literal__node__local(node)
-                + (node.Succ_Members == null ? ""
-                    : Bits_Literal__node__tree(node.Succ_Members));
-        }
-
-        private String Bits_Literal__node__local(MD_Array_Struct node)
-        {
-            switch (node.Local_Widest_Type)
+            if (Object.ReferenceEquals(value, value.AS.Memory.MD_Bits_C0))
             {
-                case Widest_Component_Type.None:
-                    return "";
-                case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Bit:
-                    System.Collections.IEnumerator e
-                        = node.Local_Bit_Members.GetEnumerator();
-                    List<Boolean> list = new List<Boolean>();
-                    while (e.MoveNext())
-                    {
-                        list.Add((Boolean)e.Current);
-                    }
-                    return String.Concat(Enumerable.Select(
-                        list, m => m ? "1" : "0"));
-                case Widest_Component_Type.Octet:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Codepoint:
-                    throw new NotImplementedException();
-                default:
-                    throw new NotImplementedException();
+                return @"\~?''";
             }
+            System.Collections.IEnumerator e = value.AS.MD_Bits().GetEnumerator();
+            List<Boolean> list = new List<Boolean>();
+            while (e.MoveNext())
+            {
+                list.Add((Boolean)e.Current);
+            }
+            return @"\~?'0b" + String.Concat(
+                    Enumerable.Select(list, m => m ? "1" : "0")
+                ) + "'";
         }
 
         private String Blob_Literal(MD_Any value)
@@ -211,8 +182,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case Widest_Component_Type.None:
                     return "";
                 case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Bit:
                     throw new NotImplementedException();
                 case Widest_Component_Type.Octet:
                     return String.Concat(Enumerable.Select(
@@ -250,8 +219,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case Widest_Component_Type.None:
                     return "";
                 case Widest_Component_Type.Unrestricted:
-                    throw new NotImplementedException();
-                case Widest_Component_Type.Bit:
                     throw new NotImplementedException();
                 case Widest_Component_Type.Octet:
                     throw new NotImplementedException();
@@ -366,16 +333,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return String.Concat(Enumerable.Select(
                         node.Local_Unrestricted_Members,
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
-                case Widest_Component_Type.Bit:
-                    System.Collections.IEnumerator e
-                        = node.Local_Bit_Members.GetEnumerator();
-                    List<Boolean> list = new List<Boolean>();
-                    while (e.MoveNext())
-                    {
-                        list.Add((Boolean)e.Current);
-                    }
-                    return String.Concat(Enumerable.Select(
-                        list, m => indent + Integer_Literal(m ? 1 : 0) + ",\u000A"));
                 case Widest_Component_Type.Octet:
                     return String.Concat(Enumerable.Select(
                         node.Local_Octet_Members,
