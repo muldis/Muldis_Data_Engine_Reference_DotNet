@@ -366,8 +366,8 @@ namespace Muldis.D.Ref_Eng.Core
                         result = true;
                         break;
                     }
-                    if (n0.Tree_Widest_Type == Widest_Component_Type.None
-                        && n1.Tree_Widest_Type == Widest_Component_Type.None)
+                    if (n0.Local_Symbolic_Type == Symbolic_Array_Type.None
+                        && n1.Local_Symbolic_Type == Symbolic_Array_Type.None)
                     {
                         // In theory we should never get here assuming that
                         // the empty Array is optimized to return a constant
@@ -375,33 +375,19 @@ namespace Muldis.D.Ref_Eng.Core
                         result = true;
                         break;
                     }
-                    if (n0.Tree_Widest_Type == Widest_Component_Type.None
-                        || n1.Tree_Widest_Type == Widest_Component_Type.None)
+                    if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
+                        && n1.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
                     {
-                        return false;
+                        result = Enumerable.SequenceEqual(
+                            n0.Local_Arrayed_Members,
+                            n1.Local_Arrayed_Members);
+                        break;
                     }
-                    // Every one of the Arrays has at least 1 member.
-                    if (n0.Pred_Members != null || n1.Pred_Members != null
-                        || n0.Succ_Members != null || n1.Succ_Members != null
-                        || n0.Tree_Widest_Type != n1.Tree_Widest_Type)
-                    {
-                        // For now skip the more complicated cases where
-                        // the Array members are defined using > 1 node
-                        // or where members use different representations.
-                        //throw new NotImplementedException();
-                        return false;  // TODO; meanwhile we compare like a reference type
-                    }
-                    switch (n0.Local_Widest_Type)
-                    {
-                        case Widest_Component_Type.Unrestricted:
-                            result = Enumerable.SequenceEqual(
-                                n0.Local_Unrestricted_Members,
-                                n1.Local_Unrestricted_Members);
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                    break;
+                    // For now skip the more complicated cases where
+                    // the Array members are defined using > 1 node
+                    // or where members use different representations.
+                    //throw new NotImplementedException();
+                    return false;  // TODO; meanwhile we compare like a reference type
                 case MD_Well_Known_Base_Type.MD_Bag:
                     MD_Bag_Struct bn0 = a0.AS.MD_Bag();
                     MD_Bag_Struct bn1 = a1.AS.MD_Bag();
@@ -558,12 +544,21 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (node.Cached_Tree_Member_Count == null)
             {
-                node.Cached_Tree_Member_Count
-                    = Array__node__local_member_count(node)
-                        + (node.Pred_Members == null ? 0
-                            : Array__node__tree_member_count(node.Pred_Members))
-                        + (node.Succ_Members == null ? 0
-                            : Array__node__tree_member_count(node.Succ_Members));
+                switch (node.Local_Symbolic_Type)
+                {
+                    case Symbolic_Array_Type.None:
+                    case Symbolic_Array_Type.Arrayed:
+                        node.Cached_Tree_Member_Count
+                            = Array__node__local_member_count(node);
+                        break;
+                    case Symbolic_Array_Type.Catenated:
+                        node.Cached_Tree_Member_Count
+                            = Array__node__tree_member_count(node.Pred_Members)
+                            + Array__node__tree_member_count(node.Succ_Members);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
             return (Int64)node.Cached_Tree_Member_Count;
         }
@@ -572,15 +567,14 @@ namespace Muldis.D.Ref_Eng.Core
         {
             if (node.Cached_Local_Member_Count == null)
             {
-                Int64 lm = node.Local_Multiplicity;
-                switch (node.Local_Widest_Type)
+                switch (node.Local_Symbolic_Type)
                 {
-                    case Widest_Component_Type.None:
+                    case Symbolic_Array_Type.None:
                         node.Cached_Local_Member_Count = 0;
                         break;
-                    case Widest_Component_Type.Unrestricted:
+                    case Symbolic_Array_Type.Arrayed:
                         node.Cached_Local_Member_Count
-                            = lm * node.Local_Unrestricted_Members.Count;
+                            = node.Local_Multiplicity * node.Local_Arrayed_Members.Count;
                         break;
                     default:
                         throw new NotImplementedException();
@@ -641,53 +635,42 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return null;
             }
-            MD_Any maybe_member = null;
             Int64 maybe_last_ord_pos_seen = -1;
-            if (node.Pred_Members != null)
+            switch (node.Local_Symbolic_Type)
             {
-                maybe_member = Array__node__maybe_at(node.Pred_Members, ord_pos);
-                if (maybe_member != null)
-                {
-                    return maybe_member;
-                }
-                maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Pred_Members);
-                if (ord_pos <= maybe_last_ord_pos_seen)
-                {
+                case Symbolic_Array_Type.None:
                     return null;
-                }
-            }
-            if (node.Local_Widest_Type != Widest_Component_Type.None)
-            {
-                Int64 local_member_count = Array__node__local_member_count(node);
-                if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
-                {
-                    Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
-                    if (node.Local_Multiplicity > 1)
+                case Symbolic_Array_Type.Arrayed:
+                    Int64 local_member_count = Array__node__local_member_count(node);
+                    if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
                     {
-                        Int64 non_multiplied_local_count
-                            = local_member_count / node.Local_Multiplicity;
-                        ord_pos_within_local
-                            = ord_pos_within_local % non_multiplied_local_count;
+                        Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
+                        if (node.Local_Multiplicity > 1)
+                        {
+                            Int64 non_multiplied_local_count
+                                = local_member_count / node.Local_Multiplicity;
+                            ord_pos_within_local
+                                = ord_pos_within_local % non_multiplied_local_count;
+                        }
+                        return node.Local_Arrayed_Members[(Int32)ord_pos_within_local];
                     }
-                    switch (node.Local_Widest_Type)
+                    return null;
+                case Symbolic_Array_Type.Catenated:
+                    MD_Any maybe_member = Array__node__maybe_at(node.Pred_Members, ord_pos);
+                    if (maybe_member != null)
                     {
-                        case Widest_Component_Type.Unrestricted:
-                            return node.Local_Unrestricted_Members[(Int32)ord_pos_within_local];
-                        default:
-                            throw new NotImplementedException();
+                        return maybe_member;
                     }
-                }
-                else
-                {
-                    maybe_last_ord_pos_seen += local_member_count;
-                }
+                    maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Pred_Members);
+                    if (ord_pos <= maybe_last_ord_pos_seen)
+                    {
+                        return null;
+                    }
+                    Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
+                    return Array__node__maybe_at(node.Succ_Members, ord_pos_within_succ);
+                default:
+                    throw new NotImplementedException();
             }
-            if (node.Succ_Members != null)
-            {
-                Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
-                return Array__node__maybe_at(node.Succ_Members, ord_pos_within_succ);
-            }
-            return null;
         }
     }
 }

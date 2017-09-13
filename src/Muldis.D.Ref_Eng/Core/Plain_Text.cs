@@ -262,23 +262,17 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
         {
-            return (node.Pred_Members == null ? ""
-                    : Array_Selector__node__tree(node.Pred_Members, indent))
-                + Array_Selector__node__local(node, indent)
-                + (node.Succ_Members == null ? ""
-                    : Array_Selector__node__tree(node.Succ_Members, indent));
-        }
-
-        private String Array_Selector__node__local(MD_Array_Struct node, String indent)
-        {
-            switch (node.Local_Widest_Type)
+            switch (node.Local_Symbolic_Type)
             {
-                case Widest_Component_Type.None:
+                case Symbolic_Array_Type.None:
                     return "";
-                case Widest_Component_Type.Unrestricted:
+                case Symbolic_Array_Type.Arrayed:
                     return String.Concat(Enumerable.Select(
-                        node.Local_Unrestricted_Members,
+                        node.Local_Arrayed_Members,
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
+                case Symbolic_Array_Type.Catenated:
+                    return Array_Selector__node__tree(node.Pred_Members, indent)
+                        + Array_Selector__node__tree(node.Succ_Members, indent);
                 default:
                     throw new NotImplementedException();
             }
@@ -362,7 +356,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Capsule_Selector(MD_Any value, String indent)
         {
-            // TODO: Dig for cases where we have a well-known subtype not marked as such.
             return "(" + Any_Selector(value.AS.MD_Capsule().Label, indent) + " : "
                 + Any_Selector(value.AS.MD_Capsule().Attrs, indent) + ")";
         }

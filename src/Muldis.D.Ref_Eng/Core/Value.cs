@@ -264,19 +264,20 @@ namespace Muldis.D.Ref_Eng.Core
         internal Nullable<Int64> Cached_Member_Count { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Widest_Component_Type
-    // Enumerates the levels of restriction that a collection's elements
-    // would conform to, which can help set an optimized storage strategy.
-    // Unrestricted means any Muldis D value at all may be a component.
-    // None means no component is allowed; it is for empty collections.
+    // Muldis.D.Ref_Eng.Core.Symbolic_Array_Type
+    // Enumerates the various ways that a MD_Array collection can be defined
+    // symbolically in terms of other collections.
+    // None means the collection simply has zero members.
 
-    internal enum Widest_Component_Type
+    internal enum Symbolic_Array_Type
     {
         None,
-        Unrestricted,
+        Arrayed,
+        Catenated,
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Struct
+    // TODO: Refactor MD_Array_Struct to be more like MD_Bag_Struct.
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
     // an MD_Array_Struct is used by it to hold the MD_Array-specific details.
     // It takes the form of a tree of its own kind to aid in reusability
@@ -313,20 +314,20 @@ namespace Muldis.D.Ref_Eng.Core
         // not a Tuple or that any 2 members do not have the same heading.
         internal Nullable<Boolean> Cached_Tree_Relational { get; set; }
 
-        // Tree_Widest_Type indicates the widest Local_Widest_Type in the
-        // tree, and thus of the over-all type of the tree.
-        // This can be calculated from other fields, but is always defined.
-        internal Widest_Component_Type Tree_Widest_Type { get; set; }
+        // LST determines how to interpret most of the other fields.
+        // Iff LST is None, this node is explicitly a leaf node defining zero members.
+        // Iff LST is Arrayed, Local_Arrayed_Members, combined with
+        // Local_Multiplicity, defines all of the Array members.
+        // Iff LST is Catenated, this Array's members are defined as
+        // the catenation of Pred_Members and Succ_Members.
+        // TODO: Refactor MD_Array_Struct to be more like MD_Bag_Struct.
+        internal Symbolic_Array_Type Local_Symbolic_Type { get; set; }
 
         // Iff this is zero, then there are zero "local" members;
         // iff this is 1, then the "local" members are as Local_*_Members
         // specifies with no repeats;
         // iff this is >1, then the local members have that many occurrances.
         internal Int64 Local_Multiplicity { get; set; }
-
-        // LWT indicates which of the Local_*_Members this node is using.
-        // This is None iff Local_Multiplicity is zero.
-        internal Widest_Component_Type Local_Widest_Type { get; set; }
 
         // Cached count of members defined by the Local_*_Members fields as
         // they are defined in isolation.
@@ -348,19 +349,15 @@ namespace Muldis.D.Ref_Eng.Core
         // not a Tuple or that any 2 members do not have the same heading.
         internal Nullable<Boolean> Cached_Local_Relational { get; set; }
 
-        // Iff LWT is Unrestricted, this field is the payload.
-        // Represents a Muldis D Array value where each member value is
-        // unrestricted in allowed type.
+        // This field is used iff LST is Arrayed.
         // A List<MD_Any> is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
-        internal List<MD_Any> Local_Unrestricted_Members { get; set; }
+        internal List<MD_Any> Local_Arrayed_Members { get; set; }
 
-        // Iff there is at least 1 predecessor member of the "local" ones,
-        // this subtree says what they are.
+        // This field is used iff LST is Catenated.
         internal MD_Array_Struct Pred_Members { get; set; }
 
-        // Iff there is at least 1 successor member of the "local" ones,
-        // this subtree says what they are.
+        // This field is used iff LST is Catenated.
         internal MD_Array_Struct Succ_Members { get; set; }
     }
 
