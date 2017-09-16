@@ -71,6 +71,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Boolean_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Integer:
                     return Integer_Literal(value);
+                case MD_Well_Known_Base_Type.MD_Fraction:
+                    return Fraction_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Bits:
                     return Bits_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Blob:
@@ -84,10 +86,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 case MD_Well_Known_Base_Type.MD_Tuple:
                     return Tuple_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Capsule:
-                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Fraction))
-                    {
-                        return Fraction_Literal(value);
-                    }
                     if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Set))
                     {
                         return Set_Selector(value, indent);
@@ -132,9 +130,9 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Fraction_Literal(MD_Any value)
         {
-            MD_Tuple_Struct ca = value.AS.MD_Capsule().Attrs.AS.MD_Tuple();
-            return ca.Multi_OA["numerator"].AS.MD_Integer().ToString()
-                + "/" + ca.Multi_OA["denominator"].AS.MD_Integer().ToString();
+            MD_Fraction_Struct fa = value.AS.MD_Fraction();
+            fa.Ensure_Coprime();
+            return fa.As_Pair.Numerator.ToString() + "/" + fa.As_Pair.Denominator.ToString();
         }
 
         private String Bits_Literal(MD_Any value)

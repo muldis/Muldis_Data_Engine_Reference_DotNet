@@ -25,7 +25,6 @@ namespace Muldis.D.Ref_Eng.Core
         Excuse,
         Integer_NN,
         Integer_P,
-        Fraction,
         Text__ASCII,
         Set,
         Tuple_Array,

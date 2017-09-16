@@ -20,6 +20,7 @@ namespace Muldis.D.Ref_Eng.Core
     {
         MD_Boolean,
         MD_Integer,
+        MD_Fraction,
         MD_Bits,
         MD_Blob,
         MD_Text,
@@ -120,6 +121,7 @@ namespace Muldis.D.Ref_Eng.Core
             // While we conceptually could special case smaller integers with
             // additional fields for performance, we won't, mainly to keep
             // things simpler, and because BigInteger special-cases internally.
+        // Iff MSBT is MD_Fraction, this field holds a MD_Fraction_Struct.
         // Iff MSBT is MD_Bits, this field holds a BitArray.
             // Consider a MD_Bits_Struct if we want symbolic like MD_Array.
         // Iff MSBT is MD_Blob, this field holds a Byte[].
@@ -159,6 +161,11 @@ namespace Muldis.D.Ref_Eng.Core
         internal BigInteger MD_Integer()
         {
             return (BigInteger)Details;
+        }
+
+        internal MD_Fraction_Struct MD_Fraction()
+        {
+            return (MD_Fraction_Struct)Details;
         }
 
         internal BitArray MD_Bits()
@@ -215,6 +222,113 @@ namespace Muldis.D.Ref_Eng.Core
         {
             return (MD_External_Struct)Details;
         }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Fraction_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Fraction,
+    // an MD_Fraction_Struct is used by it to hold the MD_Fraction-specific details.
+
+    internal class MD_Fraction_Struct
+    {
+        // The As_Decimal field is optionally valued if the MD_Fraction
+        // value is known small enough to fit in the range it can represent
+        // and it is primarily used when the MD_Fraction value was input to
+        // the system as a .Net Decimal in the first place or was output
+        // from the system as such; a MD_Fraction input first as a Decimal
+        // is only copied to the Numerator+Denominator fields when needed;
+        // if all 3 said fields are valued at once, they are redundant.
+        internal Nullable<Decimal> As_Decimal { get; set; }
+
+        // The As_Pair field can represent any
+        // MD_Fraction value at all, such that the Fraction's value is
+        // defined as the fractional division of Numerator by Denominator.
+        // As_Pair might not be defined if As_Decimal is defined.
+        internal MD_Fraction_Pair As_Pair { get; set; }
+
+        internal void Ensure_Coprime()
+        {
+            Ensure_Pair();
+            if (As_Pair.Cached_Is_Coprime == true)
+            {
+                return;
+            }
+            // Note that GreatestCommonDivisor() always has a non-negative result.
+            BigInteger gcd = BigInteger.GreatestCommonDivisor(As_Pair.Numerator, As_Pair.Denominator);
+            if (gcd > 1)
+            {
+                // Make the numerator and denominator coprime.
+                As_Pair.Numerator   = (As_Pair.Denominator > 0 ? As_Pair.Numerator   : -As_Pair.Numerator  ) / gcd;
+                As_Pair.Denominator = (As_Pair.Denominator > 0 ? As_Pair.Denominator : -As_Pair.Denominator) / gcd;
+            }
+            As_Pair.Cached_Is_Coprime = true;
+        }
+
+        internal void Ensure_Pair()
+        {
+            if (As_Pair != null)
+            {
+                return;
+            }
+            // If Numerator+Denominator are null, As_Decimal must not be.
+            Int32[] dec_bits = Decimal.GetBits((Decimal)As_Decimal);
+            // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
+            // The GetBits spec says that it returns 4 32-bit integers
+            // representing the 128 bits of the Decimal itself; of these,
+            // the first 3 integers' bits give the mantissa,
+            // the 4th integer's bits give the sign and the scale factor.
+            // "Bits 16 to 23 must contain an exponent between 0 and 28,
+            // which indicates the power of 10 to divide the integer number."
+            Int32 scale_factor_int = ((dec_bits[3] >> 16) & 0x7F);
+            Decimal denominator_dec = 1M;
+            // Decimal doesn't have exponentiation op so we do it manually.
+            for (Int32 i = 1; i <= scale_factor_int; i++)
+            {
+                denominator_dec = denominator_dec * 10M;
+            }
+            Decimal numerator_dec = (Decimal)As_Decimal * denominator_dec;
+            As_Pair = new MD_Fraction_Pair {
+                Numerator = new BigInteger(numerator_dec),
+                Denominator = new BigInteger(denominator_dec),
+            };
+        }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Fraction_Pair
+    // Represents a numerator/denominator pair.
+
+    internal class MD_Fraction_Pair
+    {
+        // The Numerator+Denominator field pair can represent any
+        // MD_Fraction value at all, such that the Fraction's value is
+        // defined as the fractional division of Numerator by Denominator.
+        // They are always defined or not defined as a pair, and the pair
+        // might not be defined if As_Decimal is defined.
+        // Denominator may never be zero, there are no limits otherwise.
+        internal BigInteger Numerator { get; set; }
+        internal BigInteger Denominator { get; set; }
+
+        // This field is used only if Numerator+Denominator are defined.
+        // This is true iff we know that the defined Numerator and
+        // Denominator are coprime (their greatest common divisor is 1);
+        // this is false iff we know that they are not coprime.
+        // While the pair typically need to be coprime in order to reliably
+        // determine if 2 MD_Fraction represent the same Muldis D value,
+        // we don't necessarily store them that way for efficiency sake.
+        internal Nullable<Boolean> Cached_Is_Coprime { get; set; }
+
+        // This field is used only if Numerator+Denominator are defined.
+        // Iff this field is defined, we ensure that both the current
+        // MD_Fraction_Struct has a Denominator equal to it, and also that
+        // any other MD_Fraction_Struct derived from it has the same
+        // Denominator as well, iff the MD_Fraction value can be exactly
+        // represented by such a MD_Fraction_Struct.
+        // Having this field defined tends to suppress automatic efforts to
+        // normalize the MD_Fraction_Struct to a coprime state.
+        // The main purpose of this field is to aid in system performance
+        // when a lot of math, particularly addition and subtraction, is
+        // done with rationals having a common conceptual fixed precision,
+        // so that the performance is then closer to integer math.
+        internal Nullable<BigInteger> Denominator_Affinity { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Text_Struct

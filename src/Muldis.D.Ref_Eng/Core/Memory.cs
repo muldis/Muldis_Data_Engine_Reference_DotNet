@@ -125,6 +125,20 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any v = MD_Integer(i);
             }
 
+            MD_Fraction_0 = new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+                Details = new MD_Fraction_Struct {
+                    As_Decimal = 0.0M,
+                    As_Pair = new MD_Fraction_Pair {
+                        Numerator = m_integers[0].AS.MD_Integer(),
+                        Denominator = m_integers[1].AS.MD_Integer(),
+                        Cached_Is_Coprime = true,
+                    },
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
+
             MD_Bits_C0 = new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
@@ -302,18 +316,6 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
 
-            MD_Fraction_0 = MD_Capsule(
-                MD_Attr_Name("Fraction"),
-                MD_Tuple(
-                    multi_oa: new Dictionary<String,MD_Any>()
-                    {
-                        {"numerator"  , MD_Integer(0)},
-                        {"denominator", MD_Integer(1)},
-                    }
-                )
-            );
-            MD_Fraction_0.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
-
             MD_Set_C0 = MD_Capsule(
                 MD_Attr_Name("Set"),
                 MD_Tuple(
@@ -454,52 +456,37 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any MD_Fraction(BigInteger numerator, BigInteger denominator)
         {
             // Note we assume our caller has already ensured denominator is not zero.
-            // Note that GreatestCommonDivisor() always has a non-negative result.
-            BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
-            if (gcd > 1)
-            {
-                // Make the numerator and denominator coprime.
-                numerator   = (denominator > 0 ? numerator   : -numerator  ) / gcd;
-                denominator = (denominator > 0 ? denominator : -denominator) / gcd;
-            }
-            if (numerator == 0 && denominator == 1)
+            if (numerator == 0)
             {
                 return MD_Fraction_0;
             }
-            MD_Any fraction = MD_Capsule(
-                MD_Attr_Name("Fraction"),
-                MD_Tuple(
-                    multi_oa: new Dictionary<String,MD_Any>()
-                    {
-                        {"numerator"  , MD_Integer(numerator  )},
-                        {"denominator", MD_Integer(denominator)},
-                    }
-                )
-            );
-            fraction.AS.Cached_WKT.Add(MD_Well_Known_Type.Fraction);
-            return fraction;
+            return new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+                Details = new MD_Fraction_Struct {
+                    As_Pair = new MD_Fraction_Pair {
+                        Numerator = numerator,
+                        Denominator = denominator,
+                    },
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
         }
 
         internal MD_Any MD_Fraction(Decimal value)
         {
-            Int32[] dec_bits = Decimal.GetBits(value);
-            // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
-            // The GetBits spec says that it returns 4 32-bit integers
-            // representing the 128 bits of the Decimal itself; of these,
-            // the first 3 integers' bits give the mantissa,
-            // the 4th integer's bits give the sign and the scale factor.
-            // "Bits 16 to 23 must contain an exponent between 0 and 28,
-            // which indicates the power of 10 to divide the integer number."
-            Int32 scale_factor_int = ((dec_bits[3] >> 16) & 0x7F);
-            Decimal denominator_dec = 1M;
-            // Decimal doesn't have exponentiation op so we do it manually.
-            for (Int32 i = 1; i <= scale_factor_int; i++)
+            if (value == 0)
             {
-                denominator_dec = denominator_dec * 10M;
+                return MD_Fraction_0;
             }
-            Decimal numerator_dec = value * denominator_dec;
-            return MD_Fraction(new BigInteger(numerator_dec),
-                new BigInteger(denominator_dec));
+            return new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+                Details = new MD_Fraction_Struct {
+                    As_Decimal = value,
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
         }
 
         internal MD_Any MD_Bits(BitArray members)

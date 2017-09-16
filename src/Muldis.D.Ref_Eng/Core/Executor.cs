@@ -349,6 +349,31 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Well_Known_Base_Type.MD_Integer:
                     result = (a0.AS.MD_Integer() == a1.AS.MD_Integer());
                     break;
+                case MD_Well_Known_Base_Type.MD_Fraction:
+                    MD_Fraction_Struct fs0 = a0.AS.MD_Fraction();
+                    MD_Fraction_Struct fs1 = a1.AS.MD_Fraction();
+                    if (Object.ReferenceEquals(fs0, fs1))
+                    {
+                        result = true;
+                        break;
+                    }
+                    if (fs0.As_Decimal != null && fs1.As_Decimal != null)
+                    {
+                        result = (fs0.As_Decimal == fs1.As_Decimal);
+                        break;
+                    }
+                    fs0.Ensure_Pair();
+                    fs1.Ensure_Pair();
+                    if (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator)
+                    {
+                        result = (fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
+                        break;
+                    }
+                    fs0.Ensure_Coprime();
+                    fs1.Ensure_Coprime();
+                    result = (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator
+                        && fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
+                    break;
                 case MD_Well_Known_Base_Type.MD_Bits:
                     //throw new NotImplementedException();
                     return false;  // TODO; meanwhile we compare like a reference type
