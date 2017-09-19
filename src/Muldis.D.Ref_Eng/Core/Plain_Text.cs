@@ -81,15 +81,13 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Text_Literal(value);
                 case MD_Well_Known_Base_Type.MD_Array:
                     return Array_Selector(value, indent);
+                case MD_Well_Known_Base_Type.MD_Set:
+                    return Set_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Bag:
                     return Bag_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Tuple:
                     return Tuple_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Capsule:
-                    if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Set))
-                    {
-                        return Set_Selector(value, indent);
-                    }
                     return Capsule_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Variable:
                     // We display something useful for debugging purposes, but no
@@ -279,9 +277,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Set_Selector(MD_Any value, String indent)
         {
             String mei = indent + "\u0009";
-            MD_Any bag = value.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value;
-            value.AS.Memory.Bag__Collapse(bag: bag, want_indexed: true);
-            MD_Bag_Struct node = bag.AS.MD_Bag();
+            value.AS.Memory.Bag__Collapse(bag: value, want_indexed: true);
+            MD_Bag_Struct node = value.AS.MD_Bag();
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Bag_Type.None:

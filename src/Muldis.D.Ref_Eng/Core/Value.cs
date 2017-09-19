@@ -25,6 +25,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Blob,
         MD_Text,
         MD_Array,
+        MD_Set,
         MD_Bag,
         MD_Tuple,
         MD_Capsule,
@@ -128,7 +129,8 @@ namespace Muldis.D.Ref_Eng.Core
             // Consider a MD_Blob_Struct if we want symbolic like MD_Array.
         // Iff MSBT is MD_Text, this field holds a MD_Text_Struct.
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
-        // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct.
+        // Iff MSBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
+        // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
         // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
         // Iff MSBT is MD_Variable, this field holds a MD_Variable_Struct.
@@ -186,6 +188,11 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Array_Struct MD_Array()
         {
             return (MD_Array_Struct)Details;
+        }
+
+        internal MD_Bag_Struct MD_Set()
+        {
+            return MD_Bag();
         }
 
         internal MD_Bag_Struct MD_Bag()
@@ -523,6 +530,8 @@ namespace Muldis.D.Ref_Eng.Core
     // Muldis.D.Ref_Eng.Core.MD_Bag_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Bag,
     // a MD_Bag_Struct is used by it to hold the MD_Bag-specific details.
+    // Also used for MD_Set, so any MD_Bag reference generally should be
+    // read as either MD_Set or MD_Bag.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
     // Note that MD_Bag is the most complicated Muldis D Foundation type to

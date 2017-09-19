@@ -142,6 +142,8 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Text)new MD_Text().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Array:
                     return (IMD_Array)new MD_Array().init(m_machine, value);
+                case Core.MD_Well_Known_Base_Type.MD_Set:
+                    return (IMD_Set)new MD_Set().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Bag:
                     return (IMD_Bag)new MD_Bag().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Tuple:
@@ -151,10 +153,6 @@ namespace Muldis.D.Ref_Eng
                     }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Capsule:
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Set))
-                    {
-                        return (IMD_Set)new MD_Set().init(m_machine, value);
-                    }
                     if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Array))
                     {
                         return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
@@ -344,7 +342,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         return Core_MD_Tuple_Array(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
                     }
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Array")
                     {
                         return Core_MD_Tuple_Array(body: (Muldis.D.Ref_Eng.Value.MD_Array)v);
                     }
@@ -364,7 +362,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         return Core_MD_Tuple_Bag(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
                     }
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Bag")
                     {
                         return Core_MD_Tuple_Bag(body: (Muldis.D.Ref_Eng.Value.MD_Bag)v);
                     }
@@ -739,8 +737,11 @@ namespace Muldis.D.Ref_Eng
 
         private Core.MD_Any Core_MD_Set(List<Object> members)
         {
-            Core.MD_Any bag = Core_MD_Bag(members: members, with_unique: true);
-            return m_memory.MD_Set(bag);
+            return m_memory.MD_Set(
+                new List<Core.Multiplied_Member>(members.Select(
+                    m => new Core.Multiplied_Member(Core_MD_Any(m))
+                ))
+            );
         }
 
         public IMD_Bag MD_Bag(List<Object> members)
@@ -753,14 +754,12 @@ namespace Muldis.D.Ref_Eng
                 Core_MD_Bag(members));
         }
 
-        private Core.MD_Any Core_MD_Bag(
-            List<Object> members, Boolean with_unique = false)
+        private Core.MD_Any Core_MD_Bag(List<Object> members)
         {
             return m_memory.MD_Bag(
-                members: new List<Core.Multiplied_Member>(members.Select(
+                new List<Core.Multiplied_Member>(members.Select(
                     m => new Core.Multiplied_Member(Core_MD_Any(m))
-                )),
-                with_unique: with_unique
+                ))
             );
         }
 

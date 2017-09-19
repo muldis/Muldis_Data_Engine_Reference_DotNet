@@ -413,7 +413,9 @@ namespace Muldis.D.Ref_Eng.Core
                     // or where members use different representations.
                     //throw new NotImplementedException();
                     return false;  // TODO; meanwhile we compare like a reference type
+                case MD_Well_Known_Base_Type.MD_Set:
                 case MD_Well_Known_Base_Type.MD_Bag:
+                    // MD_Set and MD_Bag have the same internal representation.
                     MD_Bag_Struct bn0 = a0.AS.MD_Bag();
                     MD_Bag_Struct bn1 = a1.AS.MD_Bag();
                     if (Object.ReferenceEquals(bn0, bn1))

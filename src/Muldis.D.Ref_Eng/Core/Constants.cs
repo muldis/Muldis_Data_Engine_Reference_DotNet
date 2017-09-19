@@ -26,7 +26,6 @@ namespace Muldis.D.Ref_Eng.Core
         Integer_NN,
         Integer_P,
         Text__ASCII,
-        Set,
         Tuple_Array,
         Relation,
         Tuple_Bag,
