@@ -169,7 +169,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
                         {
-                            return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                            return (IMD_No_Reason)new MD_No_Reason()
                                 .init(m_machine, value);
                         }
                         return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
@@ -1250,7 +1250,7 @@ namespace Muldis.D.Ref_Eng
             }
             if (value == "No_Reason")
             {
-                return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+                return (IMD_No_Reason)new MD_No_Reason()
                     .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
             }
             if (m_memory.Test_Dot_Net_String(value)
@@ -1267,9 +1267,9 @@ namespace Muldis.D.Ref_Eng
                 m_memory.Simple_MD_Excuse(value));
         }
 
-        public IMD_Excuse_No_Reason MD_Excuse_No_Reason()
+        public IMD_No_Reason MD_No_Reason()
         {
-            return (IMD_Excuse_No_Reason)new MD_Excuse_No_Reason()
+            return (IMD_No_Reason)new MD_No_Reason()
                 .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
         }
 
@@ -1468,7 +1468,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
     }
 
-    public class MD_Excuse_No_Reason : MD_Excuse, IMD_Excuse_No_Reason
+    public class MD_No_Reason : MD_Excuse, IMD_No_Reason
     {
     }
 }

@@ -102,7 +102,7 @@ namespace Muldis.DBP
 
         IMD_Excuse MD_Excuse(String value);
 
-        IMD_Excuse_No_Reason MD_Excuse_No_Reason();
+        IMD_No_Reason MD_No_Reason();
 
         IMD_Heading MD_Attr_Name(String label);
 
@@ -206,7 +206,7 @@ namespace Muldis.DBP
     {
     }
 
-    public interface IMD_Excuse_No_Reason : IMD_Excuse
+    public interface IMD_No_Reason : IMD_Excuse
     {
     }
 }
