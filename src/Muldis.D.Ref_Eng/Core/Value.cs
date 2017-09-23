@@ -33,6 +33,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Process,
         MD_Stream,
         MD_External,
+        MD_Excuse,
     };
 
     // Muldis.D.Ref_Eng.Core.MD_Any
@@ -131,12 +132,13 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
         // Iff MSBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
-        // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct.
+        // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct (like MD_Excuse).
         // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
         // Iff MSBT is MD_Variable, this field holds a MD_Variable_Struct.
         // Iff MSBT is MD_Process, this field holds a MD_Process_Struct.
         // Iff MSBT is MD_Stream, this field holds a MD_Stream_Struct.
         // Iff MSBT is MD_External, this field holds a MD_External_Struct.
+        // Iff MSBT is MD_Excuse, this field holds a MD_Tuple_Struct (like MD_Tuple).
         internal Object Details { get; set; }
 
         // Set of well-known Muldis D types that this value is known to be
@@ -228,6 +230,11 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_External_Struct MD_External()
         {
             return (MD_External_Struct)Details;
+        }
+
+        internal MD_Tuple_Struct MD_Excuse()
+        {
+            return (MD_Tuple_Struct)Details;
         }
     }
 
@@ -626,6 +633,7 @@ namespace Muldis.D.Ref_Eng.Core
     // Muldis.D.Ref_Eng.Core.MD_Tuple_Struct
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Tuple,
     // a MD_Tuple_Struct is used by it to hold the MD_Tuple-specific details.
+    // Also used for MD_Excuse.
     // For efficiency, a few most-commonly used Muldis D Tuple attribute
     // names have their own corresponding MD_Tuple_Struct fields, while the
     // long tail of remaining possible but less often used names don't.

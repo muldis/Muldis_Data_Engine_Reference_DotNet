@@ -445,7 +445,18 @@ namespace Muldis.D.Ref_Eng.Core
             Well_Known_Excuses = new Dictionary<String,MD_Any>();
             foreach (String s in Constants.Strings__Well_Known_Excuses())
             {
-                Well_Known_Excuses.Add(s, MD_Excuse(MD_Tuple(MD_Attr_Name(s))));
+                Well_Known_Excuses.Add(
+                    s,
+                    new MD_Any { AS = new MD_Any_Struct {
+                        Memory = this,
+                        MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+                        Details = new MD_Tuple_Struct {
+                            Degree = 1,
+                            A0 = MD_Attr_Name(s),
+                        },
+                        Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+                    } }
+                );
             }
         }
 
@@ -845,13 +856,9 @@ namespace Muldis.D.Ref_Eng.Core
         {
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
-                Details = new MD_Capsule_Struct {
-                    Label = MD_Attr_Name("Excuse"),
-                    Attrs = attrs,
-                },
-                Cached_WKT = new HashSet<MD_Well_Known_Type>()
-                    {MD_Well_Known_Type.Excuse},
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+                Details = attrs.AS.Details,
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
 
@@ -861,7 +868,15 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return Well_Known_Excuses[value];
             }
-            return MD_Excuse(MD_Tuple(MD_Attr_Name(value)));
+            return new MD_Any { AS = new MD_Any_Struct {
+                Memory = this,
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+                Details = new MD_Tuple_Struct {
+                    Degree = 1,
+                    A0 = MD_Attr_Name(value),
+                },
+                Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+            } };
         }
 
         internal Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)

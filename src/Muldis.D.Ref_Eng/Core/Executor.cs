@@ -466,6 +466,8 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     break;
                 case MD_Well_Known_Base_Type.MD_Tuple:
+                case MD_Well_Known_Base_Type.MD_Excuse:
+                    // MD_Tuple and MD_Excuse have the same internal representation.
                     MD_Tuple_Struct ts0 = a0.AS.MD_Tuple();
                     MD_Tuple_Struct ts1 = a1.AS.MD_Tuple();
                     // First test just that the Tuple headings are the same,

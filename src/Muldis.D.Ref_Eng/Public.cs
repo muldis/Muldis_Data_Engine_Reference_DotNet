@@ -165,15 +165,6 @@ namespace Muldis.D.Ref_Eng
                     {
                         return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
                     }
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Excuse))
-                    {
-                        if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
-                        {
-                            return (IMD_No_Reason)new MD_No_Reason()
-                                .init(m_machine, value);
-                        }
-                        return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
-                    }
                     return (IMD_Capsule)new MD_Capsule().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Variable:
                     return (IMD_Variable)new MD_Variable().init(m_machine, value);
@@ -183,6 +174,15 @@ namespace Muldis.D.Ref_Eng
                     return (IMD_Stream)new MD_Stream().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_External:
                     return (IMD_External)new MD_External().init(m_machine, value);
+                case Core.MD_Well_Known_Base_Type.MD_Excuse:
+                {
+                    if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
+                    {
+                        return (IMD_No_Reason)new MD_No_Reason()
+                            .init(m_machine, value);
+                    }
+                    return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
+                }
                 default:
                     throw new NotImplementedException();
             }

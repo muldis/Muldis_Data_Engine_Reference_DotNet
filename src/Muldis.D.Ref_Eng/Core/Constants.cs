@@ -22,7 +22,6 @@ namespace Muldis.D.Ref_Eng.Core
 
     internal enum MD_Well_Known_Type
     {
-        Excuse,
         Integer_NN,
         Integer_P,
         Text__ASCII,
