@@ -813,9 +813,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Variable,
-                Details = new MD_Variable_Struct {
-                    Current_Value = initial_current_value,
-                },
+                Details = initial_current_value,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
@@ -825,7 +823,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Process,
-                Details = new MD_Process_Struct {},
+                Details = null,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
@@ -835,7 +833,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Stream,
-                Details = new MD_Stream_Struct {},
+                Details = null,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
@@ -845,9 +843,7 @@ namespace Muldis.D.Ref_Eng.Core
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_External,
-                Details = new MD_External_Struct {
-                    Value = value,
-                },
+                Details = value,
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }

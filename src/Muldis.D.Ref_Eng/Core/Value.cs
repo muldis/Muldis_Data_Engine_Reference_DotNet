@@ -134,10 +134,17 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
         // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct (like MD_Excuse).
         // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
-        // Iff MSBT is MD_Variable, this field holds a MD_Variable_Struct.
-        // Iff MSBT is MD_Process, this field holds a MD_Process_Struct.
-        // Iff MSBT is MD_Stream, this field holds a MD_Stream_Struct.
-        // Iff MSBT is MD_External, this field holds a MD_External_Struct.
+        // Iff MSBT is MD_Variable, this field holds a MD_Any.
+            // For a MD_Variable, Details holds its Current_Value.
+            // This can become a MD_Variable_Struct if we want to store other things.
+        // Iff MSBT is MD_Process, this field holds an Object.
+            // TODO: Replace this with some other type when we know what that is.
+        // Iff MSBT is MD_Stream, this field holds an Object.
+            // TODO: Replace this with some other type when we know what that is.
+        // Iff MSBT is MD_External, this field holds an Object.
+            // The entity that is defined and managed externally to the Muldis
+            // D language environment, which the MD_External value is an opaque
+            // and transient reference to.
         // Iff MSBT is MD_Excuse, this field holds a MD_Tuple_Struct (like MD_Tuple).
         internal Object Details { get; set; }
 
@@ -212,24 +219,24 @@ namespace Muldis.D.Ref_Eng.Core
             return (MD_Capsule_Struct)Details;
         }
 
-        internal MD_Variable_Struct MD_Variable()
+        internal MD_Any MD_Variable()
         {
-            return (MD_Variable_Struct)Details;
+            return (MD_Any)Details;
         }
 
-        internal MD_Process_Struct MD_Process()
+        internal Object MD_Process()
         {
-            return (MD_Process_Struct)Details;
+            return (Object)Details;
         }
 
-        internal MD_Stream_Struct MD_Stream()
+        internal Object MD_Stream()
         {
-            return (MD_Stream_Struct)Details;
+            return (Object)Details;
         }
 
-        internal MD_External_Struct MD_External()
+        internal Object MD_External()
         {
-            return (MD_External_Struct)Details;
+            return (Object)Details;
         }
 
         internal MD_Tuple_Struct MD_Excuse()
@@ -407,7 +414,7 @@ namespace Muldis.D.Ref_Eng.Core
     // Muldis.D.Ref_Eng.Core.MD_Array_Struct
     // TODO: Refactor MD_Array_Struct to be more like MD_Bag_Struct.
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
-    // an MD_Array_Struct is used by it to hold the MD_Array-specific details.
+    // a MD_Array_Struct is used by it to hold the MD_Array-specific details.
     // It takes the form of a tree of its own kind to aid in reusability
     // of common substrings of members of distinct MD_Array values;
     // the actual members of the MD_Array value are, in order, any members
@@ -511,7 +518,7 @@ namespace Muldis.D.Ref_Eng.Core
     }
 
     // Muldis.D.Ref_Eng.Core.Multiplied_Member
-    // Represents a multiset of 0..N members of a collection where every
+    // Represents a multiset of 1..N members of a collection where every
     // member is the same Muldis D value.
 
     internal class Multiplied_Member
@@ -681,46 +688,5 @@ namespace Muldis.D.Ref_Eng.Core
 
         // The Muldis D value that is the "attributes" of this MD_Capsule value.
         internal MD_Any Attrs { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Variable_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Variable,
-    // a MD_Variable_Struct is used by it to hold the MD_Variable-specific details.
-    // Represents a Muldis D "variable", which is a container for an
-    // appearance of a value.  A Muldis D variable can be created,
-    // destroyed, copied, and mutated.  A variable's fundamental identity
-    // is its address, its identity does not vary with what value appears there.
-
-    internal class MD_Variable_Struct
-    {
-        internal MD_Any Current_Value { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Process_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Process,
-    // a MD_Process_Struct is used by it to hold the MD_Process-specific details.
-
-    internal class MD_Process_Struct
-    {
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Stream_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Stream,
-    // a MD_Stream_Struct is used by it to hold the MD_Stream-specific details.
-
-    internal class MD_Stream_Struct
-    {
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_External_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_External,
-    // a MD_External_Struct is used by it to hold the MD_External-specific details.
-
-    internal class MD_External_Struct
-    {
-        // The entity that is defined and managed externally to the Muldis
-        // D language environment, which the MD_External value is an opaque
-        // and transient reference to.
-        internal Object Value { get; set; }
     }
 }

@@ -1435,7 +1435,7 @@ namespace Muldis.D.Ref_Eng.Value
         public IMD_Any Current()
         {
             return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
-                m_value.AS.MD_Variable().Current_Value);
+                m_value.AS.MD_Variable());
         }
 
         public void Assign(IMD_Any value)
@@ -1444,7 +1444,7 @@ namespace Muldis.D.Ref_Eng.Value
             {
                 throw new ArgumentNullException("value");
             }
-            m_value.AS.MD_Variable().Current_Value = ((MD_Any)value).m_value;
+            m_value.AS.Details = ((MD_Any)value).m_value;
         }
     }
 
@@ -1460,7 +1460,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
         public Object Export_External_Object()
         {
-            return m_value.AS.MD_External().Value;
+            return m_value.AS.MD_External();
         }
     }
 
