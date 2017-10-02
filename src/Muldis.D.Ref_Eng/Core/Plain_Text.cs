@@ -259,9 +259,29 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             return sb.ToString();
         }
 
+        private String Attr_Name(String value)
+        {
+            if (value.Length == 1 && ((Char)value[0]) <= 0x1F)
+            {
+                // Format as an ordered attribute name, an Integer in 0..31.
+                return Integer_Literal((Int64)(Char)value[0]);
+            }
+            // Else, format as a non-ordered attribute name.
+            if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
+            {
+                // Format as a bareword alphanumeric name.
+                return value;
+            }
+            // Else, format as a quoted name.
+            if (value == "")
+            {
+                return "\"\"";
+            }
+            return "\"" + Quoted_Name_Or_Text_Segment_Content(value) + "\"";
+        }
+
         private String Heading_Literal(MD_Any value)
         {
-            // TODO: Quote attribute names where appropriate.
             Memory m = value.AS.Memory;
             MD_Tuple_Struct ts = value.AS.MD_Tuple();
             if (ts.Degree == 1)
@@ -269,7 +289,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 return Object.ReferenceEquals(value, m.Attr_Name_0) ? @"\0"
                      : Object.ReferenceEquals(value, m.Attr_Name_1) ? @"\1"
                      : Object.ReferenceEquals(value, m.Attr_Name_2) ? @"\2"
-                     : @"\" + ts.Only_OA.Value.Key;
+                     : @"\" + Attr_Name(ts.Only_OA.Value.Key);
             }
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
                 : @"\@("
@@ -277,11 +297,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     + (ts.A1 == null ? "" : "1,")
                     + (ts.A2 == null ? "" : "2,")
                     + (ts.Only_OA == null ? ""
-                        : ts.Only_OA.Value.Key + ",")
+                        : Attr_Name(ts.Only_OA.Value.Key) + ",")
                     + (ts.Multi_OA == null ? ""
                         : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                            a => a.Key + ",")))
+                            a => Attr_Name(a.Key) + ",")))
                     + ")";
         }
 
@@ -360,7 +380,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Tuple_Selector(MD_Any value, String indent)
         {
-            // TODO: Quote attribute names where appropriate.
             if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
             {
                 return Heading_Literal(value);
@@ -377,12 +396,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     + (ts.A2 == null ? "" : ati + "2 : "
                         + Any_Selector(ts.A2, ati) + ",\u000A")
                     + (ts.Only_OA == null ? ""
-                        : ati + ts.Only_OA.Value.Key + " : "
+                        : ati + Attr_Name(ts.Only_OA.Value.Key) + " : "
                             + Any_Selector(ts.Only_OA.Value.Value, ati) + ",\u000A")
                     + (ts.Multi_OA == null ? ""
                         : String.Concat(Enumerable.Select(
                             Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                            a => ati + a.Key + " : "
+                            a => ati + Attr_Name(a.Key) + " : "
                                 + Any_Selector(a.Value, ati) + ",\u000A")))
                     + indent + ")";
         }
@@ -395,7 +414,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Excuse_Selector(MD_Any value, String indent)
         {
-            // TODO: Quote attribute names where appropriate.
             String ati = indent + "\u0009";
             Memory m = value.AS.Memory;
             MD_Tuple_Struct ts = value.AS.MD_Excuse();
@@ -410,7 +428,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 return Object.ReferenceEquals(ts.A0, m.Attr_Name_0) ? @"\!0"
                      : Object.ReferenceEquals(ts.A0, m.Attr_Name_1) ? @"\!1"
                      : Object.ReferenceEquals(ts.A0, m.Attr_Name_2) ? @"\!2"
-                     : @"\!" + ts.A0.AS.MD_Tuple().Only_OA.Value.Key;
+                     : @"\!" + Attr_Name(ts.A0.AS.MD_Tuple().Only_OA.Value.Key);
             }
             return @"\!" + "(\u000A"
                 + (ts.A0 == null ? "" : ati + "0 : "
@@ -420,12 +438,12 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 + (ts.A2 == null ? "" : ati + "2 : "
                     + Any_Selector(ts.A2, ati) + ",\u000A")
                 + (ts.Only_OA == null ? ""
-                    : ati + ts.Only_OA.Value.Key + " : "
+                    : ati + Attr_Name(ts.Only_OA.Value.Key) + " : "
                         + Any_Selector(ts.Only_OA.Value.Value, ati) + ",\u000A")
                 + (ts.Multi_OA == null ? ""
                     : String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
-                        a => ati + a.Key + " : "
+                        a => ati + Attr_Name(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A")))
                 + indent + ")";
         }

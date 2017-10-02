@@ -82,6 +82,9 @@ namespace Muldis.D.Ref_Eng.Console
                 i.MD_Tuple(27,39)
             );
             IMD_Tuple that = i.MD_Tuple(27,39);
+            IMD_Tuple that_too = i.MD_Tuple(attrs: new Dictionary<String,Object>()
+                {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
+            );
             IMD_Text the_other = i.MD_Text("Fr ⊂ ac 💩 ti ÷ on");
             IMD_Fraction f0 = i.MD_Fraction(014.0M);
             IMD_Fraction f1 = i.MD_Fraction(2.3M);
