@@ -492,6 +492,12 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Fraction_0;
             }
+            // We still have to ensure normalization such that denominator is positive.
+            if (denominator < 0)
+            {
+                denominator = -denominator;
+                numerator   = -numerator  ;
+            }
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Muldis.D.Ref_Eng.Core;
@@ -131,7 +132,42 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Fraction_Literal(MD_Any value)
         {
             MD_Fraction_Struct fa = value.AS.MD_Fraction();
-            fa.Ensure_Coprime();
+            // Iff the Fraction value can be exactly expressed as a
+            // non-terminating decimal (includes all Fraction that can be
+            // non-terminating binary/octal/hex), express in that format;
+            // otherwise, express as a coprime numerator/denominator pair.
+            // Note, Is_Terminating_Decimal() will ensure As_Pair is
+            // coprime iff As_Decimal is null.
+            if (fa.Is_Terminating_Decimal())
+            {
+                if (fa.As_Decimal != null)
+                {
+                    String dec_digits = fa.As_Decimal.ToString();
+                    // When a .Net Decimal is selected using a .Net Decimal
+                    // literal having trailing zeroes, those trailing
+                    // zeroes will persist in the .ToString() result
+                    // (but any leading zeroes do not persist);
+                    // we need to detect and eliminate any of those,
+                    // except for a single trailing zero after the radix
+                    // point when the value is an integer.
+                    dec_digits = dec_digits.TrimEnd(new Char[] {'0'});
+                    return dec_digits.Substring(dec_digits.Length-1,1) == "."
+                        ? dec_digits + "0" : dec_digits;
+                }
+                Int32 dec_scale = fa.Pair_Decimal_Denominator_Scale();
+                if (dec_scale == 0)
+                {
+                    // We have an integer expressed as a Fraction.
+                    return fa.As_Pair.Numerator.ToString() + ".0";
+                }
+                BigInteger dec_denominator = BigInteger.Pow(10,dec_scale);
+                BigInteger dec_numerator = fa.As_Pair.Numerator
+                    * BigInteger.Divide(dec_denominator, fa.As_Pair.Denominator);
+                String numerator_digits = dec_numerator.ToString();
+                Int32 left_size = numerator_digits.Length - dec_scale;
+                return numerator_digits.Substring(0, left_size)
+                    + "." + numerator_digits.Substring(left_size);
+            }
             return fa.As_Pair.Numerator.ToString() + "/" + fa.As_Pair.Denominator.ToString();
         }
 

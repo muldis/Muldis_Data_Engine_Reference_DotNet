@@ -506,6 +506,8 @@ namespace Muldis.D.Ref_Eng.Core
             if (result)
             {
                 // TODO: Make a more educated decision on which one to keep.
+                // It should also have logic dispatching on MD_MSBT and
+                // do struct mergers as applicable eg copying identity info.
                 a1.AS = a0.AS;
             }
             return result;

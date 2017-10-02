@@ -256,11 +256,12 @@ namespace Muldis.D.Ref_Eng.Core
         // and it is primarily used when the MD_Fraction value was input to
         // the system as a .Net Decimal in the first place or was output
         // from the system as such; a MD_Fraction input first as a Decimal
-        // is only copied to the Numerator+Denominator fields when needed;
-        // if all 3 said fields are valued at once, they are redundant.
+        // is only copied to the As_Pair field when needed;
+        // if both said fields are valued at once, they are redundant.
         internal Nullable<Decimal> As_Decimal { get; set; }
 
-        // The As_Pair field can represent any
+        // The As_Pair field, comprising a Numerator+Denominator field
+        // pair, can represent any
         // MD_Fraction value at all, such that the Fraction's value is
         // defined as the fractional division of Numerator by Denominator.
         // As_Pair might not be defined if As_Decimal is defined.
@@ -278,8 +279,8 @@ namespace Muldis.D.Ref_Eng.Core
             if (gcd > 1)
             {
                 // Make the numerator and denominator coprime.
-                As_Pair.Numerator   = (As_Pair.Denominator > 0 ? As_Pair.Numerator   : -As_Pair.Numerator  ) / gcd;
-                As_Pair.Denominator = (As_Pair.Denominator > 0 ? As_Pair.Denominator : -As_Pair.Denominator) / gcd;
+                As_Pair.Numerator   = As_Pair.Numerator   / gcd;
+                As_Pair.Denominator = As_Pair.Denominator / gcd;
             }
             As_Pair.Cached_Is_Coprime = true;
         }
@@ -310,7 +311,72 @@ namespace Muldis.D.Ref_Eng.Core
             As_Pair = new MD_Fraction_Pair {
                 Numerator = new BigInteger(numerator_dec),
                 Denominator = new BigInteger(denominator_dec),
+                Cached_Is_Terminating_Decimal = true,
             };
+        }
+
+        internal Boolean Is_Terminating_Decimal()
+        {
+            if (As_Decimal != null)
+            {
+                return true;
+            }
+            if (As_Pair.Cached_Is_Terminating_Decimal == null)
+            {
+                Ensure_Coprime();
+                Boolean found_all_2_factors = false;
+                Boolean found_all_5_factors = false;
+                BigInteger confirmed_quotient = As_Pair.Denominator;
+                BigInteger attempt_quotient = 1;
+                BigInteger attempt_remainder = 0;
+                while (!found_all_2_factors)
+                {
+                    attempt_quotient = BigInteger.DivRem(
+                        confirmed_quotient, 2, out attempt_remainder);
+                    if (attempt_remainder > 0)
+                    {
+                        found_all_2_factors = true;
+                    }
+                    else
+                    {
+                        confirmed_quotient = attempt_quotient;
+                    }
+                }
+                while (!found_all_5_factors)
+                {
+                    attempt_quotient = BigInteger.DivRem(
+                        confirmed_quotient, 5, out attempt_remainder);
+                    if (attempt_remainder > 0)
+                    {
+                        found_all_5_factors = true;
+                    }
+                    else
+                    {
+                        confirmed_quotient = attempt_quotient;
+                    }
+                }
+                As_Pair.Cached_Is_Terminating_Decimal = (confirmed_quotient == 1);
+            }
+            return (Boolean)As_Pair.Cached_Is_Terminating_Decimal;
+        }
+
+        internal Int32 Pair_Decimal_Denominator_Scale()
+        {
+            if (As_Pair == null || !Is_Terminating_Decimal())
+            {
+                throw new InvalidOperationException();
+            }
+            Ensure_Coprime();
+            for (Int32 dec_scale = 0; dec_scale <= Int32.MaxValue; dec_scale++)
+            {
+                // BigInteger.Pow() can only take an Int32 exponent anyway.
+                if (BigInteger.Remainder(BigInteger.Pow(10,dec_scale), As_Pair.Denominator) == 0)
+                {
+                    return dec_scale;
+                }
+            }
+            // If somehow the Denominator can be big enough that we'd actually get here.
+            throw new NotImplementedException();
         }
     }
 
@@ -322,14 +388,12 @@ namespace Muldis.D.Ref_Eng.Core
         // The Numerator+Denominator field pair can represent any
         // MD_Fraction value at all, such that the Fraction's value is
         // defined as the fractional division of Numerator by Denominator.
-        // They are always defined or not defined as a pair, and the pair
-        // might not be defined if As_Decimal is defined.
-        // Denominator may never be zero, there are no limits otherwise.
+        // Denominator may never be zero; otherwise, the pair must always
+        // be normalized at least such that the Denominator is positive.
         internal BigInteger Numerator { get; set; }
         internal BigInteger Denominator { get; set; }
 
-        // This field is used only if Numerator+Denominator are defined.
-        // This is true iff we know that the defined Numerator and
+        // This is true iff we know that the Numerator and
         // Denominator are coprime (their greatest common divisor is 1);
         // this is false iff we know that they are not coprime.
         // While the pair typically need to be coprime in order to reliably
@@ -337,7 +401,19 @@ namespace Muldis.D.Ref_Eng.Core
         // we don't necessarily store them that way for efficiency sake.
         internal Nullable<Boolean> Cached_Is_Coprime { get; set; }
 
-        // This field is used only if Numerator+Denominator are defined.
+        // This is true iff we know that the MD_Fraction value can be
+        // represented as a terminating decimal number, meaning that the
+        // prime factorization of the MD_Fraction's coprime Denominator
+        // consists only of 2s and 5s; this is false iff we know that the
+        // MD_Fraction value would be an endlessly repeating decimal
+        // number, meaning that the MD_Fraction's coprime Denominator has
+        // at least 1 prime factor that is not a 2 or a 5.
+        // The identity serialization of a MD_Fraction uses a single decimal
+        // number iff it would terminate and a coprime integer pair otherwise.
+        // This field may be true even if Cached_Is_Coprime isn't because
+        // this MD_Fraction_Pair was derived from a Decimal.
+        internal Nullable<Boolean> Cached_Is_Terminating_Decimal { get; set; }
+
         // Iff this field is defined, we ensure that both the current
         // MD_Fraction_Struct has a Denominator equal to it, and also that
         // any other MD_Fraction_Struct derived from it has the same

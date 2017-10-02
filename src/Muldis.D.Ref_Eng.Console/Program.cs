@@ -83,7 +83,16 @@ namespace Muldis.D.Ref_Eng.Console
             );
             IMD_Tuple that = i.MD_Tuple(27,39);
             IMD_Text the_other = i.MD_Text("Fr ⊂ ac 💩 ti ÷ on");
-            IMD_Fraction f = i.MD_Fraction(2.3M);
+            IMD_Fraction f0 = i.MD_Fraction(014.0M);
+            IMD_Fraction f1 = i.MD_Fraction(2.3M);
+            IMD_Fraction f2 = i.MD_Fraction(02340233.23402532000M);
+            IMD_Fraction f3 = i.MD_Fraction(13,5);
+            IMD_Fraction f4 = i.MD_Fraction(27,6);
+            IMD_Fraction f5 = i.MD_Fraction(35,-41);
+            IMD_Fraction f6 = i.MD_Fraction(-54235435432,32543252);
+            IMD_Fraction f7 = i.MD_Fraction(26,13);
+            IMD_Fraction f8 = i.MD_Fraction(5,1);
+            IMD_Fraction f9 = i.MD_Fraction(5,-1);
         }
     }
 }
