@@ -168,14 +168,16 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
-                    Cached_Tree_Member_Count = 0,
-                    Cached_Tree_All_Unique = true,
-                    Cached_Tree_Relational = true,
                     Local_Symbolic_Type = Symbolic_Array_Type.None,
                     Local_Multiplicity = 0,
-                    Cached_Local_Member_Count = 0,
-                    Cached_Local_All_Unique = true,
-                    Cached_Local_Relational = true,
+                    Cached_Members_Meta = new Cached_Members_Meta {
+                        Tree_Member_Count = 0,
+                        Tree_All_Unique = true,
+                        Tree_Relational = true,
+                        Local_Member_Count = 0,
+                        Local_All_Unique = true,
+                        Local_Relational = true,
+                    },
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
@@ -184,13 +186,15 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                 Details = new MD_Bag_Struct {
-                    Cached_Tree_Member_Count = 0,
-                    Cached_Tree_All_Unique = true,
-                    Cached_Tree_Relational = true,
                     Local_Symbolic_Type = Symbolic_Bag_Type.None,
-                    Cached_Local_Member_Count = 0,
-                    Cached_Local_All_Unique = true,
-                    Cached_Local_Relational = true,
+                    Cached_Members_Meta = new Cached_Members_Meta {
+                        Tree_Member_Count = 0,
+                        Tree_All_Unique = true,
+                        Tree_Relational = true,
+                        Local_Member_Count = 0,
+                        Local_All_Unique = true,
+                        Local_Relational = true,
+                    },
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
@@ -199,13 +203,15 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                 Details = new MD_Bag_Struct {
-                    Cached_Tree_Member_Count = 0,
-                    Cached_Tree_All_Unique = true,
-                    Cached_Tree_Relational = true,
                     Local_Symbolic_Type = Symbolic_Bag_Type.None,
-                    Cached_Local_Member_Count = 0,
-                    Cached_Local_All_Unique = true,
-                    Cached_Local_Relational = true,
+                    Cached_Members_Meta = new Cached_Members_Meta {
+                        Tree_Member_Count = 0,
+                        Tree_All_Unique = true,
+                        Tree_Relational = true,
+                        Local_Member_Count = 0,
+                        Local_All_Unique = true,
+                        Local_Relational = true,
+                    },
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
@@ -350,16 +356,18 @@ namespace Muldis.D.Ref_Eng.Core
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                             Details = new MD_Array_Struct {
-                                Cached_Tree_Member_Count = 1,
-                                Cached_Tree_All_Unique = true,
-                                Cached_Tree_Relational = true,
                                 Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
                                 Local_Multiplicity = 1,
-                                Cached_Local_Member_Count = 1,
-                                Cached_Local_All_Unique = true,
-                                Cached_Local_Relational = true,
                                 Local_Arrayed_Members
                                     = new List<MD_Any> {MD_Tuple_D0},
+                                Cached_Members_Meta = new Cached_Members_Meta {
+                                    Tree_Member_Count = 1,
+                                    Tree_All_Unique = true,
+                                    Tree_Relational = true,
+                                    Local_Member_Count = 1,
+                                    Local_All_Unique = true,
+                                    Local_Relational = true,
+                                },
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } }},
@@ -387,16 +395,18 @@ namespace Muldis.D.Ref_Eng.Core
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                             Details = new MD_Bag_Struct {
-                                Cached_Tree_Member_Count = 1,
-                                Cached_Tree_All_Unique = true,
-                                Cached_Tree_Relational = true,
                                 Local_Symbolic_Type
                                     = Symbolic_Bag_Type.Singular,
-                                Cached_Local_Member_Count = 1,
-                                Cached_Local_All_Unique = true,
-                                Cached_Local_Relational = true,
                                 Local_Singular_Members
                                     = new Multiplied_Member(MD_Tuple_D0),
+                                Cached_Members_Meta = new Cached_Members_Meta {
+                                    Tree_Member_Count = 1,
+                                    Tree_All_Unique = true,
+                                    Tree_Relational = true,
+                                    Local_Member_Count = 1,
+                                    Local_All_Unique = true,
+                                    Local_Relational = true,
+                                },
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } }},
@@ -424,16 +434,18 @@ namespace Muldis.D.Ref_Eng.Core
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
-                                Cached_Tree_Member_Count = 1,
-                                Cached_Tree_All_Unique = true,
-                                Cached_Tree_Relational = true,
                                 Local_Symbolic_Type
                                     = Symbolic_Bag_Type.Singular,
-                                Cached_Local_Member_Count = 1,
-                                Cached_Local_All_Unique = true,
-                                Cached_Local_Relational = true,
                                 Local_Singular_Members
                                     = new Multiplied_Member(MD_Tuple_D0),
+                                Cached_Members_Meta = new Cached_Members_Meta {
+                                    Tree_Member_Count = 1,
+                                    Tree_All_Unique = true,
+                                    Tree_Relational = true,
+                                    Local_Member_Count = 1,
+                                    Local_All_Unique = true,
+                                    Local_Relational = true,
+                                },
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } }},
@@ -585,6 +597,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
                     Local_Multiplicity = 1,
                     Local_Arrayed_Members = members,
+                    Cached_Members_Meta = new Cached_Members_Meta(),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
@@ -600,11 +613,14 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                 Details = new MD_Bag_Struct {
-                    Cached_Tree_All_Unique = true,
                     Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                     Primary_Arg = new MD_Bag_Struct {
                         Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
                         Local_Arrayed_Members = members,
+                        Cached_Members_Meta = new Cached_Members_Meta(),
+                    },
+                    Cached_Members_Meta = new Cached_Members_Meta {
+                        Tree_All_Unique = true,
                     },
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -623,6 +639,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Details = new MD_Bag_Struct {
                     Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
                     Local_Arrayed_Members = members,
+                    Cached_Members_Meta = new Cached_Members_Meta(),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
@@ -970,14 +987,16 @@ namespace Muldis.D.Ref_Eng.Core
                         }
                     }
                     return new MD_Bag_Struct {
-                        Cached_Tree_Member_Count = ary_src_list.Count,
-                        Cached_Tree_All_Unique = node.Cached_Local_All_Unique,
-                        Cached_Tree_Relational = node.Cached_Local_Relational,
                         Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                        Cached_Local_Member_Count = ary_src_list.Count,
-                        Cached_Local_All_Unique = node.Cached_Local_All_Unique,
-                        Cached_Local_Relational = node.Cached_Local_Relational,
                         Local_Indexed_Members = ary_res_dict,
+                        Cached_Members_Meta = new Cached_Members_Meta {
+                            Tree_Member_Count = ary_src_list.Count,
+                            Tree_All_Unique = node.Cached_Members_Meta.Local_All_Unique,
+                            Tree_Relational = node.Cached_Members_Meta.Local_Relational,
+                            Local_Member_Count = ary_src_list.Count,
+                            Local_All_Unique = node.Cached_Members_Meta.Local_All_Unique,
+                            Local_Relational = node.Cached_Members_Meta.Local_Relational,
+                        },
                     };
                 case Symbolic_Bag_Type.Indexed:
                     // Node is already collapsed.
@@ -992,29 +1011,33 @@ namespace Muldis.D.Ref_Eng.Core
                     if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.Singular)
                     {
                         return new MD_Bag_Struct {
-                            Cached_Tree_Member_Count = 1,
-                            Cached_Tree_All_Unique = true,
-                            Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
                             Local_Symbolic_Type = Symbolic_Bag_Type.Singular,
-                            Cached_Local_Member_Count = 1,
-                            Cached_Local_All_Unique = true,
-                            Cached_Local_Relational = uni_pa.Cached_Local_Relational,
                             Local_Singular_Members = new Multiplied_Member(
                                 uni_pa.Local_Singular_Members.Member),
+                            Cached_Members_Meta = new Cached_Members_Meta {
+                                Tree_Member_Count = 1,
+                                Tree_All_Unique = true,
+                                Tree_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
+                                Local_Member_Count = 1,
+                                Local_All_Unique = true,
+                                Local_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
+                            },
                         };
                     }
                     Dictionary<MD_Any,Multiplied_Member> uni_src_dict
                         = uni_pa.Local_Indexed_Members;
                     return new MD_Bag_Struct {
-                        Cached_Tree_Member_Count = uni_src_dict.Count,
-                        Cached_Tree_All_Unique = true,
-                        Cached_Tree_Relational = uni_pa.Cached_Local_Relational,
                         Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                        Cached_Local_Member_Count = uni_src_dict.Count,
-                        Cached_Local_All_Unique = true,
-                        Cached_Local_Relational = uni_pa.Cached_Local_Relational,
                         Local_Indexed_Members = uni_src_dict.ToDictionary(
                             m => m.Key, m => new Multiplied_Member(m.Key, 1)),
+                        Cached_Members_Meta = new Cached_Members_Meta {
+                            Tree_Member_Count = uni_src_dict.Count,
+                            Tree_All_Unique = true,
+                            Tree_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
+                            Local_Member_Count = uni_src_dict.Count,
+                            Local_All_Unique = true,
+                            Local_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
+                        },
                     };
                 case Symbolic_Bag_Type.Insert_N:
                     throw new NotImplementedException();
@@ -1063,7 +1086,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private Boolean Array__Tree_Relational(MD_Array_Struct node)
         {
-            if (node.Cached_Tree_Relational == null)
+            if (node.Cached_Members_Meta.Tree_Relational == null)
             {
                 Boolean tr = true;
                 switch (node.Local_Symbolic_Type)
@@ -1082,23 +1105,23 @@ namespace Muldis.D.Ref_Eng.Core
                     default:
                         throw new NotImplementedException();
                 }
-                node.Cached_Tree_Relational = tr;
+                node.Cached_Members_Meta.Tree_Relational = tr;
             }
-            return (Boolean)node.Cached_Tree_Relational;
+            return (Boolean)node.Cached_Members_Meta.Tree_Relational;
         }
 
         private Boolean Array__Local_Relational(MD_Array_Struct node)
         {
-            if (node.Cached_Local_Relational == null)
+            if (node.Cached_Members_Meta.Local_Relational == null)
             {
                 switch (node.Local_Symbolic_Type)
                 {
                     case Symbolic_Array_Type.None:
-                        node.Cached_Local_Relational = true;
+                        node.Cached_Members_Meta.Local_Relational = true;
                         break;
                     case Symbolic_Array_Type.Arrayed:
                         MD_Any m0 = Array__Pick_Random_Struct_Member(node);
-                        node.Cached_Local_Relational
+                        node.Cached_Members_Meta.Local_Relational
                             = m0.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
@@ -1112,7 +1135,7 @@ namespace Muldis.D.Ref_Eng.Core
                         throw new NotImplementedException();
                 }
             }
-            return (Boolean)node.Cached_Local_Relational;
+            return (Boolean)node.Cached_Members_Meta.Local_Relational;
         }
 
         internal MD_Any Set__Pick_Random_Member(MD_Any set)
@@ -1134,7 +1157,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private MD_Any Bag__Pick_Random_Struct_Member(MD_Bag_Struct node)
         {
-            if (node.Cached_Tree_Member_Count == 0)
+            if (node.Cached_Members_Meta.Tree_Member_Count == 0)
             {
                 return null;
             }
@@ -1179,7 +1202,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private Boolean Bag__Tree_Relational(MD_Bag_Struct node)
         {
-            if (node.Cached_Tree_Relational == null)
+            if (node.Cached_Members_Meta.Tree_Relational == null)
             {
                 Boolean tr = true;
                 switch (node.Local_Symbolic_Type)
@@ -1222,14 +1245,14 @@ namespace Muldis.D.Ref_Eng.Core
                     default:
                         throw new NotImplementedException();
                 }
-                node.Cached_Tree_Relational = tr;
+                node.Cached_Members_Meta.Tree_Relational = tr;
             }
-            return (Boolean)node.Cached_Tree_Relational;
+            return (Boolean)node.Cached_Members_Meta.Tree_Relational;
         }
 
         private Boolean Bag__Local_Relational(MD_Bag_Struct node)
         {
-            if (node.Cached_Local_Relational == null)
+            if (node.Cached_Members_Meta.Local_Relational == null)
             {
                 switch (node.Local_Symbolic_Type)
                 {
@@ -1240,24 +1263,24 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Bag_Type.Intersect:
                     case Symbolic_Bag_Type.Union:
                     case Symbolic_Bag_Type.Exclusive:
-                        node.Cached_Local_Relational = true;
+                        node.Cached_Members_Meta.Local_Relational = true;
                         break;
                     case Symbolic_Bag_Type.Singular:
                     case Symbolic_Bag_Type.Insert_N:
                     case Symbolic_Bag_Type.Remove_N:
-                        node.Cached_Local_Relational
+                        node.Cached_Members_Meta.Local_Relational
                             = node.Local_Singular_Members.Member.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Bag_Type.Arrayed:
                         if (node.Local_Arrayed_Members.Count == 0)
                         {
-                            node.Cached_Local_Relational = true;
+                            node.Cached_Members_Meta.Local_Relational = true;
                         }
                         else
                         {
                             MD_Any m0 = Bag__Pick_Random_Struct_Member(node);
-                            node.Cached_Local_Relational
+                            node.Cached_Members_Meta.Local_Relational
                                 = m0.AS.MD_MSBT
                                     == MD_Well_Known_Base_Type.MD_Tuple
                                 && Enumerable.All(
@@ -1274,7 +1297,7 @@ namespace Muldis.D.Ref_Eng.Core
                         throw new NotImplementedException();
                 }
             }
-            return (Boolean)node.Cached_Local_Relational;
+            return (Boolean)node.Cached_Members_Meta.Local_Relational;
         }
 
         internal MD_Any Tuple__Heading(MD_Any tuple)

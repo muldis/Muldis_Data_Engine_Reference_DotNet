@@ -231,9 +231,11 @@ namespace Muldis.D.Ref_Eng.Core
                             Memory = m,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
-                                Cached_Tree_All_Unique = true,
                                 Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                                 Primary_Arg = v.AS.MD_Bag(),
+                                Cached_Members_Meta = new Cached_Members_Meta {
+                                    Tree_All_Unique = true,
+                                },
                             },
                             Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } };
@@ -573,17 +575,17 @@ namespace Muldis.D.Ref_Eng.Core
 
         private Int64 Array__node__tree_member_count(MD_Array_Struct node)
         {
-            if (node.Cached_Tree_Member_Count == null)
+            if (node.Cached_Members_Meta.Tree_Member_Count == null)
             {
                 switch (node.Local_Symbolic_Type)
                 {
                     case Symbolic_Array_Type.None:
                     case Symbolic_Array_Type.Arrayed:
-                        node.Cached_Tree_Member_Count
+                        node.Cached_Members_Meta.Tree_Member_Count
                             = Array__node__local_member_count(node);
                         break;
                     case Symbolic_Array_Type.Catenated:
-                        node.Cached_Tree_Member_Count
+                        node.Cached_Members_Meta.Tree_Member_Count
                             = Array__node__tree_member_count(node.Pred_Members)
                             + Array__node__tree_member_count(node.Succ_Members);
                         break;
@@ -591,27 +593,27 @@ namespace Muldis.D.Ref_Eng.Core
                         throw new NotImplementedException();
                 }
             }
-            return (Int64)node.Cached_Tree_Member_Count;
+            return (Int64)node.Cached_Members_Meta.Tree_Member_Count;
         }
 
         private Int64 Array__node__local_member_count(MD_Array_Struct node)
         {
-            if (node.Cached_Local_Member_Count == null)
+            if (node.Cached_Members_Meta.Local_Member_Count == null)
             {
                 switch (node.Local_Symbolic_Type)
                 {
                     case Symbolic_Array_Type.None:
-                        node.Cached_Local_Member_Count = 0;
+                        node.Cached_Members_Meta.Local_Member_Count = 0;
                         break;
                     case Symbolic_Array_Type.Arrayed:
-                        node.Cached_Local_Member_Count
+                        node.Cached_Members_Meta.Local_Member_Count
                             = node.Local_Multiplicity * node.Local_Arrayed_Members.Count;
                         break;
                     default:
                         throw new NotImplementedException();
                 }
             }
-            return (Int64)node.Cached_Local_Member_Count;
+            return (Int64)node.Cached_Members_Meta.Local_Member_Count;
         }
 
         private MD_Any Bits__maybe_at(MD_Any bits, Int64 ord_pos)
@@ -662,7 +664,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private MD_Any Array__node__maybe_at(MD_Array_Struct node, Int64 ord_pos)
         {
-            if (node.Cached_Tree_Member_Count == 0)
+            if (node.Cached_Members_Meta.Tree_Member_Count == 0)
             {
                 return null;
             }
