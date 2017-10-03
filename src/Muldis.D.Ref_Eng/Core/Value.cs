@@ -483,55 +483,85 @@ namespace Muldis.D.Ref_Eng.Core
     internal enum Symbolic_Array_Type
     {
         None,
+        Singular,
         Arrayed,
-        Catenated,
+        Catenate,
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Struct
-    // TODO: Refactor MD_Array_Struct to be more like MD_Bag_Struct.
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
     // a MD_Array_Struct is used by it to hold the MD_Array-specific details.
-    // It takes the form of a tree of its own kind to aid in reusability
-    // of common substrings of members of distinct MD_Array values;
-    // the actual members of the MD_Array value are, in order, any members
-    // specified by Pred_Members, then any Local_*_Members, then
-    // Succ_Members.  A MD_Array_Struct also uses run-length encoding to
-    // optimize storage, such that the actual "local" members of a node are
-    // defined as the sequence in Local_*_Members repeated the number of
-    // times specified by Local_Multiplicity.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
+    // It is important to note that the same logical Muldis D Array value
+    // may be represented by several different representation formats here,
 
     internal class MD_Array_Struct
     {
-        // LST determines how to interpret most of the other fields.
-        // Iff LST is None, this node is explicitly a leaf node defining zero members.
-        // Iff LST is Arrayed, Local_Arrayed_Members, combined with
-        // Local_Multiplicity, defines all of the Array members.
-        // Iff LST is Catenated, this Array's members are defined as
-        // the catenation of Pred_Members and Succ_Members.
-        // TODO: Refactor MD_Array_Struct to be more like MD_Bag_Struct.
+        // Local Symbolic Type (LST) determines the role this node plays in
+        // the tree.  Determines interpreting Details field.
         internal Symbolic_Array_Type Local_Symbolic_Type { get; set; }
 
-        // Iff this is zero, then there are zero "local" members;
-        // iff this is 1, then the "local" members are as Local_*_Members
-        // specifies with no repeats;
-        // iff this is >1, then the local members have that many occurrances.
-        internal Int64 Local_Multiplicity { get; set; }
+        // Details of this Muldis D Array, in one of several possible
+        // specialized representation formats depending on the data type.
+        // Iff LST is None, this field is simply null.
+            // This is a leaf node explicitly defining zero Array members.
+            // Guarantees the Array has exactly zero members.
+        // Iff LST is Singular, this field holds a Multiplied_Member.
+            // This is a leaf node defining 1..N Array members, every one of
+            // which is the same value, which can be of any type;
+            // Singular is the basis for compactly representing either a
+            // single-element Array or a repeating portion of a sparse Array.
+            // Guarantees the Array has at least 1 member and that all
+            // Array members are the same value.
+        // Iff LST is Arrayed, this field holds a List<MD_Any>.
+            // This is a leaf node defining 2..N Array members, each of which
+            // can be of any type; this is the most common format.
+            // Guarantees the Array has at least 2 members but does not
+            // guarantee that at least 2 members have distinct values.
+        // Iff LST is Catenate, this field holds a MD_Array_Pair.
+            // This is a non-leaf node with 2 direct child Array nodes;
+            // this Array's members are defined as the catenation of
+            // the pair's A0 and A1 nodes in that order.
+            // Makes no guarantees that the Array is none/singular/otherwise.
+        internal Object Details { get; set; }
 
-        // This field is used iff LST is Arrayed.
-        // A List<MD_Any> is the simplest storage representation for that
-        // type which doesn't internally use trees for sharing or multipliers.
-        internal List<MD_Any> Local_Arrayed_Members { get; set; }
-
-        // This field is used iff LST is Catenated.
-        internal MD_Array_Struct Pred_Members { get; set; }
-
-        // This field is used iff LST is Catenated.
-        internal MD_Array_Struct Succ_Members { get; set; }
-
-        // A cache of calculations about this Bag's members.
+        // A cache of calculations about this Array's members.
         internal Cached_Members_Meta Cached_Members_Meta { get; set; }
+
+        internal Multiplied_Member Singular()
+        {
+            return (Multiplied_Member)Details;
+        }
+
+        internal List<MD_Any> Arrayed()
+        {
+            return (List<MD_Any>)Details;
+        }
+
+        internal MD_Array_Pair Catenate()
+        {
+            return (MD_Array_Pair)Details;
+        }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Array_Pair
+    // Represents an ordered pair of MD_Array, typically corresponding in
+    // order to the "0" and "1" conceptually-ordered arg/attr to a function.
+
+    internal class MD_Array_Pair
+    {
+        // This is the first conceptually-ordered arg/attr.
+        internal MD_Array_Struct A0 { get; set; }
+
+        // This is the second conceptually-ordered arg/attr.
+        internal MD_Array_Struct A1 { get; set; }
+
+        internal MD_Array_Pair(MD_Array_Struct a0, MD_Array_Struct a1)
+        {
+            A0 = a0;
+            A1 = a1;
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.Symbolic_Bag_Type

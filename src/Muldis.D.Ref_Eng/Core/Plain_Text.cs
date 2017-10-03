@@ -316,17 +316,29 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
         {
+            // Note: We always display consecutive duplicates in repeating
+            // value format rather than value-count format in order to keep
+            // everything simple and reliable in the 99% common case; we
+            // assume that it would only be a rare edge case to have a
+            // sparse array that we would want to output in that manner.
+            // TODO: Rendering a Singular with a higher Multiplicity than
+            // an Int32 can hold will throw a runtime exception; we can
+            // deal with that later if an actual use case runs afowl of it.
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Array_Type.None:
                     return "";
+                case Symbolic_Array_Type.Singular:
+                    return String.Concat(Enumerable.Repeat(
+                        indent + Any_Selector(node.Singular().Member, indent) + ",\u000A",
+                        (Int32)node.Singular().Multiplicity));
                 case Symbolic_Array_Type.Arrayed:
                     return String.Concat(Enumerable.Select(
-                        node.Local_Arrayed_Members,
+                        node.Arrayed(),
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
-                case Symbolic_Array_Type.Catenated:
-                    return Array_Selector__node__tree(node.Pred_Members, indent)
-                        + Array_Selector__node__tree(node.Succ_Members, indent);
+                case Symbolic_Array_Type.Catenate:
+                    return Array_Selector__node__tree(node.Catenate().A0, indent)
+                        + Array_Selector__node__tree(node.Catenate().A1, indent);
                 default:
                     throw new NotImplementedException();
             }

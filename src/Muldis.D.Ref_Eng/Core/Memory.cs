@@ -169,7 +169,6 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
                     Local_Symbolic_Type = Symbolic_Array_Type.None,
-                    Local_Multiplicity = 0,
                     Cached_Members_Meta = new Cached_Members_Meta {
                         Tree_Member_Count = 0,
                         Tree_All_Unique = true,
@@ -356,10 +355,8 @@ namespace Muldis.D.Ref_Eng.Core
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                             Details = new MD_Array_Struct {
-                                Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
-                                Local_Multiplicity = 1,
-                                Local_Arrayed_Members
-                                    = new List<MD_Any> {MD_Tuple_D0},
+                                Local_Symbolic_Type = Symbolic_Array_Type.Singular,
+                                Details = new Multiplied_Member(MD_Tuple_D0),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_Member_Count = 1,
                                     Tree_All_Unique = true,
@@ -590,13 +587,25 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Array_C0;
             }
+            if (members.Count == 1)
+            {
+                return new MD_Any { AS = new MD_Any_Struct {
+                    Memory = this,
+                    MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
+                    Details = new MD_Array_Struct {
+                        Local_Symbolic_Type = Symbolic_Array_Type.Singular,
+                        Details = new Multiplied_Member(members[0]),
+                        Cached_Members_Meta = new Cached_Members_Meta(),
+                    },
+                    Cached_WKT = new HashSet<MD_Well_Known_Type>(),
+                } };
+            }
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
                     Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
-                    Local_Multiplicity = 1,
-                    Local_Arrayed_Members = members,
+                    Details = members,
                     Cached_Members_Meta = new Cached_Members_Meta(),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -1069,11 +1078,13 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 case Symbolic_Array_Type.None:
                     return null;
+                case Symbolic_Array_Type.Singular:
+                    return node.Singular().Member;
                 case Symbolic_Array_Type.Arrayed:
-                    return node.Local_Arrayed_Members[0];
-                case Symbolic_Array_Type.Catenated:
-                    return Array__Pick_Random_Struct_Member(node.Pred_Members)
-                        ?? Array__Pick_Random_Struct_Member(node.Succ_Members);
+                    return node.Arrayed()[0];
+                case Symbolic_Array_Type.Catenate:
+                    return Array__Pick_Random_Struct_Member(node.Catenate().A0)
+                        ?? Array__Pick_Random_Struct_Member(node.Catenate().A1);
                 default:
                     throw new NotImplementedException();
             }
@@ -1092,14 +1103,15 @@ namespace Muldis.D.Ref_Eng.Core
                 switch (node.Local_Symbolic_Type)
                 {
                     case Symbolic_Array_Type.None:
+                    case Symbolic_Array_Type.Singular:
                     case Symbolic_Array_Type.Arrayed:
                         tr = Array__Local_Relational(node);
                         break;
-                    case Symbolic_Array_Type.Catenated:
-                        MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Pred_Members);
-                        MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Succ_Members);
-                        tr = Array__Tree_Relational(node.Pred_Members)
-                            && Array__Tree_Relational(node.Succ_Members)
+                    case Symbolic_Array_Type.Catenate:
+                        MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Catenate().A0);
+                        MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Catenate().A1);
+                        tr = Array__Tree_Relational(node.Catenate().A0)
+                            && Array__Tree_Relational(node.Catenate().A1)
                             && (pm0 == null || sm0 == null || Tuple__Same_Heading(pm0, sm0));
                         break;
                     default:
@@ -1119,13 +1131,18 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Array_Type.None:
                         node.Cached_Members_Meta.Local_Relational = true;
                         break;
+                    case Symbolic_Array_Type.Singular:
+                        node.Cached_Members_Meta.Local_Relational
+                            = node.Singular().Member.AS.MD_MSBT
+                                == MD_Well_Known_Base_Type.MD_Tuple;
+                        break;
                     case Symbolic_Array_Type.Arrayed:
                         MD_Any m0 = Array__Pick_Random_Struct_Member(node);
                         node.Cached_Members_Meta.Local_Relational
                             = m0.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
-                                node.Local_Arrayed_Members,
+                                node.Arrayed(),
                                 m => m.AS.MD_MSBT
                                         == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m, m0)
