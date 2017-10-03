@@ -1048,19 +1048,7 @@ namespace Muldis.D.Ref_Eng.Core
                             Local_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
                         },
                     };
-                case Symbolic_Bag_Type.Insert_N:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Remove_N:
-                    throw new NotImplementedException();
                 case Symbolic_Bag_Type.Member_Plus:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Except:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Intersect:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Union:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Exclusive:
                     throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
@@ -1191,22 +1179,9 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new NotImplementedException();
                 case Symbolic_Bag_Type.Unique:
                     return Bag__Pick_Random_Struct_Member(node.Primary_Arg);
-                case Symbolic_Bag_Type.Insert_N:
-                    return node.Local_Singular_Members.Member;
-                case Symbolic_Bag_Type.Remove_N:
-                    throw new NotImplementedException();
                 case Symbolic_Bag_Type.Member_Plus:
                     return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
                         ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
-                case Symbolic_Bag_Type.Except:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Intersect:
-                    throw new NotImplementedException();
-                case Symbolic_Bag_Type.Union:
-                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
-                        ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
-                case Symbolic_Bag_Type.Exclusive:
-                    throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
             }
@@ -1233,18 +1208,7 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Bag_Type.Unique:
                         tr = Bag__Tree_Relational(node.Primary_Arg);
                         break;
-                    case Symbolic_Bag_Type.Insert_N:
-                        tr = Bag__Local_Relational(node);
-                        MD_Any lsm = node.Local_Singular_Members.Member;
-                        MD_Any pm0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
-                        if (pm0 != null)
-                        {
-                            tr = tr && Bag__Tree_Relational(node.Primary_Arg)
-                                && Tuple__Same_Heading(pm0, lsm);
-                        }
-                        break;
                     case Symbolic_Bag_Type.Member_Plus:
-                    case Symbolic_Bag_Type.Union:
                         tr = Bag__Tree_Relational(node.Primary_Arg)
                             && Bag__Tree_Relational(node.Extra_Arg);
                         MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
@@ -1254,11 +1218,6 @@ namespace Muldis.D.Ref_Eng.Core
                             tr = tr && Tuple__Same_Heading(pam0, eam0);
                         }
                         break;
-                    case Symbolic_Bag_Type.Remove_N:
-                    case Symbolic_Bag_Type.Except:
-                    case Symbolic_Bag_Type.Intersect:
-                    case Symbolic_Bag_Type.Exclusive:
-                        throw new NotImplementedException();
                     default:
                         throw new NotImplementedException();
                 }
@@ -1276,15 +1235,9 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Bag_Type.None:
                     case Symbolic_Bag_Type.Unique:
                     case Symbolic_Bag_Type.Member_Plus:
-                    case Symbolic_Bag_Type.Except:
-                    case Symbolic_Bag_Type.Intersect:
-                    case Symbolic_Bag_Type.Union:
-                    case Symbolic_Bag_Type.Exclusive:
                         node.Cached_Members_Meta.Local_Relational = true;
                         break;
                     case Symbolic_Bag_Type.Singular:
-                    case Symbolic_Bag_Type.Insert_N:
-                    case Symbolic_Bag_Type.Remove_N:
                         node.Cached_Members_Meta.Local_Relational
                             = node.Local_Singular_Members.Member.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple;

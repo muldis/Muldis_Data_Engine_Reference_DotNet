@@ -457,13 +457,7 @@ namespace Muldis.D.Ref_Eng.Core
                         case Symbolic_Bag_Type.Arrayed:
                         case Symbolic_Bag_Type.Indexed:
                         case Symbolic_Bag_Type.Unique:
-                        case Symbolic_Bag_Type.Insert_N:
-                        case Symbolic_Bag_Type.Remove_N:
                         case Symbolic_Bag_Type.Member_Plus:
-                        case Symbolic_Bag_Type.Except:
-                        case Symbolic_Bag_Type.Intersect:
-                        case Symbolic_Bag_Type.Union:
-                        case Symbolic_Bag_Type.Exclusive:
                             // For now skip the more complicated cases where
                             // further processing is required in order to
                             // properly compare the 2 Bag for logical equality.

@@ -576,13 +576,7 @@ namespace Muldis.D.Ref_Eng.Core
         Arrayed,
         Indexed,
         Unique,
-        Insert_N,
-        Remove_N,
         Member_Plus,
-        Except,
-        Intersect,
-        Union,
-        Exclusive,
     }
 
     // Muldis.D.Ref_Eng.Core.Multiplied_Member
@@ -629,23 +623,11 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff LST is Indexed, Local_Indexed_Members defines all of the Bag members.
         // Iff LST is Unique, this Bag's members are defined as
         // the unique members of Primary_Arg.
-        // Iff LST is Insert_N, this Bag's members are defined as
-        // the multiset sum of Primary_Arg and Local_Singular_Members.
-        // Iff LST is Remove_N, this Bag's members are defined as
-        // the multiset difference of Primary_Arg and Local_Singular_Members.
         // Iff LST is Member_Plus, this Bag's members are defined as
         // the multiset sum of Primary_Arg and Extra_Arg.
-        // Iff LST is Except, this Bag's members are defined as
-        // the multiset difference of Primary_Arg and Extra_Arg.
-        // Iff LST is Intersect, this Bag's members are defined as
-        // the multiset intersection of Primary_Arg and Extra_Arg.
-        // Iff LST is Union, this Bag's members are defined as
-        // the multiset union of Primary_Arg and Extra_Arg.
-        // Iff LST is Exclusive, this Bag's members are defined as
-        // the multiset symmetric difference of Primary_Arg and Extra_Arg.
         internal Symbolic_Bag_Type Local_Symbolic_Type { get; set; }
 
-        // This field is used iff LST is one of {Singular, Insert_N, Remove_N}.
+        // This field is used iff LST is one of {Singular}.
         internal Multiplied_Member Local_Singular_Members { get; set; }
 
         // This field is used iff LST is Arrayed.
@@ -657,12 +639,12 @@ namespace Muldis.D.Ref_Eng.Core
         internal Dictionary<MD_Any,Multiplied_Member>
             Local_Indexed_Members { get; set; }
 
-        // This field is used iff LST is one of {Unique, Insert_N, Remove_N,
-        // Member_Plus, Except, Intersect, Union, Exclusive}.
+        // This field is used iff LST is one of
+        // {Unique, Member_Plus}.
         internal MD_Bag_Struct Primary_Arg { get; set; }
 
         // This field is used iff LST is one of
-        // {Member_Plus, Except, Intersect, Union, Exclusive}.
+        // {Member_Plus}.
         internal MD_Bag_Struct Extra_Arg { get; set; }
 
         // A cache of calculations about this Bag's members.
