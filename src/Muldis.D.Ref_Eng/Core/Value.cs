@@ -485,7 +485,7 @@ namespace Muldis.D.Ref_Eng.Core
         None,
         Singular,
         Arrayed,
-        Catenate,
+        Catenated,
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Array_Struct
@@ -499,10 +499,10 @@ namespace Muldis.D.Ref_Eng.Core
     internal class MD_Array_Struct
     {
         // Local Symbolic Type (LST) determines the role this node plays in
-        // the tree.  Determines interpreting Details field.
+        // the tree.  Determines interpreting Members field.
         internal Symbolic_Array_Type Local_Symbolic_Type { get; set; }
 
-        // Details of this Muldis D Array, in one of several possible
+        // Members of this Muldis D Array, in one of several possible
         // specialized representation formats depending on the data type.
         // Iff LST is None, this field is simply null.
             // This is a leaf node explicitly defining zero Array members.
@@ -519,29 +519,29 @@ namespace Muldis.D.Ref_Eng.Core
             // can be of any type; this is the most common format.
             // Guarantees the Array has at least 2 members but does not
             // guarantee that at least 2 members have distinct values.
-        // Iff LST is Catenate, this field holds a MD_Array_Pair.
+        // Iff LST is Catenated, this field holds a MD_Array_Pair.
             // This is a non-leaf node with 2 direct child Array nodes;
             // this Array's members are defined as the catenation of
             // the pair's A0 and A1 nodes in that order.
             // Makes no guarantees that the Array is none/singular/otherwise.
-        internal Object Details { get; set; }
+        internal Object Members { get; set; }
 
         // A cache of calculations about this Array's members.
         internal Cached_Members_Meta Cached_Members_Meta { get; set; }
 
-        internal Multiplied_Member Singular()
+        internal Multiplied_Member Local_Singular_Members()
         {
-            return (Multiplied_Member)Details;
+            return (Multiplied_Member)Members;
         }
 
-        internal List<MD_Any> Arrayed()
+        internal List<MD_Any> Local_Arrayed_Members()
         {
-            return (List<MD_Any>)Details;
+            return (List<MD_Any>)Members;
         }
 
-        internal MD_Array_Pair Catenate()
+        internal MD_Array_Pair Tree_Catenated_Members()
         {
-            return (MD_Array_Pair)Details;
+            return (MD_Array_Pair)Members;
         }
     }
 

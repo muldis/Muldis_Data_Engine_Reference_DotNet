@@ -356,7 +356,7 @@ namespace Muldis.D.Ref_Eng.Core
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                             Details = new MD_Array_Struct {
                                 Local_Symbolic_Type = Symbolic_Array_Type.Singular,
-                                Details = new Multiplied_Member(MD_Tuple_D0),
+                                Members = new Multiplied_Member(MD_Tuple_D0),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_Member_Count = 1,
                                     Tree_All_Unique = true,
@@ -594,7 +594,7 @@ namespace Muldis.D.Ref_Eng.Core
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                     Details = new MD_Array_Struct {
                         Local_Symbolic_Type = Symbolic_Array_Type.Singular,
-                        Details = new Multiplied_Member(members[0]),
+                        Members = new Multiplied_Member(members[0]),
                         Cached_Members_Meta = new Cached_Members_Meta(),
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -605,7 +605,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
                     Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
-                    Details = members,
+                    Members = members,
                     Cached_Members_Meta = new Cached_Members_Meta(),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -1067,12 +1067,12 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Array_Type.None:
                     return null;
                 case Symbolic_Array_Type.Singular:
-                    return node.Singular().Member;
+                    return node.Local_Singular_Members().Member;
                 case Symbolic_Array_Type.Arrayed:
-                    return node.Arrayed()[0];
-                case Symbolic_Array_Type.Catenate:
-                    return Array__Pick_Random_Struct_Member(node.Catenate().A0)
-                        ?? Array__Pick_Random_Struct_Member(node.Catenate().A1);
+                    return node.Local_Arrayed_Members()[0];
+                case Symbolic_Array_Type.Catenated:
+                    return Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A0)
+                        ?? Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A1);
                 default:
                     throw new NotImplementedException();
             }
@@ -1095,11 +1095,11 @@ namespace Muldis.D.Ref_Eng.Core
                     case Symbolic_Array_Type.Arrayed:
                         tr = Array__Local_Relational(node);
                         break;
-                    case Symbolic_Array_Type.Catenate:
-                        MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Catenate().A0);
-                        MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Catenate().A1);
-                        tr = Array__Tree_Relational(node.Catenate().A0)
-                            && Array__Tree_Relational(node.Catenate().A1)
+                    case Symbolic_Array_Type.Catenated:
+                        MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A0);
+                        MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A1);
+                        tr = Array__Tree_Relational(node.Tree_Catenated_Members().A0)
+                            && Array__Tree_Relational(node.Tree_Catenated_Members().A1)
                             && (pm0 == null || sm0 == null || Tuple__Same_Heading(pm0, sm0));
                         break;
                     default:
@@ -1121,7 +1121,7 @@ namespace Muldis.D.Ref_Eng.Core
                         break;
                     case Symbolic_Array_Type.Singular:
                         node.Cached_Members_Meta.Local_Relational
-                            = node.Singular().Member.AS.MD_MSBT
+                            = node.Local_Singular_Members().Member.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Array_Type.Arrayed:
@@ -1130,7 +1130,7 @@ namespace Muldis.D.Ref_Eng.Core
                             = m0.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
-                                node.Arrayed(),
+                                node.Local_Arrayed_Members(),
                                 m => m.AS.MD_MSBT
                                         == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m, m0)

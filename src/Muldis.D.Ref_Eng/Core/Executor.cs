@@ -405,8 +405,8 @@ namespace Muldis.D.Ref_Eng.Core
                     if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Singular
                         && n1.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
                     {
-                        result = ((n0.Singular().Multiplicity == n1.Singular().Multiplicity)
-                            && Any__same(n0.Singular().Member, n1.Singular().Member));
+                        result = ((n0.Local_Singular_Members().Multiplicity == n1.Local_Singular_Members().Multiplicity)
+                            && Any__same(n0.Local_Singular_Members().Member, n1.Local_Singular_Members().Member));
                         break;
                     }
                     if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
@@ -414,8 +414,8 @@ namespace Muldis.D.Ref_Eng.Core
                     {
                         // TODO: Fix this to call Any__same().
                         result = Enumerable.SequenceEqual(
-                            n0.Arrayed(),
-                            n1.Arrayed());
+                            n0.Local_Arrayed_Members(),
+                            n1.Local_Arrayed_Members());
                         break;
                     }
                     // For now skip the more complicated cases where
@@ -587,10 +587,10 @@ namespace Muldis.D.Ref_Eng.Core
                         node.Cached_Members_Meta.Tree_Member_Count
                             = Array__node__local_member_count(node);
                         break;
-                    case Symbolic_Array_Type.Catenate:
+                    case Symbolic_Array_Type.Catenated:
                         node.Cached_Members_Meta.Tree_Member_Count
-                            = Array__node__tree_member_count(node.Catenate().A0)
-                            + Array__node__tree_member_count(node.Catenate().A1);
+                            = Array__node__tree_member_count(node.Tree_Catenated_Members().A0)
+                            + Array__node__tree_member_count(node.Tree_Catenated_Members().A1);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -610,11 +610,11 @@ namespace Muldis.D.Ref_Eng.Core
                         break;
                     case Symbolic_Array_Type.Singular:
                         node.Cached_Members_Meta.Local_Member_Count
-                            = node.Singular().Multiplicity;
+                            = node.Local_Singular_Members().Multiplicity;
                         break;
                     case Symbolic_Array_Type.Arrayed:
                         node.Cached_Members_Meta.Local_Member_Count
-                            = node.Arrayed().Count;
+                            = node.Local_Arrayed_Members().Count;
                         break;
                     default:
                         throw new NotImplementedException();
@@ -681,9 +681,9 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Array_Type.None:
                     return null;
                 case Symbolic_Array_Type.Singular:
-                    if (ord_pos <= (maybe_last_ord_pos_seen + node.Singular().Multiplicity))
+                    if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().Multiplicity))
                     {
-                        return node.Singular().Member;
+                        return node.Local_Singular_Members().Member;
                     }
                     return null;
                 case Symbolic_Array_Type.Arrayed:
@@ -691,22 +691,22 @@ namespace Muldis.D.Ref_Eng.Core
                     if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
                     {
                         Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
-                        return node.Arrayed()[(Int32)ord_pos_within_local];
+                        return node.Local_Arrayed_Members()[(Int32)ord_pos_within_local];
                     }
                     return null;
-                case Symbolic_Array_Type.Catenate:
-                    MD_Any maybe_member = Array__node__maybe_at(node.Catenate().A0, ord_pos);
+                case Symbolic_Array_Type.Catenated:
+                    MD_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().A0, ord_pos);
                     if (maybe_member != null)
                     {
                         return maybe_member;
                     }
-                    maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Catenate().A0);
+                    maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Tree_Catenated_Members().A0);
                     if (ord_pos <= maybe_last_ord_pos_seen)
                     {
                         return null;
                     }
                     Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
-                    return Array__node__maybe_at(node.Catenate().A1, ord_pos_within_succ);
+                    return Array__node__maybe_at(node.Tree_Catenated_Members().A1, ord_pos_within_succ);
                 default:
                     throw new NotImplementedException();
             }

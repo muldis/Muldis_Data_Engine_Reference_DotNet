@@ -330,15 +330,15 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return "";
                 case Symbolic_Array_Type.Singular:
                     return String.Concat(Enumerable.Repeat(
-                        indent + Any_Selector(node.Singular().Member, indent) + ",\u000A",
-                        (Int32)node.Singular().Multiplicity));
+                        indent + Any_Selector(node.Local_Singular_Members().Member, indent) + ",\u000A",
+                        (Int32)node.Local_Singular_Members().Multiplicity));
                 case Symbolic_Array_Type.Arrayed:
                     return String.Concat(Enumerable.Select(
-                        node.Arrayed(),
+                        node.Local_Arrayed_Members(),
                         m => indent + Any_Selector(m, indent) + ",\u000A"));
-                case Symbolic_Array_Type.Catenate:
-                    return Array_Selector__node__tree(node.Catenate().A0, indent)
-                        + Array_Selector__node__tree(node.Catenate().A1, indent);
+                case Symbolic_Array_Type.Catenated:
+                    return Array_Selector__node__tree(node.Tree_Catenated_Members().A0, indent)
+                        + Array_Selector__node__tree(node.Tree_Catenated_Members().A1, indent);
                 default:
                     throw new NotImplementedException();
             }
