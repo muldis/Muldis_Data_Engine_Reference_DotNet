@@ -232,7 +232,7 @@ namespace Muldis.D.Ref_Eng.Core
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
                                 Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                                Primary_Arg = v.AS.MD_Bag(),
+                                Members = v.AS.MD_Bag(),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_All_Unique = true,
                                 },
@@ -449,15 +449,15 @@ namespace Muldis.D.Ref_Eng.Core
                             result = true;
                             break;
                         case Symbolic_Bag_Type.Singular:
-                            result = ((bn0.Local_Singular_Members.Multiplicity
-                                    == bn1.Local_Singular_Members.Multiplicity)
-                                && Any__same(bn0.Local_Singular_Members.Member,
-                                    bn1.Local_Singular_Members.Member));
+                            result = ((bn0.Local_Singular_Members().Multiplicity
+                                    == bn1.Local_Singular_Members().Multiplicity)
+                                && Any__same(bn0.Local_Singular_Members().Member,
+                                    bn1.Local_Singular_Members().Member));
                             break;
                         case Symbolic_Bag_Type.Arrayed:
                         case Symbolic_Bag_Type.Indexed:
                         case Symbolic_Bag_Type.Unique:
-                        case Symbolic_Bag_Type.Member_Plus:
+                        case Symbolic_Bag_Type.Summed:
                             // For now skip the more complicated cases where
                             // further processing is required in order to
                             // properly compare the 2 Bag for logical equality.

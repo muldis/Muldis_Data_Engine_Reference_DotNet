@@ -576,7 +576,7 @@ namespace Muldis.D.Ref_Eng.Core
         Arrayed,
         Indexed,
         Unique,
-        Member_Plus,
+        Summed,
     }
 
     // Muldis.D.Ref_Eng.Core.Multiplied_Member
@@ -610,45 +610,100 @@ namespace Muldis.D.Ref_Eng.Core
     // read as either MD_Set or MD_Bag.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
+    // It is important to note that the same logical Muldis D Bag value
+    // may be represented by several different representation formats here,
     // Note that MD_Bag is the most complicated Muldis D Foundation type to
     // implement while at the same time is the least critical to the
     // internals; it is mainly just used for user data.
 
     internal class MD_Bag_Struct
     {
-        // LST determines how to interpret most of the other fields.
-        // Iff LST is None, this node is explicitly a leaf node defining zero members.
-        // Iff LST is Singular, Local_Singular_Members defines all of the Bag members.
-        // Iff LST is Arrayed, Local_Arrayed_Members defines all of the Bag members.
-        // Iff LST is Indexed, Local_Indexed_Members defines all of the Bag members.
-        // Iff LST is Unique, this Bag's members are defined as
-        // the unique members of Primary_Arg.
-        // Iff LST is Member_Plus, this Bag's members are defined as
-        // the multiset sum of Primary_Arg and Extra_Arg.
+        // Local Symbolic Type (LST) determines the role this node plays in
+        // the tree.  Determines interpreting Members field.
         internal Symbolic_Bag_Type Local_Symbolic_Type { get; set; }
 
-        // This field is used iff LST is one of {Singular}.
-        internal Multiplied_Member Local_Singular_Members { get; set; }
-
-        // This field is used iff LST is Arrayed.
-        internal List<Multiplied_Member> Local_Arrayed_Members { get; set; }
-
-        // This field is used iff LST is Indexed.
-        // The Dictionary has one key-asset pair for each distinct Muldis D
-        // "value", all of which are indexed by Cached_MD_Any_Identity.
-        internal Dictionary<MD_Any,Multiplied_Member>
-            Local_Indexed_Members { get; set; }
-
-        // This field is used iff LST is one of
-        // {Unique, Member_Plus}.
-        internal MD_Bag_Struct Primary_Arg { get; set; }
-
-        // This field is used iff LST is one of
-        // {Member_Plus}.
-        internal MD_Bag_Struct Extra_Arg { get; set; }
+        // Members of this Muldis D Bag, in one of several possible
+        // specialized representation formats depending on the data type.
+        // Iff LST is None, this field is simply null.
+            // This is a leaf node explicitly defining zero Bag members.
+            // Guarantees the Bag has exactly zero members.
+        // Iff LST is Singular, this field holds a Multiplied_Member.
+            // This is a leaf node defining 1..N Bag members, every one of
+            // which is the same value, which can be of any type;
+            // Singular is the basis for compactly representing either a
+            // single-element Bag or a repeating portion of a sparse Bag.
+            // Guarantees the Bag has at least 1 member and that all
+            // Bag members are the same value.
+        // Iff LST is Arrayed, this field holds a List<Multiplied_Member>.
+            // This is a leaf node defining 2..N Bag members, each of which
+            // can be of any type; this is the most common format for a Bag
+            // that is just storing members without any operations.
+            // Guarantees the Bag has at least 2 members but does not
+            // guarantee that at least 2 members have distinct values.
+        // Iff LST is Indexed, this field holds a Dictionary<MD_Any,Multiplied_Member>.
+            // This is a leaf node defining 2..N Bag members, each of which
+            // can be of any type; this is the most common format for a Bag
+            // that has had some searches or operations performed on it.
+            // The Dictionary has one key-asset pair for each distinct Muldis D
+            // "value", all of which are indexed by Cached_MD_Any_Identity.
+            // Guarantees the Bag has at least 1 member.
+        // Iff LST is Unique, this field holds a MD_Bag_Struct.
+            // This is a non-leaf node with 1 direct child Bag node;
+            // this Bag's members are defined as the child's unique members.
+            // Makes no guarantees that the Bag is none/singular/otherwise.
+        // Iff LST is Summed, this field holds a MD_Bag_Pair.
+            // This is a non-leaf node with 2 direct child Bag nodes;
+            // this Bag's members are defined as the catenation of
+            // the pair's A0 and A1 nodes in that order.
+            // Makes no guarantees that the Bag is none/singular/otherwise.
+        internal Object Members { get; set; }
 
         // A cache of calculations about this Bag's members.
         internal Cached_Members_Meta Cached_Members_Meta { get; set; }
+
+        internal Multiplied_Member Local_Singular_Members()
+        {
+            return (Multiplied_Member)Members;
+        }
+
+        internal List<Multiplied_Member> Local_Arrayed_Members()
+        {
+            return (List<Multiplied_Member>)Members;
+        }
+
+        internal Dictionary<MD_Any,Multiplied_Member> Local_Indexed_Members()
+        {
+            return (Dictionary<MD_Any,Multiplied_Member>)Members;
+        }
+
+        internal MD_Bag_Struct Tree_Unique_Members()
+        {
+            return (MD_Bag_Struct)Members;
+        }
+
+        internal MD_Bag_Pair Tree_Summed_Members()
+        {
+            return (MD_Bag_Pair)Members;
+        }
+    }
+
+    // Muldis.D.Ref_Eng.Core.MD_Bag_Pair
+    // Represents an ordered pair of MD_Bag, typically corresponding in
+    // order to the "0" and "1" conceptually-ordered arg/attr to a function.
+
+    internal class MD_Bag_Pair
+    {
+        // This is the first conceptually-ordered arg/attr.
+        internal MD_Bag_Struct A0 { get; set; }
+
+        // This is the second conceptually-ordered arg/attr.
+        internal MD_Bag_Struct A1 { get; set; }
+
+        internal MD_Bag_Pair(MD_Bag_Struct a0, MD_Bag_Struct a1)
+        {
+            A0 = a0;
+            A1 = a1;
+        }
     }
 
     // Muldis.D.Ref_Eng.Core.Cached_Members_Meta

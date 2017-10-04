@@ -394,8 +394,7 @@ namespace Muldis.D.Ref_Eng.Core
                             Details = new MD_Bag_Struct {
                                 Local_Symbolic_Type
                                     = Symbolic_Bag_Type.Singular,
-                                Local_Singular_Members
-                                    = new Multiplied_Member(MD_Tuple_D0),
+                                Members = new Multiplied_Member(MD_Tuple_D0),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_Member_Count = 1,
                                     Tree_All_Unique = true,
@@ -433,8 +432,7 @@ namespace Muldis.D.Ref_Eng.Core
                             Details = new MD_Bag_Struct {
                                 Local_Symbolic_Type
                                     = Symbolic_Bag_Type.Singular,
-                                Local_Singular_Members
-                                    = new Multiplied_Member(MD_Tuple_D0),
+                                Members = new Multiplied_Member(MD_Tuple_D0),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_Member_Count = 1,
                                     Tree_All_Unique = true,
@@ -623,9 +621,9 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                 Details = new MD_Bag_Struct {
                     Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                    Primary_Arg = new MD_Bag_Struct {
+                    Members = new MD_Bag_Struct {
                         Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
-                        Local_Arrayed_Members = members,
+                        Members = members,
                         Cached_Members_Meta = new Cached_Members_Meta(),
                     },
                     Cached_Members_Meta = new Cached_Members_Meta {
@@ -647,7 +645,7 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                 Details = new MD_Bag_Struct {
                     Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
-                    Local_Arrayed_Members = members,
+                    Members = members,
                     Cached_Members_Meta = new Cached_Members_Meta(),
                 },
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
@@ -981,7 +979,7 @@ namespace Muldis.D.Ref_Eng.Core
                         // Node is already collapsed.
                         return node;
                     }
-                    List<Multiplied_Member> ary_src_list = node.Local_Arrayed_Members;
+                    List<Multiplied_Member> ary_src_list = node.Local_Arrayed_Members();
                     Dictionary<MD_Any,Multiplied_Member> ary_res_dict
                         = new Dictionary<MD_Any,Multiplied_Member>();
                     foreach (Multiplied_Member m in ary_src_list)
@@ -997,7 +995,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     return new MD_Bag_Struct {
                         Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                        Local_Indexed_Members = ary_res_dict,
+                        Members = ary_res_dict,
                         Cached_Members_Meta = new Cached_Members_Meta {
                             Tree_Member_Count = ary_src_list.Count,
                             Tree_All_Unique = node.Cached_Members_Meta.Local_All_Unique,
@@ -1012,7 +1010,7 @@ namespace Muldis.D.Ref_Eng.Core
                     return node;
                 case Symbolic_Bag_Type.Unique:
                     MD_Bag_Struct uni_pa = Bag__Collapsed_Struct(
-                        node: node.Primary_Arg, want_indexed: true);
+                        node: node.Tree_Unique_Members(), want_indexed: true);
                     if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.None)
                     {
                         return uni_pa;
@@ -1021,8 +1019,8 @@ namespace Muldis.D.Ref_Eng.Core
                     {
                         return new MD_Bag_Struct {
                             Local_Symbolic_Type = Symbolic_Bag_Type.Singular,
-                            Local_Singular_Members = new Multiplied_Member(
-                                uni_pa.Local_Singular_Members.Member),
+                            Members = new Multiplied_Member(
+                                uni_pa.Local_Singular_Members().Member),
                             Cached_Members_Meta = new Cached_Members_Meta {
                                 Tree_Member_Count = 1,
                                 Tree_All_Unique = true,
@@ -1034,10 +1032,10 @@ namespace Muldis.D.Ref_Eng.Core
                         };
                     }
                     Dictionary<MD_Any,Multiplied_Member> uni_src_dict
-                        = uni_pa.Local_Indexed_Members;
+                        = uni_pa.Local_Indexed_Members();
                     return new MD_Bag_Struct {
                         Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                        Local_Indexed_Members = uni_src_dict.ToDictionary(
+                        Members = uni_src_dict.ToDictionary(
                             m => m.Key, m => new Multiplied_Member(m.Key, 1)),
                         Cached_Members_Meta = new Cached_Members_Meta {
                             Tree_Member_Count = uni_src_dict.Count,
@@ -1048,7 +1046,7 @@ namespace Muldis.D.Ref_Eng.Core
                             Local_Relational = uni_pa.Cached_Members_Meta.Local_Relational,
                         },
                     };
-                case Symbolic_Bag_Type.Member_Plus:
+                case Symbolic_Bag_Type.Summed:
                     throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
@@ -1171,17 +1169,17 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Bag_Type.None:
                     return null;
                 case Symbolic_Bag_Type.Singular:
-                    return node.Local_Singular_Members.Member;
+                    return node.Local_Singular_Members().Member;
                 case Symbolic_Bag_Type.Arrayed:
-                    return node.Local_Arrayed_Members.Count == 0 ? null
-                        : node.Local_Arrayed_Members[0].Member;
+                    return node.Local_Arrayed_Members().Count == 0 ? null
+                        : node.Local_Arrayed_Members()[0].Member;
                 case Symbolic_Bag_Type.Indexed:
                     throw new NotImplementedException();
                 case Symbolic_Bag_Type.Unique:
-                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg);
-                case Symbolic_Bag_Type.Member_Plus:
-                    return Bag__Pick_Random_Struct_Member(node.Primary_Arg)
-                        ?? Bag__Pick_Random_Struct_Member(node.Extra_Arg);
+                    return Bag__Pick_Random_Struct_Member(node.Tree_Unique_Members());
+                case Symbolic_Bag_Type.Summed:
+                    return Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A0)
+                        ?? Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A1);
                 default:
                     throw new NotImplementedException();
             }
@@ -1206,13 +1204,13 @@ namespace Muldis.D.Ref_Eng.Core
                         tr = Bag__Local_Relational(node);
                         break;
                     case Symbolic_Bag_Type.Unique:
-                        tr = Bag__Tree_Relational(node.Primary_Arg);
+                        tr = Bag__Tree_Relational(node.Tree_Unique_Members());
                         break;
-                    case Symbolic_Bag_Type.Member_Plus:
-                        tr = Bag__Tree_Relational(node.Primary_Arg)
-                            && Bag__Tree_Relational(node.Extra_Arg);
-                        MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Primary_Arg);
-                        MD_Any eam0 = Bag__Pick_Random_Struct_Member(node.Extra_Arg);
+                    case Symbolic_Bag_Type.Summed:
+                        tr = Bag__Tree_Relational(node.Tree_Summed_Members().A0)
+                            && Bag__Tree_Relational(node.Tree_Summed_Members().A1);
+                        MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A0);
+                        MD_Any eam0 = Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A1);
                         if (pam0 != null && eam0 != null)
                         {
                             tr = tr && Tuple__Same_Heading(pam0, eam0);
@@ -1234,16 +1232,16 @@ namespace Muldis.D.Ref_Eng.Core
                 {
                     case Symbolic_Bag_Type.None:
                     case Symbolic_Bag_Type.Unique:
-                    case Symbolic_Bag_Type.Member_Plus:
+                    case Symbolic_Bag_Type.Summed:
                         node.Cached_Members_Meta.Local_Relational = true;
                         break;
                     case Symbolic_Bag_Type.Singular:
                         node.Cached_Members_Meta.Local_Relational
-                            = node.Local_Singular_Members.Member.AS.MD_MSBT
+                            = node.Local_Singular_Members().Member.AS.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Bag_Type.Arrayed:
-                        if (node.Local_Arrayed_Members.Count == 0)
+                        if (node.Local_Arrayed_Members().Count == 0)
                         {
                             node.Cached_Members_Meta.Local_Relational = true;
                         }
@@ -1254,7 +1252,7 @@ namespace Muldis.D.Ref_Eng.Core
                                 = m0.AS.MD_MSBT
                                     == MD_Well_Known_Base_Type.MD_Tuple
                                 && Enumerable.All(
-                                    node.Local_Arrayed_Members,
+                                    node.Local_Arrayed_Members(),
                                     m => m.Member.AS.MD_MSBT
                                             == MD_Well_Known_Base_Type.MD_Tuple
                                         && Tuple__Same_Heading(m.Member, m0)
