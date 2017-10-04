@@ -493,6 +493,7 @@ namespace Muldis.D.Ref_Eng.Core
     // a MD_Array_Struct is used by it to hold the MD_Array-specific details.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
+    // MD_Array members are only directly stored in leaf nodes of the graph.
     // It is important to note that the same logical Muldis D Array value
     // may be represented by several different representation formats here,
 
@@ -610,6 +611,7 @@ namespace Muldis.D.Ref_Eng.Core
     // read as either MD_Set or MD_Bag.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
+    // MD_Bag members are only directly stored in leaf nodes of the graph.
     // It is important to note that the same logical Muldis D Bag value
     // may be represented by several different representation formats here,
     // Note that MD_Bag is the most complicated Muldis D Foundation type to
@@ -707,10 +709,10 @@ namespace Muldis.D.Ref_Eng.Core
     }
 
     // Muldis.D.Ref_Eng.Core.Cached_Members_Meta
-    // Represents cached metadata for the members of a Muldis D
-    // "discrete homogeneous" collection such as an Array or Bag,
-    // particularly a collection implemented as a tree of nodes,
-    // where each node may define members locally or refer to child nodes.
+    // Represents cached metadata for the members of a Muldis D "discrete
+    // homogeneous" collection such as an Array or Bag, particularly a
+    // collection implemented as a tree of nodes, where each node may
+    // either define members locally or refer to child nodes but not both.
 
     internal class Cached_Members_Meta
     {
@@ -733,26 +735,6 @@ namespace Muldis.D.Ref_Eng.Core
         // the same heading; this is false iff we know that any member is
         // not a Tuple or that any 2 members do not have the same heading.
         internal Nullable<Boolean> Tree_Relational { get; set; }
-
-        // Nullable Integer
-        // Cached count of members defined by the Local_*_Members fields as
-        // they are defined in isolation.
-        internal Nullable<Int64> Local_Member_Count { get; set; }
-
-        // Nullable Boolean
-        // This is true iff we know that no 2 members of the Muldis D Array/Bag
-        // represented by this tree node (specifically the Local_*_Members
-        // fields as they are defined in isolation) are the same value, and
-        // false iff we know that at least 2 members are the same value.
-        internal Nullable<Boolean> Local_All_Unique { get; set; }
-
-        // Nullable Boolean
-        // This is true iff we know that the Muldis D Array/Bag represented
-        // by this tree node (as with Local_All_Unique) has no member that
-        // is not a Muldis D Tuple and has no 2 members that do not have
-        // the same heading; this is false iff we know that any member is
-        // not a Tuple or that any 2 members do not have the same heading.
-        internal Nullable<Boolean> Local_Relational { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Tuple_Struct

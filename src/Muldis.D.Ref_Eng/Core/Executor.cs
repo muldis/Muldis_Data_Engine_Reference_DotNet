@@ -582,10 +582,15 @@ namespace Muldis.D.Ref_Eng.Core
                 switch (node.Local_Symbolic_Type)
                 {
                     case Symbolic_Array_Type.None:
+                        node.Cached_Members_Meta.Tree_Member_Count = 0;
+                        break;
                     case Symbolic_Array_Type.Singular:
+                        node.Cached_Members_Meta.Tree_Member_Count
+                            = node.Local_Singular_Members().Multiplicity;
+                        break;
                     case Symbolic_Array_Type.Arrayed:
                         node.Cached_Members_Meta.Tree_Member_Count
-                            = Array__node__local_member_count(node);
+                            = node.Local_Arrayed_Members().Count;
                         break;
                     case Symbolic_Array_Type.Catenated:
                         node.Cached_Members_Meta.Tree_Member_Count
@@ -597,30 +602,6 @@ namespace Muldis.D.Ref_Eng.Core
                 }
             }
             return (Int64)node.Cached_Members_Meta.Tree_Member_Count;
-        }
-
-        private Int64 Array__node__local_member_count(MD_Array_Struct node)
-        {
-            if (node.Cached_Members_Meta.Local_Member_Count == null)
-            {
-                switch (node.Local_Symbolic_Type)
-                {
-                    case Symbolic_Array_Type.None:
-                        node.Cached_Members_Meta.Local_Member_Count = 0;
-                        break;
-                    case Symbolic_Array_Type.Singular:
-                        node.Cached_Members_Meta.Local_Member_Count
-                            = node.Local_Singular_Members().Multiplicity;
-                        break;
-                    case Symbolic_Array_Type.Arrayed:
-                        node.Cached_Members_Meta.Local_Member_Count
-                            = node.Local_Arrayed_Members().Count;
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-            return (Int64)node.Cached_Members_Meta.Local_Member_Count;
         }
 
         private MD_Any Bits__maybe_at(MD_Any bits, Int64 ord_pos)
@@ -687,7 +668,7 @@ namespace Muldis.D.Ref_Eng.Core
                     }
                     return null;
                 case Symbolic_Array_Type.Arrayed:
-                    Int64 local_member_count = Array__node__local_member_count(node);
+                    Int64 local_member_count = Array__node__tree_member_count(node);
                     if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
                     {
                         Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
