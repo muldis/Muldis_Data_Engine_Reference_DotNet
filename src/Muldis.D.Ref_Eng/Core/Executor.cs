@@ -40,8 +40,8 @@ namespace Muldis.D.Ref_Eng.Core
                             MD_Any maybe_second = Array__maybe_at(function, 1);
                             if (Array__count(function) == 2
                                 && maybe_second != null
-                                && maybe_second.AS.Cached_WKT.Contains(
-                                    MD_Well_Known_Type.Attr_Name))
+                                && maybe_second.AS.Member_Status_in_WKT(
+                                    MD_Well_Known_Type.Attr_Name) == true)
                             {
                                 return evaluate_foundation_function(maybe_second, args);
                             }
@@ -238,7 +238,6 @@ namespace Muldis.D.Ref_Eng.Core
                                     Tree_All_Unique = true,
                                 },
                             },
-                            Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                         } };
                     case "Tuple_degree":
                         if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)

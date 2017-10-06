@@ -385,7 +385,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
 
         private String Tuple_Selector(MD_Any value, String indent)
         {
-            if (value.AS.Cached_WKT.Contains(MD_Well_Known_Type.Heading))
+            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
             {
                 return Heading_Literal(value);
             }
@@ -428,7 +428,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             }
             if (ts.Degree == 1 && ts.A0 != null
                 && ts.A0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
-                && ts.A0.AS.Cached_WKT.Contains(MD_Well_Known_Type.Attr_Name))
+                && ts.A0.AS.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
             {
                 return Object.ReferenceEquals(ts.A0, m.Attr_Name_0) ? @"\!0"
                      : Object.ReferenceEquals(ts.A0, m.Attr_Name_1) ? @"\!1"

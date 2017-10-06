@@ -147,21 +147,21 @@ namespace Muldis.D.Ref_Eng
                 case Core.MD_Well_Known_Base_Type.MD_Bag:
                     return (IMD_Bag)new MD_Bag().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Tuple:
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Heading))
+                    if (value.AS.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
                         return (IMD_Heading)new MD_Heading().init(m_machine, value);
                     }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Capsule:
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Array))
+                    if (value.AS.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Array) == true)
                     {
                         return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
                     }
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Relation))
+                    if (value.AS.Member_Status_in_WKT(Core.MD_Well_Known_Type.Relation) == true)
                     {
                         return (IMD_Relation)new MD_Relation().init(m_machine, value);
                     }
-                    if (value.AS.Cached_WKT.Contains(Core.MD_Well_Known_Type.Tuple_Bag))
+                    if (value.AS.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Bag) == true)
                     {
                         return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
                     }
