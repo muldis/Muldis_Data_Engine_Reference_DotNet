@@ -1014,7 +1014,7 @@ namespace Muldis.D.Ref_Eng
                         + " members aren't all MD_Tuple with a common heading."
                 );
             }
-            Core.MD_Any hv = m_memory.Array__Pick_Random_Member(bv);
+            Core.MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
             if (hv == null)
             {
                 throw new ArgumentException
@@ -1065,7 +1065,7 @@ namespace Muldis.D.Ref_Eng
                         + " members aren't all MD_Tuple with a common heading."
                 );
             }
-            Core.MD_Any hv = m_memory.Set__Pick_Random_Member(bv);
+            Core.MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
             if (hv == null)
             {
                 throw new ArgumentException
@@ -1116,7 +1116,7 @@ namespace Muldis.D.Ref_Eng
                         + " members aren't all MD_Tuple with a common heading."
                 );
             }
-            Core.MD_Any hv = m_memory.Bag__Pick_Random_Member(bv);
+            Core.MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
             if (hv == null)
             {
                 throw new ArgumentException

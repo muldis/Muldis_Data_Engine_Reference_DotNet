@@ -353,9 +353,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             {
                 case Symbolic_Bag_Type.None:
                     return "{}";
-                case Symbolic_Bag_Type.Singular:
-                    Multiplied_Member lsm = node.Local_Singular_Members();
-                    return "{\u000A" + mei + Any_Selector(lsm.Member, mei) + ",\u000A" + indent + "}";
                 case Symbolic_Bag_Type.Indexed:
                     return "{\u000A" + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
@@ -375,10 +372,6 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             {
                 case Symbolic_Bag_Type.None:
                     return "{0:0}";
-                case Symbolic_Bag_Type.Singular:
-                    Multiplied_Member lsm = node.Local_Singular_Members();
-                    return "{\u000A" + mei + Any_Selector(lsm.Member, mei) + " : "
-                        + Integer_Literal(lsm.Multiplicity) + ",\u000A" + indent + "}";
                 case Symbolic_Bag_Type.Indexed:
                     return "{\u000A" + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),

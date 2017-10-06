@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -343,6 +344,16 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return false;
             }
+            if (a0.AS.Cached_MD_Any_Identity != null
+                && a1.AS.Cached_MD_Any_Identity != null)
+            {
+                if (a0.AS.Cached_MD_Any_Identity == a1.AS.Cached_MD_Any_Identity)
+                {
+                    merge_two_same(a0, a1);
+                    return true;
+                }
+                return false;
+            }
             Boolean result;
             switch (a0.AS.MD_MSBT)
             {
@@ -377,8 +388,10 @@ namespace Muldis.D.Ref_Eng.Core
                         && fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
                     break;
                 case MD_Well_Known_Base_Type.MD_Bits:
-                    //throw new NotImplementedException();
-                    return false;  // TODO; meanwhile we compare like a reference type
+                    result = Enumerable.SequenceEqual(
+                        BitArray_to_List(a0.AS.MD_Bits()),
+                        BitArray_to_List(a1.AS.MD_Bits()));
+                    break;
                 case MD_Well_Known_Base_Type.MD_Blob:
                     result = Enumerable.SequenceEqual(a0.AS.MD_Blob(), a1.AS.MD_Blob());
                     break;
@@ -386,6 +399,8 @@ namespace Muldis.D.Ref_Eng.Core
                     result = (a0.AS.MD_Text().Codepoint_Members == a1.AS.MD_Text().Codepoint_Members);
                     break;
                 case MD_Well_Known_Base_Type.MD_Array:
+                    Memory.Array__Collapse(a0);
+                    Memory.Array__Collapse(a1);
                     MD_Array_Struct n0 = a0.AS.MD_Array();
                     MD_Array_Struct n1 = a1.AS.MD_Array();
                     if (Object.ReferenceEquals(n0, n1))
@@ -405,27 +420,44 @@ namespace Muldis.D.Ref_Eng.Core
                     if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Singular
                         && n1.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
                     {
-                        result = ((n0.Local_Singular_Members().Multiplicity == n1.Local_Singular_Members().Multiplicity)
-                            && Any__same(n0.Local_Singular_Members().Member, n1.Local_Singular_Members().Member));
+                        result = ((n0.Local_Singular_Members().Multiplicity
+                                == n1.Local_Singular_Members().Multiplicity)
+                            && Any__same(n0.Local_Singular_Members().Member,
+                                n1.Local_Singular_Members().Member));
                         break;
                     }
                     if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
                         && n1.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
                     {
-                        // TODO: Fix this to call Any__same().
+                        // This works because MD_Any Equals() calls Any__Same().
                         result = Enumerable.SequenceEqual(
                             n0.Local_Arrayed_Members(),
                             n1.Local_Arrayed_Members());
                         break;
                     }
-                    // For now skip the more complicated cases where
-                    // the Array members are defined using > 1 node
-                    // or where members use different representations.
-                    //throw new NotImplementedException();
-                    return false;  // TODO; meanwhile we compare like a reference type
+                    MD_Array_Struct n0_ = n0;
+                    MD_Array_Struct n1_ = n1;
+                    if (n0_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
+                        && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
+                    {
+                         n1_ = n0;
+                         n0_ = n1;
+                    }
+                    if (n0_.Local_Symbolic_Type == Symbolic_Array_Type.Singular
+                        && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
+                    {
+                        Multiplied_Member sm = n0_.Local_Singular_Members();
+                        List<MD_Any> am = n1_.Local_Arrayed_Members();
+                        result = sm.Multiplicity == am.Count
+                            && Enumerable.All(am, m => Any__same(m, sm.Member));
+                    }
+                    // We should never get here.
+                    throw new NotImplementedException();
                 case MD_Well_Known_Base_Type.MD_Set:
                 case MD_Well_Known_Base_Type.MD_Bag:
                     // MD_Set and MD_Bag have the same internal representation.
+                    Memory.Bag__Collapse(bag: a0, want_indexed: true);
+                    Memory.Bag__Collapse(bag: a1, want_indexed: true);
                     MD_Bag_Struct bn0 = a0.AS.MD_Bag();
                     MD_Bag_Struct bn1 = a1.AS.MD_Bag();
                     if (Object.ReferenceEquals(bn0, bn1))
@@ -433,42 +465,32 @@ namespace Muldis.D.Ref_Eng.Core
                         result = true;
                         break;
                     }
-                    if (bn0.Local_Symbolic_Type != bn1.Local_Symbolic_Type)
+                    if (bn0.Local_Symbolic_Type == Symbolic_Bag_Type.None
+                        && bn1.Local_Symbolic_Type == Symbolic_Bag_Type.None)
                     {
-                        // For now skip the more complicated cases where
-                        // the Bag root nodes use different representations.
-                        //throw new NotImplementedException();
-                        return false;  // TODO; meanwhile we compare like a reference type
+                        // In theory we should never get here assuming that
+                        // the empty Array is optimized to return a constant
+                        // at selection time, but we will check anyway.
+                        result = true;
+                        break;
                     }
-                    switch (bn0.Local_Symbolic_Type)
+                    if (bn0.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed
+                        && bn1.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed)
                     {
-                        case Symbolic_Bag_Type.None:
-                            // In theory we should never get here assuming that
-                            // the empty Bag is optimized to return a constant
-                            // at selection time, but we will check anyway.
-                            result = true;
-                            break;
-                        case Symbolic_Bag_Type.Singular:
-                            result = ((bn0.Local_Singular_Members().Multiplicity
-                                    == bn1.Local_Singular_Members().Multiplicity)
-                                && Any__same(bn0.Local_Singular_Members().Member,
-                                    bn1.Local_Singular_Members().Member));
-                            break;
-                        case Symbolic_Bag_Type.Arrayed:
-                        case Symbolic_Bag_Type.Indexed:
-                        case Symbolic_Bag_Type.Unique:
-                        case Symbolic_Bag_Type.Summed:
-                            // For now skip the more complicated cases where
-                            // further processing is required in order to
-                            // properly compare the 2 Bag for logical equality.
-                            // That is, normalize trees into Indexed.
-                            // This in practice skips most Bag, alas.
-                            //throw new NotImplementedException();
-                            return false;  // TODO; meanwhile we compare like a reference type
-                        default:
-                            throw new NotImplementedException();
+                        Dictionary<MD_Any,Multiplied_Member> im0
+                            = bn0.Local_Indexed_Members();
+                        Dictionary<MD_Any,Multiplied_Member> im1
+                            = bn1.Local_Indexed_Members();
+                        result = im0.Count == im1.Count
+                            && Enumerable.All(
+                                im0.Values,
+                                m => im1.ContainsKey(m.Member)
+                                    && im1[m.Member].Multiplicity == m.Multiplicity
+                            );
+                        break;
                     }
-                    break;
+                    // We should never get here.
+                    throw new NotImplementedException();
                 case MD_Well_Known_Base_Type.MD_Tuple:
                 case MD_Well_Known_Base_Type.MD_Excuse:
                     // MD_Tuple and MD_Excuse have the same internal representation.
@@ -509,12 +531,31 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (result)
             {
+                merge_two_same(a0, a1);
+            }
+            return result;
+        }
+
+        internal List<Boolean> BitArray_to_List(BitArray value)
+        {
+            System.Collections.IEnumerator e = value.GetEnumerator();
+            List<Boolean> list = new List<Boolean>();
+            while (e.MoveNext())
+            {
+                list.Add((Boolean)e.Current);
+            }
+            return list;
+        }
+
+        internal void merge_two_same(MD_Any a0, MD_Any a1)
+        {
+            // This may be run on 2 MD_Any only if it was already
+            // determined they represent the same Muldis D value; typically
+            // it is invoked by Any__same() when it would result in true.
+            a1.AS = a0.AS;
                 // TODO: Make a more educated decision on which one to keep.
                 // It should also have logic dispatching on MD_MSBT and
                 // do struct mergers as applicable eg copying identity info.
-                a1.AS = a0.AS;
-            }
-            return result;
         }
 
         private BigInteger Integer__factorial(BigInteger value)

@@ -575,7 +575,12 @@ namespace Muldis.D.Ref_Eng.Core
                     Details = new MD_Array_Struct {
                         Local_Symbolic_Type = Symbolic_Array_Type.Singular,
                         Members = new Multiplied_Member(members[0]),
-                        Cached_Members_Meta = new Cached_Members_Meta(),
+                        Cached_Members_Meta = new Cached_Members_Meta {
+                            Tree_Member_Count = 1,
+                            Tree_All_Unique = true,
+                            Tree_Relational = (members[0].AS.MD_MSBT
+                                == MD_Well_Known_Base_Type.MD_Tuple),
+                        },
                     },
                     Cached_WKT = new HashSet<MD_Well_Known_Type>(),
                 } };
@@ -756,7 +761,7 @@ namespace Muldis.D.Ref_Eng.Core
                 {
                     return MD_Relation_D0C0;
                 }
-                if (Set__Pick_Random_Member(body) != null)
+                if (Set__Pick_Arbitrary_Member(body) != null)
                 {
                     return MD_Relation_D0C1;
                 }
@@ -809,6 +814,11 @@ namespace Muldis.D.Ref_Eng.Core
             // Muldis D type, and if it is, return a MD_Any using the most
             // specific well known base type for that MD value rather than
             // using the generic Capsule format, for normalization.
+            // Note: We do NOT ever have to declare known-not-wkt for types
+            // with their own storage formats (things we would never declare
+            // known-is-wkt) because they're all tested to that level and
+            // normalized at selection, therefore if we have a MD_Capsule
+            // extant whose label is say 'Text' we know it isn't a Text value, and so on.
             return new MD_Any { AS = new MD_Any_Struct {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
@@ -819,6 +829,11 @@ namespace Muldis.D.Ref_Eng.Core
                 Cached_WKT = new HashSet<MD_Well_Known_Type>(),
             } };
         }
+
+        // TODO: Here or in Executor also have Capsule_attrs() etc functions
+        // that take anything conceptually a Capsule and let users use it
+        // as if it were a MD_Capsule_Struct; these have the opposite
+        // transformations as MD_Capsule() above does.
 
         internal MD_Any New_MD_Variable(MD_Any initial_current_value)
         {
@@ -934,6 +949,61 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple;
         }
 
+        internal void Array__Collapse(MD_Any array)
+        {
+            array.AS.Details = Array__Collapsed_Struct(array.AS.MD_Array());
+        }
+
+        private MD_Array_Struct Array__Collapsed_Struct(MD_Array_Struct node)
+        {
+            switch (node.Local_Symbolic_Type)
+            {
+                case Symbolic_Array_Type.None:
+                    // Node is already collapsed.
+                    // In theory we should never get here assuming that any
+                    // operations which would knowingly result in the empty
+                    // Array are optimized to return MD_Array_C0 directly.
+                    return MD_Array_C0.AS.MD_Array();
+                case Symbolic_Array_Type.Singular:
+                case Symbolic_Array_Type.Arrayed:
+                    // Node is already collapsed.
+                    return node;
+                case Symbolic_Array_Type.Catenated:
+                    MD_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().A0);
+                    MD_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().A1);
+                    if (n0.Local_Symbolic_Type == Symbolic_Array_Type.None)
+                    {
+                        return n1;
+                    }
+                    if (n1.Local_Symbolic_Type == Symbolic_Array_Type.None)
+                    {
+                        return n0;
+                    }
+                    // Both child nodes have at least 1 member, so we will
+                    // use Arrayed format for merger even if the input
+                    // members are the same value.
+                    // This will die if Multiplicity greater than an Int32.
+                    return new MD_Array_Struct {
+                        Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
+                        Members = Enumerable.Concat(
+                            (n0.Local_Symbolic_Type == Symbolic_Array_Type.Singular
+                                ? Enumerable.Repeat(n0.Local_Singular_Members().Member,
+                                    (Int32)n0.Local_Singular_Members().Multiplicity)
+                                : n0.Local_Arrayed_Members()),
+                            (n1.Local_Symbolic_Type == Symbolic_Array_Type.Singular
+                                ? Enumerable.Repeat(n1.Local_Singular_Members().Member,
+                                    (Int32)n1.Local_Singular_Members().Multiplicity)
+                                : n1.Local_Arrayed_Members())
+                        ),
+                        Cached_Members_Meta = new Cached_Members_Meta(),
+                            // TODO: Merge existing source meta where efficient,
+                            // Tree_Member_Count and Tree_Relational in particular.
+                    };
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         internal void Bag__Collapse(MD_Any bag, Boolean want_indexed = false)
         {
             bag.AS.Details = Bag__Collapsed_Struct(bag.AS.MD_Bag(), want_indexed);
@@ -942,8 +1012,8 @@ namespace Muldis.D.Ref_Eng.Core
         private MD_Bag_Struct Bag__Collapsed_Struct(MD_Bag_Struct node,
             Boolean want_indexed = false)
         {
-            // Note: want_indexed only causes Indexed result when Arrayed
-            // otherwise would be used; None/Singular still also used.
+            // Note: want_indexed only causes Indexed result when Singular
+            // or Arrayed otherwise would be used; None still also used.
             switch (node.Local_Symbolic_Type)
             {
                 case Symbolic_Bag_Type.None:
@@ -953,8 +1023,23 @@ namespace Muldis.D.Ref_Eng.Core
                     // Bag are optimized to return MD_Bag_C0 directly.
                     return MD_Bag_C0.AS.MD_Bag();
                 case Symbolic_Bag_Type.Singular:
-                    // Node is already collapsed.
-                    return node;
+                    if (!want_indexed)
+                    {
+                        // Node is already collapsed.
+                        return node;
+                    }
+                    Multiplied_Member lsm = node.Local_Singular_Members();
+                    return new MD_Bag_Struct {
+                        Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
+                        Members = new Dictionary<MD_Any,Multiplied_Member>()
+                            {{lsm.Member, lsm}},
+                        Cached_Members_Meta = new Cached_Members_Meta {
+                            Tree_Member_Count = lsm.Multiplicity,
+                            Tree_All_Unique = (lsm.Multiplicity == 1),
+                            Tree_Relational = (lsm.Member.AS.MD_MSBT
+                                == MD_Well_Known_Base_Type.MD_Tuple),
+                        },
+                    };
                 case Symbolic_Bag_Type.Arrayed:
                     if (!want_indexed)
                     {
@@ -994,19 +1079,6 @@ namespace Muldis.D.Ref_Eng.Core
                     {
                         return uni_pa;
                     }
-                    if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.Singular)
-                    {
-                        return new MD_Bag_Struct {
-                            Local_Symbolic_Type = Symbolic_Bag_Type.Singular,
-                            Members = new Multiplied_Member(
-                                uni_pa.Local_Singular_Members().Member),
-                            Cached_Members_Meta = new Cached_Members_Meta {
-                                Tree_Member_Count = 1,
-                                Tree_All_Unique = true,
-                                Tree_Relational = uni_pa.Cached_Members_Meta.Tree_Relational,
-                            },
-                        };
-                    }
                     Dictionary<MD_Any,Multiplied_Member> uni_src_dict
                         = uni_pa.Local_Indexed_Members();
                     return new MD_Bag_Struct {
@@ -1020,18 +1092,54 @@ namespace Muldis.D.Ref_Eng.Core
                         },
                     };
                 case Symbolic_Bag_Type.Summed:
-                    throw new NotImplementedException();
+                    MD_Bag_Struct n0 = Bag__Collapsed_Struct(
+                        node: node.Tree_Summed_Members().A0, want_indexed: true);
+                    MD_Bag_Struct n1 = Bag__Collapsed_Struct(
+                        node: node.Tree_Summed_Members().A1, want_indexed: true);
+                    if (n0.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                    {
+                        return n1;
+                    }
+                    if (n1.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                    {
+                        return n0;
+                    }
+                    Dictionary<MD_Any,Multiplied_Member> n0_src_dict
+                        = n0.Local_Indexed_Members();
+                    Dictionary<MD_Any,Multiplied_Member> n1_src_dict
+                        = n1.Local_Indexed_Members();
+                    Dictionary<MD_Any,Multiplied_Member> res_dict
+                        = new Dictionary<MD_Any,Multiplied_Member>(n0_src_dict);
+                    foreach (Multiplied_Member m in n1_src_dict.Values)
+                    {
+                        if (!res_dict.ContainsKey(m.Member))
+                        {
+                            res_dict.Add(m.Member, m);
+                        }
+                        else
+                        {
+                            res_dict[m.Member] = new Multiplied_Member(m.Member,
+                                res_dict[m.Member].Multiplicity + m.Multiplicity);
+                        }
+                    }
+                    return new MD_Bag_Struct {
+                        Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
+                        Members = res_dict,
+                        Cached_Members_Meta = new Cached_Members_Meta(),
+                            // TODO: Merge existing source meta where efficient,
+                            // Tree_Member_Count and Tree_Relational in particular.
+                    };
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        internal MD_Any Array__Pick_Random_Member(MD_Any array)
+        internal MD_Any Array__Pick_Arbitrary_Member(MD_Any array)
         {
-            return Array__Pick_Random_Struct_Member(array.AS.MD_Array());
+            return Array__Pick_Arbitrary_Node_Member(array.AS.MD_Array());
         }
 
-        private MD_Any Array__Pick_Random_Struct_Member(MD_Array_Struct node)
+        private MD_Any Array__Pick_Arbitrary_Node_Member(MD_Array_Struct node)
         {
             switch (node.Local_Symbolic_Type)
             {
@@ -1042,8 +1150,8 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Array_Type.Arrayed:
                     return node.Local_Arrayed_Members()[0];
                 case Symbolic_Array_Type.Catenated:
-                    return Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A0)
-                        ?? Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A1);
+                    return Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A0)
+                        ?? Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A1);
                 default:
                     throw new NotImplementedException();
             }
@@ -1069,19 +1177,17 @@ namespace Muldis.D.Ref_Eng.Core
                             == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Array_Type.Arrayed:
-                        MD_Any m0 = Array__Pick_Random_Struct_Member(node);
-                        tr = m0.AS.MD_MSBT
-                                == MD_Well_Known_Base_Type.MD_Tuple
+                        MD_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
+                        tr = m0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
                                 node.Local_Arrayed_Members(),
-                                m => m.AS.MD_MSBT
-                                        == MD_Well_Known_Base_Type.MD_Tuple
+                                m => m.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m, m0)
                             );
                         break;
                     case Symbolic_Array_Type.Catenated:
-                        MD_Any pm0 = Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A0);
-                        MD_Any sm0 = Array__Pick_Random_Struct_Member(node.Tree_Catenated_Members().A1);
+                        MD_Any pm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A0);
+                        MD_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A1);
                         tr = Array__Tree_Relational(node.Tree_Catenated_Members().A0)
                             && Array__Tree_Relational(node.Tree_Catenated_Members().A1)
                             && (pm0 == null || sm0 == null || Tuple__Same_Heading(pm0, sm0));
@@ -1094,9 +1200,9 @@ namespace Muldis.D.Ref_Eng.Core
             return (Boolean)node.Cached_Members_Meta.Tree_Relational;
         }
 
-        internal MD_Any Set__Pick_Random_Member(MD_Any set)
+        internal MD_Any Set__Pick_Arbitrary_Member(MD_Any set)
         {
-            return Bag__Pick_Random_Member(
+            return Bag__Pick_Arbitrary_Member(
                 set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
         }
 
@@ -1106,12 +1212,12 @@ namespace Muldis.D.Ref_Eng.Core
                 set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
         }
 
-        internal MD_Any Bag__Pick_Random_Member(MD_Any bag)
+        internal MD_Any Bag__Pick_Arbitrary_Member(MD_Any bag)
         {
-            return Bag__Pick_Random_Struct_Member(bag.AS.MD_Bag());
+            return Bag__Pick_Arbitrary_Node_Member(bag.AS.MD_Bag());
         }
 
-        private MD_Any Bag__Pick_Random_Struct_Member(MD_Bag_Struct node)
+        private MD_Any Bag__Pick_Arbitrary_Node_Member(MD_Bag_Struct node)
         {
             if (node.Cached_Members_Meta.Tree_Member_Count == 0)
             {
@@ -1124,15 +1230,14 @@ namespace Muldis.D.Ref_Eng.Core
                 case Symbolic_Bag_Type.Singular:
                     return node.Local_Singular_Members().Member;
                 case Symbolic_Bag_Type.Arrayed:
-                    return node.Local_Arrayed_Members().Count == 0 ? null
-                        : node.Local_Arrayed_Members()[0].Member;
+                    return node.Local_Arrayed_Members()[0].Member;
                 case Symbolic_Bag_Type.Indexed:
-                    throw new NotImplementedException();
+                    return node.Local_Indexed_Members().First().Value.Member;
                 case Symbolic_Bag_Type.Unique:
-                    return Bag__Pick_Random_Struct_Member(node.Tree_Unique_Members());
+                    return Bag__Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
                 case Symbolic_Bag_Type.Summed:
-                    return Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A0)
-                        ?? Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A1);
+                    return Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A0)
+                        ?? Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A1);
                 default:
                     throw new NotImplementedException();
             }
@@ -1158,33 +1263,31 @@ namespace Muldis.D.Ref_Eng.Core
                             == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Bag_Type.Arrayed:
-                        if (node.Local_Arrayed_Members().Count == 0)
-                        {
-                            tr = true;
-                        }
-                        else
-                        {
-                            MD_Any m0 = Bag__Pick_Random_Struct_Member(node);
-                            tr = m0.AS.MD_MSBT
-                                    == MD_Well_Known_Base_Type.MD_Tuple
-                                && Enumerable.All(
-                                    node.Local_Arrayed_Members(),
-                                    m => m.Member.AS.MD_MSBT
-                                            == MD_Well_Known_Base_Type.MD_Tuple
-                                        && Tuple__Same_Heading(m.Member, m0)
-                                );
-                        }
+                        MD_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
+                        tr = m0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            && Enumerable.All(
+                                node.Local_Arrayed_Members(),
+                                m => m.Member.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                                    && Tuple__Same_Heading(m.Member, m0)
+                            );
                         break;
                     case Symbolic_Bag_Type.Indexed:
-                        throw new NotImplementedException();
+                        MD_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
+                        tr = im0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            && Enumerable.All(
+                                node.Local_Indexed_Members().Values,
+                                m => m.Member.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                                    && Tuple__Same_Heading(m.Member, im0)
+                            );
+                        break;
                     case Symbolic_Bag_Type.Unique:
                         tr = Bag__Tree_Relational(node.Tree_Unique_Members());
                         break;
                     case Symbolic_Bag_Type.Summed:
                         tr = Bag__Tree_Relational(node.Tree_Summed_Members().A0)
                             && Bag__Tree_Relational(node.Tree_Summed_Members().A1);
-                        MD_Any pam0 = Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A0);
-                        MD_Any eam0 = Bag__Pick_Random_Struct_Member(node.Tree_Summed_Members().A1);
+                        MD_Any pam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A0);
+                        MD_Any eam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A1);
                         if (pam0 != null && eam0 != null)
                         {
                             tr = tr && Tuple__Same_Heading(pam0, eam0);
