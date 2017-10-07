@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace Muldis.D.Ref_Eng.Core
 {
@@ -1368,6 +1369,33 @@ namespace Muldis.D.Ref_Eng.Core
                     || (ts1.Multi_OA != null && ts2.Multi_OA != null
                     && Enumerable.All(ts1.Multi_OA,
                         attr => ts2.Multi_OA.ContainsKey(attr.Key))));
+        }
+
+        internal MD_Any MD_Text_from_UTF_8_MD_Blob(MD_Any value)
+        {
+            Byte[] octets = value.AS.MD_Blob();
+            UTF8Encoding enc = new UTF8Encoding
+            (
+                encoderShouldEmitUTF8Identifier: false,
+                throwOnInvalidBytes: true
+            );
+            try
+            {
+                String s = enc.GetString(octets);
+                Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
+                if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    return Simple_MD_Excuse("X_Unicode_Blob_Not_UTF_8");
+                }
+                return MD_Text(
+                    s,
+                    (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                );
+            }
+            catch
+            {
+                return Simple_MD_Excuse("X_Unicode_Blob_Not_UTF_8");
+            }
         }
     }
 }

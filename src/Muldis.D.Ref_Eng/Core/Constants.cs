@@ -301,6 +301,8 @@ namespace Muldis.D.Ref_Eng.Core
                 "Tuple_heading",
                 "Capsule_label",
                 "Capsule_attrs",
+                "Text_from_UTF_8_Blob",
+                "MDPT_Parsing_Unit_Text_to_Any",
             };
         }
 

@@ -10,9 +10,17 @@ namespace Muldis.D.Ref_Eng.Core
     {
         internal readonly Memory Memory;
 
+        internal readonly Plain_Text.Standard_Parser Standard_Parser;
+
+        internal readonly Plain_Text.Standard_Generator Standard_Generator;
+
         internal Executor(Memory memory)
         {
             Memory = memory;
+
+            Standard_Parser = new Plain_Text.Standard_Parser();
+
+            Standard_Generator = new Plain_Text.Standard_Generator();
         }
 
         internal MD_Any Evaluates(MD_Any function, MD_Any args = null)
@@ -27,52 +35,30 @@ namespace Muldis.D.Ref_Eng.Core
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Args_Not_Tuple").ToString());
             }
-            switch (function.AS.MD_MSBT)
+            if (Is_Absolute_Name(function))
             {
-                case MD_Well_Known_Base_Type.MD_Array:
-                    // Try to use as a Muldis D Absolute_Name value where
-                    // that specifies the qualified name of a function to call.
-                    MD_Any maybe_first = Array__maybe_at(function, 0);
-                    if (maybe_first != null)
-                    {
-                        if (Object.ReferenceEquals(maybe_first, m.MD_Attr_Name("foundation")))
-                        {
-                            MD_Any maybe_second = Array__maybe_at(function, 1);
-                            if (Array__count(function) == 2
-                                && maybe_second != null
-                                && maybe_second.AS.Member_Status_in_WKT(
-                                    MD_Well_Known_Type.Attr_Name) == true)
-                            {
-                                return evaluate_foundation_function(maybe_second, args);
-                            }
-                            throw new ArgumentException(m.Simple_MD_Excuse(
-                                "X_Malformed_Foundation_Function_Call").ToString());
-                        }
-                        throw new NotImplementedException();
-                    }
-                    throw new ArgumentException(m.Simple_MD_Excuse(
-                        "X_Malformed_Function_Call").ToString());
-                case MD_Well_Known_Base_Type.MD_Capsule:
-                    MD_Any label = function.AS.MD_Capsule().Label;
-                    MD_Any attrs = function.AS.MD_Capsule().Attrs;
-                    if (Object.ReferenceEquals(label, m.MD_Attr_Name("Routine_Call")))
-                    {
-                        throw new NotImplementedException();
-                    }
-                    if (Object.ReferenceEquals(label, m.MD_Attr_Name("Function")))
-                    {
-                        throw new NotImplementedException();
-                    }
-                    if (Object.ReferenceEquals(label, m.MD_Attr_Name("Package")))
-                    {
-                        throw new NotImplementedException();
-                    }
-                    throw new ArgumentException(m.Simple_MD_Excuse(
-                        "X_Malformed_Function_Call").ToString());
-                default:
-                    throw new ArgumentException(m.Simple_MD_Excuse(
-                        "X_Malformed_Function_Call").ToString());
+                if (Object.ReferenceEquals(
+                    Array__maybe_at(function, 0), m.MD_Attr_Name("foundation")))
+                {
+                    return evaluate_foundation_function(
+                        Array__maybe_at(function, 1), args);
+                }
+                throw new NotImplementedException();
             }
+            if (Is_Function_Call(function))
+            {
+                throw new NotImplementedException();
+            }
+            if (Is_Function(function))
+            {
+                throw new NotImplementedException();
+            }
+            if (Is_Package(function))
+            {
+                throw new NotImplementedException();
+            }
+            throw new ArgumentException(m.Simple_MD_Excuse(
+                "X_Malformed_Function_Call").ToString());
         }
 
         internal void Performs(MD_Any procedure, MD_Any args = null)
@@ -86,7 +72,188 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
             }
+            if (Is_Absolute_Name(procedure))
+            {
+                throw new NotImplementedException();
+            }
+            if (Is_Procedure_Call(procedure))
+            {
+                throw new NotImplementedException();
+            }
+            if (Is_Procedure(procedure))
+            {
+                throw new NotImplementedException();
+            }
+            if (Is_Package(procedure))
+            {
+                throw new NotImplementedException();
+            }
+            throw new ArgumentException(m.Simple_MD_Excuse(
+                "X_Malformed_Procedure_Call").ToString());
+        }
+
+        internal Boolean Is_Excuse(MD_Any value)
+        {
             throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Fraction(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Bits(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Blob(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Text(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_String(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Set(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Tuple_Array(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Relation(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Tuple_Bag(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Interval(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Package(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Function(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Procedure(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Function_Call(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Procedure_Call(MD_Any value)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Boolean Is_Heading(MD_Any value)
+        {
+            return value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true;
+        }
+
+        internal Boolean Is_Attr_Name(MD_Any value)
+        {
+            return value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true;
+        }
+
+        internal Boolean Is_Attr_Name_List(MD_Any value)
+        {
+            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List) == true)
+            {
+                return true;
+            }
+            Memory m = Memory;
+            if (value.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+            {
+                return false;
+            }
+            // TODO: Replace this loop with an "All" higher order function call.
+            Int64 count = Array__count(value);
+            for (Int64 i = 0; i < count; i++)
+            {
+                if (!Is_Attr_Name(Array__maybe_at(value, i)))
+                {
+                    return false;
+                }
+            }
+            value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List, true);
+            return true;
+        }
+
+        internal Boolean Is_Local_Name(MD_Any value)
+        {
+            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Local_Name) == true)
+            {
+                return true;
+            }
+            if (!Is_Attr_Name_List(value))
+            {
+                return false;
+            }
+            Int64 count = Array__count(value);
+            if (count == 0)
+            {
+                return false;
+            }
+            MD_Any first = Array__maybe_at(value, 0);
+            if ((Object.ReferenceEquals(first, Memory.MD_Attr_Name("foundation")) && count == 2)
+                || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("used")) && count >= 2)
+                || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("package")) && count >= 1)
+                || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("folder")) && count >= 1)
+                || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("material")) && count == 1)
+                || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("floating")) && count >= 2))
+            {
+                value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Local_Name, true);
+                return true;
+            }
+            return false;
+        }
+
+        internal Boolean Is_Absolute_Name(MD_Any value)
+        {
+            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name) == true)
+            {
+                return true;
+            }
+            if (!Is_Local_Name(value))
+            {
+                return false;
+            }
+            MD_Any first = Array__maybe_at(value, 0);
+            if (Object.ReferenceEquals(first, Memory.MD_Attr_Name("foundation"))
+                || Object.ReferenceEquals(first, Memory.MD_Attr_Name("used"))
+                || Object.ReferenceEquals(first, Memory.MD_Attr_Name("package")))
+            {
+                value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name, true);
+                return true;
+            }
+            return false;
         }
 
         internal MD_Any evaluate_foundation_function(MD_Any func_name, MD_Any args)
@@ -115,7 +282,7 @@ namespace Muldis.D.Ref_Eng.Core
                     case "None":
                         return m.MD_False;
 
-                    // FOUNDATION TYPE DEFINERS
+                    // FOUNDATION BASE TYPE DEFINERS
 
                     case "Boolean":
                         return m.MD_Boolean(
@@ -173,6 +340,21 @@ namespace Muldis.D.Ref_Eng.Core
                     // TUPLE SUBTYPE DEFINERS
 
                     // CAPSULE SUBTYPE DEFINERS
+
+                    case "Blob":
+                        return m.MD_Boolean(
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Blob
+                        );
+
+                    case "Text":
+                        return m.MD_Boolean(
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Text
+                        );
+
+                    case "Excuse":
+                        return m.MD_Boolean(
+                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Excuse
+                        );
 
                     default:
                         throw new NotImplementedException();
@@ -253,6 +435,20 @@ namespace Muldis.D.Ref_Eng.Core
                                 "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                         }
                         return m.Tuple__Heading(v);
+                    case "Text_from_UTF_8_Blob":
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Blob)
+                        {
+                            throw new ArgumentException(m.Simple_MD_Excuse(
+                                "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
+                        }
+                        return m.MD_Text_from_UTF_8_MD_Blob(v);
+                    case "MDPT_Parsing_Unit_Text_to_Any":
+                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Text)
+                        {
+                            throw new ArgumentException(m.Simple_MD_Excuse(
+                                "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
+                        }
+                        return this.Standard_Parser.MDPT_Parsing_Unit_MD_Text_to_MD_Any(v);
                     default:
                         throw new NotImplementedException();
                 }
