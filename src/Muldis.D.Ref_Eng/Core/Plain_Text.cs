@@ -31,22 +31,22 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     // by code such as the X or Y classes below.
     // This class is completely deterministic and its exact output Muldis D
     // Package/etc values are determined entirely by its input Text/etc values.
-    // Standard_Parser accepts input in the full Muldis_D_Plain_Text
-    // grammar, not just the "foundational" subset that Standard_Generator
-    // outputs.  However, Standard_Parser expressly does not retain any
+    // Standard_Parser only accepts input in the "foundational" flavor of
+    // Muldis_D_Plain_Text, the same flavor that Standard_Generator outputs;
+    // it also expressly does not retain any
     // parsing meta-data as new decorations on the output code, such as
     // which exact numeric or string formats or whitespace was used.
-    // This is so that the Muldis_D_Foundation has a competent parsing
-    // capability built-in, and any more complicated alternate parsers can
-    // be written in Muldis D and bootstrapped by it; those alternate
-    // parsers are free to create decorations to support perfect
-    // round-tripping from plain text source to identical plain-text source.
     // Similarly, Standard_Parser has zero configuration options.
+    // The more complicated reference implementation of a parser for the full
+    // Muldis_D_Plain_Text grammar is in turn written in the "foundational"
+    // subset of Muldis D, thus an executor for the full language is
+    // bootstrapped by an executor taking just the subset.
+    // The full reference parser can create decorations to support perfect
+    // round-tripping from plain text source to identical plain-text source.
 
     internal class Standard_Parser : Parser
     {
-        internal MD_Any MDPT_Parsing_Unit_MD_Text_to_MD_Any(
-            MD_Any parsing_unit)
+        internal MD_Any MDPT_Parsing_Unit_MD_Text_to_MD_Any(MD_Any parsing_unit)
         {
             // TODO: Everything.
             return parsing_unit.AS.Memory.Well_Known_Excuses["No_Reason"];
