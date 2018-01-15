@@ -9,13 +9,13 @@ This document describes Muldis.D.Ref\_Eng version 0.
 
 # DESCRIPTION
 
-This distribution features the C\# library named ```Muldis.D.Ref_Eng``` and
+This distribution features the C\# library named `Muldis.D.Ref_Eng` and
 its support structure, particularly the C\# console
-application ```Muldis.D.Ref_Eng.Console```.
+application `Muldis.D.Ref_Eng.Console`.
 
 Muldis.D.Ref\_Eng is the reference implementation over C\# of the **Muldis
 D** language by the authority Muldis Data Systems
-([http://muldis.com](http://muldis.com)), version number ```0.201.0.-9```.
+([http://muldis.com](http://muldis.com)), version number `0.201.0.-9`.
 
 The Muldis D language specification is under active development and its
 latest version can be seen at
@@ -26,7 +26,7 @@ Date (C.J. Date) and Hugh Darwen whose home website is
 [http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
 
 This distribution bundles a non-canonical copy of the library
-named ```Muldis.DBP``` / ```IMDBP.cs``` for build-out-of-the-box
+named `Muldis.DBP` / `IMDBP.cs` for build-out-of-the-box
 convenience in the short term while the latter is not yet published as a
 NuGet package; see [https://github.com/muldis/Muldis-DBP-DotNet](
 https://github.com/muldis/Muldis-DBP-DotNet) for the canonical copy.
@@ -37,7 +37,7 @@ https://github.com/muldis/Muldis-DBP-DotNet) for the canonical copy.
 
 Muldis.D.Ref\_Eng is intended to be published as a NuGet package in the
 near future, and that is intended to be the way that "normal" users consume
-the library.  Until then, all users consume it as ```*.cs``` source files
+the library.  Until then, all users consume it as `*.cs` source files
 that they include in and compile with their own projects.
 
 Muldis.D.Ref\_Eng is defined in terms of Microsoft's .Net API and is
@@ -58,7 +58,7 @@ cross-platform and should be immediately usable on Microsoft Windows or
 Apple MacOS or various Linux flavors or other operating systems, either
 desktop computers or mobile devices etc.
 
-The C\# source files explicitly declare that they are ```CLSCompliant```
+The C\# source files explicitly declare that they are `CLSCompliant`
 and so should be useable with code written in any language that compiles to
 Microsoft's CLR, including both C\# and Visual Basic.
 
@@ -77,26 +77,26 @@ are further interpreted in the following sections.
 
 To build and run Muldis.D.Ref\_Eng on a Microsoft Windows OS, the best
 solution is to download and install MS Visual Studio 2017, which is the
-first version with the tooling to understand the ```Muldis.D.Ref_Eng.sln```
-and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.
+first version with the tooling to understand the `Muldis.D.Ref_Eng.sln`
+and `*.csproj` etc that Muldis.D.Ref\_Eng comes with.
 
 The alternate best solution is to download and install Microsoft's .Net
 Core SDK, a command-line development tool which should understand the same
 solution/project files.
 
 Otherwise, any version of MS Visual Studio back to MS Visual Studio 2010
-should in theory handle the ```*.cs``` files with your own Visual Studio
+should in theory handle the `*.cs` files with your own Visual Studio
 solution and project files.
 
-Set ```Muldis.D.Ref_Eng.Console``` as the start project if you want to use
+Set `Muldis.D.Ref_Eng.Console` as the start project if you want to use
 this standalone Muldis D source file executor.
 
 ## Installation of Dependencies Under Apple Mac OS
 
 To build and run Muldis.D.Ref\_Eng on an Apple Mac OS, the canonical
 solution is to download and install Microsoft's .Net Core SDK, a
-command-line tool that understands the ```Muldis.D.Ref_Eng.sln```
-and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.
+command-line tool that understands the `Muldis.D.Ref_Eng.sln`
+and `*.csproj` etc that Muldis.D.Ref\_Eng comes with.
 
 The following procedure has been successfully used by the author.
 
@@ -104,8 +104,8 @@ The following procedure has been successfully used by the author.
 indicated next; other Mac OS versions weren't tried.
 
 2. Download and install the .Net Core SDK, which provides the command-line
-tool ```dotnet``` for building and running the .Net code.  To be
-specific, ```dotnet-dev-osx-x64.1.0.4.pkg``` was the
+tool `dotnet` for building and running the .Net code.  To be
+specific, `dotnet-dev-osx-x64.1.0.4.pkg` was the
 installer used by the author.
 
 NOTE: THE FOLLOWING SECTION MIGHT ACTUALLY BE OBSOLETE.  IT WAS NEEDED FOR
@@ -133,20 +133,20 @@ Apple's system-provided OpenSSL continues to get that one.
 
 END OF THE POSSIBLY OBSOLETE SECTION.
 
-Running ```dotnet help``` is quite helpful in general.
+Running `dotnet help` is quite helpful in general.
 
 To prepare to run Muldis.D.Ref\_Eng, at the command line, first cd
-into its root directory and then run ```dotnet restore```.  This causes
+into its root directory and then run `dotnet restore`.  This causes
 NuGet to fetch and make available the core .Net libraries, without which
-attempting to run a program gets errors like ```System``` can't be found.
+attempting to run a program gets errors like `System` can't be found.
 
 To build/run Muldis.D.Ref\_Eng, at the command line, first cd
-into ```src/Muldis.D.Ref_Eng.Console``` and then run ```dotnet run```.
+into `src/Muldis.D.Ref_Eng.Console` and then run `dotnet run`.
 
 Another good solution is to use Microsoft's free Visual Studio Community
 for Mac which provides a GUI and debugger and is otherwise a lot like the
-Visual Studio for MS Windows.  It also understands the ```Muldis.D.Ref_Eng.sln```
-and ```*.csproj``` etc that Muldis.D.Ref\_Eng comes with.  See
+Visual Studio for MS Windows.  It also understands the `Muldis.D.Ref_Eng.sln`
+and `*.csproj` etc that Muldis.D.Ref\_Eng comes with.  See
 [https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/).
 
 ## Installation of Dependencies Under Other Operating Systems
