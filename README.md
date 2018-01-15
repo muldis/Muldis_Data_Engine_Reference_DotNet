@@ -33,7 +33,55 @@ https://github.com/muldis/Muldis-DBP-DotNet) for the canonical copy.
 
 *This documentation is pending.*
 
-# DEPENDENCIES AND COMPATIBILITY
+# DEPENDENCIES AND COMPATIBILITY (NEW VERSION)
+
+**Muldis Reference Engine: .NET** is defined in terms of Microsoft's .NET
+"dot net" developer platform.
+
+[https://www.microsoft.com/net](https://www.microsoft.com/net)
+
+**Muldis Reference Engine: .NET** officially requires the .NET Standard
+version 2.0 API (2017).
+
+[https://docs.microsoft.com/en-us/dotnet/standard/net-standard](
+https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+
+The .NET Standard version 2.0 API is provided by the following .NET
+implementations: .NET Core versions 2.0 (2017) and above, .NET Framework
+(with .NET Core 2.0 SDK) versions 4.6.1 (2015) and above, Mono versions 5.4
+(2017) and above, and others listed at the above url.
+
+Between the various .NET Standard version 2.0 implementations, there is
+coverage for all the major operating systems, including Microsoft Windows,
+Apple MacOS, and a variety of Linux flavors.  As such, **Muldis Reference
+Engine: .NET** is officially cross-platform and should run on anywhere that
+at least one .NET Standard version 2.0 implementation does.
+
+**Muldis Reference Engine: .NET** unofficially is also very likely to work
+with older .NET implementations, with .NET Framework version 4.0 (2010)
+being more the hard minimum (versions less than 4.0 are known to lack
+required features), but the author does not formally test with these.
+
+The newest .NET implementations provided by Microsoft for each major
+operating system can be downloaded here, including the Visual Studio IDE
+and the .NET Core SDK:
+
+[https://www.microsoft.com/net/download](https://www.microsoft.com/net/download)
+
+On Microsoft Windows, MS Visual Studio 2017 version 15.4.0 (2017 Oct 9) was
+the first version to include stable .NET Standard 2.0 and .NET Core 2.0 by
+default and so is the earliest recommended version to use.  Unofficially
+any version back to MS Visual Studio 2010 inclusive would probably handle
+the C\# source files.  As of this writing, MS Visual Studio 2017 version
+15.5.3 (2018 Jan 9) is the newest stable version released.
+
+On Apple MacOS, MS Visual Studio 2017 for Mac version 7.2.0 (2017 Oct 9)
+was the first version to include stable .NET Standard 2.0 and .NET Core 2.0
+by default and so is the earliest recommended version to use.  As of this
+writing, MS Visual Studio 2017 for Mac version 7.3.3 (2018 Jan 9) is the
+newest stable version released.
+
+# DEPENDENCIES AND COMPATIBILITY (OLD VERSION, TO BE REMOVED)
 
 Muldis.D.Ref\_Eng is intended to be published as a NuGet package in the
 near future, and that is intended to be the way that "normal" users consume
