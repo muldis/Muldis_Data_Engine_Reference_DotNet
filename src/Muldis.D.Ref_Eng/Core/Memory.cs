@@ -21,6 +21,8 @@ namespace Muldis.D.Ref_Eng.Core
     // Some caches are logically just HashSets, but we need the ability to
     // fetch the actual cached objects which are the set members so we can
     // reuse them, not just know they exist, so Dictionaries are used instead.
+    // Note this is called "interning" in a variety of programming languages;
+    // see https://en.wikipedia.org/wiki/String_interning for more on that.
 
     internal class Memory
     {
@@ -66,7 +68,7 @@ namespace Muldis.D.Ref_Eng.Core
         // assets are False), limited to 10K entries of shorter size.
         private readonly Dictionary<MD_Any,MD_Any> m_heading_tuples;
         // Cache of MD_Tuple and Heading subtype Attr_Name values.
-        // The set of values in here is a proper subset of MD_Tuple_D0.
+        // The set of values in here is a proper subset of m_heading_tuples.
         private readonly Dictionary<String,MD_Any> m_attr_name_tuples;
         internal readonly MD_Any Attr_Name_0;
         internal readonly MD_Any Attr_Name_1;
@@ -106,17 +108,17 @@ namespace Muldis.D.Ref_Eng.Core
 
             Executor = new Executor(this);
 
-            MD_False = new MD_Any { AS = new MD_Any_Struct {
+            MD_False = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Boolean,
                 Details = false,
-            } };
+            };
 
-            MD_True = new MD_Any { AS = new MD_Any_Struct {
+            MD_True = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Boolean,
                 Details = true,
-            } };
+            };
 
             m_integers = new Dictionary<Int32,MD_Any>();
             for (Int32 i = -1; i <= 1; i++)
@@ -124,32 +126,32 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any v = MD_Integer(i);
             }
 
-            MD_Fraction_0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Fraction_0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
                 Details = new MD_Fraction_Struct {
                     As_Decimal = 0.0M,
                     As_Pair = new MD_Fraction_Pair {
-                        Numerator = m_integers[0].AS.MD_Integer(),
-                        Denominator = m_integers[1].AS.MD_Integer(),
+                        Numerator = m_integers[0].MD_Integer(),
+                        Denominator = m_integers[1].MD_Integer(),
                         Cached_Is_Coprime = true,
                     },
                 },
-            } };
+            };
 
-            MD_Bits_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Bits_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
                 Details = new BitArray(0),
-            } };
+            };
 
-            MD_Blob_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Blob_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
                 Details = new Byte[] {},
-            } };
+            };
 
-            MD_Text_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Text_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
                 Details = new MD_Text_Struct {
@@ -157,9 +159,9 @@ namespace Muldis.D.Ref_Eng.Core
                     Has_Any_Non_BMP = false,
                     Cached_Member_Count = 0,
                 },
-            } };
+            };
 
-            MD_Array_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Array_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
@@ -170,9 +172,9 @@ namespace Muldis.D.Ref_Eng.Core
                         Tree_Relational = true,
                     },
                 },
-            } };
+            };
 
-            MD_Set_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Set_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                 Details = new MD_Bag_Struct {
@@ -183,9 +185,9 @@ namespace Muldis.D.Ref_Eng.Core
                         Tree_Relational = true,
                     },
                 },
-            } };
+            };
 
-            MD_Bag_C0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Bag_C0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                 Details = new MD_Bag_Struct {
@@ -196,9 +198,9 @@ namespace Muldis.D.Ref_Eng.Core
                         Tree_Relational = true,
                     },
                 },
-            } };
+            };
 
-            MD_Tuple_D0 = new MD_Any { AS = new MD_Any_Struct {
+            MD_Tuple_D0 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -206,11 +208,11 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
+            };
 
             m_attr_name_tuples = new Dictionary<String,MD_Any>()
             {
-                {"\u0000", new MD_Any { AS = new MD_Any_Struct {
+                {"\u0000", new MD_Any {
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
@@ -219,8 +221,8 @@ namespace Muldis.D.Ref_Eng.Core
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
-                } } },
-                {"\u0001", new MD_Any { AS = new MD_Any_Struct {
+                } },
+                {"\u0001", new MD_Any {
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
@@ -229,8 +231,8 @@ namespace Muldis.D.Ref_Eng.Core
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
-                } } },
-                {"\u0002", new MD_Any { AS = new MD_Any_Struct {
+                } },
+                {"\u0002", new MD_Any {
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
@@ -239,13 +241,13 @@ namespace Muldis.D.Ref_Eng.Core
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
-                } } },
+                } },
             };
             Attr_Name_0 = m_attr_name_tuples["\u0000"];
             Attr_Name_1 = m_attr_name_tuples["\u0001"];
             Attr_Name_2 = m_attr_name_tuples["\u0002"];
 
-            Heading_0_1 = new MD_Any { AS = new MD_Any_Struct {
+            Heading_0_1 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -255,8 +257,8 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
-            Heading_0_2 = new MD_Any { AS = new MD_Any_Struct {
+            };
+            Heading_0_2 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -266,8 +268,8 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
-            Heading_1_2 = new MD_Any { AS = new MD_Any_Struct {
+            };
+            Heading_1_2 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -277,9 +279,9 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
+            };
 
-            Heading_0_1_2 = new MD_Any { AS = new MD_Any_Struct {
+            Heading_0_1_2 = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -290,7 +292,7 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
+            };
 
             m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
             {
@@ -309,14 +311,14 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any an = MD_Attr_Name(s);
             }
 
-            m_false_nullary_capsule = new MD_Any { AS = new MD_Any_Struct {
+            m_false_nullary_capsule = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
                 Details = new MD_Capsule_Struct {
                     Label = MD_False,
                     Attrs = MD_Tuple_D0,
                 },
-            } };
+            };
 
             MD_Tuple_Array_D0C0 = MD_Capsule(
                 MD_Attr_Name("Tuple_Array"),
@@ -325,7 +327,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", MD_Tuple_D0}, {"body", MD_Array_C0}}
                 )
             );
-            MD_Tuple_Array_D0C0.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
+            MD_Tuple_Array_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
 
             MD_Tuple_Array_D0C1 = MD_Capsule(
                 MD_Attr_Name("Tuple_Array"),
@@ -333,7 +335,7 @@ namespace Muldis.D.Ref_Eng.Core
                     multi_oa: new Dictionary<String,MD_Any>()
                     {
                         {"heading", MD_Tuple_D0},
-                        {"body", new MD_Any { AS = new MD_Any_Struct {
+                        {"body", new MD_Any {
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                             Details = new MD_Array_Struct {
@@ -345,11 +347,11 @@ namespace Muldis.D.Ref_Eng.Core
                                     Tree_Relational = true,
                                 },
                             },
-                        } }},
+                        }},
                     }
                 )
             );
-            MD_Tuple_Array_D0C1.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
+            MD_Tuple_Array_D0C1.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
 
             MD_Relation_D0C0 = MD_Capsule(
                 MD_Attr_Name("Relation"),
@@ -358,7 +360,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", MD_Tuple_D0}, {"body", MD_Set_C0}}
                 )
             );
-            MD_Relation_D0C0.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
+            MD_Relation_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
 
             MD_Relation_D0C1 = MD_Capsule(
                 MD_Attr_Name("Relation"),
@@ -366,7 +368,7 @@ namespace Muldis.D.Ref_Eng.Core
                     multi_oa: new Dictionary<String,MD_Any>()
                     {
                         {"heading", MD_Tuple_D0},
-                        {"body", new MD_Any { AS = new MD_Any_Struct {
+                        {"body", new MD_Any {
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                             Details = new MD_Bag_Struct {
@@ -379,11 +381,11 @@ namespace Muldis.D.Ref_Eng.Core
                                     Tree_Relational = true,
                                 },
                             },
-                        } }},
+                        }},
                     }
                 )
             );
-            MD_Relation_D0C1.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
+            MD_Relation_D0C1.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
 
             MD_Tuple_Bag_D0C0 = MD_Capsule(
                 MD_Attr_Name("Tuple_Bag"),
@@ -392,7 +394,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", MD_Tuple_D0}, {"body", MD_Bag_C0}}
                 )
             );
-            MD_Tuple_Bag_D0C0.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
+            MD_Tuple_Bag_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
 
             MD_Tuple_Bag_D0C1 = MD_Capsule(
                 MD_Attr_Name("Tuple_Bag"),
@@ -400,7 +402,7 @@ namespace Muldis.D.Ref_Eng.Core
                     multi_oa: new Dictionary<String,MD_Any>()
                     {
                         {"heading", MD_Tuple_D0},
-                        {"body", new MD_Any { AS = new MD_Any_Struct {
+                        {"body", new MD_Any {
                             Memory = this,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
@@ -413,25 +415,25 @@ namespace Muldis.D.Ref_Eng.Core
                                     Tree_Relational = true,
                                 },
                             },
-                        } }},
+                        }},
                     }
                 )
             );
-            MD_Tuple_Bag_D0C1.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
+            MD_Tuple_Bag_D0C1.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
 
             Well_Known_Excuses = new Dictionary<String,MD_Any>();
             foreach (String s in Constants.Strings__Well_Known_Excuses())
             {
                 Well_Known_Excuses.Add(
                     s,
-                    new MD_Any { AS = new MD_Any_Struct {
+                    new MD_Any {
                         Memory = this,
                         MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
                         Details = new MD_Tuple_Struct {
                             Degree = 1,
                             A0 = MD_Attr_Name(s),
                         },
-                    } }
+                    }
                 );
             }
         }
@@ -448,11 +450,11 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return m_integers[(Int32)value];
             }
-            MD_Any integer = new MD_Any { AS = new MD_Any_Struct {
+            MD_Any integer = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Integer,
                 Details = value,
-            } };
+            };
             if (may_cache && m_integers.Count < 10000)
             {
                 m_integers.Add((Int32)value, integer);
@@ -473,7 +475,7 @@ namespace Muldis.D.Ref_Eng.Core
                 denominator = -denominator;
                 numerator   = -numerator  ;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
                 Details = new MD_Fraction_Struct {
@@ -482,7 +484,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Denominator = denominator,
                     },
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Fraction(Decimal value)
@@ -491,13 +493,13 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Fraction_0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
                 Details = new MD_Fraction_Struct {
                     As_Decimal = value,
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Bits(BitArray members)
@@ -506,11 +508,11 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Bits_C0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
                 Details = members,
-            } };
+            };
         }
 
         internal MD_Any MD_Blob(Byte[] members)
@@ -519,11 +521,11 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Blob_C0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
                 Details = members,
-            } };
+            };
         }
 
         internal MD_Any MD_Text(String members, Boolean has_any_non_BMP)
@@ -532,14 +534,14 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Text_C0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
                 Details = new MD_Text_Struct {
                     Codepoint_Members = members,
                     Has_Any_Non_BMP = has_any_non_BMP,
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Array(List<MD_Any> members)
@@ -550,7 +552,7 @@ namespace Muldis.D.Ref_Eng.Core
             }
             if (members.Count == 1)
             {
-                return new MD_Any { AS = new MD_Any_Struct {
+                return new MD_Any {
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                     Details = new MD_Array_Struct {
@@ -559,13 +561,13 @@ namespace Muldis.D.Ref_Eng.Core
                         Cached_Members_Meta = new Cached_Members_Meta {
                             Tree_Member_Count = 1,
                             Tree_All_Unique = true,
-                            Tree_Relational = (members[0].AS.MD_MSBT
+                            Tree_Relational = (members[0].MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple),
                         },
                     },
-                } };
+                };
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
@@ -573,7 +575,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Members = members,
                     Cached_Members_Meta = new Cached_Members_Meta(),
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Set(List<Multiplied_Member> members)
@@ -582,7 +584,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Set_C0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
                 Details = new MD_Bag_Struct {
@@ -596,7 +598,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Tree_All_Unique = true,
                     },
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Bag(List<Multiplied_Member> members)
@@ -605,7 +607,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return MD_Bag_C0;
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                 Details = new MD_Bag_Struct {
@@ -613,7 +615,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Members = members,
                     Cached_Members_Meta = new Cached_Members_Meta(),
                 },
-            } };
+            };
         }
 
         internal MD_Any MD_Tuple(
@@ -650,7 +652,7 @@ namespace Muldis.D.Ref_Eng.Core
                     return m_attr_name_tuples[only_oa.Value.Key];
                 }
             }
-            MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
+            MD_Any tuple = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -661,14 +663,14 @@ namespace Muldis.D.Ref_Eng.Core
                     Only_OA = only_oa,
                     Multi_OA = multi_oa,
                 },
-            } };
+            };
             if (degree == 1)
             {
                 if (only_oa != null
                     && Object.ReferenceEquals(only_oa.Value.Value, MD_True))
                 {
-                    tuple.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
-                    tuple.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
+                    tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
+                    tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
                     if (only_oa.Value.Key.Length <= 200 && m_heading_tuples.Count < 10000)
                     {
                         m_heading_tuples.Add(tuple, tuple);
@@ -686,7 +688,7 @@ namespace Muldis.D.Ref_Eng.Core
                 && (multi_oa == null || Enumerable.All(multi_oa,
                     attr => Object.ReferenceEquals(attr.Value, MD_True))))
             {
-                tuple.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
+                tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
                 if (degree <= 30
                     && (only_oa == null || only_oa.Value.Key.Length <= 200)
                     && (multi_oa == null || Enumerable.All(multi_oa,
@@ -725,7 +727,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", heading}, {"body", body}}
                 )
             );
-            tuple_array.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
+            tuple_array.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
             return tuple_array;
         }
 
@@ -749,7 +751,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", heading}, {"body", body}}
                 )
             );
-            relation.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
+            relation.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
             return relation;
         }
 
@@ -774,7 +776,7 @@ namespace Muldis.D.Ref_Eng.Core
                         {{"heading", heading}, {"body", body}}
                 )
             );
-            tuple_bag.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
+            tuple_bag.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
             return tuple_bag;
         }
 
@@ -795,14 +797,14 @@ namespace Muldis.D.Ref_Eng.Core
             // known-is-wkt) because they're all tested to that level and
             // normalized at selection, therefore if we have a MD_Capsule
             // extant whose label is say 'Text' we know it isn't a Text value, and so on.
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
                 Details = new MD_Capsule_Struct {
                     Label = label,
                     Attrs = attrs,
                 },
-            } };
+            };
         }
 
         // TODO: Here or in Executor also have Capsule_attrs() etc functions
@@ -812,47 +814,47 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any New_MD_Variable(MD_Any initial_current_value)
         {
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Variable,
                 Details = initial_current_value,
-            } };
+            };
         }
 
         internal MD_Any New_MD_Process()
         {
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Process,
                 Details = null,
-            } };
+            };
         }
 
         internal MD_Any New_MD_Stream()
         {
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Stream,
                 Details = null,
-            } };
+            };
         }
 
         internal MD_Any New_MD_External(Object value)
         {
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_External,
                 Details = value,
-            } };
+            };
         }
 
         internal MD_Any MD_Excuse(MD_Any attrs)
         {
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
-                Details = attrs.AS.Details,
-            } };
+                Details = attrs.Details,
+            };
         }
 
         internal MD_Any Simple_MD_Excuse(String value)
@@ -861,14 +863,14 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return Well_Known_Excuses[value];
             }
-            return new MD_Any { AS = new MD_Any_Struct {
+            return new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
                 Details = new MD_Tuple_Struct {
                     Degree = 1,
                     A0 = MD_Attr_Name(value),
                 },
-            } };
+            };
         }
 
         internal Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)
@@ -900,7 +902,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return m_attr_name_tuples[value];
             }
-            MD_Any tuple = new MD_Any { AS = new MD_Any_Struct {
+            MD_Any tuple = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -909,7 +911,7 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
-            } };
+            };
             if (value.Length <= 200 && m_heading_tuples.Count < 10000)
             {
                 m_heading_tuples.Add(tuple, tuple);
@@ -920,7 +922,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal void Array__Collapse(MD_Any array)
         {
-            array.AS.Details = Array__Collapsed_Struct(array.AS.MD_Array());
+            array.Details = Array__Collapsed_Struct(array.MD_Array());
         }
 
         private MD_Array_Struct Array__Collapsed_Struct(MD_Array_Struct node)
@@ -932,7 +934,7 @@ namespace Muldis.D.Ref_Eng.Core
                     // In theory we should never get here assuming that any
                     // operations which would knowingly result in the empty
                     // Array are optimized to return MD_Array_C0 directly.
-                    return MD_Array_C0.AS.MD_Array();
+                    return MD_Array_C0.MD_Array();
                 case Symbolic_Array_Type.Singular:
                 case Symbolic_Array_Type.Arrayed:
                     // Node is already collapsed.
@@ -975,7 +977,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal void Bag__Collapse(MD_Any bag, Boolean want_indexed = false)
         {
-            bag.AS.Details = Bag__Collapsed_Struct(bag.AS.MD_Bag(), want_indexed);
+            bag.Details = Bag__Collapsed_Struct(bag.MD_Bag(), want_indexed);
         }
 
         private MD_Bag_Struct Bag__Collapsed_Struct(MD_Bag_Struct node,
@@ -990,7 +992,7 @@ namespace Muldis.D.Ref_Eng.Core
                     // In theory we should never get here assuming that any
                     // operations which would knowingly result in the empty
                     // Bag are optimized to return MD_Bag_C0 directly.
-                    return MD_Bag_C0.AS.MD_Bag();
+                    return MD_Bag_C0.MD_Bag();
                 case Symbolic_Bag_Type.Singular:
                     if (!want_indexed)
                     {
@@ -1005,7 +1007,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Cached_Members_Meta = new Cached_Members_Meta {
                             Tree_Member_Count = lsm.Multiplicity,
                             Tree_All_Unique = (lsm.Multiplicity == 1),
-                            Tree_Relational = (lsm.Member.AS.MD_MSBT
+                            Tree_Relational = (lsm.Member.MD_MSBT
                                 == MD_Well_Known_Base_Type.MD_Tuple),
                         },
                     };
@@ -1105,7 +1107,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Array__Pick_Arbitrary_Member(MD_Any array)
         {
-            return Array__Pick_Arbitrary_Node_Member(array.AS.MD_Array());
+            return Array__Pick_Arbitrary_Node_Member(array.MD_Array());
         }
 
         private MD_Any Array__Pick_Arbitrary_Node_Member(MD_Array_Struct node)
@@ -1128,7 +1130,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Array__Is_Relational(MD_Any array)
         {
-            return Array__Tree_Relational(array.AS.MD_Array());
+            return Array__Tree_Relational(array.MD_Array());
         }
 
         private Boolean Array__Tree_Relational(MD_Array_Struct node)
@@ -1142,15 +1144,15 @@ namespace Muldis.D.Ref_Eng.Core
                         tr = true;
                         break;
                     case Symbolic_Array_Type.Singular:
-                        tr = node.Local_Singular_Members().Member.AS.MD_MSBT
+                        tr = node.Local_Singular_Members().Member.MD_MSBT
                             == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Array_Type.Arrayed:
                         MD_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
-                        tr = m0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                        tr = m0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
                                 node.Local_Arrayed_Members(),
-                                m => m.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                                m => m.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m, m0)
                             );
                         break;
@@ -1172,18 +1174,18 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any Set__Pick_Arbitrary_Member(MD_Any set)
         {
             return Bag__Pick_Arbitrary_Member(
-                set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
+                set.MD_Capsule().Attrs.MD_Tuple().Only_OA.Value.Value);
         }
 
         internal Boolean Set__Is_Relational(MD_Any set)
         {
             return Bag__Is_Relational(
-                set.AS.MD_Capsule().Attrs.AS.MD_Tuple().Only_OA.Value.Value);
+                set.MD_Capsule().Attrs.MD_Tuple().Only_OA.Value.Value);
         }
 
         internal MD_Any Bag__Pick_Arbitrary_Member(MD_Any bag)
         {
-            return Bag__Pick_Arbitrary_Node_Member(bag.AS.MD_Bag());
+            return Bag__Pick_Arbitrary_Node_Member(bag.MD_Bag());
         }
 
         private MD_Any Bag__Pick_Arbitrary_Node_Member(MD_Bag_Struct node)
@@ -1214,7 +1216,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Bag__Is_Relational(MD_Any bag)
         {
-            return Bag__Tree_Relational(bag.AS.MD_Bag());
+            return Bag__Tree_Relational(bag.MD_Bag());
         }
 
         private Boolean Bag__Tree_Relational(MD_Bag_Struct node)
@@ -1228,24 +1230,24 @@ namespace Muldis.D.Ref_Eng.Core
                         tr = true;
                         break;
                     case Symbolic_Bag_Type.Singular:
-                        tr = node.Local_Singular_Members().Member.AS.MD_MSBT
+                        tr = node.Local_Singular_Members().Member.MD_MSBT
                             == MD_Well_Known_Base_Type.MD_Tuple;
                         break;
                     case Symbolic_Bag_Type.Arrayed:
                         MD_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
-                        tr = m0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                        tr = m0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
                                 node.Local_Arrayed_Members(),
-                                m => m.Member.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                                m => m.Member.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m.Member, m0)
                             );
                         break;
                     case Symbolic_Bag_Type.Indexed:
                         MD_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
-                        tr = im0.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                        tr = im0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                             && Enumerable.All(
                                 node.Local_Indexed_Members().Values,
-                                m => m.Member.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                                m => m.Member.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                                     && Tuple__Same_Heading(m.Member, im0)
                             );
                         break;
@@ -1272,12 +1274,12 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any Tuple__Heading(MD_Any tuple)
         {
-            if (tuple.AS.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
+            if (tuple.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
             {
                 return tuple;
             }
             // If we get here, the Tuple/Heading degree is guaranteed > 0.
-            MD_Tuple_Struct ts = tuple.AS.MD_Tuple();
+            MD_Tuple_Struct ts = tuple.MD_Tuple();
             if (ts.Degree == 1)
             {
                 if (ts.A0 != null)
@@ -1299,7 +1301,7 @@ namespace Muldis.D.Ref_Eng.Core
                     return m_attr_name_tuples[ts.Only_OA.Value.Key];
                 }
             }
-            MD_Any heading = new MD_Any { AS = new MD_Any_Struct {
+            MD_Any heading = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
@@ -1317,12 +1319,12 @@ namespace Muldis.D.Ref_Eng.Core
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
-            } };
+            };
             if (ts.Degree == 1)
             {
                 if (ts.Only_OA != null)
                 {
-                    heading.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
+                    heading.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
                     if (ts.Only_OA.Value.Key.Length <= 200 && m_heading_tuples.Count < 10000)
                     {
                         m_heading_tuples.Add(heading, heading);
@@ -1351,13 +1353,12 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Tuple__Same_Heading(MD_Any t1, MD_Any t2)
         {
-            if (Object.ReferenceEquals(t1,t2)
-                || Object.ReferenceEquals(t1.AS,t2.AS))
+            if (Object.ReferenceEquals(t1,t2))
             {
                 return true;
             }
-            MD_Tuple_Struct ts1 = t1.AS.MD_Tuple();
-            MD_Tuple_Struct ts2 = t2.AS.MD_Tuple();
+            MD_Tuple_Struct ts1 = t1.MD_Tuple();
+            MD_Tuple_Struct ts2 = t2.MD_Tuple();
             return (ts1.Degree == ts2.Degree)
                 && ((ts1.A0 == null) == (ts2.A0 == null))
                 && ((ts1.A1 == null) == (ts2.A1 == null))
@@ -1373,7 +1374,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal MD_Any MD_Text_from_UTF_8_MD_Blob(MD_Any value)
         {
-            Byte[] octets = value.AS.MD_Blob();
+            Byte[] octets = value.MD_Blob();
             UTF8Encoding enc = new UTF8Encoding
             (
                 encoderShouldEmitUTF8Identifier: false,

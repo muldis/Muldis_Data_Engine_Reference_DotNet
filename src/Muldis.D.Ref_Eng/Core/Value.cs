@@ -44,10 +44,10 @@ namespace Muldis.D.Ref_Eng.Core
     // "value"; however, any time that two MD_Any are discovered to
     // denote the same Muldis D value, any references to one may be safely
     // replaced by references to the other.
-    // As a primary aid in implementing the "flyweight pattern", a MD_Any
-    // object is actually a lightweight "value handle" pointing to a
-    // separate "value struct" object with its components; this allows us
-    // to get as close as easily possible to replacing references to one
+    // A design objective is implementing the "flyweight pattern",
+    // where MD_Any objects share components directly or indirectly as much
+    // as is safely possible.  For example, if we detect duplication at
+    // runtime, we may replace references to one
     // MD_Any with another where the underlying virtual machine or
     // garbage collector doesn't natively provide that ability.
     // Similarly, proving equality of two "value" can often short-circuit.
@@ -57,55 +57,6 @@ namespace Muldis.D.Ref_Eng.Core
     // that possibly can mutate, such as a Muldis D "variable".
 
     internal class MD_Any
-    {
-        internal MD_Any_Struct AS { get; set; }
-
-        internal Boolean Same(MD_Any value)
-        {
-            return AS.Memory.Executor.Any__same(this, value);
-        }
-
-        internal String MD_Any_Identity()
-        {
-            // This called function will test if AS.Cached_MD_Any_Identity
-            // is null and assign it a value if so and use its value if not.
-            return AS.Memory.Identity_Generator.MD_Any_to_Identity_String(this);
-        }
-
-        public override String ToString()
-        {
-            return AS.Memory.Preview_Generator.MD_Any_To_Preview_String(this);
-        }
-    }
-
-    internal class MD_Any_Comparer : EqualityComparer<MD_Any>
-    {
-        public override Boolean Equals(MD_Any v1, MD_Any v2)
-        {
-            if (v1 == null && v2 == null)
-            {
-                // Would we ever get here?
-                return true;
-            }
-            if (v1 == null || v2 == null)
-            {
-                return false;
-            }
-            return v1.Same(v2);
-        }
-
-        public override Int32 GetHashCode(MD_Any v)
-        {
-            if (v == null)
-            {
-                // Would we ever get here?
-                return 0;
-            }
-            return v.MD_Any_Identity().GetHashCode();
-        }
-    }
-
-    internal class MD_Any_Struct
     {
         // Memory pool this Muldis D "value" lives in.
         internal Memory Memory { get; set; }
@@ -163,12 +114,29 @@ namespace Muldis.D.Ref_Eng.Core
         internal Dictionary<MD_Well_Known_Type,Boolean> Cached_WKT_Statuses { get; set; }
 
         // Normalized serialization of the Muldis D "value" that its host
-        // MD_Any_Struct represents.  This is calculated lazily if needed,
+        // MD_Any represents.  This is calculated lazily if needed,
         // typically when the "value" is a member of an indexed collection.
         // The serialization format either is or resembles a Muldis D Plain Text
         // literal for selecting the value, in the form of character strings
         // whose character codepoints are typically in the 0..127 range.
         internal String Cached_MD_Any_Identity { get; set; }
+
+        internal Boolean Same(MD_Any value)
+        {
+            return Memory.Executor.Any__same(this, value);
+        }
+
+        internal String MD_Any_Identity()
+        {
+            // This called function will test if Cached_MD_Any_Identity
+            // is null and assign it a value if so and use its value if not.
+            return Memory.Identity_Generator.MD_Any_to_Identity_String(this);
+        }
+
+        public override String ToString()
+        {
+            return Memory.Preview_Generator.MD_Any_To_Preview_String(this);
+        }
 
         internal Nullable<Boolean> MD_Boolean()
         {
@@ -271,6 +239,33 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 Cached_WKT_Statuses[type] = status;
             }
+        }
+    }
+
+    internal class MD_Any_Comparer : EqualityComparer<MD_Any>
+    {
+        public override Boolean Equals(MD_Any v1, MD_Any v2)
+        {
+            if (v1 == null && v2 == null)
+            {
+                // Would we ever get here?
+                return true;
+            }
+            if (v1 == null || v2 == null)
+            {
+                return false;
+            }
+            return v1.Same(v2);
+        }
+
+        public override Int32 GetHashCode(MD_Any v)
+        {
+            if (v == null)
+            {
+                // Would we ever get here?
+                return 0;
+            }
+            return v.MD_Any_Identity().GetHashCode();
         }
     }
 

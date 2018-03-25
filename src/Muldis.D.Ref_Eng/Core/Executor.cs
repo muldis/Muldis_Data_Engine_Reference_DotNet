@@ -30,7 +30,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 args = m.MD_Tuple_D0;
             }
-            if (args.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+            if (args.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
             {
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Args_Not_Tuple").ToString());
@@ -68,7 +68,7 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 args = m.MD_Tuple_D0;
             }
-            if (args.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+            if (args.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
             {
                 throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
             }
@@ -174,22 +174,22 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Is_Heading(MD_Any value)
         {
-            return value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true;
+            return value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true;
         }
 
         internal Boolean Is_Attr_Name(MD_Any value)
         {
-            return value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true;
+            return value.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true;
         }
 
         internal Boolean Is_Attr_Name_List(MD_Any value)
         {
-            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List) == true)
+            if (value.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List) == true)
             {
                 return true;
             }
             Memory m = Memory;
-            if (value.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+            if (value.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
             {
                 return false;
             }
@@ -202,13 +202,13 @@ namespace Muldis.D.Ref_Eng.Core
                     return false;
                 }
             }
-            value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List, true);
+            value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List, true);
             return true;
         }
 
         internal Boolean Is_Local_Name(MD_Any value)
         {
-            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Local_Name) == true)
+            if (value.Member_Status_in_WKT(MD_Well_Known_Type.Local_Name) == true)
             {
                 return true;
             }
@@ -229,7 +229,7 @@ namespace Muldis.D.Ref_Eng.Core
                 || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("material")) && count == 1)
                 || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("floating")) && count >= 2))
             {
-                value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Local_Name, true);
+                value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Local_Name, true);
                 return true;
             }
             return false;
@@ -237,7 +237,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Boolean Is_Absolute_Name(MD_Any value)
         {
-            if (value.AS.Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name) == true)
+            if (value.Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name) == true)
             {
                 return true;
             }
@@ -250,7 +250,7 @@ namespace Muldis.D.Ref_Eng.Core
                 || Object.ReferenceEquals(first, Memory.MD_Attr_Name("used"))
                 || Object.ReferenceEquals(first, Memory.MD_Attr_Name("package")))
             {
-                value.AS.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name, true);
+                value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name, true);
                 return true;
             }
             return false;
@@ -263,7 +263,7 @@ namespace Muldis.D.Ref_Eng.Core
                 = Object.ReferenceEquals(func_name, m.Attr_Name_0) ? "\u0000"
                 : Object.ReferenceEquals(func_name, m.Attr_Name_1) ? "\u0001"
                 : Object.ReferenceEquals(func_name, m.Attr_Name_2) ? "\u0002"
-                : func_name.AS.MD_Tuple().Only_OA.Value.Key;
+                : func_name.MD_Tuple().Only_OA.Value.Key;
 
             // TYPE DEFINERS
 
@@ -274,7 +274,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple().A0;
+                MD_Any v = args.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     case "Any":
@@ -286,53 +286,53 @@ namespace Muldis.D.Ref_Eng.Core
 
                     case "Boolean":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Boolean
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Boolean
                         );
                     case "Integer":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer
                         );
                     case "Array":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Array
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Array
                         );
                     case "Bag":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Bag
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Bag
                         );
                     case "Tuple":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                         );
                     case "Capsule":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Capsule
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Capsule
                         );
                     case "Handle":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
-                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
-                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
-                                || v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_External
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
+                                || v.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
+                                || v.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
+                                || v.MD_MSBT == MD_Well_Known_Base_Type.MD_External
                         );
 
                     // HANDLE SUBTYPE DEFINERS
 
                     case "Variable":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
                         );
                     case "Process":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
                         );
                     case "Stream":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
                         );
                     case "External":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_External
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_External
                         );
 
                     // ARRAY SUBTYPE DEFINERS
@@ -343,17 +343,17 @@ namespace Muldis.D.Ref_Eng.Core
 
                     case "Blob":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Blob
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Blob
                         );
 
                     case "Text":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Text
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Text
                         );
 
                     case "Excuse":
                         return m.MD_Boolean(
-                            v.AS.MD_MSBT == MD_Well_Known_Base_Type.MD_Excuse
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Excuse
                         );
 
                     default:
@@ -370,80 +370,80 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple().A0;
+                MD_Any v = args.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     case "Integer_opposite":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(-v.AS.MD_Integer());
+                        return m.MD_Integer(-v.MD_Integer());
                     case "Integer_modulus":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(BigInteger.Abs(v.AS.MD_Integer()));
+                        return m.MD_Integer(BigInteger.Abs(v.MD_Integer()));
                     case "Integer_factorial":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
-                            || v.AS.MD_Integer() < 0)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
+                            || v.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                         }
                         // Note that System.Numerics.BigInteger doesn't come
                         // with a Factorial(n) so we have to do it ourselves.
-                        return m.MD_Integer(Integer__factorial(v.AS.MD_Integer()));
+                        return m.MD_Integer(Integer__factorial(v.MD_Integer()));
                     case "Array_count":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_count_Arg_0_Not_Array").ToString());
                         }
                         return m.MD_Integer(Array__count(v));
                     case "Bag_unique":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Bag)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Bag)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Bag_unique_Arg_0_Not_Bag").ToString());
                         }
-                        return new MD_Any { AS = new MD_Any_Struct {
+                        return new MD_Any {
                             Memory = m,
                             MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
                             Details = new MD_Bag_Struct {
                                 Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                                Members = v.AS.MD_Bag(),
+                                Members = v.MD_Bag(),
                                 Cached_Members_Meta = new Cached_Members_Meta {
                                     Tree_All_Unique = true,
                                 },
                             },
-                        } };
+                        };
                     case "Tuple_degree":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                         }
-                        return m.MD_Integer(v.AS.MD_Tuple().Degree);
+                        return m.MD_Integer(v.MD_Tuple().Degree);
                     case "Tuple_heading":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                         }
                         return m.Tuple__Heading(v);
                     case "Text_from_UTF_8_Blob":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Blob)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Blob)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                         }
                         return m.MD_Text_from_UTF_8_MD_Blob(v);
                     case "MDPT_Parsing_Unit_Text_to_Any":
-                        if (v.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Text)
+                        if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Text)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
@@ -463,37 +463,37 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Binary_Function_Args_Not_Heading_0_1").ToString());
                 }
-                MD_Any a0 = args.AS.MD_Tuple().A0;
-                MD_Any a1 = args.AS.MD_Tuple().A1;
+                MD_Any a0 = args.MD_Tuple().A0;
+                MD_Any a1 = args.MD_Tuple().A1;
                 switch (func_name_s)
                 {
                     case "same":
                         return m.MD_Boolean(Any__same(a0, a1));
                     case "Integer_plus":
-                        if (a0.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                        if (a0.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_plus_Arg_0_Not_Integer").ToString());
                         }
-                        if (a1.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                        if (a1.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Integer_plus_Arg_1_Not_Integer").ToString());
                         }
-                        return m.MD_Integer(a0.AS.MD_Integer() + a1.AS.MD_Integer());
+                        return m.MD_Integer(a0.MD_Integer() + a1.MD_Integer());
                     case "Array_at":
-                        if (a0.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+                        if (a0.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_at_Arg_0_Not_Array").ToString());
                         }
-                        if (a1.AS.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
-                            || a1.AS.MD_Integer() < 0)
+                        if (a1.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
+                            || a1.MD_Integer() < 0)
                         {
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                         }
-                        MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.AS.MD_Integer());
+                        MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MD_Integer());
                         if (maybe_member == null)
                         {
                             throw new ArgumentException(
@@ -514,7 +514,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
                 }
-                MD_Any v = args.AS.MD_Tuple().A0;
+                MD_Any v = args.MD_Tuple().A0;
                 switch (func_name_s)
                 {
                     default:
@@ -531,18 +531,14 @@ namespace Muldis.D.Ref_Eng.Core
             {
                 return true;
             }
-            if (Object.ReferenceEquals(a0.AS, a1.AS))
-            {
-                return true;
-            }
-            if (a0.AS.MD_MSBT != a1.AS.MD_MSBT)
+            if (a0.MD_MSBT != a1.MD_MSBT)
             {
                 return false;
             }
-            if (a0.AS.Cached_MD_Any_Identity != null
-                && a1.AS.Cached_MD_Any_Identity != null)
+            if (a0.Cached_MD_Any_Identity != null
+                && a1.Cached_MD_Any_Identity != null)
             {
-                if (a0.AS.Cached_MD_Any_Identity == a1.AS.Cached_MD_Any_Identity)
+                if (a0.Cached_MD_Any_Identity == a1.Cached_MD_Any_Identity)
                 {
                     merge_two_same(a0, a1);
                     return true;
@@ -550,16 +546,16 @@ namespace Muldis.D.Ref_Eng.Core
                 return false;
             }
             Boolean result;
-            switch (a0.AS.MD_MSBT)
+            switch (a0.MD_MSBT)
             {
                 case MD_Well_Known_Base_Type.MD_Boolean:
-                    return a0.AS.MD_Boolean() == a1.AS.MD_Boolean();
+                    return a0.MD_Boolean() == a1.MD_Boolean();
                 case MD_Well_Known_Base_Type.MD_Integer:
-                    result = (a0.AS.MD_Integer() == a1.AS.MD_Integer());
+                    result = (a0.MD_Integer() == a1.MD_Integer());
                     break;
                 case MD_Well_Known_Base_Type.MD_Fraction:
-                    MD_Fraction_Struct fs0 = a0.AS.MD_Fraction();
-                    MD_Fraction_Struct fs1 = a1.AS.MD_Fraction();
+                    MD_Fraction_Struct fs0 = a0.MD_Fraction();
+                    MD_Fraction_Struct fs1 = a1.MD_Fraction();
                     if (Object.ReferenceEquals(fs0, fs1))
                     {
                         result = true;
@@ -584,20 +580,20 @@ namespace Muldis.D.Ref_Eng.Core
                     break;
                 case MD_Well_Known_Base_Type.MD_Bits:
                     result = Enumerable.SequenceEqual(
-                        BitArray_to_List(a0.AS.MD_Bits()),
-                        BitArray_to_List(a1.AS.MD_Bits()));
+                        BitArray_to_List(a0.MD_Bits()),
+                        BitArray_to_List(a1.MD_Bits()));
                     break;
                 case MD_Well_Known_Base_Type.MD_Blob:
-                    result = Enumerable.SequenceEqual(a0.AS.MD_Blob(), a1.AS.MD_Blob());
+                    result = Enumerable.SequenceEqual(a0.MD_Blob(), a1.MD_Blob());
                     break;
                 case MD_Well_Known_Base_Type.MD_Text:
-                    result = (a0.AS.MD_Text().Codepoint_Members == a1.AS.MD_Text().Codepoint_Members);
+                    result = (a0.MD_Text().Codepoint_Members == a1.MD_Text().Codepoint_Members);
                     break;
                 case MD_Well_Known_Base_Type.MD_Array:
                     Memory.Array__Collapse(a0);
                     Memory.Array__Collapse(a1);
-                    MD_Array_Struct n0 = a0.AS.MD_Array();
-                    MD_Array_Struct n1 = a1.AS.MD_Array();
+                    MD_Array_Struct n0 = a0.MD_Array();
+                    MD_Array_Struct n1 = a1.MD_Array();
                     if (Object.ReferenceEquals(n0, n1))
                     {
                         result = true;
@@ -653,8 +649,8 @@ namespace Muldis.D.Ref_Eng.Core
                     // MD_Set and MD_Bag have the same internal representation.
                     Memory.Bag__Collapse(bag: a0, want_indexed: true);
                     Memory.Bag__Collapse(bag: a1, want_indexed: true);
-                    MD_Bag_Struct bn0 = a0.AS.MD_Bag();
-                    MD_Bag_Struct bn1 = a1.AS.MD_Bag();
+                    MD_Bag_Struct bn0 = a0.MD_Bag();
+                    MD_Bag_Struct bn1 = a1.MD_Bag();
                     if (Object.ReferenceEquals(bn0, bn1))
                     {
                         result = true;
@@ -689,8 +685,8 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Well_Known_Base_Type.MD_Tuple:
                 case MD_Well_Known_Base_Type.MD_Excuse:
                     // MD_Tuple and MD_Excuse have the same internal representation.
-                    MD_Tuple_Struct ts0 = a0.AS.MD_Tuple();
-                    MD_Tuple_Struct ts1 = a1.AS.MD_Tuple();
+                    MD_Tuple_Struct ts0 = a0.MD_Tuple();
+                    MD_Tuple_Struct ts1 = a1.MD_Tuple();
                     // First test just that the Tuple headings are the same,
                     // and only if they are, compare the attribute values.
                     return (ts0.Degree == ts1.Degree)
@@ -712,8 +708,8 @@ namespace Muldis.D.Ref_Eng.Core
                         && (ts0.Multi_OA == null || Enumerable.All(ts0.Multi_OA,
                             attr => Any__same(attr.Value, ts1.Multi_OA[attr.Key])));
                 case MD_Well_Known_Base_Type.MD_Capsule:
-                    result = Any__same(a0.AS.MD_Capsule().Label, a1.AS.MD_Capsule().Label)
-                          && Any__same(a0.AS.MD_Capsule().Attrs, a1.AS.MD_Capsule().Attrs);
+                    result = Any__same(a0.MD_Capsule().Label, a1.MD_Capsule().Label)
+                          && Any__same(a0.MD_Capsule().Attrs, a1.MD_Capsule().Attrs);
                     break;
                 case MD_Well_Known_Base_Type.MD_Variable:
                 case MD_Well_Known_Base_Type.MD_Process:
@@ -747,7 +743,6 @@ namespace Muldis.D.Ref_Eng.Core
             // This may be run on 2 MD_Any only if it was already
             // determined they represent the same Muldis D value; typically
             // it is invoked by Any__same() when it would result in true.
-            a1.AS = a0.AS;
                 // TODO: Make a more educated decision on which one to keep.
                 // It should also have logic dispatching on MD_MSBT and
                 // do struct mergers as applicable eg copying identity info.
@@ -770,17 +765,17 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Int64 Bits__count(MD_Any bits)
         {
-            return bits.AS.MD_Bits().Length;
+            return bits.MD_Bits().Length;
         }
 
         internal Int64 Blob__count(MD_Any blob)
         {
-            return blob.AS.MD_Blob().Length;
+            return blob.MD_Blob().Length;
         }
 
         internal Int64 Text__count(MD_Any text)
         {
-            MD_Text_Struct node = text.AS.MD_Text();
+            MD_Text_Struct node = text.MD_Text();
             if (node.Cached_Member_Count == null)
             {
                 if (node.Has_Any_Non_BMP)
@@ -808,7 +803,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         internal Int64 Array__count(MD_Any array)
         {
-            return Array__node__tree_member_count(array.AS.MD_Array());
+            return Array__node__tree_member_count(array.MD_Array());
         }
 
         private Int64 Array__node__tree_member_count(MD_Array_Struct node)
@@ -842,17 +837,17 @@ namespace Muldis.D.Ref_Eng.Core
 
         private MD_Any Bits__maybe_at(MD_Any bits, Int64 ord_pos)
         {
-            return Memory.MD_Integer(bits.AS.MD_Bits()[(Int32)ord_pos] ? 1 : 0);
+            return Memory.MD_Integer(bits.MD_Bits()[(Int32)ord_pos] ? 1 : 0);
         }
 
         private MD_Any Blob__maybe_at(MD_Any blob, Int64 ord_pos)
         {
-            return Memory.MD_Integer(blob.AS.MD_Blob()[(Int32)ord_pos]);
+            return Memory.MD_Integer(blob.MD_Blob()[(Int32)ord_pos]);
         }
 
         private MD_Any Text__maybe_at(MD_Any text, Int64 ord_pos)
         {
-            MD_Text_Struct node = text.AS.MD_Text();
+            MD_Text_Struct node = text.MD_Text();
             if (node.Has_Any_Non_BMP)
             {
                 String s = node.Codepoint_Members;
@@ -883,7 +878,7 @@ namespace Muldis.D.Ref_Eng.Core
 
         private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)
         {
-            return Array__node__maybe_at(array.AS.MD_Array(), ord_pos);
+            return Array__node__maybe_at(array.MD_Array(), ord_pos);
         }
 
         private MD_Any Array__node__maybe_at(MD_Array_Struct node, Int64 ord_pos)
