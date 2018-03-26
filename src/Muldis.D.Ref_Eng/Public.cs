@@ -791,82 +791,51 @@ namespace Muldis.D.Ref_Eng
                     }
                 }
             }
-            // Start by normalizing the distribution of the attribute
-            // definitions among the arguments to match the distribution
-            // used by our internals, and check for duplicate names.
-            Nullable<KeyValuePair<String,Object>> attr = null;
-            if (attrs != null)
+            // Dictionary are mutable so clone argument to protect caller.
+            attrs = (attrs == null) ? new Dictionary<String,Object>()
+                : new Dictionary<String,Object>(attrs);
+            if (a0 != null)
             {
-                if (attrs.ContainsKey("\u0000") || attrs.ContainsKey("\u0001")
-                    || attrs.ContainsKey("\u0002"))
+                if (attrs.ContainsKey("\u0000"))
                 {
-                    // Dictionary are mutable so clone argument to protect caller.
-                    attrs = new Dictionary<String,Object>(attrs);
-                    if (attrs.ContainsKey("\u0000"))
-                    {
-                        if (a0 != null)
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "attrs",
-                                message: "Can't select MD_Tuple with same-named"
-                                    + " attribute in both [a0] and [attrs] args."
-                            );
-                        }
-                        a0 = attrs["\u0000"];
-                        attrs.Remove("\u0000");
-                    }
-                    if (attrs.ContainsKey("\u0001"))
-                    {
-                        if (a1 != null)
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "attrs",
-                                message: "Can't select MD_Tuple with same-named"
-                                    + " attribute in both [a1] and [attrs] args."
-                            );
-                        }
-                        a1 = attrs["\u0001"];
-                        attrs.Remove("\u0001");
-                    }
-                    if (attrs.ContainsKey("\u0002"))
-                    {
-                        if (a2 != null)
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "attrs",
-                                message: "Can't select MD_Tuple with same-named"
-                                    + " attribute in both [a2] and [attrs] args."
-                            );
-                        }
-                        a2 = attrs["\u0002"];
-                        attrs.Remove("\u0002");
-                    }
+                    throw new ArgumentException
+                    (
+                        paramName: "attrs",
+                        message: "Can't select MD_Tuple with same-named"
+                            + " attribute in both [a0] and [attrs] args."
+                    );
                 }
-                if (attrs.Count == 1)
-                {
-                    attr = Enumerable.Single(attrs);
-                    attrs = null;
-                }
-                else if (attrs.Count == 0)
-                {
-                    attrs = null;
-                }
+                attrs.Add("\u0000", a0);
             }
-            // Now perform the attributes' importing proper.
+            if (a1 != null)
+            {
+                if (attrs.ContainsKey("\u0001"))
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "attrs",
+                        message: "Can't select MD_Tuple with same-named"
+                            + " attribute in both [a1] and [attrs] args."
+                    );
+                }
+                attrs.Add("\u0001", a1);
+            }
+            if (a2 != null)
+            {
+                if (attrs.ContainsKey("\u0002"))
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "attrs",
+                        message: "Can't select MD_Tuple with same-named"
+                            + " attribute in both [a2] and [attrs] args."
+                    );
+                }
+                attrs.Add("\u0002", a2);
+            }
             return m_memory.MD_Tuple(
-                a0: a0 == null ? null : Core_MD_Any(a0),
-                a1: a1 == null ? null : Core_MD_Any(a1),
-                a2: a2 == null ? null : Core_MD_Any(a2),
-                only_oa: attr == null
-                    ? (Nullable<KeyValuePair<String,Core.MD_Any>>)null
-                    : new KeyValuePair<String,Core.MD_Any>(
-                        attr.Value.Key, Core_MD_Any(attr.Value.Value)),
-                multi_oa: attrs == null ? null
-                    : new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
-                        a => a.Key, a => Core_MD_Any(a.Value)))
+                multi_oa: new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                    a => a.Key, a => Core_MD_Any(a.Value)))
             );
         }
 

@@ -204,7 +204,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 0,
+                    Multi_OA = new Dictionary<String, MD_Any>(),
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
@@ -216,8 +216,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
-                        Degree = 1,
-                        A0 = MD_True,
+                        Multi_OA = new Dictionary<String,MD_Any>() {{"\u0000", MD_True}},
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -226,8 +225,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
-                        Degree = 1,
-                        A1 = MD_True,
+                        Multi_OA = new Dictionary<String,MD_Any>() {{"\u0001", MD_True}},
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -236,8 +234,7 @@ namespace Muldis.D.Ref_Eng.Core
                     Memory = this,
                     MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                     Details = new MD_Tuple_Struct {
-                        Degree = 1,
-                        A2 = MD_True,
+                        Multi_OA = new Dictionary<String,MD_Any>() {{"\u0002", MD_True}},
                     },
                     Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                         {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -251,9 +248,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 2,
-                    A0 = MD_True,
-                    A1 = MD_True,
+                    Multi_OA = new Dictionary<String,MD_Any>()
+                        {{"\u0000", MD_True}, {"\u0001", MD_True}},
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
@@ -262,9 +258,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 2,
-                    A0 = MD_True,
-                    A2 = MD_True,
+                    Multi_OA = new Dictionary<String,MD_Any>()
+                        {{"\u0000", MD_True}, {"\u0002", MD_True}},
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
@@ -273,9 +268,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 2,
-                    A1 = MD_True,
-                    A2 = MD_True,
+                    Multi_OA = new Dictionary<String,MD_Any>()
+                        {{"\u0001", MD_True}, {"\u0002", MD_True}},
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
@@ -285,10 +279,8 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 3,
-                    A0 = MD_True,
-                    A1 = MD_True,
-                    A2 = MD_True,
+                    Multi_OA = new Dictionary<String,MD_Any>()
+                        {{"\u0000", MD_True}, {"\u0001", MD_True}, {"\u0002", MD_True}},
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
@@ -430,8 +422,7 @@ namespace Muldis.D.Ref_Eng.Core
                         Memory = this,
                         MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
                         Details = new MD_Tuple_Struct {
-                            Degree = 1,
-                            A0 = MD_Attr_Name(s),
+                            Multi_OA = new Dictionary<String,MD_Any>() {{"\u0000", MD_Attr_Name(s)}},
                         },
                     }
                 );
@@ -618,81 +609,50 @@ namespace Muldis.D.Ref_Eng.Core
             };
         }
 
-        internal MD_Any MD_Tuple(
-            MD_Any a0 = null, MD_Any a1 = null, MD_Any a2 = null,
-            Nullable<KeyValuePair<String,MD_Any>> only_oa = null,
-            Dictionary<String,MD_Any> multi_oa = null)
+        internal MD_Any MD_Tuple(Dictionary<String,MD_Any> multi_oa)
         {
-            Int32 degree = (a0 == null ? 0 : 1) + (a1 == null ? 0 : 1)
-                + (a2 == null ? 0 : 1) + (only_oa == null ? 0 : 1)
-                + (multi_oa == null ? 0 : multi_oa.Count);
-            if (degree == 0)
+            if (multi_oa.Count == 0)
             {
                 return MD_Tuple_D0;
             }
-            if (degree == 1)
+            if (multi_oa.Count == 1)
             {
-                if (a0 != null && Object.ReferenceEquals(a0, MD_True))
+                KeyValuePair<String, MD_Any> only_oa = multi_oa.First();
+                if (Object.ReferenceEquals(only_oa.Value, MD_True)
+                    && only_oa.Key.Length <= 200
+                    && m_attr_name_tuples.ContainsKey(only_oa.Key))
                 {
-                    return Attr_Name_0;
-                }
-                if (a1 != null && Object.ReferenceEquals(a1, MD_True))
-                {
-                    return Attr_Name_1;
-                }
-                if (a2 != null && Object.ReferenceEquals(a2, MD_True))
-                {
-                    return Attr_Name_2;
-                }
-                if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, MD_True)
-                    && only_oa.Value.Key.Length <= 200
-                    && m_attr_name_tuples.ContainsKey(only_oa.Value.Key))
-                {
-                    return m_attr_name_tuples[only_oa.Value.Key];
+                    return m_attr_name_tuples[only_oa.Key];
                 }
             }
             MD_Any tuple = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = degree,
-                    A0 = a0,
-                    A1 = a1,
-                    A2 = a2,
-                    Only_OA = only_oa,
                     Multi_OA = multi_oa,
                 },
             };
-            if (degree == 1)
+            if (multi_oa.Count == 1)
             {
-                if (only_oa != null
-                    && Object.ReferenceEquals(only_oa.Value.Value, MD_True))
+                KeyValuePair<String, MD_Any> only_oa = multi_oa.First();
+                if (Object.ReferenceEquals(only_oa.Value, MD_True))
                 {
                     tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
                     tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
-                    if (only_oa.Value.Key.Length <= 200 && m_heading_tuples.Count < 10000)
+                    if (only_oa.Key.Length <= 200 && m_heading_tuples.Count < 10000)
                     {
                         m_heading_tuples.Add(tuple, tuple);
-                        m_attr_name_tuples.Add(only_oa.Value.Key, tuple);
+                        m_attr_name_tuples.Add(only_oa.Key, tuple);
                     }
                 }
                 return tuple;
             }
             // We only get here if the tuple degree >= 2.
-            if ((a0 == null || Object.ReferenceEquals(a0, MD_True))
-                && (a1 == null || Object.ReferenceEquals(a1, MD_True))
-                && (a2 == null || Object.ReferenceEquals(a2, MD_True))
-                && (only_oa == null || Object.ReferenceEquals(
-                    only_oa.Value.Value, MD_True))
-                && (multi_oa == null || Enumerable.All(multi_oa,
-                    attr => Object.ReferenceEquals(attr.Value, MD_True))))
+            if (Enumerable.All(multi_oa, attr => Object.ReferenceEquals(attr.Value, MD_True)))
             {
                 tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
-                if (degree <= 30
-                    && (only_oa == null || only_oa.Value.Key.Length <= 200)
-                    && (multi_oa == null || Enumerable.All(multi_oa,
-                        attr => attr.Key.Length <= 200)))
+                if (multi_oa.Count <= 30
+                    && Enumerable.All(multi_oa, attr => attr.Key.Length <= 200))
                 {
                     if (m_heading_tuples.ContainsKey(tuple))
                     {
@@ -867,8 +827,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
                 Details = new MD_Tuple_Struct {
-                    Degree = 1,
-                    A0 = MD_Attr_Name(value),
+                    Multi_OA = new Dictionary<String,MD_Any>() {{"\u0000", MD_Attr_Name(value)}},
                 },
             };
         }
@@ -906,8 +865,7 @@ namespace Muldis.D.Ref_Eng.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = 1,
-                    Only_OA = new KeyValuePair<String,MD_Any>(value, MD_True),
+                    Multi_OA = new Dictionary<String,MD_Any>() {{value, MD_True}},
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -1174,13 +1132,13 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any Set__Pick_Arbitrary_Member(MD_Any set)
         {
             return Bag__Pick_Arbitrary_Member(
-                set.MD_Capsule().Attrs.MD_Tuple().Only_OA.Value.Value);
+                set.MD_Capsule().Attrs.MD_Tuple().Multi_OA.First().Value);
         }
 
         internal Boolean Set__Is_Relational(MD_Any set)
         {
             return Bag__Is_Relational(
-                set.MD_Capsule().Attrs.MD_Tuple().Only_OA.Value.Value);
+                set.MD_Capsule().Attrs.MD_Tuple().Multi_OA.First().Value);
         }
 
         internal MD_Any Bag__Pick_Arbitrary_Member(MD_Any bag)
@@ -1280,64 +1238,49 @@ namespace Muldis.D.Ref_Eng.Core
             }
             // If we get here, the Tuple/Heading degree is guaranteed > 0.
             MD_Tuple_Struct ts = tuple.MD_Tuple();
-            if (ts.Degree == 1)
+            if (ts.Multi_OA.Count == 1)
             {
-                if (ts.A0 != null)
+                if (ts.Multi_OA.ContainsKey("\u0000"))
                 {
                     return Attr_Name_0;
                 }
-                if (ts.A1 != null)
+                if (ts.Multi_OA.ContainsKey("\u0001"))
                 {
                     return Attr_Name_1;
                 }
-                if (ts.A2 != null)
+                if (ts.Multi_OA.ContainsKey("\u0002"))
                 {
                     return Attr_Name_2;
                 }
-                if (ts.Only_OA != null
-                    && ts.Only_OA.Value.Key.Length <= 200
-                    && m_attr_name_tuples.ContainsKey(ts.Only_OA.Value.Key))
+                if (ts.Multi_OA.First().Key.Length <= 200
+                    && m_attr_name_tuples.ContainsKey(ts.Multi_OA.First().Key))
                 {
-                    return m_attr_name_tuples[ts.Only_OA.Value.Key];
+                    return m_attr_name_tuples[ts.Multi_OA.First().Key];
                 }
             }
             MD_Any heading = new MD_Any {
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
                 Details = new MD_Tuple_Struct {
-                    Degree = ts.Degree,
-                    A0 = ts.A0 == null ? null : MD_True,
-                    A1 = ts.A1 == null ? null : MD_True,
-                    A2 = ts.A2 == null ? null : MD_True,
-                    Only_OA = ts.Only_OA == null
-                        ? (Nullable<KeyValuePair<String,MD_Any>>)null
-                        : new KeyValuePair<String,MD_Any>(
-                            ts.Only_OA.Value.Key, MD_True),
-                    Multi_OA = ts.Multi_OA == null ? null
-                        : new Dictionary<String,MD_Any>(
-                            ts.Multi_OA.ToDictionary(a => a.Key, a => MD_True)),
+                    Multi_OA = new Dictionary<String,MD_Any>(
+                        ts.Multi_OA.ToDictionary(a => a.Key, a => MD_True)),
                 },
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}},
             };
-            if (ts.Degree == 1)
+            if (ts.Multi_OA.Count == 1)
             {
-                if (ts.Only_OA != null)
+                heading.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
+                if (ts.Multi_OA.First().Key.Length <= 200 && m_heading_tuples.Count < 10000)
                 {
-                    heading.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
-                    if (ts.Only_OA.Value.Key.Length <= 200 && m_heading_tuples.Count < 10000)
-                    {
-                        m_heading_tuples.Add(heading, heading);
-                        m_attr_name_tuples.Add(ts.Only_OA.Value.Key, heading);
-                    }
+                    m_heading_tuples.Add(heading, heading);
+                    m_attr_name_tuples.Add(ts.Multi_OA.First().Key, heading);
                 }
                 return heading;
             }
             // We only get here if the tuple degree >= 2.
-            if (ts.Degree <= 30
-                && (ts.Only_OA == null || ts.Only_OA.Value.Key.Length <= 200)
-                && (ts.Multi_OA == null || Enumerable.All(ts.Multi_OA,
-                    attr => attr.Key.Length <= 200)))
+            if (ts.Multi_OA.Count <= 30
+                && Enumerable.All(ts.Multi_OA, attr => attr.Key.Length <= 200))
             {
                 if (m_heading_tuples.ContainsKey(heading))
                 {
@@ -1359,17 +1302,8 @@ namespace Muldis.D.Ref_Eng.Core
             }
             MD_Tuple_Struct ts1 = t1.MD_Tuple();
             MD_Tuple_Struct ts2 = t2.MD_Tuple();
-            return (ts1.Degree == ts2.Degree)
-                && ((ts1.A0 == null) == (ts2.A0 == null))
-                && ((ts1.A1 == null) == (ts2.A1 == null))
-                && ((ts1.A2 == null) == (ts2.A2 == null))
-                && ((ts1.Only_OA == null && ts2.Only_OA == null)
-                    || (ts1.Only_OA != null && ts2.Only_OA != null
-                    && ts1.Only_OA.Value.Key == ts2.Only_OA.Value.Key))
-                && ((ts1.Multi_OA == null && ts2.Multi_OA == null)
-                    || (ts1.Multi_OA != null && ts2.Multi_OA != null
-                    && Enumerable.All(ts1.Multi_OA,
-                        attr => ts2.Multi_OA.ContainsKey(attr.Key))));
+            return (ts1.Multi_OA.Count == ts2.Multi_OA.Count)
+                && Enumerable.All(ts1.Multi_OA, attr => ts2.Multi_OA.ContainsKey(attr.Key));
         }
 
         internal MD_Any MD_Text_from_UTF_8_MD_Blob(MD_Any value)

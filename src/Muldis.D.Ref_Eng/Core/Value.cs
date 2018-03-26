@@ -765,39 +765,12 @@ namespace Muldis.D.Ref_Eng.Core
     // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Tuple,
     // a MD_Tuple_Struct is used by it to hold the MD_Tuple-specific details.
     // Also used for MD_Excuse.
-    // For efficiency, a few most-commonly used Muldis D Tuple attribute
-    // names have their own corresponding MD_Tuple_Struct fields, while the
-    // long tail of remaining possible but less often used names don't.
-    // For example, all routine argument lists of degree 0..3 with just
-    // conceptually-ordered arguments are fully covered with said few,
-    // including nearly all routines of the Muldis D Standard Library.
 
     internal class MD_Tuple_Struct
     {
-        // Count of attributes of the Muldis D Tuple.
-        // This can be calculated from other fields, but is always defined.
-        internal Int32 Degree { get; set; }
-
-        // Iff Muldis D Tuple has attr named [0], this field has its asset.
-        // This is the canonical name of a first conceptually-ordered attr.
-        internal MD_Any A0 { get; set; }
-
-        // Iff Muldis D Tuple has attr named [1], this field has its asset.
-        // This is the canonical name of a second conceptually-ordered attr.
-        internal MD_Any A1 { get; set; }
-
-        // Iff Muldis D Tuple has attr named [2], this field has its asset.
-        // This is the canonical name of a third conceptually-ordered attr.
-        internal MD_Any A2 { get; set; }
-
-        // Iff Muldis D Tuple has exactly 1 attribute with some other name
-        // than the [N] ones handled above, this other attr is represented
-        // by this field as a of name-asset pair.
-        internal Nullable<KeyValuePair<String,MD_Any>> Only_OA { get; set; }
-
-        // Iff Muldis D Tuple has at least 2 attributes with some other name
-        // than the [N] ones handled above, those other attrs are represented
+        // The Muldis D Tuple's attributes are represented
         // by this field as a set of name-asset pairs.
+        // This field is always not null even for the nullary Tuple.
         internal Dictionary<String,MD_Any> Multi_OA { get; set; }
     }
 
