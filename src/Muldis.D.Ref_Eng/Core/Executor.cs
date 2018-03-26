@@ -259,7 +259,7 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any evaluate_foundation_function(MD_Any func_name, MD_Any args)
         {
             Memory m = Memory;
-            String func_name_s = func_name.MD_Tuple().Multi_OA.First().Key;
+            String func_name_s = func_name.MD_Tuple().First().Key;
 
             // TYPE DEFINERS
 
@@ -270,7 +270,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.MD_Tuple().Multi_OA["\u0000"];
+                MD_Any v = args.MD_Tuple()["\u0000"];
                 switch (func_name_s)
                 {
                     case "Any":
@@ -366,7 +366,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
                 }
-                MD_Any v = args.MD_Tuple().Multi_OA["\u0000"];
+                MD_Any v = args.MD_Tuple()["\u0000"];
                 switch (func_name_s)
                 {
                     case "Integer_opposite":
@@ -423,7 +423,7 @@ namespace Muldis.D.Ref_Eng.Core
                             throw new ArgumentException(m.Simple_MD_Excuse(
                                 "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                         }
-                        return m.MD_Integer(v.MD_Tuple().Multi_OA.Count);
+                        return m.MD_Integer(v.MD_Tuple().Count);
                     case "Tuple_heading":
                         if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                         {
@@ -459,8 +459,8 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Binary_Function_Args_Not_Heading_0_1").ToString());
                 }
-                MD_Any a0 = args.MD_Tuple().Multi_OA["\u0000"];
-                MD_Any a1 = args.MD_Tuple().Multi_OA["\u0001"];
+                MD_Any a0 = args.MD_Tuple()["\u0000"];
+                MD_Any a1 = args.MD_Tuple()["\u0001"];
                 switch (func_name_s)
                 {
                     case "same":
@@ -510,7 +510,7 @@ namespace Muldis.D.Ref_Eng.Core
                     throw new ArgumentException(m.Simple_MD_Excuse(
                         "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
                 }
-                MD_Any v = args.MD_Tuple().Multi_OA["\u0000"];
+                MD_Any v = args.MD_Tuple()["\u0000"];
                 switch (func_name_s)
                 {
                     default:
@@ -681,15 +681,13 @@ namespace Muldis.D.Ref_Eng.Core
                 case MD_Well_Known_Base_Type.MD_Tuple:
                 case MD_Well_Known_Base_Type.MD_Excuse:
                     // MD_Tuple and MD_Excuse have the same internal representation.
-                    MD_Tuple_Struct ts0 = a0.MD_Tuple();
-                    MD_Tuple_Struct ts1 = a1.MD_Tuple();
+                    Dictionary<String,MD_Any> attrs0 = a0.MD_Tuple();
+                    Dictionary<String,MD_Any> attrs1 = a1.MD_Tuple();
                     // First test just that the Tuple headings are the same,
                     // and only if they are, compare the attribute values.
-                    return (ts0.Multi_OA.Count == ts1.Multi_OA.Count)
-                        && Enumerable.All(ts0.Multi_OA,
-                            attr => ts1.Multi_OA.ContainsKey(attr.Key))
-                        && Enumerable.All(ts0.Multi_OA,
-                            attr => Any__same(attr.Value, ts1.Multi_OA[attr.Key]));
+                    return (attrs0.Count == attrs1.Count)
+                        && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
+                        && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
                 case MD_Well_Known_Base_Type.MD_Capsule:
                     result = Any__same(a0.MD_Capsule().Label, a1.MD_Capsule().Label)
                           && Any__same(a0.MD_Capsule().Attrs, a1.MD_Capsule().Attrs);

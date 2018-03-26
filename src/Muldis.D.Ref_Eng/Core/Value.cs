@@ -83,7 +83,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
         // Iff MSBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
-        // Iff MSBT is MD_Tuple, this field holds a MD_Tuple_Struct (like MD_Excuse).
+        // Iff MSBT is MD_Tuple, this field holds a Dictionary<String,MD_Any> (like MD_Excuse).
         // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
         // Iff MSBT is MD_Variable, this field holds a MD_Any.
             // For a MD_Variable, Details holds its Current_Value.
@@ -96,7 +96,7 @@ namespace Muldis.D.Ref_Eng.Core
             // The entity that is defined and managed externally to the Muldis
             // D language environment, which the MD_External value is an opaque
             // and transient reference to.
-        // Iff MSBT is MD_Excuse, this field holds a MD_Tuple_Struct (like MD_Tuple).
+        // Iff MSBT is MD_Excuse, this field holds a Dictionary<String,MD_Any> (like MD_Tuple).
         internal Object Details { get; set; }
 
         // Set of well-known Muldis D types that this Muldis D "value" is
@@ -183,9 +183,9 @@ namespace Muldis.D.Ref_Eng.Core
             return (MD_Bag_Struct)Details;
         }
 
-        internal MD_Tuple_Struct MD_Tuple()
+        internal Dictionary<String,MD_Any> MD_Tuple()
         {
-            return (MD_Tuple_Struct)Details;
+            return (Dictionary<String,MD_Any>)Details;
         }
 
         internal MD_Capsule_Struct MD_Capsule()
@@ -213,9 +213,9 @@ namespace Muldis.D.Ref_Eng.Core
             return (Object)Details;
         }
 
-        internal MD_Tuple_Struct MD_Excuse()
+        internal Dictionary<String,MD_Any> MD_Excuse()
         {
-            return (MD_Tuple_Struct)Details;
+            return (Dictionary<String,MD_Any>)Details;
         }
 
         internal Nullable<Boolean> Member_Status_in_WKT(MD_Well_Known_Type type)
@@ -759,19 +759,6 @@ namespace Muldis.D.Ref_Eng.Core
         // the same heading; this is false iff we know that any member is
         // not a Tuple or that any 2 members do not have the same heading.
         internal Nullable<Boolean> Tree_Relational { get; set; }
-    }
-
-    // Muldis.D.Ref_Eng.Core.MD_Tuple_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Tuple,
-    // a MD_Tuple_Struct is used by it to hold the MD_Tuple-specific details.
-    // Also used for MD_Excuse.
-
-    internal class MD_Tuple_Struct
-    {
-        // The Muldis D Tuple's attributes are represented
-        // by this field as a set of name-asset pairs.
-        // This field is always not null even for the nullary Tuple.
-        internal Dictionary<String,MD_Any> Multi_OA { get; set; }
     }
 
     // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct

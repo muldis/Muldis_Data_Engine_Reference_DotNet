@@ -283,15 +283,15 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         private String Heading_Literal(MD_Any value)
         {
             Memory m = value.Memory;
-            MD_Tuple_Struct ts = value.MD_Tuple();
-            if (ts.Multi_OA.Count == 1)
+            Dictionary<String,MD_Any> attrs = value.MD_Tuple();
+            if (attrs.Count == 1)
             {
-                return @"\" + Attr_Name(ts.Multi_OA.First().Key);
+                return @"\" + Attr_Name(attrs.First().Key);
             }
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
                 : @"\@("
                     + String.Concat(Enumerable.Select(
-                            Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
+                            Enumerable.OrderBy(attrs, a => a.Key),
                             a => Attr_Name(a.Key) + ","))
                     + ")";
         }
@@ -382,11 +382,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
             }
             String ati = indent + "\u0009";
             Memory m = value.Memory;
-            MD_Tuple_Struct ts = value.MD_Tuple();
+            Dictionary<String,MD_Any> attrs = value.MD_Tuple();
             return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
                 : "(\u000A"
                     + String.Concat(Enumerable.Select(
-                            Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
+                            Enumerable.OrderBy(attrs, a => a.Key),
                             a => ati + Attr_Name(a.Key) + " : "
                                 + Any_Selector(a.Value, ati) + ",\u000A"))
                     + indent + ")";
@@ -402,20 +402,20 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         {
             String ati = indent + "\u0009";
             Memory m = value.Memory;
-            MD_Tuple_Struct ts = value.MD_Excuse();
-            if (ts.Multi_OA.Count == 0)
+            Dictionary<String,MD_Any> attrs = value.MD_Excuse();
+            if (attrs.Count == 0)
             {
                 return @"\!()";
             }
-            if (ts.Multi_OA.Count == 1 && ts.Multi_OA.ContainsKey("\u0000")
-                && ts.Multi_OA["\u0000"].MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
-                && ts.Multi_OA["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
+            if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
+                && attrs["\u0000"].MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                && attrs["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
             {
-                return @"\!" + Attr_Name(ts.Multi_OA["\u0000"].MD_Tuple().Multi_OA.First().Key);
+                return @"\!" + Attr_Name(attrs["\u0000"].MD_Tuple().First().Key);
             }
             return @"\!" + "(\u000A"
                 + String.Concat(Enumerable.Select(
-                        Enumerable.OrderBy(ts.Multi_OA, a => a.Key),
+                        Enumerable.OrderBy(attrs, a => a.Key),
                         a => ati + Attr_Name(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
                 + indent + ")";
