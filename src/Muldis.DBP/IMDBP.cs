@@ -64,13 +64,11 @@ namespace Muldis.DBP
 
         IMD_Tuple MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
-            Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null);
 
         IMD_Heading MD_Heading(
             Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null,
-            String attr_name = null, HashSet<String> attr_names = null);
+            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null);
 
         IMD_Tuple_Array MD_Tuple_Array(IMD_Heading heading);
 

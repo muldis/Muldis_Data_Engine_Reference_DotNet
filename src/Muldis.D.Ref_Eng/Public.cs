@@ -765,31 +765,16 @@ namespace Muldis.D.Ref_Eng
 
         public IMD_Tuple MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
-            Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null)
         {
             return (IMD_Tuple)new MD_Tuple().init(m_machine,
-                Core_MD_Tuple(a0, a1, a2, attr, attrs));
+                Core_MD_Tuple(a0, a1, a2, attrs));
         }
 
         private Core.MD_Any Core_MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
-            Nullable<KeyValuePair<String,Object>> attr = null,
             Dictionary<String,Object> attrs = null)
         {
-            if (attr != null)
-            {
-                if (m_memory.Test_Dot_Net_String(attr.Value.Key)
-                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attr",
-                        message: "Can't select MD_Tuple with attribute"
-                            + " name that is a malformed .Net String."
-                    );
-                }
-            }
             if (attrs != null)
             {
                 foreach (String atnm in attrs.Keys)
@@ -809,63 +794,7 @@ namespace Muldis.D.Ref_Eng
             // Start by normalizing the distribution of the attribute
             // definitions among the arguments to match the distribution
             // used by our internals, and check for duplicate names.
-            if (attr != null && attrs != null)
-            {
-                if (attrs.ContainsKey(attr.Value.Key))
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attr",
-                        message: "Can't select MD_Tuple with same-named"
-                            + " attribute in both [attr] and [attrs] args."
-                    );
-                }
-            }
-            if (attr != null)
-            {
-                if (attr.Value.Key == "\u0000")
-                {
-                    if (a0 != null)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "attr",
-                            message: "Can't select MD_Tuple with same-named"
-                                + " attribute in both [a0] and [attr] args."
-                        );
-                    }
-                    a0 = attr.Value.Value;
-                    attr = null;
-                }
-                if (attr.Value.Key == "\u0001")
-                {
-                    if (a1 != null)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "attr",
-                            message: "Can't select MD_Tuple with same-named"
-                                + " attribute in both [a1] and [attr] args."
-                        );
-                    }
-                    a1 = attr.Value.Value;
-                    attr = null;
-                }
-                if (attr.Value.Key == "\u0002")
-                {
-                    if (a2 != null)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "attr",
-                            message: "Can't select MD_Tuple with same-named"
-                                + " attribute in both [a2] and [attr] args."
-                        );
-                    }
-                    a2 = attr.Value.Value;
-                    attr = null;
-                }
-            }
+            Nullable<KeyValuePair<String,Object>> attr = null;
             if (attrs != null)
             {
                 if (attrs.ContainsKey("\u0000") || attrs.ContainsKey("\u0001")
@@ -916,14 +845,7 @@ namespace Muldis.D.Ref_Eng
                         attrs.Remove("\u0002");
                     }
                 }
-                if (attr != null && attrs.Count >= 1)
-                {
-                    // Dictionary are mutable so clone argument to protect caller.
-                    attrs = new Dictionary<String,Object>(attrs);
-                    attrs.Add(attr.Value.Key, attr.Value.Value);
-                    attr = null;
-                }
-                else if (attr == null && attrs.Count == 1)
+                if (attrs.Count == 1)
                 {
                     attr = Enumerable.Single(attrs);
                     attrs = null;
@@ -950,25 +872,20 @@ namespace Muldis.D.Ref_Eng
 
         public IMD_Heading MD_Heading(
             Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null,
-            String attr_name = null, HashSet<String> attr_names = null)
+            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null)
         {
             return (IMD_Heading)new MD_Heading().init(m_machine,
-                Core_MD_Heading(a0, a1, a2, attr_name, attr_names));
+                Core_MD_Heading(a0, a1, a2, attr_names));
         }
 
         private Core.MD_Any Core_MD_Heading(
             Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null,
-            String attr_name = null, HashSet<String> attr_names = null)
+            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null)
         {
             return Core_MD_Tuple(
                 a0: (a0 == null || a0 == false) ? (Object)null : true,
                 a1: (a1 == null || a1 == false) ? (Object)null : true,
                 a2: (a2 == null || a2 == false) ? (Object)null : true,
-                attr: attr_name == null
-                    ? (Nullable<KeyValuePair<String,Object>>)null
-                    : new KeyValuePair<String,Object>(attr_name, true),
                 attrs: attr_names == null ? null
                     : new Dictionary<String,Object>(
                         attr_names.ToDictionary(a => a, a => (Object)true))
