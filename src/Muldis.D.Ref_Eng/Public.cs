@@ -152,7 +152,7 @@ namespace Muldis.D.Ref_Eng
                         return (IMD_Heading)new MD_Heading().init(m_machine, value);
                     }
                     return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
-                case Core.MD_Well_Known_Base_Type.MD_Capsule:
+                case Core.MD_Well_Known_Base_Type.MD_Article:
                     if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Array) == true)
                     {
                         return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
@@ -165,7 +165,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
                     }
-                    return (IMD_Capsule)new MD_Capsule().init(m_machine, value);
+                    return (IMD_Article)new MD_Article().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Variable:
                     return (IMD_Variable)new MD_Variable().init(m_machine, value);
                 case Core.MD_Well_Known_Base_Type.MD_Process:
@@ -367,7 +367,7 @@ namespace Muldis.D.Ref_Eng
                         return Core_MD_Tuple_Bag(body: (Muldis.D.Ref_Eng.Value.MD_Bag)v);
                     }
                     break;
-                case "Capsule":
+                case "Article":
                     if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                     {
                         Object label = ((KeyValuePair<Object,Object>)v).Key;
@@ -378,7 +378,7 @@ namespace Muldis.D.Ref_Eng
                             throw new ArgumentNullException
                             (
                                 paramName: "value",
-                                message: "Can't select MD_Capsule with a null Capsule attrs."
+                                message: "Can't select MD_Article with a null Article attrs."
                             );
                         }
                         Core.MD_Any attrs_cv = Core_MD_Any(attrs);
@@ -387,7 +387,7 @@ namespace Muldis.D.Ref_Eng
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MD_Capsule with a Capsule attrs"
+                                message: "Can't select MD_Article with an Article attrs"
                                     + " that doesn't evaluate as a MD_Tuple."
                             );
                         }
@@ -399,11 +399,11 @@ namespace Muldis.D.Ref_Eng
                                 throw new ArgumentException
                                 (
                                     paramName: "value",
-                                    message: "Can't select MD_Capsule with label"
+                                    message: "Can't select MD_Article with label"
                                         + " that is a malformed .Net String."
                                 );
                             }
-                            return m_memory.MD_Capsule(
+                            return m_memory.MD_Article(
                                 m_memory.MD_Attr_Name((String)label),
                                 attrs_cv
                             );
@@ -418,12 +418,12 @@ namespace Muldis.D.Ref_Eng
                                     throw new ArgumentException
                                     (
                                         paramName: "value",
-                                        message: "Can't select MD_Capsule with label"
+                                        message: "Can't select MD_Article with label"
                                             + " that includes a malformed .Net String."
                                     );
                                 }
                             }
-                            return m_memory.MD_Capsule(
+                            return m_memory.MD_Article(
                                 m_memory.MD_Array(new List<Core.MD_Any>(((String[])label).Select(
                                     m => m_memory.MD_Attr_Name(m)
                                 ))),
@@ -432,7 +432,7 @@ namespace Muldis.D.Ref_Eng
                         }
                         if (label.GetType().FullName.StartsWith("Muldis.D.Ref_Eng.Value."))
                         {
-                            return m_memory.MD_Capsule(Core_MD_Any(label), attrs_cv);
+                            return m_memory.MD_Article(Core_MD_Any(label), attrs_cv);
                         }
                     }
                     break;
@@ -1014,7 +1014,7 @@ namespace Muldis.D.Ref_Eng
             return m_memory.MD_Tuple_Bag(hv, bv);
         }
 
-        public IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs)
+        public IMD_Article MD_Article(IMD_Any label, IMD_Tuple attrs)
         {
             if (label == null)
             {
@@ -1024,14 +1024,14 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                m_memory.MD_Capsule(
+            return (IMD_Article)new MD_Article().init(m_machine,
+                m_memory.MD_Article(
                     ((MD_Any)label).m_value, ((MD_Any)attrs).m_value
                 )
             );
         }
 
-        public IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs)
+        public IMD_Article MD_Article(String label, IMD_Tuple attrs)
         {
             if (label == null)
             {
@@ -1043,7 +1043,7 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentException
                 (
                     paramName: "label",
-                    message: "Can't select MD_Capsule with label"
+                    message: "Can't select MD_Article with label"
                         + " that is a malformed .Net String."
                 );
             }
@@ -1051,14 +1051,14 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                m_memory.MD_Capsule(
+            return (IMD_Article)new MD_Article().init(m_machine,
+                m_memory.MD_Article(
                     m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value
                 )
             );
         }
 
-        public IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs)
+        public IMD_Article MD_Article(String[] label, IMD_Tuple attrs)
         {
             if (label == null)
             {
@@ -1072,7 +1072,7 @@ namespace Muldis.D.Ref_Eng
                     throw new ArgumentException
                     (
                         paramName: "label",
-                        message: "Can't select MD_Capsule with label"
+                        message: "Can't select MD_Article with label"
                             + " that includes a malformed .Net String."
                     );
                 }
@@ -1081,8 +1081,8 @@ namespace Muldis.D.Ref_Eng
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Capsule)new MD_Capsule().init(m_machine,
-                m_memory.MD_Capsule(
+            return (IMD_Article)new MD_Article().init(m_machine,
+                m_memory.MD_Article(
                     m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
                         m => m_memory.MD_Attr_Name(m)
                     ))),
@@ -1260,19 +1260,19 @@ namespace Muldis.D.Ref_Eng.Value
         }
     }
 
-    public class MD_Fraction : MD_Capsule, IMD_Fraction
+    public class MD_Fraction : MD_Article, IMD_Fraction
     {
     }
 
-    public class MD_Bits : MD_Capsule, IMD_Bits
+    public class MD_Bits : MD_Article, IMD_Bits
     {
     }
 
-    public class MD_Blob : MD_Capsule, IMD_Blob
+    public class MD_Blob : MD_Article, IMD_Blob
     {
     }
 
-    public class MD_Text : MD_Capsule, IMD_Text
+    public class MD_Text : MD_Article, IMD_Text
     {
     }
 
@@ -1280,7 +1280,7 @@ namespace Muldis.D.Ref_Eng.Value
     {
     }
 
-    public class MD_Set : MD_Capsule, IMD_Set
+    public class MD_Set : MD_Article, IMD_Set
     {
     }
 
@@ -1296,19 +1296,19 @@ namespace Muldis.D.Ref_Eng.Value
     {
     }
 
-    public class MD_Tuple_Array : MD_Capsule, IMD_Tuple_Array
+    public class MD_Tuple_Array : MD_Article, IMD_Tuple_Array
     {
     }
 
-    public class MD_Relation : MD_Capsule, IMD_Relation
+    public class MD_Relation : MD_Article, IMD_Relation
     {
     }
 
-    public class MD_Tuple_Bag : MD_Capsule, IMD_Tuple_Bag
+    public class MD_Tuple_Bag : MD_Article, IMD_Tuple_Bag
     {
     }
 
-    public class MD_Capsule : MD_Any, IMD_Capsule
+    public class MD_Article : MD_Any, IMD_Article
     {
     }
 
@@ -1350,7 +1350,7 @@ namespace Muldis.D.Ref_Eng.Value
         }
     }
 
-    public class MD_Excuse : MD_Capsule, IMD_Excuse
+    public class MD_Excuse : MD_Article, IMD_Excuse
     {
     }
 

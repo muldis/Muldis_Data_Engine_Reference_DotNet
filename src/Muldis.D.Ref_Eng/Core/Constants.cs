@@ -14,7 +14,7 @@ namespace Muldis.D.Ref_Eng.Core
     // Enumerates Muldis D types that are considered well-known to this
     // Muldis D language implementation.  Typically these are defined in
     // the Muldis D Foundation language spec even if most of their related
-    // operators are not.  Typically each one is a Capsule subtype.
+    // operators are not.  Typically each one is an Article subtype.
     // This set excludes on purpose the subset of well-known types that
     // should be trivial to test membership of by other means; in
     // particular it excludes {Any,None}, the MD_Well_Known_Base_Type;
@@ -37,7 +37,7 @@ namespace Muldis.D.Ref_Eng.Core
         Signature__Disjunction,
         Signature__Tuple_Attrs_Match_Simple,
         Signature__Tuple_Attrs_Match,
-        Signature__Capsule_Match,
+        Signature__Article_Match,
         Expression,
         Literal,
         Args,
@@ -46,7 +46,7 @@ namespace Muldis.D.Ref_Eng.Core
         Set_Selector,
         Bag_Selector,
         Tuple_Selector,
-        Capsule_Selector,
+        Article_Selector,
         If_Then_Else_Expr,
         And_Then,
         Or_Else,
@@ -110,8 +110,8 @@ namespace Muldis.D.Ref_Eng.Core
                 "Blob",
                 "Block",
                 "Boolean",
-                "Capsule_Selector",
-                "Capsule",
+                "Article_Selector",
+                "Article",
                 "Current",
                 "Declare",
                 "Evaluates",
@@ -156,7 +156,7 @@ namespace Muldis.D.Ref_Eng.Core
                 "Routine_Call",
                 "Set_Selector",
                 "Set",
-                "Signature__Capsule_Match",
+                "Signature__Article_Match",
                 "Signature__Conjunction",
                 "Signature__Disjunction",
                 "Signature__Tuple_Attrs_Match_Simple",
@@ -222,7 +222,7 @@ namespace Muldis.D.Ref_Eng.Core
                 "Relation",
                 "Tuple_Bag",
                 "Interval",
-                "Capsule",
+                "Article",
                 "Handle",
                 "Variable",
                 "Process",
@@ -236,7 +236,7 @@ namespace Muldis.D.Ref_Eng.Core
                 "Signature__Disjunction",
                 "Signature__Tuple_Attrs_Match_Simple",
                 "Signature__Tuple_Attrs_Match",
-                "Signature__Capsule_Match",
+                "Signature__Article_Match",
                 "Expression",
                 "Literal",
                 "Args",
@@ -245,7 +245,7 @@ namespace Muldis.D.Ref_Eng.Core
                 "Set_Selector",
                 "Bag_Selector",
                 "Tuple_Selector",
-                "Capsule_Selector",
+                "Article_Selector",
                 "If_Then_Else_Expr",
                 "And_Then",
                 "Or_Else",
@@ -299,8 +299,8 @@ namespace Muldis.D.Ref_Eng.Core
                 "Bag_unique_count",
                 "Tuple_degree",
                 "Tuple_heading",
-                "Capsule_label",
-                "Capsule_attrs",
+                "Article_label",
+                "Article_attrs",
                 "Text_from_UTF_8_Blob",
                 "MDPT_Parsing_Unit_Text_to_Any",
             };
@@ -365,8 +365,8 @@ namespace Muldis.D.Ref_Eng.Core
                 "Tuple_attrs_where",
                 "Tuple_attrs_map",
                 "Tuple_attrs_reduce",
-                "Capsule_select",
-                "Capsule_at",
+                "Article_select",
+                "Article_at",
             };
         }
 

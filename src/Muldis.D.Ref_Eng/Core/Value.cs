@@ -11,7 +11,7 @@ namespace Muldis.D.Ref_Eng.Core
     // their own dedicated handling code or formats in the implementation.
     // Every one of these types is either disjoint from or a proper subtype
     // or proper supertype of each of the others of these types, and in
-    // particular many of these are proper subtypes of Capsule; however,
+    // particular many of these are proper subtypes of Article; however,
     // every Muldis D value is considered to have a best fit into exactly
     // one of these types and that value is expected to be normalized
     // towards its best fit storage format.
@@ -28,7 +28,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Set,
         MD_Bag,
         MD_Tuple,
-        MD_Capsule,
+        MD_Article,
         MD_Variable,
         MD_Process,
         MD_Stream,
@@ -84,7 +84,7 @@ namespace Muldis.D.Ref_Eng.Core
         // Iff MSBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
         // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
         // Iff MSBT is MD_Tuple, this field holds a Dictionary<String,MD_Any> (like MD_Excuse).
-        // Iff MSBT is MD_Capsule, this field holds a MD_Capsule_Struct.
+        // Iff MSBT is MD_Article, this field holds a MD_Article_Struct.
         // Iff MSBT is MD_Variable, this field holds a MD_Any.
             // For a MD_Variable, Details holds its Current_Value.
             // This can become a MD_Variable_Struct if we want to store other things.
@@ -188,9 +188,9 @@ namespace Muldis.D.Ref_Eng.Core
             return (Dictionary<String,MD_Any>)Details;
         }
 
-        internal MD_Capsule_Struct MD_Capsule()
+        internal MD_Article_Struct MD_Article()
         {
-            return (MD_Capsule_Struct)Details;
+            return (MD_Article_Struct)Details;
         }
 
         internal MD_Any MD_Variable()
@@ -761,16 +761,16 @@ namespace Muldis.D.Ref_Eng.Core
         internal Nullable<Boolean> Tree_Relational { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Capsule_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Capsule,
-    // a MD_Capsule_Struct is used by it to hold the MD_Capsule-specific details.
+    // Muldis.D.Ref_Eng.Core.MD_Article_Struct
+    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Article,
+    // a MD_Article_Struct is used by it to hold the MD_Article-specific details.
 
-    internal class MD_Capsule_Struct
+    internal class MD_Article_Struct
     {
-        // The Muldis D value that is the "label" of this MD_Capsule value.
+        // The Muldis D value that is the "label" of this MD_Article value.
         internal MD_Any Label { get; set; }
 
-        // The Muldis D value that is the "attributes" of this MD_Capsule value.
+        // The Muldis D value that is the "attributes" of this MD_Article value.
         internal MD_Any Attrs { get; set; }
     }
 }

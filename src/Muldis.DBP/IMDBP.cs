@@ -82,11 +82,11 @@ namespace Muldis.DBP
 
         IMD_Tuple_Bag MD_Tuple_Bag(IMD_Bag body);
 
-        IMD_Capsule MD_Capsule(IMD_Any label, IMD_Tuple attrs);
+        IMD_Article MD_Article(IMD_Any label, IMD_Tuple attrs);
 
-        IMD_Capsule MD_Capsule(String label, IMD_Tuple attrs);
+        IMD_Article MD_Article(String label, IMD_Tuple attrs);
 
-        IMD_Capsule MD_Capsule(String[] label, IMD_Tuple attrs);
+        IMD_Article MD_Article(String[] label, IMD_Tuple attrs);
 
         IMD_Variable New_MD_Variable(IMD_Any initial_current_value);
 
@@ -172,7 +172,7 @@ namespace Muldis.DBP
     {
     }
 
-    public interface IMD_Capsule : IMD_Any
+    public interface IMD_Article : IMD_Any
     {
     }
 

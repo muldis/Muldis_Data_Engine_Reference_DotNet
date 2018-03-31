@@ -88,8 +88,8 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     return Bag_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Tuple:
                     return Tuple_Selector(value, indent);
-                case MD_Well_Known_Base_Type.MD_Capsule:
-                    return Capsule_Selector(value, indent);
+                case MD_Well_Known_Base_Type.MD_Article:
+                    return Article_Selector(value, indent);
                 case MD_Well_Known_Base_Type.MD_Variable:
                     // We display something useful for debugging purposes, but no
                     // (transient) MD_Variable can actually be rendered as Muldis D Plain Text.
@@ -392,10 +392,10 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                     + indent + ")";
         }
 
-        private String Capsule_Selector(MD_Any value, String indent)
+        private String Article_Selector(MD_Any value, String indent)
         {
-            return "(" + Any_Selector(value.MD_Capsule().Label, indent) + " : "
-                + Any_Selector(value.MD_Capsule().Attrs, indent) + ")";
+            return "(" + Any_Selector(value.MD_Article().Label, indent) + " : "
+                + Any_Selector(value.MD_Article().Attrs, indent) + ")";
         }
 
         private String Excuse_Selector(MD_Any value, String indent)

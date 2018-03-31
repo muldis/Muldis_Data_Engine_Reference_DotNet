@@ -93,9 +93,9 @@ namespace Muldis.D.Ref_Eng.Core
         internal readonly MD_Any MD_Tuple_Bag_D0C0;
         internal readonly MD_Any MD_Tuple_Bag_D0C1;
 
-        // MD_Capsule with False label and no attributes
+        // MD_Article with False label and no attributes
         // (type default value but not actually useful in practice).
-        private readonly MD_Any m_false_nullary_capsule;
+        private readonly MD_Any m_false_nullary_article;
 
         // All well known MD_Excuse values.
         internal readonly Dictionary<String,MD_Any> Well_Known_Excuses;
@@ -287,23 +287,23 @@ namespace Muldis.D.Ref_Eng.Core
                 MD_Any an = MD_Attr_Name(s);
             }
 
-            m_false_nullary_capsule = new MD_Any {
+            m_false_nullary_article = new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
-                Details = new MD_Capsule_Struct {
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Article,
+                Details = new MD_Article_Struct {
                     Label = MD_False,
                     Attrs = MD_Tuple_D0,
                 },
             };
 
-            MD_Tuple_Array_D0C0 = MD_Capsule(
+            MD_Tuple_Array_D0C0 = MD_Article(
                 MD_Attr_Name("Tuple_Array"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", MD_Tuple_D0}, {"body", MD_Array_C0}})
             );
             MD_Tuple_Array_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
 
-            MD_Tuple_Array_D0C1 = MD_Capsule(
+            MD_Tuple_Array_D0C1 = MD_Article(
                 MD_Attr_Name("Tuple_Array"),
                 MD_Tuple(
                     new Dictionary<String,MD_Any>()
@@ -327,14 +327,14 @@ namespace Muldis.D.Ref_Eng.Core
             );
             MD_Tuple_Array_D0C1.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Array, true);
 
-            MD_Relation_D0C0 = MD_Capsule(
+            MD_Relation_D0C0 = MD_Article(
                 MD_Attr_Name("Relation"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", MD_Tuple_D0}, {"body", MD_Set_C0}})
             );
             MD_Relation_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
 
-            MD_Relation_D0C1 = MD_Capsule(
+            MD_Relation_D0C1 = MD_Article(
                 MD_Attr_Name("Relation"),
                 MD_Tuple(
                     new Dictionary<String,MD_Any>()
@@ -359,14 +359,14 @@ namespace Muldis.D.Ref_Eng.Core
             );
             MD_Relation_D0C1.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Relation, true);
 
-            MD_Tuple_Bag_D0C0 = MD_Capsule(
+            MD_Tuple_Bag_D0C0 = MD_Article(
                 MD_Attr_Name("Tuple_Bag"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", MD_Tuple_D0}, {"body", MD_Bag_C0}})
             );
             MD_Tuple_Bag_D0C0.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Tuple_Bag, true);
 
-            MD_Tuple_Bag_D0C1 = MD_Capsule(
+            MD_Tuple_Bag_D0C1 = MD_Article(
                 MD_Attr_Name("Tuple_Bag"),
                 MD_Tuple(
                     new Dictionary<String,MD_Any>()
@@ -653,7 +653,7 @@ namespace Muldis.D.Ref_Eng.Core
                     return MD_Tuple_Array_D0C1;
                 }
             }
-            MD_Any tuple_array = MD_Capsule(
+            MD_Any tuple_array = MD_Article(
                 MD_Attr_Name("Tuple_Array"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", heading}, {"body", body}})
@@ -675,7 +675,7 @@ namespace Muldis.D.Ref_Eng.Core
                     return MD_Relation_D0C1;
                 }
             }
-            MD_Any relation = MD_Capsule(
+            MD_Any relation = MD_Article(
                 MD_Attr_Name("Relation"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", heading}, {"body", body}})
@@ -698,7 +698,7 @@ namespace Muldis.D.Ref_Eng.Core
                 //    return MD_Tuple_Bag_D0C1;
                 //}
             }
-            MD_Any tuple_bag = MD_Capsule(
+            MD_Any tuple_bag = MD_Article(
                 MD_Attr_Name("Tuple_Bag"),
                 MD_Tuple(new Dictionary<String,MD_Any>()
                     {{"heading", heading}, {"body", body}})
@@ -707,37 +707,37 @@ namespace Muldis.D.Ref_Eng.Core
             return tuple_bag;
         }
 
-        internal MD_Any MD_Capsule(MD_Any label, MD_Any attrs)
+        internal MD_Any MD_Article(MD_Any label, MD_Any attrs)
         {
             if (Object.ReferenceEquals(label, MD_False)
                 && Object.ReferenceEquals(attrs, MD_Tuple_D0))
             {
-                return m_false_nullary_capsule;
+                return m_false_nullary_article;
             }
             // TODO: If label corresponds to a MD_Well_Known_Base_Type then
             // validate whether the label+attrs is actually a member of its
             // Muldis D type, and if it is, return a MD_Any using the most
             // specific well known base type for that MD value rather than
-            // using the generic Capsule format, for normalization.
+            // using the generic Article format, for normalization.
             // Note: We do NOT ever have to declare known-not-wkt for types
             // with their own storage formats (things we would never declare
             // known-is-wkt) because they're all tested to that level and
-            // normalized at selection, therefore if we have a MD_Capsule
+            // normalized at selection, therefore if we have a MD_Article
             // extant whose label is say 'Text' we know it isn't a Text value, and so on.
             return new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Capsule,
-                Details = new MD_Capsule_Struct {
+                MD_MSBT = MD_Well_Known_Base_Type.MD_Article,
+                Details = new MD_Article_Struct {
                     Label = label,
                     Attrs = attrs,
                 },
             };
         }
 
-        // TODO: Here or in Executor also have Capsule_attrs() etc functions
-        // that take anything conceptually a Capsule and let users use it
-        // as if it were a MD_Capsule_Struct; these have the opposite
-        // transformations as MD_Capsule() above does.
+        // TODO: Here or in Executor also have Article_attrs() etc functions
+        // that take anything conceptually a Article and let users use it
+        // as if it were a MD_Article_Struct; these have the opposite
+        // transformations as MD_Article() above does.
 
         internal MD_Any New_MD_Variable(MD_Any initial_current_value)
         {
@@ -1095,13 +1095,13 @@ namespace Muldis.D.Ref_Eng.Core
         internal MD_Any Set__Pick_Arbitrary_Member(MD_Any set)
         {
             return Bag__Pick_Arbitrary_Member(
-                set.MD_Capsule().Attrs.MD_Tuple().First().Value);
+                set.MD_Article().Attrs.MD_Tuple().First().Value);
         }
 
         internal Boolean Set__Is_Relational(MD_Any set)
         {
             return Bag__Is_Relational(
-                set.MD_Capsule().Attrs.MD_Tuple().First().Value);
+                set.MD_Article().Attrs.MD_Tuple().First().Value);
         }
 
         internal MD_Any Bag__Pick_Arbitrary_Member(MD_Any bag)

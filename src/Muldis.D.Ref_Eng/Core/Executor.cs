@@ -300,9 +300,9 @@ namespace Muldis.D.Ref_Eng.Core
                         return m.MD_Boolean(
                             v.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
                         );
-                    case "Capsule":
+                    case "Article":
                         return m.MD_Boolean(
-                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Capsule
+                            v.MD_MSBT == MD_Well_Known_Base_Type.MD_Article
                         );
                     case "Handle":
                         return m.MD_Boolean(
@@ -335,7 +335,7 @@ namespace Muldis.D.Ref_Eng.Core
 
                     // TUPLE SUBTYPE DEFINERS
 
-                    // CAPSULE SUBTYPE DEFINERS
+                    // ARTICLE SUBTYPE DEFINERS
 
                     case "Blob":
                         return m.MD_Boolean(
@@ -688,9 +688,9 @@ namespace Muldis.D.Ref_Eng.Core
                     return (attrs0.Count == attrs1.Count)
                         && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                         && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
-                case MD_Well_Known_Base_Type.MD_Capsule:
-                    result = Any__same(a0.MD_Capsule().Label, a1.MD_Capsule().Label)
-                          && Any__same(a0.MD_Capsule().Attrs, a1.MD_Capsule().Attrs);
+                case MD_Well_Known_Base_Type.MD_Article:
+                    result = Any__same(a0.MD_Article().Label, a1.MD_Article().Label)
+                          && Any__same(a0.MD_Article().Attrs, a1.MD_Article().Attrs);
                     break;
                 case MD_Well_Known_Base_Type.MD_Variable:
                 case MD_Well_Known_Base_Type.MD_Process:
