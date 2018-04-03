@@ -5,9 +5,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Muldis.D.Ref_Eng.Core
+namespace Muldis.ReferenceEngine.Core
 {
-    // Muldis.D.Ref_Eng.Core.Memory
+    // Muldis.ReferenceEngine.Core.Memory
     // Provides a virtual machine memory pool where Muldis D values and
     // variables live, which exploits the "flyweight pattern" for
     // efficiency in both performance and memory usage.
@@ -16,7 +16,7 @@ namespace Muldis.D.Ref_Eng.Core
     // VM values/vars/processes/etc that would interact must share one.
     // Memory might have multiple pools, say, for separate handling of
     // entities that are short-lived versus longer-lived.
-    // Note that .Net Core lacks System.Runtime.Caching or similar built-in
+    // Note that .NET Core lacks System.Runtime.Caching or similar built-in
     // so for any situations we might have used such, we roll our own.
     // Some caches are logically just HashSets, but we need the ability to
     // fetch the actual cached objects which are the set members so we can

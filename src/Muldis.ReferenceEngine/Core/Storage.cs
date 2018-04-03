@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Muldis.D.Ref_Eng.Core
+namespace Muldis.ReferenceEngine.Core
 {
-    // Muldis.D.Ref_Eng.Core.Storage
+    // Muldis.ReferenceEngine.Core.Storage
     // For fetching data from and storing data to the host file system.
     // All data is interpreted here simply in terms of plain octet arrays;
     // it is up to callers to map this as character data where appropriate.

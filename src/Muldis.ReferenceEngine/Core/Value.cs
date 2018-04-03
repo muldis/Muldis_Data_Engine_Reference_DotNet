@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Muldis.D.Ref_Eng.Core
+namespace Muldis.ReferenceEngine.Core
 {
-    // Muldis.D.Ref_Eng.Core.MD_MSBT
+    // Muldis.ReferenceEngine.Core.MD_MSBT
     // Enumerates Muldis D base types that are considered well-known to
     // this Muldis D language implementation, and that in particular have
     // their own dedicated handling code or formats in the implementation.
@@ -36,7 +36,7 @@ namespace Muldis.D.Ref_Eng.Core
         MD_Excuse,
     };
 
-    // Muldis.D.Ref_Eng.Core.MD_Any
+    // Muldis.ReferenceEngine.Core.MD_Any
     // Represents a Muldis D "value", which is an individual constant that
     // is not fixed in time or space.  Every Muldis D value is unique,
     // eternal, and immutable; it has no address and can not be updated.
@@ -118,7 +118,7 @@ namespace Muldis.D.Ref_Eng.Core
         // typically when the "value" is a member of an indexed collection.
         // The serialization format either is or resembles a Muldis D Plain Text
         // literal for selecting the value, in the form of character strings
-        // whose character codepoints are typically in the 0..127 range.
+        // whose character code points are typically in the 0..127 range.
         internal String Cached_MD_Any_Identity { get; set; }
 
         internal Boolean Same(MD_Any value)
@@ -269,8 +269,8 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Fraction_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Fraction,
+    // Muldis.ReferenceEngine.Core.MD_Fraction_Struct
+    // When a Muldis.ReferenceEngine.Core.MD_Any is representing a MD_Fraction,
     // an MD_Fraction_Struct is used by it to hold the MD_Fraction-specific details.
 
     internal class MD_Fraction_Struct
@@ -278,7 +278,7 @@ namespace Muldis.D.Ref_Eng.Core
         // The As_Decimal field is optionally valued if the MD_Fraction
         // value is known small enough to fit in the range it can represent
         // and it is primarily used when the MD_Fraction value was input to
-        // the system as a .Net Decimal in the first place or was output
+        // the system as a .NET Decimal in the first place or was output
         // from the system as such; a MD_Fraction input first as a Decimal
         // is only copied to the As_Pair field when needed;
         // if both said fields are valued at once, they are redundant.
@@ -404,7 +404,7 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Fraction_Pair
+    // Muldis.ReferenceEngine.Core.MD_Fraction_Pair
     // Represents a numerator/denominator pair.
 
     internal class MD_Fraction_Pair
@@ -452,54 +452,54 @@ namespace Muldis.D.Ref_Eng.Core
         internal Nullable<BigInteger> Denominator_Affinity { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Text_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Text,
+    // Muldis.ReferenceEngine.Core.MD_Text_Struct
+    // When a Muldis.ReferenceEngine.Core.MD_Any is representing a MD_Text,
     // an MD_Text_Struct is used by it to hold the MD_Text-specific details.
 
     internal class MD_Text_Struct
     {
         // Represents a Muldis D Text value where each member value is
         // a Muldis D Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
-        // A .Net String is the simplest storage representation for that
+        // A .NET String is the simplest storage representation for that
         // type which doesn't internally use trees for sharing or multipliers.
         // This is the canonical storage type for a regular character string.
         // Each logical member represents a single Unicode standard character
-        // codepoint from either the Basic Multilingual Plane (BMP), which
+        // code point from either the Basic Multilingual Plane (BMP), which
         // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
         // or from either of the 16 supplementary planes, which is those
         // member values in the range {0x10000..0x10FFFF}.
-        // Codepoint_Members is represented using a standard .Net
+        // Codepoint_Members is represented using a standard .NET
         // String value for simplicity but a String has a different native
-        // concept of components; it is formally an array of .Net Char
-        // each of which is either a whole BMP codepoint or half of a
-        // non-BMP codepoint; a non-BMP codepoint is represented by a pair
+        // concept of components; it is formally an array of .NET Char
+        // each of which is either a whole BMP code point or half of a
+        // non-BMP code point; a non-BMP code point is represented by a pair
         // of consecutive Char with numeric values in {0xD800..0xDFFF};
         // therefore, the native "length" of a String only matches the
-        // "length" of the Muldis D Text when all codepoints are in the BMP.
-        // While it is possible for a .Net String to contain an isolated
+        // "length" of the Muldis D Text when all code points are in the BMP.
+        // While it is possible for a .NET String to contain an isolated
         // "surrogate" Char outside of a proper "surrogate pair", both
-        // Muldis.DBP and Muldis.D.Ref_Eng forbid such a malformed String
+        // Muldis.DatabaseProtocol and Muldis.ReferenceEngine forbid such a malformed String
         // from either being used internally or being passed in by the API.
         internal String Codepoint_Members { get; set; }
 
         // Nullable Boolean
-        // This is true iff we know that at least 1 Codepoint member is NOT
+        // This is true iff we know that at least 1 code point member is NOT
         // in the Basic Multilingual Plane (BMP); this is false iff we know
-        // that there is no such Codepoint member.  That is, with respect
-        // to a .Net String, this is true iff we know the String has at least
-        // 1 "surrogate pair".  We cache this knowledge because a .Net String
+        // that there is no such code point member.  That is, with respect
+        // to a .NET String, this is true iff we know the String has at least
+        // 1 "surrogate pair".  We cache this knowledge because a .NET String
         // with any non-BMP Char is more complicated to count the members
         // of or access members by ordinal position or do some other stuff.
-        // This field is always defined as a side-effect of Muldis.D.Ref_Eng
+        // This field is always defined as a side-effect of Muldis.ReferenceEngine
         // forbidding a malformed String and so they are always tested at
         // the borders, that test also revealing if a String has non-BMP chars.
         internal Boolean Has_Any_Non_BMP { get; set; }
 
-        // Cached count of codepoint members of the Muldis D Text.
+        // Cached count of code point members of the Muldis D Text.
         internal Nullable<Int64> Cached_Member_Count { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.Symbolic_Array_Type
+    // Muldis.ReferenceEngine.Core.Symbolic_Array_Type
     // Enumerates the various ways that a MD_Array collection can be defined
     // symbolically in terms of other collections.
     // None means the collection simply has zero members.
@@ -512,8 +512,8 @@ namespace Muldis.D.Ref_Eng.Core
         Catenated,
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Array_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Array,
+    // Muldis.ReferenceEngine.Core.MD_Array_Struct
+    // When a Muldis.ReferenceEngine.Core.MD_Any is representing a MD_Array,
     // a MD_Array_Struct is used by it to hold the MD_Array-specific details.
     // The "tree" is actually a uni-directional graph as multiple nodes can
     // cite the same other conceptually immutable nodes as their children.
@@ -570,7 +570,7 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Array_Pair
+    // Muldis.ReferenceEngine.Core.MD_Array_Pair
     // Represents an ordered pair of MD_Array, typically corresponding in
     // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -589,7 +589,7 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Symbolic_Bag_Type
+    // Muldis.ReferenceEngine.Core.Symbolic_Bag_Type
     // Enumerates the various ways that a MD_Bag collection can be defined
     // symbolically in terms of other collections.
     // None means the collection simply has zero members.
@@ -604,7 +604,7 @@ namespace Muldis.D.Ref_Eng.Core
         Summed,
     }
 
-    // Muldis.D.Ref_Eng.Core.Multiplied_Member
+    // Muldis.ReferenceEngine.Core.Multiplied_Member
     // Represents a multiset of 1..N members of a collection where every
     // member is the same Muldis D value.
 
@@ -628,8 +628,8 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Bag_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Bag,
+    // Muldis.ReferenceEngine.Core.MD_Bag_Struct
+    // When a Muldis.ReferenceEngine.Core.MD_Any is representing a MD_Bag,
     // a MD_Bag_Struct is used by it to hold the MD_Bag-specific details.
     // Also used for MD_Set, so any MD_Bag reference generally should be
     // read as either MD_Set or MD_Bag.
@@ -713,7 +713,7 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Bag_Pair
+    // Muldis.ReferenceEngine.Core.MD_Bag_Pair
     // Represents an ordered pair of MD_Bag, typically corresponding in
     // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -732,7 +732,7 @@ namespace Muldis.D.Ref_Eng.Core
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Cached_Members_Meta
+    // Muldis.ReferenceEngine.Core.Cached_Members_Meta
     // Represents cached metadata for the members of a Muldis D "discrete
     // homogeneous" collection such as an Array or Bag, particularly a
     // collection implemented as a tree of nodes, where each node may
@@ -761,8 +761,8 @@ namespace Muldis.D.Ref_Eng.Core
         internal Nullable<Boolean> Tree_Relational { get; set; }
     }
 
-    // Muldis.D.Ref_Eng.Core.MD_Article_Struct
-    // When a Muldis.D.Ref_Eng.Core.MD_Any is representing a MD_Article,
+    // Muldis.ReferenceEngine.Core.MD_Article_Struct
+    // When a Muldis.ReferenceEngine.Core.MD_Any is representing a MD_Article,
     // a MD_Article_Struct is used by it to hold the MD_Article-specific details.
 
     internal class MD_Article_Struct

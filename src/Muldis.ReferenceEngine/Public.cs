@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Muldis.DBP;
-using Muldis.D.Ref_Eng;
-using Muldis.D.Ref_Eng.Value;
+using Muldis.DatabaseProtocol;
+using Muldis.ReferenceEngine;
+using Muldis.ReferenceEngine.Value;
 
 [assembly: CLSCompliant(true)]
 
-namespace Muldis.D.Ref_Eng
+namespace Muldis.ReferenceEngine
 {
     public class Info : IInfo
     {
@@ -111,7 +111,7 @@ namespace Muldis.D.Ref_Eng
             if (value != null)
             {
                 String type_name = value.GetType().FullName;
-                if (type_name.StartsWith("Muldis.D.Ref_Eng.Value."))
+                if (type_name.StartsWith("Muldis.ReferenceEngine.Value."))
                 {
                     return (IMD_Any)value;
                 }
@@ -193,7 +193,7 @@ namespace Muldis.D.Ref_Eng
             if (value != null)
             {
                 String type_name = value.GetType().FullName;
-                if (type_name.StartsWith("Muldis.D.Ref_Eng.Value."))
+                if (type_name.StartsWith("Muldis.ReferenceEngine.Value."))
                 {
                     return ((MD_Any)value).m_value;
                 }
@@ -208,7 +208,7 @@ namespace Muldis.D.Ref_Eng
         private Core.MD_Any Import_Qualified(KeyValuePair<String,Object> value)
         {
             Object v = value.Value;
-            // Note that .Net guarantees the .Key is never null.
+            // Note that .NET guarantees the .Key is never null.
             if (v == null && value.Key != "Excuse")
             {
                 throw new ArgumentNullException
@@ -246,7 +246,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         Object numerator   = ((KeyValuePair<Object,Object>)v).Key;
                         Object denominator = ((KeyValuePair<Object,Object>)v).Value;
-                        // Note that .Net guarantees the .Key is never null.
+                        // Note that .NET guarantees the .Key is never null.
                         if (denominator == null)
                         {
                             throw new ArgumentNullException
@@ -265,8 +265,8 @@ namespace Muldis.D.Ref_Eng
                         {
                             return Core_MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                         }
-                        if (numerator.GetType().FullName == "Muldis.D.Ref_Eng.Value.MD_Integer"
-                            && denominator.GetType().FullName == "Muldis.D.Ref_Eng.Value.MD_Integer")
+                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Integer"
+                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Integer")
                         {
                             return Core_MD_Fraction(
                                 ((MD_Integer)numerator  ).m_value.MD_Integer(),
@@ -298,7 +298,7 @@ namespace Muldis.D.Ref_Eng
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MD_Text with a malformed .Net String."
+                                message: "Can't select MD_Text with a malformed .NET String."
                             );
                         }
                         return m_memory.MD_Text(
@@ -338,33 +338,33 @@ namespace Muldis.D.Ref_Eng
                     }
                     break;
                 case "Tuple_Array":
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
                     {
-                        return Core_MD_Tuple_Array(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                        return Core_MD_Tuple_Array(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
                     }
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Array")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Array")
                     {
-                        return Core_MD_Tuple_Array(body: (Muldis.D.Ref_Eng.Value.MD_Array)v);
+                        return Core_MD_Tuple_Array(body: (Muldis.ReferenceEngine.Value.MD_Array)v);
                     }
                     break;
                 case "Relation":
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
                     {
-                        return Core_MD_Relation(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                        return Core_MD_Relation(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
                     }
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Set")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Set")
                     {
-                        return Core_MD_Relation(body: (Muldis.D.Ref_Eng.Value.MD_Set)v);
+                        return Core_MD_Relation(body: (Muldis.ReferenceEngine.Value.MD_Set)v);
                     }
                     break;
                 case "Tuple_Bag":
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
                     {
-                        return Core_MD_Tuple_Bag(heading: (Muldis.D.Ref_Eng.Value.MD_Heading)v);
+                        return Core_MD_Tuple_Bag(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
                     }
-                    if (type_name == "Muldis.D.Ref_Eng.Value.MD_Bag")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Bag")
                     {
-                        return Core_MD_Tuple_Bag(body: (Muldis.D.Ref_Eng.Value.MD_Bag)v);
+                        return Core_MD_Tuple_Bag(body: (Muldis.ReferenceEngine.Value.MD_Bag)v);
                     }
                     break;
                 case "Article":
@@ -372,7 +372,7 @@ namespace Muldis.D.Ref_Eng
                     {
                         Object label = ((KeyValuePair<Object,Object>)v).Key;
                         Object attrs = ((KeyValuePair<Object,Object>)v).Value;
-                        // Note that .Net guarantees the .Key is never null.
+                        // Note that .NET guarantees the .Key is never null.
                         if (attrs == null)
                         {
                             throw new ArgumentNullException
@@ -400,7 +400,7 @@ namespace Muldis.D.Ref_Eng
                                 (
                                     paramName: "value",
                                     message: "Can't select MD_Article with label"
-                                        + " that is a malformed .Net String."
+                                        + " that is a malformed .NET String."
                                 );
                             }
                             return m_memory.MD_Article(
@@ -419,7 +419,7 @@ namespace Muldis.D.Ref_Eng
                                     (
                                         paramName: "value",
                                         message: "Can't select MD_Article with label"
-                                            + " that includes a malformed .Net String."
+                                            + " that includes a malformed .NET String."
                                     );
                                 }
                             }
@@ -430,17 +430,17 @@ namespace Muldis.D.Ref_Eng
                                 attrs_cv
                             );
                         }
-                        if (label.GetType().FullName.StartsWith("Muldis.D.Ref_Eng.Value."))
+                        if (label.GetType().FullName.StartsWith("Muldis.ReferenceEngine.Value."))
                         {
                             return m_memory.MD_Article(Core_MD_Any(label), attrs_cv);
                         }
                     }
                     break;
                 case "New_Variable":
-                    if (type_name.StartsWith("Muldis.D.Ref_Eng.Value."))
+                    if (type_name.StartsWith("Muldis.ReferenceEngine.Value."))
                     {
                         return m_memory.New_MD_Variable(
-                            ((Muldis.D.Ref_Eng.Value.MD_Any)v).m_value);
+                            ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value);
                     }
                     break;
                 case "New_Process":
@@ -475,7 +475,7 @@ namespace Muldis.D.Ref_Eng
                             (
                                 paramName: "value",
                                 message: "Can't select MD_Excuse with label"
-                                    + " that is a malformed .Net String."
+                                    + " that is a malformed .NET String."
                             );
                         }
                         return m_memory.Simple_MD_Excuse((String)v);
@@ -490,7 +490,7 @@ namespace Muldis.D.Ref_Eng
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MD_Attr_Name with a malformed .Net String."
+                                message: "Can't select MD_Attr_Name with a malformed .NET String."
                             );
                         }
                         return m_memory.MD_Attr_Name((String)v);
@@ -508,7 +508,7 @@ namespace Muldis.D.Ref_Eng
                                 (
                                     paramName: "value",
                                     message: "Can't select MD_Attr_Name_List with"
-                                        + " member that is a malformed .Net String."
+                                        + " member that is a malformed .NET String."
                                 );
                             }
                         }
@@ -571,7 +571,7 @@ namespace Muldis.D.Ref_Eng
                     throw new ArgumentException
                     (
                         paramName: "value",
-                        message: "Can't select MD_Text with a malformed .Net String."
+                        message: "Can't select MD_Text with a malformed .NET String."
                     );
                 }
                 return m_memory.MD_Text(
@@ -695,7 +695,7 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentException
                 (
                     paramName: "members",
-                    message: "Can't select MD_Text with a malformed .Net String."
+                    message: "Can't select MD_Text with a malformed .NET String."
                 );
             }
             return (IMD_Text)new MD_Text().init(m_machine,
@@ -786,7 +786,7 @@ namespace Muldis.D.Ref_Eng
                         (
                             paramName: "attrs",
                             message: "Can't select MD_Tuple with attribute"
-                                + " name that is a malformed .Net String."
+                                + " name that is a malformed .NET String."
                         );
                     }
                 }
@@ -1044,7 +1044,7 @@ namespace Muldis.D.Ref_Eng
                 (
                     paramName: "label",
                     message: "Can't select MD_Article with label"
-                        + " that is a malformed .Net String."
+                        + " that is a malformed .NET String."
                 );
             }
             if (attrs == null)
@@ -1073,7 +1073,7 @@ namespace Muldis.D.Ref_Eng
                     (
                         paramName: "label",
                         message: "Can't select MD_Article with label"
-                            + " that includes a malformed .Net String."
+                            + " that includes a malformed .NET String."
                     );
                 }
             }
@@ -1146,7 +1146,7 @@ namespace Muldis.D.Ref_Eng
                 (
                     paramName: "value",
                     message: "Can't select MD_Excuse with label"
-                        + " that is a malformed .Net String."
+                        + " that is a malformed .NET String."
                 );
             }
             return (IMD_Excuse)new MD_Excuse().init(m_machine,
@@ -1171,7 +1171,7 @@ namespace Muldis.D.Ref_Eng
                 throw new ArgumentException
                 (
                     paramName: "label",
-                    message: "Can't select MD_Attr_Name with a malformed .Net String."
+                    message: "Can't select MD_Attr_Name with a malformed .NET String."
                 );
             }
             return (IMD_Heading)new MD_Heading().init(m_machine,
@@ -1194,7 +1194,7 @@ namespace Muldis.D.Ref_Eng
                     (
                         paramName: "label",
                         message: "Can't select MD_Attr_Name_List with"
-                            + " member that is a malformed .Net String."
+                            + " member that is a malformed .NET String."
                     );
                 }
             }
@@ -1207,7 +1207,7 @@ namespace Muldis.D.Ref_Eng
     }
 }
 
-namespace Muldis.D.Ref_Eng.Value
+namespace Muldis.ReferenceEngine.Value
 {
     public abstract class MD_Any : IMD_Any
     {

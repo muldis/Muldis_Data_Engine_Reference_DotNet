@@ -5,7 +5,7 @@ using System.Numerics;
 
 [assembly: CLSCompliant(true)]
 
-namespace Muldis.DBP
+namespace Muldis.DatabaseProtocol
 {
     public interface IInfo
     {

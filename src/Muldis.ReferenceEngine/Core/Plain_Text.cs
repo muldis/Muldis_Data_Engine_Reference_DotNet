@@ -4,11 +4,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Muldis.D.Ref_Eng.Core;
+using Muldis.ReferenceEngine.Core;
 
-namespace Muldis.D.Ref_Eng.Core.Plain_Text
+namespace Muldis.ReferenceEngine.Core.Plain_Text
 {
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Parser
+    // Muldis.ReferenceEngine.Core.Plain_Text.Parser
     // Provides common implementation code for all other *_Parser
     // classes where they don't have reason to differ.
     // Or it would if there was more than one *_Parser, which there isn't.
@@ -17,7 +17,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     {
     }
 
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Standard_Parser
+    // Muldis.ReferenceEngine.Core.Plain_Text.Standard_Parser
     // Provides utility pure functions that accept Muldis D Plain Text (MDPT)
     // source code, either a complete "parsing unit" that might comprise a
     // foo.mdpt disk file or appropriate portions of such, usually input as
@@ -26,7 +26,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
     // "Package" type, which is the "native" form of Muldis D source code
     // and a "standard compilation unit".
     // The input "Text" source code is expected to conform to the formal
-    // specification "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0.-9'"
+    // specification "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0'"
     // and would typically either be hand-written by users or be generated
     // by code such as the X or Y classes below.
     // This class is completely deterministic and its exact output Muldis D
@@ -53,7 +53,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Generator
+    // Muldis.ReferenceEngine.Core.Plain_Text.Generator
     // Provides common implementation code for all other *_Generator
     // classes where they don't have reason to differ.
     // In fact, presently all inheriting classes actually have identical
@@ -143,7 +143,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
                 if (fa.As_Decimal != null)
                 {
                     String dec_digits = fa.As_Decimal.ToString();
-                    // When a .Net Decimal is selected using a .Net Decimal
+                    // When a .NET Decimal is selected using a .NET Decimal
                     // literal having trailing zeroes, those trailing
                     // zeroes will persist in the .ToString() result
                     // (but any leading zeroes do not persist);
@@ -422,11 +422,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Standard_Generator
+    // Muldis.ReferenceEngine.Core.Plain_Text.Standard_Generator
     // Provides utility pure functions that accept any Muldis D "Package"
     // value, which is a native Muldis D "standard compilation unit", and
     // derive a "Text" value that is this "Package" encoded in compliance
-    // with the "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0.-9'"
+    // with the "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0'"
     // formal specification.  This outputs of this generator are intended
     // for external use, whether for storage in foo.mdpt disk files or
     // other places, viewing by users, and reading by other programs, as a
@@ -458,7 +458,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
         {
             return value.Memory.MD_Text(
-                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
+                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0'\u000A"
                 + "meta foundational\u000A"
                 + Any_Selector(value, "") + "\u000A",
                 false
@@ -468,7 +468,7 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         internal MD_Any MD_Text_MDPT_Parsing_Unit_Predicate(Memory memory)
         {
             return memory.MD_Text(
-                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0.-9'\u000A"
+                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0'\u000A"
                 + "meta foundational\u000A",
                 false
             );
@@ -490,19 +490,19 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Identity_Generator
+    // Muldis.ReferenceEngine.Core.Plain_Text.Identity_Generator
     // Provides utility pure functions that accept any Muldis D "value"
-    // and derive a .Net String that uniquely identifies it.
+    // and derive a .NET String that uniquely identifies it.
     // This class is deterministic and guarantees that iff 2 MD_Any are
     // logically considered to be the "same" Muldis D value then they will
-    // map to exactly the same .Net String value, and moreover, that iff 2
+    // map to exactly the same .NET String value, and moreover, that iff 2
     // MD_Any are logically considered to NOT be the "same" Muldis D value,
-    // they are guaranteed to map to distinct .Net String values.
+    // they are guaranteed to map to distinct .NET String values.
     // The outputs of this generator are intended for internal use only,
     // where the outputs are transient and only intended to be used within
-    // the same in-memory Muldis.D.Ref_Eng VM instance that generated them.
+    // the same in-memory Muldis.ReferenceEngine VM instance that generated them.
     // The intended use of this class is to produce normalized identity
-    // values for .Net collection indexes, Dictionary keys for example, or
+    // values for .NET collection indexes, Dictionary keys for example, or
     // otherwise support the means of primary/last resort for set-like
     // operations like duplicate elimination, relational joins, and more.
     // The outputs of this class may possibly conform to the
@@ -531,11 +531,11 @@ namespace Muldis.D.Ref_Eng.Core.Plain_Text
         }
     }
 
-    // Muldis.D.Ref_Eng.Core.Plain_Text.Preview_Generator
+    // Muldis.ReferenceEngine.Core.Plain_Text.Preview_Generator
     // Provides utility pure functions that accept any Muldis D "value"
-    // and derive a .Net String that provides a "preview quick look"
+    // and derive a .NET String that provides a "preview quick look"
     // serialization of that value.  The intended use of this class is to
-    // underlie a .Net ToString() override for all .Net values representing
+    // underlie a .NET ToString() override for all .NET values representing
     // Muldis D values so that debuggers including MS Visual Studio can
     // assist programmers at easily determining what the current logical
     // values of their program variables are, which would otherwise be

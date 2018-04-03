@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Muldis.DBP;
+using Muldis.DatabaseProtocol;
 
 [assembly: CLSCompliant(true)]
 
-namespace Muldis.D.Ref_Eng.Console
+namespace Muldis.ReferenceEngine.Console
 {
     public class Program
     {
@@ -54,7 +54,7 @@ namespace Muldis.D.Ref_Eng.Console
             }
 
             // Instantiate object of a Muldis DataBase Protocol provider information class.
-            IInfo provider_info = new Muldis.D.Ref_Eng.Info();
+            IInfo provider_info = new Muldis.ReferenceEngine.Info();
 
             // Request a VM object implementing a specific version of the MDBP or
             // what the info provider considers the next best fit version;
@@ -66,7 +66,7 @@ namespace Muldis.D.Ref_Eng.Console
             {
                 System.Console.WriteLine(
                     "The requested Muldis DataBase Protocol provider"
-                    + " information class [Muldis.D.Ref_Eng.Info]"
+                    + " information class [Muldis.ReferenceEngine.Info]"
                     + " doesn't provide the specific MDBP version needed.");
                 return;
             }
