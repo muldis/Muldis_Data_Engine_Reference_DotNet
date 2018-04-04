@@ -49,61 +49,15 @@ namespace Muldis.ReferenceEngine
             return this;
         }
 
-        public IExecutor Executor()
-        {
-            return new Executor().init(this);
-        }
-
-        public IImporter Importer()
-        {
-            return new Importer().init(this);
-        }
-    }
-
-    public class Executor : IExecutor
-    {
-        internal Machine       m_machine;
-        internal Core.Executor m_executor;
-
-        internal Executor init(Machine machine)
-        {
-            m_machine  = machine;
-            m_executor = machine.m_executor;
-            return this;
-        }
-
-        public IMachine Machine()
-        {
-            return m_machine;
-        }
-
         public IMD_Any Evaluates(IMD_Any function, IMD_Any args = null)
         {
-            return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
+            return Best_Fit_Public_Value(
                 m_executor.Evaluates(((MD_Any)function).m_value, ((MD_Any)args).m_value));
         }
 
         public void Performs(IMD_Any procedure, IMD_Any args = null)
         {
             m_executor.Performs(((MD_Any)procedure).m_value, ((MD_Any)args).m_value);
-        }
-    }
-
-    public class Importer : IImporter
-    {
-        internal Machine     m_machine;
-        internal Core.Memory m_memory;
-
-        internal Importer init(Machine machine)
-        {
-            m_machine = machine;
-            m_memory  = machine.m_memory;
-            return this;
-        }
-
-        public IMachine Machine()
-        {
-            return m_machine;
         }
 
         public IMD_Any MD_Any(Object value)
@@ -129,59 +83,59 @@ namespace Muldis.ReferenceEngine
             switch (value.MD_MSBT)
             {
                 case Core.MD_Well_Known_Base_Type.MD_Boolean:
-                    return (IMD_Boolean)new MD_Boolean().init(m_machine, value);
+                    return (IMD_Boolean)new MD_Boolean().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Integer:
-                    return (IMD_Integer)new MD_Integer().init(m_machine, value);
+                    return (IMD_Integer)new MD_Integer().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Fraction:
-                    return (IMD_Fraction)new MD_Fraction().init(m_machine, value);
+                    return (IMD_Fraction)new MD_Fraction().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Bits:
-                    return (IMD_Bits)new MD_Bits().init(m_machine, value);
+                    return (IMD_Bits)new MD_Bits().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Blob:
-                    return (IMD_Blob)new MD_Blob().init(m_machine, value);
+                    return (IMD_Blob)new MD_Blob().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Text:
-                    return (IMD_Text)new MD_Text().init(m_machine, value);
+                    return (IMD_Text)new MD_Text().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Array:
-                    return (IMD_Array)new MD_Array().init(m_machine, value);
+                    return (IMD_Array)new MD_Array().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Set:
-                    return (IMD_Set)new MD_Set().init(m_machine, value);
+                    return (IMD_Set)new MD_Set().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Bag:
-                    return (IMD_Bag)new MD_Bag().init(m_machine, value);
+                    return (IMD_Bag)new MD_Bag().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Tuple:
                     if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return (IMD_Heading)new MD_Heading().init(m_machine, value);
+                        return (IMD_Heading)new MD_Heading().init(this, value);
                     }
-                    return (IMD_Tuple)new MD_Tuple().init(m_machine, value);
+                    return (IMD_Tuple)new MD_Tuple().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Article:
                     if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Array) == true)
                     {
-                        return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine, value);
+                        return (IMD_Tuple_Array)new MD_Tuple_Array().init(this, value);
                     }
                     if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Relation) == true)
                     {
-                        return (IMD_Relation)new MD_Relation().init(m_machine, value);
+                        return (IMD_Relation)new MD_Relation().init(this, value);
                     }
                     if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Bag) == true)
                     {
-                        return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine, value);
+                        return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this, value);
                     }
-                    return (IMD_Article)new MD_Article().init(m_machine, value);
+                    return (IMD_Article)new MD_Article().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Variable:
-                    return (IMD_Variable)new MD_Variable().init(m_machine, value);
+                    return (IMD_Variable)new MD_Variable().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Process:
-                    return (IMD_Process)new MD_Process().init(m_machine, value);
+                    return (IMD_Process)new MD_Process().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Stream:
-                    return (IMD_Stream)new MD_Stream().init(m_machine, value);
+                    return (IMD_Stream)new MD_Stream().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_External:
-                    return (IMD_External)new MD_External().init(m_machine, value);
+                    return (IMD_External)new MD_External().init(this, value);
                 case Core.MD_Well_Known_Base_Type.MD_Excuse:
                 {
                     if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
                     {
                         return (IMD_No_Reason)new MD_No_Reason()
-                            .init(m_machine, value);
+                            .init(this, value);
                     }
-                    return (IMD_Excuse)new MD_Excuse().init(m_machine, value);
+                    return (IMD_Excuse)new MD_Excuse().init(this, value);
                 }
                 default:
                     throw new NotImplementedException();
@@ -584,7 +538,7 @@ namespace Muldis.ReferenceEngine
 
         public IMD_Boolean MD_Boolean(Boolean value)
         {
-            return (IMD_Boolean)new MD_Boolean().init(m_machine,
+            return (IMD_Boolean)new MD_Boolean().init(this,
                 m_memory.MD_Boolean(value));
         }
 
@@ -594,13 +548,13 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("value");
             }
-            return (IMD_Integer)new MD_Integer().init(m_machine,
+            return (IMD_Integer)new MD_Integer().init(this,
                 m_memory.MD_Integer(value));
         }
 
         public IMD_Integer MD_Integer(Int32 value)
         {
-            return (IMD_Integer)new MD_Integer().init(m_machine,
+            return (IMD_Integer)new MD_Integer().init(this,
                 m_memory.MD_Integer(value));
         }
 
@@ -614,7 +568,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("denominator");
             }
-            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+            return (IMD_Fraction)new MD_Fraction().init(this,
                 Core_MD_Fraction(
                     ((MD_Integer)numerator  ).m_value.MD_Integer(),
                     ((MD_Integer)denominator).m_value.MD_Integer()
@@ -632,19 +586,19 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("denominator");
             }
-            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+            return (IMD_Fraction)new MD_Fraction().init(this,
                 Core_MD_Fraction(numerator, denominator));
         }
 
         public IMD_Fraction MD_Fraction(Int32 numerator, Int32 denominator)
         {
-            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+            return (IMD_Fraction)new MD_Fraction().init(this,
                 Core_MD_Fraction(numerator, denominator));
         }
 
         public IMD_Fraction MD_Fraction(Decimal value)
         {
-            return (IMD_Fraction)new MD_Fraction().init(m_machine,
+            return (IMD_Fraction)new MD_Fraction().init(this,
                 m_memory.MD_Fraction(value));
         }
 
@@ -668,7 +622,7 @@ namespace Muldis.ReferenceEngine
                 throw new ArgumentNullException("members");
             }
             // BitArrays are mutable so clone argument to protect our internals.
-            return (IMD_Bits)new MD_Bits().init(m_machine,
+            return (IMD_Bits)new MD_Bits().init(this,
                 m_memory.MD_Bits(new BitArray(members)));
         }
 
@@ -679,7 +633,7 @@ namespace Muldis.ReferenceEngine
                 throw new ArgumentNullException("members");
             }
             // Arrays are mutable so clone argument to protect our internals.
-            return (IMD_Blob)new MD_Blob().init(m_machine,
+            return (IMD_Blob)new MD_Blob().init(this,
                 m_memory.MD_Blob(members.ToArray()));
         }
 
@@ -698,7 +652,7 @@ namespace Muldis.ReferenceEngine
                     message: "Can't select MD_Text with a malformed .NET String."
                 );
             }
-            return (IMD_Text)new MD_Text().init(m_machine,
+            return (IMD_Text)new MD_Text().init(this,
                 m_memory.MD_Text(
                     members,
                     (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
@@ -712,7 +666,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("members");
             }
-            return (IMD_Array)new MD_Array().init(m_machine,
+            return (IMD_Array)new MD_Array().init(this,
                 Core_MD_Array(members));
         }
 
@@ -731,7 +685,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("members");
             }
-            return (IMD_Set)new MD_Set().init(m_machine,
+            return (IMD_Set)new MD_Set().init(this,
                 Core_MD_Set(members));
         }
 
@@ -750,7 +704,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("members");
             }
-            return (IMD_Bag)new MD_Bag().init(m_machine,
+            return (IMD_Bag)new MD_Bag().init(this,
                 Core_MD_Bag(members));
         }
 
@@ -767,7 +721,7 @@ namespace Muldis.ReferenceEngine
             Object a0 = null, Object a1 = null, Object a2 = null,
             Dictionary<String,Object> attrs = null)
         {
-            return (IMD_Tuple)new MD_Tuple().init(m_machine,
+            return (IMD_Tuple)new MD_Tuple().init(this,
                 Core_MD_Tuple(a0, a1, a2, attrs));
         }
 
@@ -843,7 +797,7 @@ namespace Muldis.ReferenceEngine
             Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
             Nullable<Boolean> a2 = null, HashSet<String> attr_names = null)
         {
-            return (IMD_Heading)new MD_Heading().init(m_machine,
+            return (IMD_Heading)new MD_Heading().init(this,
                 Core_MD_Heading(a0, a1, a2, attr_names));
         }
 
@@ -867,7 +821,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("heading");
             }
-            return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine,
+            return (IMD_Tuple_Array)new MD_Tuple_Array().init(this,
                 Core_MD_Tuple_Array(heading));
         }
 
@@ -877,7 +831,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("body");
             }
-            return (IMD_Tuple_Array)new MD_Tuple_Array().init(m_machine,
+            return (IMD_Tuple_Array)new MD_Tuple_Array().init(this,
                 Core_MD_Tuple_Array(body));
         }
 
@@ -918,7 +872,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("heading");
             }
-            return (IMD_Relation)new MD_Relation().init(m_machine,
+            return (IMD_Relation)new MD_Relation().init(this,
                 Core_MD_Relation(heading));
         }
 
@@ -928,7 +882,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("body");
             }
-            return (IMD_Relation)new MD_Relation().init(m_machine,
+            return (IMD_Relation)new MD_Relation().init(this,
                 Core_MD_Relation(body));
         }
 
@@ -969,7 +923,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("heading");
             }
-            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine,
+            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this,
                 Core_MD_Tuple_Bag(heading));
         }
 
@@ -979,7 +933,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("body");
             }
-            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(m_machine,
+            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this,
                 Core_MD_Tuple_Bag(body));
         }
 
@@ -1024,7 +978,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Article)new MD_Article().init(m_machine,
+            return (IMD_Article)new MD_Article().init(this,
                 m_memory.MD_Article(
                     ((MD_Any)label).m_value, ((MD_Any)attrs).m_value
                 )
@@ -1051,7 +1005,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Article)new MD_Article().init(m_machine,
+            return (IMD_Article)new MD_Article().init(this,
                 m_memory.MD_Article(
                     m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value
                 )
@@ -1081,7 +1035,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Article)new MD_Article().init(m_machine,
+            return (IMD_Article)new MD_Article().init(this,
                 m_memory.MD_Article(
                     m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
                         m => m_memory.MD_Attr_Name(m)
@@ -1096,25 +1050,25 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("initial_current_value");
             }
-            return (IMD_Variable)new MD_Variable().init(m_machine,
+            return (IMD_Variable)new MD_Variable().init(this,
                 m_memory.New_MD_Variable(((MD_Any)initial_current_value).m_value));
         }
 
         public IMD_Process New_MD_Process()
         {
-            return (IMD_Process)new MD_Process().init(m_machine,
+            return (IMD_Process)new MD_Process().init(this,
                 m_memory.New_MD_Process());
         }
 
         public IMD_Stream New_MD_Stream()
         {
-            return (IMD_Stream)new MD_Stream().init(m_machine,
+            return (IMD_Stream)new MD_Stream().init(this,
                 m_memory.New_MD_Stream());
         }
 
         public IMD_External New_MD_External(Object value)
         {
-            return (IMD_External)new MD_External().init(m_machine,
+            return (IMD_External)new MD_External().init(this,
                 m_memory.New_MD_External(value));
         }
 
@@ -1124,7 +1078,7 @@ namespace Muldis.ReferenceEngine
             {
                 throw new ArgumentNullException("attrs");
             }
-            return (IMD_Excuse)new MD_Excuse().init(m_machine,
+            return (IMD_Excuse)new MD_Excuse().init(this,
                 m_memory.MD_Excuse(((MD_Tuple)attrs).m_value));
         }
 
@@ -1137,7 +1091,7 @@ namespace Muldis.ReferenceEngine
             if (value == "No_Reason")
             {
                 return (IMD_No_Reason)new MD_No_Reason()
-                    .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
+                    .init(this, m_memory.Simple_MD_Excuse("No_Reason"));
             }
             if (m_memory.Test_Dot_Net_String(value)
                 == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -1149,14 +1103,14 @@ namespace Muldis.ReferenceEngine
                         + " that is a malformed .NET String."
                 );
             }
-            return (IMD_Excuse)new MD_Excuse().init(m_machine,
+            return (IMD_Excuse)new MD_Excuse().init(this,
                 m_memory.Simple_MD_Excuse(value));
         }
 
         public IMD_No_Reason MD_No_Reason()
         {
             return (IMD_No_Reason)new MD_No_Reason()
-                .init(m_machine, m_memory.Simple_MD_Excuse("No_Reason"));
+                .init(this, m_memory.Simple_MD_Excuse("No_Reason"));
         }
 
         public IMD_Heading MD_Attr_Name(String label)
@@ -1174,7 +1128,7 @@ namespace Muldis.ReferenceEngine
                     message: "Can't select MD_Attr_Name with a malformed .NET String."
                 );
             }
-            return (IMD_Heading)new MD_Heading().init(m_machine,
+            return (IMD_Heading)new MD_Heading().init(this,
                 m_memory.MD_Attr_Name(label)
             );
         }
@@ -1198,7 +1152,7 @@ namespace Muldis.ReferenceEngine
                     );
                 }
             }
-            return (IMD_Array)new MD_Array().init(m_machine,
+            return (IMD_Array)new MD_Array().init(this,
                 m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
                     m => m_memory.MD_Attr_Name(m)
                 )))
@@ -1320,7 +1274,7 @@ namespace Muldis.ReferenceEngine.Value
     {
         public IMD_Any Current()
         {
-            return ((Importer)m_machine.Importer()).Best_Fit_Public_Value(
+            return m_machine.Best_Fit_Public_Value(
                 m_value.MD_Variable());
         }
 

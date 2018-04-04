@@ -70,8 +70,6 @@ namespace Muldis.ReferenceEngine.Console
                     + " doesn't provide the specific MDBP version needed.");
                 return;
             }
-            IExecutor vme = machine.Executor();
-            IImporter vmi = machine.Importer();
 
             // File system path for the file containing plain text source
             // code that the user wishes to execute as their main program.
@@ -105,47 +103,47 @@ namespace Muldis.ReferenceEngine.Console
 
             // Import the user-specified source code file's raw content into
             // the MDBP-implementing virtual machine where it would be used.
-            IMD_Blob source_code_blob = vmi.MD_Blob(source_code_file_content);
+            IMD_Blob source_code_blob = machine.MD_Blob(source_code_file_content);
 
             // Try to parse the file content into canonical format VM source code.
-            IMD_Any maybe_source_code_text = vme.Evaluates(
-                vmi.MD_Attr_Name_List(new String[] {"foundation", "Text_from_UTF_8_Blob"}),
-                vmi.MD_Tuple(source_code_blob)
+            IMD_Any maybe_source_code_text = machine.Evaluates(
+                machine.MD_Attr_Name_List(new String[] {"foundation", "Text_from_UTF_8_Blob"}),
+                machine.MD_Tuple(source_code_blob)
             );
-            if (((IMD_Boolean)vme.Evaluates(
-                vmi.MD_Attr_Name_List(new String[] {"foundation", "Excuse"}),
-                vmi.MD_Tuple(maybe_source_code_text))).Export_Boolean())
+            if (((IMD_Boolean)machine.Evaluates(
+                machine.MD_Attr_Name_List(new String[] {"foundation", "Excuse"}),
+                machine.MD_Tuple(maybe_source_code_text))).Export_Boolean())
             {
                 System.Console.WriteLine("The requested source code providing file"
                     + " [" + source_code_file_path + "] is not well-formed UTF-8 text:"
                     + " " + maybe_source_code_text.ToString());
                 return;
             }
-            IMD_Any maybe_source_code = vme.Evaluates(
-                vmi.MD_Attr_Name_List(new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"}),
-                vmi.MD_Tuple(maybe_source_code_text)
+            IMD_Any maybe_source_code = machine.Evaluates(
+                machine.MD_Attr_Name_List(new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"}),
+                machine.MD_Tuple(maybe_source_code_text)
             );
 
             // Temporary Executor test.
-            IMD_Integer sum = (IMD_Integer)vme.Evaluates(
-                vmi.MD_Attr_Name_List(new String[] {"foundation", "Integer_plus"}),
-                vmi.MD_Tuple(27,39)
+            IMD_Integer sum = (IMD_Integer)machine.Evaluates(
+                machine.MD_Attr_Name_List(new String[] {"foundation", "Integer_plus"}),
+                machine.MD_Tuple(27,39)
             );
-            IMD_Tuple that = vmi.MD_Tuple(27,39);
-            IMD_Tuple that_too = vmi.MD_Tuple(attrs: new Dictionary<String,Object>()
+            IMD_Tuple that = machine.MD_Tuple(27,39);
+            IMD_Tuple that_too = machine.MD_Tuple(attrs: new Dictionary<String,Object>()
                 {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
             );
-            IMD_Text the_other = vmi.MD_Text("Fr ⊂ ac 💩 ti ÷ on");
-            IMD_Fraction f0 = vmi.MD_Fraction(014.0M);
-            IMD_Fraction f1 = vmi.MD_Fraction(2.3M);
-            IMD_Fraction f2 = vmi.MD_Fraction(02340233.23402532000M);
-            IMD_Fraction f3 = vmi.MD_Fraction(13,5);
-            IMD_Fraction f4 = vmi.MD_Fraction(27,6);
-            IMD_Fraction f5 = vmi.MD_Fraction(35,-41);
-            IMD_Fraction f6 = vmi.MD_Fraction(-54235435432,32543252);
-            IMD_Fraction f7 = vmi.MD_Fraction(26,13);
-            IMD_Fraction f8 = vmi.MD_Fraction(5,1);
-            IMD_Fraction f9 = vmi.MD_Fraction(5,-1);
+            IMD_Text the_other = machine.MD_Text("Fr ⊂ ac 💩 ti ÷ on");
+            IMD_Fraction f0 = machine.MD_Fraction(014.0M);
+            IMD_Fraction f1 = machine.MD_Fraction(2.3M);
+            IMD_Fraction f2 = machine.MD_Fraction(02340233.23402532000M);
+            IMD_Fraction f3 = machine.MD_Fraction(13,5);
+            IMD_Fraction f4 = machine.MD_Fraction(27,6);
+            IMD_Fraction f5 = machine.MD_Fraction(35,-41);
+            IMD_Fraction f6 = machine.MD_Fraction(-54235435432,32543252);
+            IMD_Fraction f7 = machine.MD_Fraction(26,13);
+            IMD_Fraction f8 = machine.MD_Fraction(5,1);
+            IMD_Fraction f9 = machine.MD_Fraction(5,-1);
         }
     }
 }
