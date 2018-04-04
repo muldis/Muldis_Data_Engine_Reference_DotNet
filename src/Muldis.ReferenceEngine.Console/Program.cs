@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Muldis.DatabaseProtocol;
 
 [assembly: CLSCompliant(true)]
@@ -11,21 +12,70 @@ namespace Muldis.ReferenceEngine.Console
     {
         public static void Main(String[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 // TODO: Review whether host_executable_path reflects actual
                 // main program invocation syntax or not, and accounts for
                 // the varied host operating systems or compiled vs debugged.
                 String host_executable_path
                     = System.Reflection.Assembly.GetEntryAssembly().Location;
-                System.Console.WriteLine(
-                    "Usage: " + host_executable_path + " <source_code_file_path>");
+                System.Console.WriteLine("Usage: " + host_executable_path
+                    + " <MDBP_provider_info_class_name> <source_code_file_path>");
                 return;
             }
 
+            // Name of class we expect to implement Muldis DataBase Protocol provider information interface.
+            String MDBP_provider_info_class_name = args[0];
+
+            // Try and load the provider info class, or die.
+            // Note, generally the class name needs to be assembly-qualified for
+            // GetType() to find it; eg "Company.Project.Class,Company.Project" works.
+            Type provider_info_class = Type.GetType(MDBP_provider_info_class_name);
+            if (provider_info_class == null)
+            {
+                System.Console.WriteLine(
+                    "The requested MDBP provider information class"
+                    + " [" + MDBP_provider_info_class_name + "] can't be loaded;"
+                    + " perhaps it needs to be fully qualified with the assembly name.");
+                return;
+            }
+
+            // Die unless the provider info class explicitly declares it implements MDBP.
+            if (!Enumerable.Any(provider_info_class.GetMethods(),
+                t => t.Name == "Provides_Dot_Net_Muldis_DBP"))
+            {
+                System.Console.WriteLine(
+                    "The requested MDBP provider information class"
+                    + " [" + MDBP_provider_info_class_name + "]"
+                    + " doesn't declare that it provides a MDBP API"
+                    + " by declaring the method [Provides_Dot_Net_Muldis_DBP].");
+                return;
+            }
+
+            // Instantiate object of a Muldis DataBase Protocol provider information class.
+            IInfo provider_info
+                = (IInfo)Activator.CreateInstance(provider_info_class);
+
+            // Request a VM object implementing a specific version of the MDBP or
+            // what the info provider considers the next best fit version;
+            // this would die if it thinks it can't satisfy an acceptable version.
+            // We will use this for all the main work.
+            IMachine machine = provider_info.Want_VM_API(
+                new String[] {"Muldis_DBP_DotNet", "http://muldis.com", "0.1.0.-9"});
+            if (machine == null)
+            {
+                System.Console.WriteLine(
+                    "The requested Muldis DataBase Protocol provider"
+                    + " information class [" + MDBP_provider_info_class_name + "]"
+                    + " doesn't provide the specific MDBP version needed.");
+                return;
+            }
+            IExecutor vme = machine.Executor();
+            IImporter vmi = machine.Importer();
+
             // File system path for the file containing plain text source
             // code that the user wishes to execute as their main program.
-            String source_code_file_path = args[0];
+            String source_code_file_path = args[1];
 
             // If the user-specified file path is absolute, Path.Combine()
             // will just use that as the final path; otherwise it is taken
@@ -52,26 +102,6 @@ namespace Muldis.ReferenceEngine.Console
                     + " " + e.ToString());
                 return;
             }
-
-            // Instantiate object of a Muldis DataBase Protocol provider information class.
-            IInfo provider_info = new Muldis.ReferenceEngine.Info();
-
-            // Request a VM object implementing a specific version of the MDBP or
-            // what the info provider considers the next best fit version;
-            // this would die if it thinks it can't satisfy an acceptable version.
-            // We will use this for all the main work.
-            IMachine machine = provider_info.Want_VM_API(
-                new String[] {"Muldis_DBP_DotNet", "http://muldis.com", "0.1.0.-9"});
-            if (machine == null)
-            {
-                System.Console.WriteLine(
-                    "The requested Muldis DataBase Protocol provider"
-                    + " information class [Muldis.ReferenceEngine.Info]"
-                    + " doesn't provide the specific MDBP version needed.");
-                return;
-            }
-            IExecutor vme = machine.Executor();
-            IImporter vmi = machine.Importer();
 
             // Import the user-specified source code file's raw content into
             // the MDBP-implementing virtual machine where it would be used.
