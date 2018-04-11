@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
 
 [assembly: CLSCompliant(true)]
@@ -16,14 +14,14 @@ namespace Muldis.DatabaseProtocol
 
     public interface IMachine
     {
-        IMD_Any Evaluates(IMD_Any function, IMD_Any args = null);
+        IValue Evaluates(IValue function, IValue args = null);
 
-        void Performs(IMD_Any procedure, IMD_Any args = null);
+        void Performs(IValue procedure, IValue args = null);
 
-        IMD_Any MD_Any(Object value);
+        IValue MD_Any(Object value);
     }
 
-    public interface IMD_Any
+    public interface IValue
     {
         IMachine Machine();
 
@@ -33,9 +31,9 @@ namespace Muldis.DatabaseProtocol
 
         Int32 Export_Int32();
 
-        IMD_Any Current();
+        IValue Current();
 
-        void Assign(IMD_Any value);
+        void Assign(IValue value);
 
         Object Export_External_Object();
     }
