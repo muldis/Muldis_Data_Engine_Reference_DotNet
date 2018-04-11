@@ -218,31 +218,29 @@ namespace Muldis.ReferenceEngine
                 case "Tuple":
                     if (type_name == "System.Object[]")
                     {
-                        return Core_MD_Tuple(
+                        return Core_MD_Tuple__Ordered(
                             a0: ((Object[])v).Length >= 1 ? ((Object[])v)[0] : null,
                             a1: ((Object[])v).Length >= 2 ? ((Object[])v)[1] : null,
-                            a2: ((Object[])v).Length >= 3 ? ((Object[])v)[2] : null,
-                            attrs: ((Object[])v).Length >= 4 ? (Dictionary<String,Object>)(((Object[])v)[3]) : null
+                            a2: ((Object[])v).Length >= 3 ? ((Object[])v)[2] : null
                         );
                     }
                     if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                     {
-                        return Core_MD_Tuple(attrs: (Dictionary<String,Object>)v);
+                        return Core_MD_Tuple__Named(attrs: (Dictionary<String,Object>)v);
                     }
                     break;
                 case "Heading":
                     if (type_name == "System.Object[]")
                     {
-                        return Core_MD_Heading(
+                        return Core_MD_Heading__Ordered(
                             a0: ((Object[])v).Length >= 1 ? (Nullable<Boolean>)((Object[])v)[0] : null,
                             a1: ((Object[])v).Length >= 2 ? (Nullable<Boolean>)((Object[])v)[1] : null,
-                            a2: ((Object[])v).Length >= 3 ? (Nullable<Boolean>)((Object[])v)[2] : null,
-                            attr_names: ((Object[])v).Length >= 4 ? (HashSet<String>)(((Object[])v)[3]) : null
+                            a2: ((Object[])v).Length >= 3 ? (Nullable<Boolean>)((Object[])v)[2] : null
                         );
                     }
                     if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                     {
-                        return Core_MD_Heading(attr_names: (HashSet<String>)v);
+                        return Core_MD_Heading__Named(attr_names: (HashSet<String>)v);
                     }
                     break;
                 case "Tuple_Array":
@@ -539,66 +537,20 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        private Core.MD_Any Core_MD_Tuple(
-            Object a0 = null, Object a1 = null, Object a2 = null,
-            Dictionary<String,Object> attrs = null)
+        private Core.MD_Any Core_MD_Tuple__Ordered(
+            Object a0 = null, Object a1 = null, Object a2 = null)
         {
-            if (attrs != null)
-            {
-                foreach (String atnm in attrs.Keys)
-                {
-                    if (m_memory.Test_Dot_Net_String(atnm)
-                        == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "attrs",
-                            message: "Can't select MD_Tuple with attribute"
-                                + " name that is a malformed .NET String."
-                        );
-                    }
-                }
-            }
-            // Dictionary are mutable so clone argument to protect caller.
-            attrs = (attrs == null) ? new Dictionary<String,Object>()
-                : new Dictionary<String,Object>(attrs);
+            Dictionary<String,Object> attrs = new Dictionary<String,Object>();
             if (a0 != null)
             {
-                if (attrs.ContainsKey("\u0000"))
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attrs",
-                        message: "Can't select MD_Tuple with same-named"
-                            + " attribute in both [a0] and [attrs] args."
-                    );
-                }
                 attrs.Add("\u0000", a0);
             }
             if (a1 != null)
             {
-                if (attrs.ContainsKey("\u0001"))
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attrs",
-                        message: "Can't select MD_Tuple with same-named"
-                            + " attribute in both [a1] and [attrs] args."
-                    );
-                }
                 attrs.Add("\u0001", a1);
             }
             if (a2 != null)
             {
-                if (attrs.ContainsKey("\u0002"))
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attrs",
-                        message: "Can't select MD_Tuple with same-named"
-                            + " attribute in both [a2] and [attrs] args."
-                    );
-                }
                 attrs.Add("\u0002", a2);
             }
             return m_memory.MD_Tuple(
@@ -607,17 +559,43 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        private Core.MD_Any Core_MD_Heading(
-            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null)
+        private Core.MD_Any Core_MD_Tuple__Named(Dictionary<String,Object> attrs)
         {
-            return Core_MD_Tuple(
+            foreach (String atnm in attrs.Keys)
+            {
+                if (m_memory.Test_Dot_Net_String(atnm)
+                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                {
+                    throw new ArgumentException
+                    (
+                        paramName: "attrs",
+                        message: "Can't select MD_Tuple with attribute"
+                            + " name that is a malformed .NET String."
+                    );
+                }
+            }
+            return m_memory.MD_Tuple(
+                new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                    a => a.Key, a => Core_MD_Any(a.Value)))
+            );
+        }
+
+        private Core.MD_Any Core_MD_Heading__Ordered(
+            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
+            Nullable<Boolean> a2 = null)
+        {
+            return Core_MD_Tuple__Ordered(
                 a0: (a0 == null || a0 == false) ? (Object)null : true,
                 a1: (a1 == null || a1 == false) ? (Object)null : true,
-                a2: (a2 == null || a2 == false) ? (Object)null : true,
-                attrs: attr_names == null ? null
-                    : new Dictionary<String,Object>(
-                        attr_names.ToDictionary(a => a, a => (Object)true))
+                a2: (a2 == null || a2 == false) ? (Object)null : true
+            );
+        }
+
+        private Core.MD_Any Core_MD_Heading__Named(HashSet<String> attr_names)
+        {
+            return Core_MD_Tuple__Named(
+                attrs: new Dictionary<String,Object>(
+                    attr_names.ToDictionary(a => a, a => (Object)true))
             );
         }
 
