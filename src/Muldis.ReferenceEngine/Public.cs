@@ -280,12 +280,30 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple":
+                    if (type_name == "System.Object[]")
+                    {
+                        return Core_MD_Tuple(
+                            a0: ((Object[])v).Length >= 1 ? ((Object[])v)[0] : null,
+                            a1: ((Object[])v).Length >= 2 ? ((Object[])v)[1] : null,
+                            a2: ((Object[])v).Length >= 3 ? ((Object[])v)[2] : null,
+                            attrs: ((Object[])v).Length >= 4 ? (Dictionary<String,Object>)(((Object[])v)[3]) : null
+                        );
+                    }
                     if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                     {
                         return Core_MD_Tuple(attrs: (Dictionary<String,Object>)v);
                     }
                     break;
                 case "Heading":
+                    if (type_name == "System.Object[]")
+                    {
+                        return Core_MD_Heading(
+                            a0: ((Object[])v).Length >= 1 ? (Nullable<Boolean>)((Object[])v)[0] : null,
+                            a1: ((Object[])v).Length >= 2 ? (Nullable<Boolean>)((Object[])v)[1] : null,
+                            a2: ((Object[])v).Length >= 3 ? (Nullable<Boolean>)((Object[])v)[2] : null,
+                            attr_names: ((Object[])v).Length >= 4 ? (HashSet<String>)(((Object[])v)[3]) : null
+                        );
+                    }
                     if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                     {
                         return Core_MD_Heading(attr_names: (HashSet<String>)v);
@@ -576,14 +594,6 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        public IMD_Tuple MD_Tuple(
-            Object a0 = null, Object a1 = null, Object a2 = null,
-            Dictionary<String,Object> attrs = null)
-        {
-            return (IMD_Tuple)new MD_Tuple().init(this,
-                Core_MD_Tuple(a0, a1, a2, attrs));
-        }
-
         private Core.MD_Any Core_MD_Tuple(
             Object a0 = null, Object a1 = null, Object a2 = null,
             Dictionary<String,Object> attrs = null)
@@ -650,14 +660,6 @@ namespace Muldis.ReferenceEngine
                 new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
                     a => a.Key, a => Core_MD_Any(a.Value)))
             );
-        }
-
-        public IMD_Heading MD_Heading(
-            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null)
-        {
-            return (IMD_Heading)new MD_Heading().init(this,
-                Core_MD_Heading(a0, a1, a2, attr_names));
         }
 
         private Core.MD_Any Core_MD_Heading(

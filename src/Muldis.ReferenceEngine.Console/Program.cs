@@ -109,11 +109,11 @@ namespace Muldis.ReferenceEngine.Console
             // Try to parse the file content into canonical format VM source code.
             IMD_Any maybe_source_code_text = machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
-                machine.MD_Tuple(source_code_blob)
+                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
             );
             if (((IMD_Boolean)machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-                machine.MD_Tuple(maybe_source_code_text))).Export_Boolean())
+                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Export_Boolean())
             {
                 System.Console.WriteLine("The requested source code providing file"
                     + " [" + source_code_file_path + "] is not well-formed UTF-8 text:"
@@ -122,18 +122,18 @@ namespace Muldis.ReferenceEngine.Console
             }
             IMD_Any maybe_source_code = machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
-                machine.MD_Tuple(maybe_source_code_text)
+                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text}))
             );
 
             // Temporary Executor test.
             IMD_Integer sum = (IMD_Integer)machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
-                machine.MD_Tuple(27,39)
+                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
             );
-            IMD_Tuple that = machine.MD_Tuple(27,39);
-            IMD_Tuple that_too = machine.MD_Tuple(attrs: new Dictionary<String,Object>()
+            IMD_Tuple that = (IMD_Tuple)machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+            IMD_Tuple that_too = (IMD_Tuple)machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
                 {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
-            );
+            ));
             IMD_Text the_other = (IMD_Text)machine.MD_Any("Fr ⊂ ac 💩 ti ÷ on");
             IMD_Fraction f0 = (IMD_Fraction)machine.MD_Any(014.0M);
             IMD_Fraction f1 = (IMD_Fraction)machine.MD_Any(2.3M);

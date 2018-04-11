@@ -21,14 +21,6 @@ namespace Muldis.DatabaseProtocol
         void Performs(IMD_Any procedure, IMD_Any args = null);
 
         IMD_Any MD_Any(Object value);
-
-        IMD_Tuple MD_Tuple(
-            Object a0 = null, Object a1 = null, Object a2 = null,
-            Dictionary<String,Object> attrs = null);
-
-        IMD_Heading MD_Heading(
-            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null, HashSet<String> attr_names = null);
     }
 
     public interface IMD_Any
