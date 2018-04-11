@@ -536,72 +536,6 @@ namespace Muldis.ReferenceEngine
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
 
-        public IMD_Boolean MD_Boolean(Boolean value)
-        {
-            return (IMD_Boolean)new MD_Boolean().init(this,
-                m_memory.MD_Boolean(value));
-        }
-
-        public IMD_Integer MD_Integer(BigInteger value)
-        {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            return (IMD_Integer)new MD_Integer().init(this,
-                m_memory.MD_Integer(value));
-        }
-
-        public IMD_Integer MD_Integer(Int32 value)
-        {
-            return (IMD_Integer)new MD_Integer().init(this,
-                m_memory.MD_Integer(value));
-        }
-
-        public IMD_Fraction MD_Fraction(IMD_Integer numerator, IMD_Integer denominator)
-        {
-            if (numerator == null)
-            {
-                throw new ArgumentNullException("numerator");
-            }
-            if (denominator == null)
-            {
-                throw new ArgumentNullException("denominator");
-            }
-            return (IMD_Fraction)new MD_Fraction().init(this,
-                Core_MD_Fraction(
-                    ((MD_Integer)numerator  ).m_value.MD_Integer(),
-                    ((MD_Integer)denominator).m_value.MD_Integer()
-                )
-            );
-        }
-
-        public IMD_Fraction MD_Fraction(BigInteger numerator, BigInteger denominator)
-        {
-            if (numerator == null)
-            {
-                throw new ArgumentNullException("numerator");
-            }
-            if (denominator == null)
-            {
-                throw new ArgumentNullException("denominator");
-            }
-            return (IMD_Fraction)new MD_Fraction().init(this,
-                Core_MD_Fraction(numerator, denominator));
-        }
-
-        public IMD_Fraction MD_Fraction(Int32 numerator, Int32 denominator)
-        {
-            return (IMD_Fraction)new MD_Fraction().init(this,
-                Core_MD_Fraction(numerator, denominator));
-        }
-
-        public IMD_Fraction MD_Fraction(Decimal value)
-        {
-            return (IMD_Fraction)new MD_Fraction().init(this,
-                m_memory.MD_Fraction(value));
-        }
-
         private Core.MD_Any Core_MD_Fraction(BigInteger numerator, BigInteger denominator)
         {
             if (denominator == 0)
@@ -615,61 +549,6 @@ namespace Muldis.ReferenceEngine
             return m_memory.MD_Fraction(numerator, denominator);
         }
 
-        public IMD_Bits MD_Bits(BitArray members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            // BitArrays are mutable so clone argument to protect our internals.
-            return (IMD_Bits)new MD_Bits().init(this,
-                m_memory.MD_Bits(new BitArray(members)));
-        }
-
-        public IMD_Blob MD_Blob(Byte[] members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            // Arrays are mutable so clone argument to protect our internals.
-            return (IMD_Blob)new MD_Blob().init(this,
-                m_memory.MD_Blob(members.ToArray()));
-        }
-
-        public IMD_Text MD_Text(String members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String(members);
-            if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "members",
-                    message: "Can't select MD_Text with a malformed .NET String."
-                );
-            }
-            return (IMD_Text)new MD_Text().init(this,
-                m_memory.MD_Text(
-                    members,
-                    (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
-                )
-            );
-        }
-
-        public IMD_Array MD_Array(List<Object> members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            return (IMD_Array)new MD_Array().init(this,
-                Core_MD_Array(members));
-        }
-
         private Core.MD_Any Core_MD_Array(List<Object> members)
         {
             return m_memory.MD_Array(
@@ -679,16 +558,6 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        public IMD_Set MD_Set(List<Object> members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            return (IMD_Set)new MD_Set().init(this,
-                Core_MD_Set(members));
-        }
-
         private Core.MD_Any Core_MD_Set(List<Object> members)
         {
             return m_memory.MD_Set(
@@ -696,16 +565,6 @@ namespace Muldis.ReferenceEngine
                     m => new Core.Multiplied_Member(Core_MD_Any(m))
                 ))
             );
-        }
-
-        public IMD_Bag MD_Bag(List<Object> members)
-        {
-            if (members == null)
-            {
-                throw new ArgumentNullException("members");
-            }
-            return (IMD_Bag)new MD_Bag().init(this,
-                Core_MD_Bag(members));
         }
 
         private Core.MD_Any Core_MD_Bag(List<Object> members)
@@ -815,26 +674,6 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        public IMD_Tuple_Array MD_Tuple_Array(IMD_Heading heading)
-        {
-            if (heading == null)
-            {
-                throw new ArgumentNullException("heading");
-            }
-            return (IMD_Tuple_Array)new MD_Tuple_Array().init(this,
-                Core_MD_Tuple_Array(heading));
-        }
-
-        public IMD_Tuple_Array MD_Tuple_Array(IMD_Array body)
-        {
-            if (body == null)
-            {
-                throw new ArgumentNullException("body");
-            }
-            return (IMD_Tuple_Array)new MD_Tuple_Array().init(this,
-                Core_MD_Tuple_Array(body));
-        }
-
         private Core.MD_Any Core_MD_Tuple_Array(IMD_Heading heading)
         {
             Core.MD_Any hv = ((MD_Heading)heading).m_value;
@@ -864,26 +703,6 @@ namespace Muldis.ReferenceEngine
                 );
             }
             return m_memory.MD_Tuple_Array(hv, bv);
-        }
-
-        public IMD_Relation MD_Relation(IMD_Heading heading)
-        {
-            if (heading == null)
-            {
-                throw new ArgumentNullException("heading");
-            }
-            return (IMD_Relation)new MD_Relation().init(this,
-                Core_MD_Relation(heading));
-        }
-
-        public IMD_Relation MD_Relation(IMD_Set body)
-        {
-            if (body == null)
-            {
-                throw new ArgumentNullException("body");
-            }
-            return (IMD_Relation)new MD_Relation().init(this,
-                Core_MD_Relation(body));
         }
 
         private Core.MD_Any Core_MD_Relation(IMD_Heading heading)
@@ -917,26 +736,6 @@ namespace Muldis.ReferenceEngine
             return m_memory.MD_Relation(hv, bv);
         }
 
-        public IMD_Tuple_Bag MD_Tuple_Bag(IMD_Heading heading)
-        {
-            if (heading == null)
-            {
-                throw new ArgumentNullException("heading");
-            }
-            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this,
-                Core_MD_Tuple_Bag(heading));
-        }
-
-        public IMD_Tuple_Bag MD_Tuple_Bag(IMD_Bag body)
-        {
-            if (body == null)
-            {
-                throw new ArgumentNullException("body");
-            }
-            return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this,
-                Core_MD_Tuple_Bag(body));
-        }
-
         private Core.MD_Any Core_MD_Tuple_Bag(IMD_Heading heading)
         {
             Core.MD_Any hv = ((MD_Heading)heading).m_value;
@@ -966,197 +765,6 @@ namespace Muldis.ReferenceEngine
                 );
             }
             return m_memory.MD_Tuple_Bag(hv, bv);
-        }
-
-        public IMD_Article MD_Article(IMD_Any label, IMD_Tuple attrs)
-        {
-            if (label == null)
-            {
-                throw new ArgumentNullException("label");
-            }
-            if (attrs == null)
-            {
-                throw new ArgumentNullException("attrs");
-            }
-            return (IMD_Article)new MD_Article().init(this,
-                m_memory.MD_Article(
-                    ((MD_Any)label).m_value, ((MD_Any)attrs).m_value
-                )
-            );
-        }
-
-        public IMD_Article MD_Article(String label, IMD_Tuple attrs)
-        {
-            if (label == null)
-            {
-                throw new ArgumentNullException("label");
-            }
-            if (m_memory.Test_Dot_Net_String(label)
-                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "label",
-                    message: "Can't select MD_Article with label"
-                        + " that is a malformed .NET String."
-                );
-            }
-            if (attrs == null)
-            {
-                throw new ArgumentNullException("attrs");
-            }
-            return (IMD_Article)new MD_Article().init(this,
-                m_memory.MD_Article(
-                    m_memory.MD_Attr_Name(label), ((MD_Any)attrs).m_value
-                )
-            );
-        }
-
-        public IMD_Article MD_Article(String[] label, IMD_Tuple attrs)
-        {
-            if (label == null)
-            {
-                throw new ArgumentNullException("label");
-            }
-            foreach (String s in label)
-            {
-                if (m_memory.Test_Dot_Net_String(s)
-                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "label",
-                        message: "Can't select MD_Article with label"
-                            + " that includes a malformed .NET String."
-                    );
-                }
-            }
-            if (attrs == null)
-            {
-                throw new ArgumentNullException("attrs");
-            }
-            return (IMD_Article)new MD_Article().init(this,
-                m_memory.MD_Article(
-                    m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
-                        m => m_memory.MD_Attr_Name(m)
-                    ))),
-                    ((MD_Any)attrs).m_value
-                ));
-        }
-
-        public IMD_Variable New_MD_Variable(IMD_Any initial_current_value)
-        {
-            if (initial_current_value == null)
-            {
-                throw new ArgumentNullException("initial_current_value");
-            }
-            return (IMD_Variable)new MD_Variable().init(this,
-                m_memory.New_MD_Variable(((MD_Any)initial_current_value).m_value));
-        }
-
-        public IMD_Process New_MD_Process()
-        {
-            return (IMD_Process)new MD_Process().init(this,
-                m_memory.New_MD_Process());
-        }
-
-        public IMD_Stream New_MD_Stream()
-        {
-            return (IMD_Stream)new MD_Stream().init(this,
-                m_memory.New_MD_Stream());
-        }
-
-        public IMD_External New_MD_External(Object value)
-        {
-            return (IMD_External)new MD_External().init(this,
-                m_memory.New_MD_External(value));
-        }
-
-        public IMD_Excuse MD_Excuse(IMD_Tuple attrs)
-        {
-            if (attrs == null)
-            {
-                throw new ArgumentNullException("attrs");
-            }
-            return (IMD_Excuse)new MD_Excuse().init(this,
-                m_memory.MD_Excuse(((MD_Tuple)attrs).m_value));
-        }
-
-        public IMD_Excuse MD_Excuse(String value)
-        {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            if (value == "No_Reason")
-            {
-                return (IMD_No_Reason)new MD_No_Reason()
-                    .init(this, m_memory.Simple_MD_Excuse("No_Reason"));
-            }
-            if (m_memory.Test_Dot_Net_String(value)
-                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "value",
-                    message: "Can't select MD_Excuse with label"
-                        + " that is a malformed .NET String."
-                );
-            }
-            return (IMD_Excuse)new MD_Excuse().init(this,
-                m_memory.Simple_MD_Excuse(value));
-        }
-
-        public IMD_No_Reason MD_No_Reason()
-        {
-            return (IMD_No_Reason)new MD_No_Reason()
-                .init(this, m_memory.Simple_MD_Excuse("No_Reason"));
-        }
-
-        public IMD_Heading MD_Attr_Name(String label)
-        {
-            if (label == null)
-            {
-                throw new ArgumentNullException("label");
-            }
-            if (m_memory.Test_Dot_Net_String(label)
-                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "label",
-                    message: "Can't select MD_Attr_Name with a malformed .NET String."
-                );
-            }
-            return (IMD_Heading)new MD_Heading().init(this,
-                m_memory.MD_Attr_Name(label)
-            );
-        }
-
-        public IMD_Array MD_Attr_Name_List(String[] label)
-        {
-            if (label == null)
-            {
-                throw new ArgumentNullException("label");
-            }
-            foreach (String s in label)
-            {
-                if (m_memory.Test_Dot_Net_String(s)
-                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "label",
-                        message: "Can't select MD_Attr_Name_List with"
-                            + " member that is a malformed .NET String."
-                    );
-                }
-            }
-            return (IMD_Array)new MD_Array().init(this,
-                m_memory.MD_Array(new List<Core.MD_Any>(label.Select(
-                    m => m_memory.MD_Attr_Name(m)
-                )))
-            );
         }
     }
 }
