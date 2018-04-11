@@ -104,14 +104,14 @@ namespace Muldis.ReferenceEngine.Console
 
             // Import the user-specified source code file's raw content into
             // the MDBP-implementing virtual machine where it would be used.
-            IMD_Blob source_code_blob = (IMD_Blob)machine.MD_Any(source_code_file_content);
+            IMD_Any source_code_blob = machine.MD_Any(source_code_file_content);
 
             // Try to parse the file content into canonical format VM source code.
             IMD_Any maybe_source_code_text = machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
                 machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
             );
-            if (((IMD_Boolean)machine.Evaluates(
+            if ((machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
                 machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Export_Boolean())
             {
@@ -126,25 +126,25 @@ namespace Muldis.ReferenceEngine.Console
             );
 
             // Temporary Executor test.
-            IMD_Integer sum = (IMD_Integer)machine.Evaluates(
+            IMD_Any sum = machine.Evaluates(
                 machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
                 machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
             );
-            IMD_Tuple that = (IMD_Tuple)machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
-            IMD_Tuple that_too = (IMD_Tuple)machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
+            IMD_Any that = machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+            IMD_Any that_too = machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
                 {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
             ));
-            IMD_Text the_other = (IMD_Text)machine.MD_Any("Fr ⊂ ac 💩 ti ÷ on");
-            IMD_Fraction f0 = (IMD_Fraction)machine.MD_Any(014.0M);
-            IMD_Fraction f1 = (IMD_Fraction)machine.MD_Any(2.3M);
-            IMD_Fraction f2 = (IMD_Fraction)machine.MD_Any(02340233.23402532000M);
-            IMD_Fraction f3 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
-            IMD_Fraction f4 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
-            IMD_Fraction f5 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
-            IMD_Fraction f6 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
-            IMD_Fraction f7 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
-            IMD_Fraction f8 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
-            IMD_Fraction f9 = (IMD_Fraction)machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
+            IMD_Any the_other = machine.MD_Any("Fr ⊂ ac 💩 ti ÷ on");
+            IMD_Any f0 = machine.MD_Any(014.0M);
+            IMD_Any f1 = machine.MD_Any(2.3M);
+            IMD_Any f2 = machine.MD_Any(02340233.23402532000M);
+            IMD_Any f3 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
+            IMD_Any f4 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
+            IMD_Any f5 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
+            IMD_Any f6 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
+            IMD_Any f7 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
+            IMD_Any f8 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
+            IMD_Any f9 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
         }
     }
 }

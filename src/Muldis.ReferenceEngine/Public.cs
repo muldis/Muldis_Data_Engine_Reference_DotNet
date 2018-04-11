@@ -51,7 +51,7 @@ namespace Muldis.ReferenceEngine
 
         public IMD_Any Evaluates(IMD_Any function, IMD_Any args = null)
         {
-            return Best_Fit_Public_Value(
+            return (IMD_Any)new MD_Any().init(this,
                 m_executor.Evaluates(((MD_Any)function).m_value, ((MD_Any)args).m_value));
         }
 
@@ -71,75 +71,11 @@ namespace Muldis.ReferenceEngine
                 }
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
-                    return Best_Fit_Public_Value(Import_Qualified(
+                    return (IMD_Any)new MD_Any().init(this, Import_Qualified(
                         (KeyValuePair<String,Object>)value));
                 }
             }
-            return Best_Fit_Public_Value(Import_Unqualified(value));
-        }
-
-        internal IMD_Any Best_Fit_Public_Value(Core.MD_Any value)
-        {
-            switch (value.MD_MSBT)
-            {
-                case Core.MD_Well_Known_Base_Type.MD_Boolean:
-                    return (IMD_Boolean)new MD_Boolean().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Integer:
-                    return (IMD_Integer)new MD_Integer().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Fraction:
-                    return (IMD_Fraction)new MD_Fraction().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Bits:
-                    return (IMD_Bits)new MD_Bits().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Blob:
-                    return (IMD_Blob)new MD_Blob().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Text:
-                    return (IMD_Text)new MD_Text().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Array:
-                    return (IMD_Array)new MD_Array().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Set:
-                    return (IMD_Set)new MD_Set().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Bag:
-                    return (IMD_Bag)new MD_Bag().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Tuple:
-                    if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
-                    {
-                        return (IMD_Heading)new MD_Heading().init(this, value);
-                    }
-                    return (IMD_Tuple)new MD_Tuple().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Article:
-                    if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Array) == true)
-                    {
-                        return (IMD_Tuple_Array)new MD_Tuple_Array().init(this, value);
-                    }
-                    if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Relation) == true)
-                    {
-                        return (IMD_Relation)new MD_Relation().init(this, value);
-                    }
-                    if (value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Tuple_Bag) == true)
-                    {
-                        return (IMD_Tuple_Bag)new MD_Tuple_Bag().init(this, value);
-                    }
-                    return (IMD_Article)new MD_Article().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Variable:
-                    return (IMD_Variable)new MD_Variable().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Process:
-                    return (IMD_Process)new MD_Process().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Stream:
-                    return (IMD_Stream)new MD_Stream().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_External:
-                    return (IMD_External)new MD_External().init(this, value);
-                case Core.MD_Well_Known_Base_Type.MD_Excuse:
-                {
-                    if (ReferenceEquals(value, m_memory.Simple_MD_Excuse("No_Reason")))
-                    {
-                        return (IMD_No_Reason)new MD_No_Reason()
-                            .init(this, value);
-                    }
-                    return (IMD_Excuse)new MD_Excuse().init(this, value);
-                }
-                default:
-                    throw new NotImplementedException();
-            }
+            return (IMD_Any)new MD_Any().init(this, Import_Unqualified(value));
         }
 
         private Core.MD_Any Core_MD_Any(Object value)
@@ -219,12 +155,14 @@ namespace Muldis.ReferenceEngine
                         {
                             return Core_MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                         }
-                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Integer"
-                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Integer")
+                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Any"
+                            && ((Muldis.ReferenceEngine.Value.MD_Any)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
+                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.Value.MD_Any"
+                            && ((Muldis.ReferenceEngine.Value.MD_Any)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
                         {
                             return Core_MD_Fraction(
-                                ((MD_Integer)numerator  ).m_value.MD_Integer(),
-                                ((MD_Integer)denominator).m_value.MD_Integer()
+                                ((Muldis.ReferenceEngine.Value.MD_Any)numerator  ).m_value.MD_Integer(),
+                                ((Muldis.ReferenceEngine.Value.MD_Any)denominator).m_value.MD_Integer()
                             );
                         }
                     }
@@ -310,33 +248,42 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple_Array":
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Tuple_Array(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
+                        return Core_MD_Tuple_Array__Heading(heading: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Array")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
                     {
-                        return Core_MD_Tuple_Array(body: (Muldis.ReferenceEngine.Value.MD_Array)v);
+                        return Core_MD_Tuple_Array__Body(body: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
                     break;
                 case "Relation":
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Relation(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
+                        return Core_MD_Relation__Heading(heading: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Set")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
                     {
-                        return Core_MD_Relation(body: (Muldis.ReferenceEngine.Value.MD_Set)v);
+                        return Core_MD_Relation__Body(body: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
                     break;
                 case "Tuple_Bag":
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Heading")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Tuple_Bag(heading: (Muldis.ReferenceEngine.Value.MD_Heading)v);
+                        return Core_MD_Tuple_Bag__Heading(heading: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Bag")
+                    if (type_name == "Muldis.ReferenceEngine.Value.MD_Any"
+                        && ((Muldis.ReferenceEngine.Value.MD_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
                     {
-                        return Core_MD_Tuple_Bag(body: (Muldis.ReferenceEngine.Value.MD_Bag)v);
+                        return Core_MD_Tuple_Bag__Body(body: (Muldis.ReferenceEngine.Value.MD_Any)v);
                     }
                     break;
                 case "Article":
@@ -676,16 +623,16 @@ namespace Muldis.ReferenceEngine
             );
         }
 
-        private Core.MD_Any Core_MD_Tuple_Array(IMD_Heading heading)
+        private Core.MD_Any Core_MD_Tuple_Array__Heading(IMD_Any heading)
         {
-            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any hv = ((MD_Any)heading).m_value;
             Core.MD_Any bv = m_memory.MD_Array_C0;
             return m_memory.MD_Tuple_Array(hv, bv);
         }
 
-        private Core.MD_Any Core_MD_Tuple_Array(IMD_Array body)
+        private Core.MD_Any Core_MD_Tuple_Array__Body(IMD_Any body)
         {
-            Core.MD_Any bv = ((MD_Array)body).m_value;
+            Core.MD_Any bv = ((MD_Any)body).m_value;
             if (!m_memory.Array__Is_Relational(bv))
             {
                 throw new ArgumentException
@@ -707,16 +654,16 @@ namespace Muldis.ReferenceEngine
             return m_memory.MD_Tuple_Array(hv, bv);
         }
 
-        private Core.MD_Any Core_MD_Relation(IMD_Heading heading)
+        private Core.MD_Any Core_MD_Relation__Heading(IMD_Any heading)
         {
-            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any hv = ((MD_Any)heading).m_value;
             Core.MD_Any bv = m_memory.MD_Set_C0;
             return m_memory.MD_Relation(hv, bv);
         }
 
-        private Core.MD_Any Core_MD_Relation(IMD_Set body)
+        private Core.MD_Any Core_MD_Relation__Body(IMD_Any body)
         {
-            Core.MD_Any bv = ((MD_Set)body).m_value;
+            Core.MD_Any bv = ((MD_Any)body).m_value;
             if (!m_memory.Set__Is_Relational(bv))
             {
                 throw new ArgumentException
@@ -738,16 +685,16 @@ namespace Muldis.ReferenceEngine
             return m_memory.MD_Relation(hv, bv);
         }
 
-        private Core.MD_Any Core_MD_Tuple_Bag(IMD_Heading heading)
+        private Core.MD_Any Core_MD_Tuple_Bag__Heading(IMD_Any heading)
         {
-            Core.MD_Any hv = ((MD_Heading)heading).m_value;
+            Core.MD_Any hv = ((MD_Any)heading).m_value;
             Core.MD_Any bv = m_memory.MD_Bag_C0;
             return m_memory.MD_Tuple_Bag(hv, bv);
         }
 
-        private Core.MD_Any Core_MD_Tuple_Bag(IMD_Bag body)
+        private Core.MD_Any Core_MD_Tuple_Bag__Body(IMD_Any body)
         {
-            Core.MD_Any bv = ((MD_Bag)body).m_value;
+            Core.MD_Any bv = ((MD_Any)body).m_value;
             if (!m_memory.Bag__Is_Relational(bv))
             {
                 throw new ArgumentException
@@ -773,7 +720,7 @@ namespace Muldis.ReferenceEngine
 
 namespace Muldis.ReferenceEngine.Value
 {
-    public abstract class MD_Any : IMD_Any
+    public class MD_Any : IMD_Any
     {
         internal Machine     m_machine;
         internal Core.MD_Any m_value;
@@ -800,18 +747,12 @@ namespace Muldis.ReferenceEngine.Value
         {
             return m_machine;
         }
-    }
 
-    public class MD_Boolean : MD_Any, IMD_Boolean
-    {
         public Boolean Export_Boolean()
         {
             return m_value.MD_Boolean().Value;
         }
-    }
 
-    public class MD_Integer : MD_Any, IMD_Integer
-    {
         public BigInteger Export_BigInteger()
         {
             return m_value.MD_Integer();
@@ -822,70 +763,10 @@ namespace Muldis.ReferenceEngine.Value
             // This will throw an OverflowException if the value is too large.
             return (Int32)m_value.MD_Integer();
         }
-    }
 
-    public class MD_Fraction : MD_Article, IMD_Fraction
-    {
-    }
-
-    public class MD_Bits : MD_Article, IMD_Bits
-    {
-    }
-
-    public class MD_Blob : MD_Article, IMD_Blob
-    {
-    }
-
-    public class MD_Text : MD_Article, IMD_Text
-    {
-    }
-
-    public class MD_Array : MD_Any, IMD_Array
-    {
-    }
-
-    public class MD_Set : MD_Article, IMD_Set
-    {
-    }
-
-    public class MD_Bag : MD_Any, IMD_Bag
-    {
-    }
-
-    public class MD_Tuple : MD_Any, IMD_Tuple
-    {
-    }
-
-    public class MD_Heading : MD_Tuple, IMD_Heading
-    {
-    }
-
-    public class MD_Tuple_Array : MD_Article, IMD_Tuple_Array
-    {
-    }
-
-    public class MD_Relation : MD_Article, IMD_Relation
-    {
-    }
-
-    public class MD_Tuple_Bag : MD_Article, IMD_Tuple_Bag
-    {
-    }
-
-    public class MD_Article : MD_Any, IMD_Article
-    {
-    }
-
-    public abstract class MD_Handle : MD_Any, IMD_Handle
-    {
-    }
-
-    public class MD_Variable : MD_Handle, IMD_Variable
-    {
         public IMD_Any Current()
         {
-            return m_machine.Best_Fit_Public_Value(
-                m_value.MD_Variable());
+            return (IMD_Any)new MD_Any().init(m_machine, m_value.MD_Variable());
         }
 
         public void Assign(IMD_Any value)
@@ -896,29 +777,10 @@ namespace Muldis.ReferenceEngine.Value
             }
             m_value.Details = ((MD_Any)value).m_value;
         }
-    }
 
-    public class MD_Process : MD_Handle, IMD_Process
-    {
-    }
-
-    public class MD_Stream : MD_Handle, IMD_Stream
-    {
-    }
-
-    public class MD_External : MD_Handle, IMD_External
-    {
         public Object Export_External_Object()
         {
             return m_value.MD_External();
         }
-    }
-
-    public class MD_Excuse : MD_Article, IMD_Excuse
-    {
-    }
-
-    public class MD_No_Reason : MD_Excuse, IMD_No_Reason
-    {
     }
 }
