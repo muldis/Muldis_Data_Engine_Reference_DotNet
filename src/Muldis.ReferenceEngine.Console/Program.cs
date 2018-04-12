@@ -111,9 +111,9 @@ namespace Muldis.ReferenceEngine.Console
                 machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
                 machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
             );
-            if ((machine.MdbpEvaluate(
+            if ((Boolean)machine.MdbpExportQualified(machine.MdbpEvaluate(
                 machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Export_Boolean())
+                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Value)
             {
                 System.Console.WriteLine("The requested source code providing file"
                     + " [" + source_code_file_path + "] is not well-formed UTF-8 text:"

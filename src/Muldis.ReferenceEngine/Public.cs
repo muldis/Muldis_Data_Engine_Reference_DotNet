@@ -58,22 +58,33 @@ namespace Muldis.ReferenceEngine
             m_executor.Performs(((MreValue)procedure).m_value, ((MreValue)args).m_value);
         }
 
+        public IMdbpValue MdbpCurrent(IMdbpValue variable)
+        {
+            return (IMdbpValue)new MreValue().init(this,
+                ((MreValue)variable).m_value.MD_Variable());
+        }
+
+        public void MdbpAssign(IMdbpValue variable, IMdbpValue newCurrent)
+        {
+            if (newCurrent == null)
+            {
+                throw new ArgumentNullException("newCurrent");
+            }
+            ((MreValue)variable).m_value.Details = ((MreValue)newCurrent).m_value;
+        }
+
         public IMdbpValue MdbpImport(Object value)
         {
-            if (value != null)
+            if (value != null && value.GetType().FullName == "Muldis.ReferenceEngine.MreValue")
             {
-                String type_name = value.GetType().FullName;
-                if (type_name == "Muldis.ReferenceEngine.MreValue")
-                {
-                    return (IMdbpValue)value;
-                }
-                if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
-                {
-                    return (IMdbpValue)new MreValue().init(this, Import__Tree_Qualified(
-                        (KeyValuePair<String,Object>)value));
-                }
+                return (IMdbpValue)value;
             }
-            return (IMdbpValue)new MreValue().init(this, Import__Tree_Unqualified(value));
+            return (IMdbpValue)new MreValue().init(this, Import__Tree(value));
+        }
+
+        public IMdbpValue MdbpImportQualified(KeyValuePair<String,Object> value)
+        {
+            return (IMdbpValue)new MreValue().init(this, Import__Tree_Qualified(value));
         }
 
         private Core.MD_Any Import__Tree(Object value)
@@ -640,6 +651,67 @@ namespace Muldis.ReferenceEngine
             }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
+
+        public Object MdbpExport(IMdbpValue value)
+        {
+            Core.MD_Any v = ((MreValue)value).m_value;
+            switch (v.MD_MSBT)
+            {
+                case Core.MD_Well_Known_Base_Type.MD_Boolean:
+                    return v.MD_Boolean().Value;
+                case Core.MD_Well_Known_Base_Type.MD_Integer:
+                    return v.MD_Integer();
+                case Core.MD_Well_Known_Base_Type.MD_External:
+                    return v.MD_External();
+                default:
+                    return MdbpExportQualified(value);
+            }
+        }
+
+        public KeyValuePair<String,Object> MdbpExportQualified(IMdbpValue value)
+        {
+            Core.MD_Any v = ((MreValue)value).m_value;
+            switch (v.MD_MSBT)
+            {
+                case Core.MD_Well_Known_Base_Type.MD_Boolean:
+                    return new KeyValuePair<String,Object>("Boolean",
+                        v.MD_Boolean().Value);
+                case Core.MD_Well_Known_Base_Type.MD_Integer:
+                    return new KeyValuePair<String,Object>("Integer",
+                        v.MD_Integer());
+                case Core.MD_Well_Known_Base_Type.MD_Fraction:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Bits:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Blob:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Text:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Array:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Set:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Bag:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Tuple:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Article:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Variable:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Process:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_Stream:
+                    throw new NotImplementedException();
+                case Core.MD_Well_Known_Base_Type.MD_External:
+                    return new KeyValuePair<String,Object>("New_External",
+                        v.MD_External());
+                case Core.MD_Well_Known_Base_Type.MD_Excuse:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 
     public class MreValue : IMdbpValue
@@ -668,41 +740,6 @@ namespace Muldis.ReferenceEngine
         public IMdbpMachine MdbpMachine()
         {
             return m_machine;
-        }
-
-        public Boolean Export_Boolean()
-        {
-            return m_value.MD_Boolean().Value;
-        }
-
-        public BigInteger Export_BigInteger()
-        {
-            return m_value.MD_Integer();
-        }
-
-        public Int32 Export_Int32()
-        {
-            // This will throw an OverflowException if the value is too large.
-            return (Int32)m_value.MD_Integer();
-        }
-
-        public IMdbpValue MdbpCurrent()
-        {
-            return (IMdbpValue)new MreValue().init(m_machine, m_value.MD_Variable());
-        }
-
-        public void MdbpAssign(IMdbpValue newCurrent)
-        {
-            if (newCurrent == null)
-            {
-                throw new ArgumentNullException("newCurrent");
-            }
-            m_value.Details = ((MreValue)newCurrent).m_value;
-        }
-
-        public Object Export_External_Object()
-        {
-            return m_value.MD_External();
         }
     }
 }
