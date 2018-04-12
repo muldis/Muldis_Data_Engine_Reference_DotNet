@@ -146,19 +146,43 @@ namespace Muldis.ReferenceEngine
                         if (numerator.GetType().FullName == "System.Int32"
                             && denominator.GetType().FullName == "System.Int32")
                         {
-                            return Core_MD_Fraction((Int32)numerator, (Int32)denominator);
+                            if (((Int32)denominator) == 0)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Fraction with a denominator of zero."
+                                );
+                            }
+                            return m_memory.MD_Fraction((Int32)numerator, (Int32)denominator);
                         }
                         if (numerator.GetType().FullName == "System.Numerics.BigInteger"
                             && denominator.GetType().FullName == "System.Numerics.BigInteger")
                         {
-                            return Core_MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
+                            if (((BigInteger)denominator) == 0)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Fraction with a denominator of zero."
+                                );
+                            }
+                            return m_memory.MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                         }
                         if (numerator.GetType().FullName == "Muldis.ReferenceEngine.Value"
                             && ((Muldis.ReferenceEngine.Value)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
                             && denominator.GetType().FullName == "Muldis.ReferenceEngine.Value"
                             && ((Muldis.ReferenceEngine.Value)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
                         {
-                            return Core_MD_Fraction(
+                            if (((Muldis.ReferenceEngine.Value)denominator).m_value.MD_Integer() == 0)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Fraction with a denominator of zero."
+                                );
+                            }
+                            return m_memory.MD_Fraction(
                                 ((Muldis.ReferenceEngine.Value)numerator  ).m_value.MD_Integer(),
                                 ((Muldis.ReferenceEngine.Value)denominator).m_value.MD_Integer()
                             );
@@ -200,47 +224,104 @@ namespace Muldis.ReferenceEngine
                 case "Array":
                     if (type_name.StartsWith("System.Collections.Generic.List`"))
                     {
-                        return Core_MD_Array((List<Object>)v);
+                        return m_memory.MD_Array(
+                            new List<Core.MD_Any>(((List<Object>)v).Select(
+                                m => Core_MD_Any(m)
+                            ))
+                        );
                     }
                     break;
                 case "Set":
                     if (type_name.StartsWith("System.Collections.Generic.List`"))
                     {
-                        return Core_MD_Set((List<Object>)v);
+                        return m_memory.MD_Set(
+                            new List<Core.Multiplied_Member>(((List<Object>)v).Select(
+                                m => new Core.Multiplied_Member(Core_MD_Any(m))
+                            ))
+                        );
                     }
                     break;
                 case "Bag":
                     if (type_name.StartsWith("System.Collections.Generic.List`"))
                     {
-                        return Core_MD_Bag((List<Object>)v);
+                        return m_memory.MD_Bag(
+                            new List<Core.Multiplied_Member>(((List<Object>)v).Select(
+                                m => new Core.Multiplied_Member(Core_MD_Any(m))
+                            ))
+                        );
                     }
                     break;
                 case "Tuple":
                     if (type_name == "System.Object[]")
                     {
-                        return Core_MD_Tuple__Ordered(
-                            a0: ((Object[])v).Length >= 1 ? ((Object[])v)[0] : null,
-                            a1: ((Object[])v).Length >= 2 ? ((Object[])v)[1] : null,
-                            a2: ((Object[])v).Length >= 3 ? ((Object[])v)[2] : null
+                        Dictionary<String,Object> attrs = new Dictionary<String,Object>();
+                        for (Int32 i = 0; i < ((Object[])v).Length; i++)
+                        {
+                            attrs.Add(Char.ConvertFromUtf32(i), ((Object[])v)[i]);
+                        }
+                        return m_memory.MD_Tuple(
+                            new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                                a => a.Key, a => Core_MD_Any(a.Value)))
                         );
                     }
                     if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                     {
-                        return Core_MD_Tuple__Named(attrs: (Dictionary<String,Object>)v);
+                        Dictionary<String,Object> attrs = (Dictionary<String,Object>)v;
+                        foreach (String atnm in attrs.Keys)
+                        {
+                            if (m_memory.Test_Dot_Net_String(atnm)
+                                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Tuple with attribute"
+                                        + " name that is a malformed .NET String."
+                                );
+                            }
+                        }
+                        return m_memory.MD_Tuple(
+                            new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                                a => a.Key, a => Core_MD_Any(a.Value)))
+                        );
                     }
                     break;
                 case "Heading":
                     if (type_name == "System.Object[]")
                     {
-                        return Core_MD_Heading__Ordered(
-                            a0: ((Object[])v).Length >= 1 ? (Nullable<Boolean>)((Object[])v)[0] : null,
-                            a1: ((Object[])v).Length >= 2 ? (Nullable<Boolean>)((Object[])v)[1] : null,
-                            a2: ((Object[])v).Length >= 3 ? (Nullable<Boolean>)((Object[])v)[2] : null
+                        HashSet<String> attr_names = (HashSet<String>)v;
+                        for (Int32 i = 0; i < ((Object[])v).Length; i++)
+                        {
+                            if (((Object[])v)[0] != null && (Boolean)((Object[])v)[0])
+                            {
+                                attr_names.Add(Char.ConvertFromUtf32(i));
+                            }
+                        }
+                        return m_memory.MD_Tuple(
+                            new Dictionary<String,Core.MD_Any>(
+                                attr_names.ToDictionary(a => a, a => m_memory.MD_True))
                         );
                     }
                     if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                     {
-                        return Core_MD_Heading__Named(attr_names: (HashSet<String>)v);
+                        HashSet<String> attr_names = (HashSet<String>)v;
+                        foreach (String atnm in attr_names)
+                        {
+                            if (m_memory.Test_Dot_Net_String(atnm)
+                                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            {
+                                throw new ArgumentException
+                                (
+                                    paramName: "value",
+                                    message: "Can't select MD_Heading with attribute"
+                                        + " name that is a malformed .NET String."
+                                );
+                            }
+                        }
+                        return m_memory.MD_Tuple(
+                            new Dictionary<String,Core.MD_Any>(
+                                attr_names.ToDictionary(a => a, a => m_memory.MD_True))
+                        );
                     }
                     break;
                 case "Tuple_Array":
@@ -248,12 +329,33 @@ namespace Muldis.ReferenceEngine
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
                         && ((Muldis.ReferenceEngine.Value)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Tuple_Array__Heading(heading: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        Core.MD_Any bv = m_memory.MD_Array_C0;
+                        return m_memory.MD_Tuple_Array(hv, bv);
                     }
                     if (type_name == "Muldis.ReferenceEngine.Value"
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
                     {
-                        return Core_MD_Tuple_Array__Body(body: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        if (!m_memory.Array__Is_Relational(bv))
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Tuple_Array from a MD_Array whose"
+                                    + " members aren't all MD_Tuple with a common heading."
+                            );
+                        }
+                        Core.MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
+                        if (hv == null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Tuple_Array from empty MD_Array."
+                            );
+                        }
+                        return m_memory.MD_Tuple_Array(hv, bv);
                     }
                     break;
                 case "Relation":
@@ -261,12 +363,33 @@ namespace Muldis.ReferenceEngine
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
                         && ((Muldis.ReferenceEngine.Value)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Relation__Heading(heading: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        Core.MD_Any bv = m_memory.MD_Set_C0;
+                        return m_memory.MD_Relation(hv, bv);
                     }
                     if (type_name == "Muldis.ReferenceEngine.Value"
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
                     {
-                        return Core_MD_Relation__Body(body: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        if (!m_memory.Set__Is_Relational(bv))
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Relation from a MD_Set whose"
+                                    + " members aren't all MD_Tuple with a common heading."
+                            );
+                        }
+                        Core.MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
+                        if (hv == null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Relation from empty MD_Set."
+                            );
+                        }
+                        return m_memory.MD_Relation(hv, bv);
                     }
                     break;
                 case "Tuple_Bag":
@@ -274,12 +397,33 @@ namespace Muldis.ReferenceEngine
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
                         && ((Muldis.ReferenceEngine.Value)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        return Core_MD_Tuple_Bag__Heading(heading: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        Core.MD_Any bv = m_memory.MD_Bag_C0;
+                        return m_memory.MD_Tuple_Bag(hv, bv);
                     }
                     if (type_name == "Muldis.ReferenceEngine.Value"
                         && ((Muldis.ReferenceEngine.Value)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
                     {
-                        return Core_MD_Tuple_Bag__Body(body: (Muldis.ReferenceEngine.Value)v);
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.Value)v).m_value;
+                        if (!m_memory.Bag__Is_Relational(bv))
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Tuple_Bag from a MD_Bag whose"
+                                    + " members aren't all MD_Tuple with a common heading."
+                            );
+                        }
+                        Core.MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
+                        if (hv == null)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MD_Tuple_Bag from empty MD_Bag."
+                            );
+                        }
+                        return m_memory.MD_Tuple_Bag(hv, bv);
                     }
                     break;
                 case "Article":
@@ -495,201 +639,6 @@ namespace Muldis.ReferenceEngine
                 );
             }
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
-        }
-
-        private Core.MD_Any Core_MD_Fraction(BigInteger numerator, BigInteger denominator)
-        {
-            if (denominator == 0)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "denominator",
-                    message: "Can't select MD_Fraction with a denominator of zero."
-                );
-            }
-            return m_memory.MD_Fraction(numerator, denominator);
-        }
-
-        private Core.MD_Any Core_MD_Array(List<Object> members)
-        {
-            return m_memory.MD_Array(
-                new List<Core.MD_Any>(members.Select(
-                    m => Core_MD_Any(m)
-                ))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Set(List<Object> members)
-        {
-            return m_memory.MD_Set(
-                new List<Core.Multiplied_Member>(members.Select(
-                    m => new Core.Multiplied_Member(Core_MD_Any(m))
-                ))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Bag(List<Object> members)
-        {
-            return m_memory.MD_Bag(
-                new List<Core.Multiplied_Member>(members.Select(
-                    m => new Core.Multiplied_Member(Core_MD_Any(m))
-                ))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Tuple__Ordered(
-            Object a0 = null, Object a1 = null, Object a2 = null)
-        {
-            Dictionary<String,Object> attrs = new Dictionary<String,Object>();
-            if (a0 != null)
-            {
-                attrs.Add("\u0000", a0);
-            }
-            if (a1 != null)
-            {
-                attrs.Add("\u0001", a1);
-            }
-            if (a2 != null)
-            {
-                attrs.Add("\u0002", a2);
-            }
-            return m_memory.MD_Tuple(
-                new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
-                    a => a.Key, a => Core_MD_Any(a.Value)))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Tuple__Named(Dictionary<String,Object> attrs)
-        {
-            foreach (String atnm in attrs.Keys)
-            {
-                if (m_memory.Test_Dot_Net_String(atnm)
-                    == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                {
-                    throw new ArgumentException
-                    (
-                        paramName: "attrs",
-                        message: "Can't select MD_Tuple with attribute"
-                            + " name that is a malformed .NET String."
-                    );
-                }
-            }
-            return m_memory.MD_Tuple(
-                new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
-                    a => a.Key, a => Core_MD_Any(a.Value)))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Heading__Ordered(
-            Nullable<Boolean> a0 = null, Nullable<Boolean> a1 = null,
-            Nullable<Boolean> a2 = null)
-        {
-            return Core_MD_Tuple__Ordered(
-                a0: (a0 == null || a0 == false) ? (Object)null : true,
-                a1: (a1 == null || a1 == false) ? (Object)null : true,
-                a2: (a2 == null || a2 == false) ? (Object)null : true
-            );
-        }
-
-        private Core.MD_Any Core_MD_Heading__Named(HashSet<String> attr_names)
-        {
-            return Core_MD_Tuple__Named(
-                attrs: new Dictionary<String,Object>(
-                    attr_names.ToDictionary(a => a, a => (Object)true))
-            );
-        }
-
-        private Core.MD_Any Core_MD_Tuple_Array__Heading(IValue heading)
-        {
-            Core.MD_Any hv = ((Value)heading).m_value;
-            Core.MD_Any bv = m_memory.MD_Array_C0;
-            return m_memory.MD_Tuple_Array(hv, bv);
-        }
-
-        private Core.MD_Any Core_MD_Tuple_Array__Body(IValue body)
-        {
-            Core.MD_Any bv = ((Value)body).m_value;
-            if (!m_memory.Array__Is_Relational(bv))
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Tuple_Array from a MD_Array whose"
-                        + " members aren't all MD_Tuple with a common heading."
-                );
-            }
-            Core.MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
-            if (hv == null)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Tuple_Array from empty MD_Array."
-                );
-            }
-            return m_memory.MD_Tuple_Array(hv, bv);
-        }
-
-        private Core.MD_Any Core_MD_Relation__Heading(IValue heading)
-        {
-            Core.MD_Any hv = ((Value)heading).m_value;
-            Core.MD_Any bv = m_memory.MD_Set_C0;
-            return m_memory.MD_Relation(hv, bv);
-        }
-
-        private Core.MD_Any Core_MD_Relation__Body(IValue body)
-        {
-            Core.MD_Any bv = ((Value)body).m_value;
-            if (!m_memory.Set__Is_Relational(bv))
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Relation from a MD_Set whose"
-                        + " members aren't all MD_Tuple with a common heading."
-                );
-            }
-            Core.MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
-            if (hv == null)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Relation from empty MD_Set."
-                );
-            }
-            return m_memory.MD_Relation(hv, bv);
-        }
-
-        private Core.MD_Any Core_MD_Tuple_Bag__Heading(IValue heading)
-        {
-            Core.MD_Any hv = ((Value)heading).m_value;
-            Core.MD_Any bv = m_memory.MD_Bag_C0;
-            return m_memory.MD_Tuple_Bag(hv, bv);
-        }
-
-        private Core.MD_Any Core_MD_Tuple_Bag__Body(IValue body)
-        {
-            Core.MD_Any bv = ((Value)body).m_value;
-            if (!m_memory.Bag__Is_Relational(bv))
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Tuple_Bag from a MD_Bag whose"
-                        + " members aren't all MD_Tuple with a common heading."
-                );
-            }
-            Core.MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
-            if (hv == null)
-            {
-                throw new ArgumentException
-                (
-                    paramName: "body",
-                    message: "Can't select MD_Tuple_Bag from empty MD_Bag."
-                );
-            }
-            return m_memory.MD_Tuple_Bag(hv, bv);
         }
     }
 
