@@ -43,26 +43,26 @@ namespace Muldis.ReferenceEngine.Console
 
             // Die unless the provider info class explicitly declares it implements MDBP.
             if (!Enumerable.Any(provider_info_class.GetMethods(),
-                t => t.Name == "Provides_Dot_Net_Muldis_DBP"))
+                t => t.Name == "ProvidesMuldisDatabaseProtocolInfo"))
             {
                 System.Console.WriteLine(
                     "The requested MDBP provider information class"
                     + " [" + MDBP_provider_info_class_name + "]"
                     + " doesn't declare that it provides a MDBP API"
-                    + " by declaring the method [Provides_Dot_Net_Muldis_DBP].");
+                    + " by declaring the method [ProvidesMuldisDatabaseProtocolInfo].");
                 return;
             }
 
             // Instantiate object of a Muldis DataBase Protocol provider information class.
-            IInfo provider_info
-                = (IInfo)Activator.CreateInstance(provider_info_class);
+            IMdbpInfo provider_info
+                = (IMdbpInfo)Activator.CreateInstance(provider_info_class);
 
             // Request a VM object implementing a specific version of the MDBP or
             // what the info provider considers the next best fit version;
             // this would die if it thinks it can't satisfy an acceptable version.
             // We will use this for all the main work.
-            IMachine machine = provider_info.Want_VM_API(
-                new String[] {"Muldis_DBP_DotNet", "http://muldis.com", "0.1.0.-9"});
+            IMdbpMachine machine = provider_info.MdbpWantMachineApi(
+                new String[] {"Muldis_Database_Protocol", "http://muldis.com", "0.201.0"});
             if (machine == null)
             {
                 System.Console.WriteLine(
@@ -104,47 +104,47 @@ namespace Muldis.ReferenceEngine.Console
 
             // Import the user-specified source code file's raw content into
             // the MDBP-implementing virtual machine where it would be used.
-            IValue source_code_blob = machine.MD_Any(source_code_file_content);
+            IMdbpValue source_code_blob = machine.MdbpImport(source_code_file_content);
 
             // Try to parse the file content into canonical format VM source code.
-            IValue maybe_source_code_text = machine.Evaluates(
-                machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
-                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
+            IMdbpValue maybe_source_code_text = machine.MdbpEvaluate(
+                machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
+                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
             );
-            if ((machine.Evaluates(
-                machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Export_Boolean())
+            if ((machine.MdbpEvaluate(
+                machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
+                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Export_Boolean())
             {
                 System.Console.WriteLine("The requested source code providing file"
                     + " [" + source_code_file_path + "] is not well-formed UTF-8 text:"
                     + " " + maybe_source_code_text.ToString());
                 return;
             }
-            IValue maybe_source_code = machine.Evaluates(
-                machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
-                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text}))
+            IMdbpValue maybe_source_code = machine.MdbpEvaluate(
+                machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
+                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text}))
             );
 
             // Temporary Executor test.
-            IValue sum = machine.Evaluates(
-                machine.MD_Any(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
-                machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
+            IMdbpValue sum = machine.MdbpEvaluate(
+                machine.MdbpImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
+                machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
             );
-            IValue that = machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
-            IValue that_too = machine.MD_Any(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
+            IMdbpValue that = machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+            IMdbpValue that_too = machine.MdbpImport(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
                 {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
             ));
-            IValue the_other = machine.MD_Any("Fr ⊂ ac 💩 ti ÷ on");
-            IValue f0 = machine.MD_Any(014.0M);
-            IValue f1 = machine.MD_Any(2.3M);
-            IValue f2 = machine.MD_Any(02340233.23402532000M);
-            IValue f3 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
-            IValue f4 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
-            IValue f5 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
-            IValue f6 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
-            IValue f7 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
-            IValue f8 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
-            IValue f9 = machine.MD_Any(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
+            IMdbpValue the_other = machine.MdbpImport("Fr ⊂ ac 💩 ti ÷ on");
+            IMdbpValue f0 = machine.MdbpImport(014.0M);
+            IMdbpValue f1 = machine.MdbpImport(2.3M);
+            IMdbpValue f2 = machine.MdbpImport(02340233.23402532000M);
+            IMdbpValue f3 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
+            IMdbpValue f4 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
+            IMdbpValue f5 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
+            IMdbpValue f6 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
+            IMdbpValue f7 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
+            IMdbpValue f8 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
+            IMdbpValue f9 = machine.MdbpImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
         }
     }
 }

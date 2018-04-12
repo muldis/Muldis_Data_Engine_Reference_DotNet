@@ -5,25 +5,25 @@ using System.Numerics;
 
 namespace Muldis.DatabaseProtocol
 {
-    public interface IInfo
+    public interface IMdbpInfo
     {
-        Boolean Provides_Dot_Net_Muldis_DBP();
+        Boolean ProvidesMuldisDatabaseProtocolInfo();
 
-        IMachine Want_VM_API(Object requested_version);
+        IMdbpMachine MdbpWantMachineApi(Object requestedVersion);
     }
 
-    public interface IMachine
+    public interface IMdbpMachine
     {
-        IValue Evaluates(IValue function, IValue args = null);
+        IMdbpValue MdbpEvaluate(IMdbpValue function, IMdbpValue args = null);
 
-        void Performs(IValue procedure, IValue args = null);
+        void MdbpPerform(IMdbpValue procedure, IMdbpValue args = null);
 
-        IValue MD_Any(Object value);
+        IMdbpValue MdbpImport(Object value);
     }
 
-    public interface IValue
+    public interface IMdbpValue
     {
-        IMachine Machine();
+        IMdbpMachine MdbpMachine();
 
         Boolean Export_Boolean();
 
@@ -31,9 +31,9 @@ namespace Muldis.DatabaseProtocol
 
         Int32 Export_Int32();
 
-        IValue Current();
+        IMdbpValue MdbpCurrent();
 
-        void Assign(IValue value);
+        void MdbpAssign(IMdbpValue value);
 
         Object Export_External_Object();
     }
