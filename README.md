@@ -26,12 +26,6 @@ Muldis Data Language itself has as a primary influence the work of Chris
 Date (C.J. Date) and Hugh Darwen whose home website is
 [http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
 
-This distribution bundles a non-canonical copy of the library
-named `Muldis.DatabaseProtocol` / `MuldisDatabaseProtocol.cs` for build-out-of-the-box
-convenience in the short term while the latter is not yet published as a
-NuGet package; see [https://github.com/muldis/Muldis_Database_Protocol](
-https://github.com/muldis/Muldis_Database_Protocol) for the canonical copy.
-
 *This documentation is pending.*
 
 # DEPENDENCIES AND COMPATIBILITY (NEW VERSION)

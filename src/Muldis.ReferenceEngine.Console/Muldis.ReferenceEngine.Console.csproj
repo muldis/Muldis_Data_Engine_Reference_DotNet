@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Muldis.DatabaseProtocol\Muldis.DatabaseProtocol.csproj" />
     <ProjectReference Include="..\Muldis.ReferenceEngine\Muldis.ReferenceEngine.csproj" />
   </ItemGroup>
 

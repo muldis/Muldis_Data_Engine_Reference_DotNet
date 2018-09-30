@@ -3,20 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Muldis.DatabaseProtocol;
 
 [assembly: CLSCompliant(true)]
 
 namespace Muldis.ReferenceEngine
 {
-    public class MreInfo : IMdbpInfo
+    public class MdbpInfo
     {
         public Boolean ProvidesMuldisDatabaseProtocolInfo()
         {
             return true;
         }
 
-        public IMdbpMachine MdbpWantMachineApi(Object requestedVersion)
+        public MdbpMachine MdbpWantMachineApi(Object requestedVersion)
         {
             String[] onlySupportedVersion = new String[]
                 {"Muldis_Database_Protocol", "http://muldis.com", "0.201.0"};
@@ -27,7 +26,7 @@ namespace Muldis.ReferenceEngine
                     (String[])requestedVersion, onlySupportedVersion))
                 {
                     // We support the requested specific MDBP version.
-                    return new MreMachine().init();
+                    return new MdbpMachine().init();
                 }
             }
             // We don't support the requested specific MDBP version.
@@ -35,56 +34,55 @@ namespace Muldis.ReferenceEngine
         }
     }
 
-    public class MreMachine : IMdbpMachine
+    public class MdbpMachine
     {
         internal Core.Memory   m_memory;
         internal Core.Executor m_executor;
 
-        internal MreMachine init()
+        internal MdbpMachine init()
         {
             m_memory   = new Core.Memory();
             m_executor = m_memory.Executor;
             return this;
         }
 
-        public IMdbpValue MdbpEvaluate(IMdbpValue function, IMdbpValue args = null)
+        public MdbpValue MdbpEvaluate(MdbpValue function, MdbpValue args = null)
         {
-            return (IMdbpValue)new MreValue().init(this,
-                m_executor.Evaluates(((MreValue)function).m_value, ((MreValue)args).m_value));
+            return new MdbpValue().init(this,
+                m_executor.Evaluates(function.m_value, args.m_value));
         }
 
-        public void MdbpPerform(IMdbpValue procedure, IMdbpValue args = null)
+        public void MdbpPerform(MdbpValue procedure, MdbpValue args = null)
         {
-            m_executor.Performs(((MreValue)procedure).m_value, ((MreValue)args).m_value);
+            m_executor.Performs(procedure.m_value, args.m_value);
         }
 
-        public IMdbpValue MdbpCurrent(IMdbpValue variable)
+        public MdbpValue MdbpCurrent(MdbpValue variable)
         {
-            return (IMdbpValue)new MreValue().init(this,
-                ((MreValue)variable).m_value.MD_Variable());
+            return new MdbpValue().init(this, variable.m_value.MD_Variable());
         }
 
-        public void MdbpAssign(IMdbpValue variable, IMdbpValue newCurrent)
+        public void MdbpAssign(MdbpValue variable, MdbpValue newCurrent)
         {
             if (newCurrent == null)
             {
                 throw new ArgumentNullException("newCurrent");
             }
-            ((MreValue)variable).m_value.Details = ((MreValue)newCurrent).m_value;
+            variable.m_value.Details = newCurrent.m_value;
         }
 
-        public IMdbpValue MdbpImport(Object value)
+        public MdbpValue MdbpImport(Object value)
         {
-            if (value != null && value.GetType().FullName == "Muldis.ReferenceEngine.MreValue")
+            if (value != null && value.GetType().FullName == "Muldis.ReferenceEngine.MdbpValue")
             {
-                return (IMdbpValue)value;
+                return (MdbpValue)value;
             }
-            return (IMdbpValue)new MreValue().init(this, Import__Tree(value));
+            return new MdbpValue().init(this, Import__Tree(value));
         }
 
-        public IMdbpValue MdbpImportQualified(KeyValuePair<String,Object> value)
+        public MdbpValue MdbpImportQualified(KeyValuePair<String,Object> value)
         {
-            return (IMdbpValue)new MreValue().init(this, Import__Tree_Qualified(value));
+            return new MdbpValue().init(this, Import__Tree_Qualified(value));
         }
 
         private Core.MD_Any Import__Tree(Object value)
@@ -92,9 +90,9 @@ namespace Muldis.ReferenceEngine
             if (value != null)
             {
                 String type_name = value.GetType().FullName;
-                if (type_name == "Muldis.ReferenceEngine.MreValue")
+                if (type_name == "Muldis.ReferenceEngine.MdbpValue")
                 {
-                    return ((MreValue)value).m_value;
+                    return ((MdbpValue)value).m_value;
                 }
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
@@ -180,12 +178,12 @@ namespace Muldis.ReferenceEngine
                             }
                             return m_memory.MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                         }
-                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.MreValue"
-                            && ((Muldis.ReferenceEngine.MreValue)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
-                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.MreValue"
-                            && ((Muldis.ReferenceEngine.MreValue)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
+                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.MdbpValue"
+                            && ((Muldis.ReferenceEngine.MdbpValue)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
+                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.MdbpValue"
+                            && ((Muldis.ReferenceEngine.MdbpValue)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
                         {
-                            if (((Muldis.ReferenceEngine.MreValue)denominator).m_value.MD_Integer() == 0)
+                            if (((Muldis.ReferenceEngine.MdbpValue)denominator).m_value.MD_Integer() == 0)
                             {
                                 throw new ArgumentException
                                 (
@@ -194,8 +192,8 @@ namespace Muldis.ReferenceEngine
                                 );
                             }
                             return m_memory.MD_Fraction(
-                                ((Muldis.ReferenceEngine.MreValue)numerator  ).m_value.MD_Integer(),
-                                ((Muldis.ReferenceEngine.MreValue)denominator).m_value.MD_Integer()
+                                ((Muldis.ReferenceEngine.MdbpValue)numerator  ).m_value.MD_Integer(),
+                                ((Muldis.ReferenceEngine.MdbpValue)denominator).m_value.MD_Integer()
                             );
                         }
                     }
@@ -336,18 +334,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple_Array":
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Array_C0;
                         return m_memory.MD_Tuple_Array(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         if (!m_memory.Array__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -370,18 +368,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Relation":
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Set_C0;
                         return m_memory.MD_Relation(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         if (!m_memory.Set__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -404,18 +402,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple_Bag":
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Bag_C0;
                         return m_memory.MD_Tuple_Bag(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MreValue"
-                        && ((Muldis.ReferenceEngine.MreValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue"
+                        && ((Muldis.ReferenceEngine.MdbpValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MreValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MdbpValue)v).m_value;
                         if (!m_memory.Bag__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -500,17 +498,17 @@ namespace Muldis.ReferenceEngine
                                 attrs_cv
                             );
                         }
-                        if (label.GetType().FullName == "Muldis.ReferenceEngine.MreValue")
+                        if (label.GetType().FullName == "Muldis.ReferenceEngine.MdbpValue")
                         {
                             return m_memory.MD_Article(Import__Tree(label), attrs_cv);
                         }
                     }
                     break;
                 case "New_Variable":
-                    if (type_name == "Muldis.ReferenceEngine.MreValue")
+                    if (type_name == "Muldis.ReferenceEngine.MdbpValue")
                     {
                         return m_memory.New_MD_Variable(
-                            ((Muldis.ReferenceEngine.MreValue)v).m_value);
+                            ((Muldis.ReferenceEngine.MdbpValue)v).m_value);
                     }
                     break;
                 case "New_Process":
@@ -652,9 +650,9 @@ namespace Muldis.ReferenceEngine
             throw new NotImplementedException("Unhandled MDBP value type ["+type_name+"].");
         }
 
-        public Object MdbpExport(IMdbpValue value)
+        public Object MdbpExport(MdbpValue value)
         {
-            Core.MD_Any v = ((MreValue)value).m_value;
+            Core.MD_Any v = value.m_value;
             switch (v.MD_MSBT)
             {
                 case Core.MD_Well_Known_Base_Type.MD_Boolean:
@@ -668,9 +666,9 @@ namespace Muldis.ReferenceEngine
             }
         }
 
-        public KeyValuePair<String,Object> MdbpExportQualified(IMdbpValue value)
+        public KeyValuePair<String,Object> MdbpExportQualified(MdbpValue value)
         {
-            Core.MD_Any v = ((MreValue)value).m_value;
+            Core.MD_Any v = value.m_value;
             switch (v.MD_MSBT)
             {
                 case Core.MD_Well_Known_Base_Type.MD_Boolean:
@@ -714,18 +712,18 @@ namespace Muldis.ReferenceEngine
         }
     }
 
-    public class MreValue : IMdbpValue
+    public class MdbpValue
     {
-        internal MreMachine  m_machine;
+        internal MdbpMachine  m_machine;
         internal Core.MD_Any m_value;
 
-        internal MreValue init(MreMachine machine)
+        internal MdbpValue init(MdbpMachine machine)
         {
             m_machine = machine;
             return this;
         }
 
-        internal MreValue init(MreMachine machine, Core.MD_Any value)
+        internal MdbpValue init(MdbpMachine machine, Core.MD_Any value)
         {
             m_machine = machine;
             m_value   = value;
@@ -737,7 +735,7 @@ namespace Muldis.ReferenceEngine
             return m_value.ToString();
         }
 
-        public IMdbpMachine MdbpMachine()
+        public MdbpMachine MdbpMachine()
         {
             return m_machine;
         }

@@ -4,8 +4,6 @@ VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04770409-3B55-4E7F-8584-D6C7A11A48BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.DatabaseProtocol", "src\Muldis.DatabaseProtocol\Muldis.DatabaseProtocol.csproj", "{8294376F-2274-45CB-84AF-DF0278A22891}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.ReferenceEngine", "src\Muldis.ReferenceEngine\Muldis.ReferenceEngine.csproj", "{6A8C0204-808F-467D-A096-398E6CEA0297}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.ReferenceEngine.Console", "src\Muldis.ReferenceEngine.Console\Muldis.ReferenceEngine.Console.csproj", "{20BC7486-C075-4851-A011-05C5A7FDCAB7}"
@@ -20,18 +18,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|x64.Build.0 = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Debug|x86.Build.0 = Debug|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|x64.ActiveCfg = Release|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|x64.Build.0 = Release|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|x86.ActiveCfg = Release|Any CPU
-		{8294376F-2274-45CB-84AF-DF0278A22891}.Release|x86.Build.0 = Release|Any CPU
 		{6A8C0204-808F-467D-A096-398E6CEA0297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A8C0204-808F-467D-A096-398E6CEA0297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A8C0204-808F-467D-A096-398E6CEA0297}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -61,8 +47,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8294376F-2274-45CB-84AF-DF0278A22891} = {04770409-3B55-4E7F-8584-D6C7A11A48BF}
 		{6A8C0204-808F-467D-A096-398E6CEA0297} = {04770409-3B55-4E7F-8584-D6C7A11A48BF}
 		{20BC7486-C075-4851-A011-05C5A7FDCAB7} = {04770409-3B55-4E7F-8584-D6C7A11A48BF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED34426C-6714-4C32-9C92-F18005E69BF7}
 	EndGlobalSection
 EndGlobal
