@@ -583,7 +583,7 @@ namespace Muldis.ReferenceEngine.Core
                     result = Enumerable.SequenceEqual(a0.MD_Blob(), a1.MD_Blob());
                     break;
                 case MD_Well_Known_Base_Type.MD_Text:
-                    result = (a0.MD_Text().Codepoint_Members == a1.MD_Text().Codepoint_Members);
+                    result = (a0.MD_Text().Code_Point_Members == a1.MD_Text().Code_Point_Members);
                     break;
                 case MD_Well_Known_Base_Type.MD_Array:
                     Memory.Array__Collapse(a0);
@@ -761,7 +761,7 @@ namespace Muldis.ReferenceEngine.Core
             {
                 if (node.Has_Any_Non_BMP)
                 {
-                    String s = node.Codepoint_Members;
+                    String s = node.Code_Point_Members;
                     Int32 count = 0;
                     for (Int32 i = 0; i < s.Length; i++)
                     {
@@ -776,7 +776,7 @@ namespace Muldis.ReferenceEngine.Core
                 }
                 else
                 {
-                    node.Cached_Member_Count = node.Codepoint_Members.Length;
+                    node.Cached_Member_Count = node.Code_Point_Members.Length;
                 }
             }
             return (Int64)node.Cached_Member_Count;
@@ -831,7 +831,7 @@ namespace Muldis.ReferenceEngine.Core
             MD_Text_Struct node = text.MD_Text();
             if (node.Has_Any_Non_BMP)
             {
-                String s = node.Codepoint_Members;
+                String s = node.Code_Point_Members;
                 Int64 logical_i = 0;
                 for (Int32 i = 0; i < s.Length; i++)
                 {
@@ -854,7 +854,7 @@ namespace Muldis.ReferenceEngine.Core
                 }
             }
             return Memory.MD_Integer(
-                node.Codepoint_Members[(Int32)ord_pos]);
+                node.Code_Point_Members[(Int32)ord_pos]);
         }
 
         private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)

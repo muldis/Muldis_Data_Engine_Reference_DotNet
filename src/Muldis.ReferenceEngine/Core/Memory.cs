@@ -155,7 +155,7 @@ namespace Muldis.ReferenceEngine.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
                 Details = new MD_Text_Struct {
-                    Codepoint_Members = "",
+                    Code_Point_Members = "",
                     Has_Any_Non_BMP = false,
                     Cached_Member_Count = 0,
                 },
@@ -505,7 +505,7 @@ namespace Muldis.ReferenceEngine.Core
                 Memory = this,
                 MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
                 Details = new MD_Text_Struct {
-                    Codepoint_Members = members,
+                    Code_Point_Members = members,
                     Has_Any_Non_BMP = has_any_non_BMP,
                 },
             };

@@ -206,7 +206,7 @@ namespace Muldis.ReferenceEngine.Core.Plain_Text
                 return "''";
             }
             return "'" + Quoted_Name_Or_Text_Segment_Content(
-                value.MD_Text().Codepoint_Members) + "'";
+                value.MD_Text().Code_Point_Members) + "'";
         }
 
         private String Quoted_Name_Or_Text_Segment_Content(String value)

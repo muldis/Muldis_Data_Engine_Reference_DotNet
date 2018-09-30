@@ -468,7 +468,7 @@ namespace Muldis.ReferenceEngine.Core
         // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
         // or from either of the 16 supplementary planes, which is those
         // member values in the range {0x10000..0x10FFFF}.
-        // Codepoint_Members is represented using a standard .NET
+        // Code_Point_Members is represented using a standard .NET
         // String value for simplicity but a String has a different native
         // concept of components; it is formally an array of .NET Char
         // each of which is either a whole BMP code point or half of a
@@ -480,7 +480,7 @@ namespace Muldis.ReferenceEngine.Core
         // "surrogate" Char outside of a proper "surrogate pair", both
         // Muldis.DatabaseProtocol and Muldis.ReferenceEngine forbid such a malformed String
         // from either being used internally or being passed in by the API.
-        internal String Codepoint_Members { get; set; }
+        internal String Code_Point_Members { get; set; }
 
         // Nullable Boolean
         // This is true iff we know that at least 1 code point member is NOT
