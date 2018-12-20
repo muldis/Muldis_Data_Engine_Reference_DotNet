@@ -39,6 +39,13 @@ namespace Muldis.ReferenceEngine
             return this;
         }
 
+        public void ProvidesMuldisDatabaseProtocolFactory() {}
+
+        public MdbpEntrance MdbpEntrance()
+        {
+            return m_entrance;
+        }
+
         public MdbpMachine NewMdbpMachine(Object requestedModelVersion)
         {
             String[] onlySupportedModelVersion = new String[]
@@ -70,24 +77,47 @@ namespace Muldis.ReferenceEngine
             return this;
         }
 
+        public void ProvidesMuldisDatabaseProtocolMachine() {}
+
+        public MdbpFactory MdbpFactory()
+        {
+            return m_factory;
+        }
+
         public MdbpValue MdbpEvaluate(MdbpValue function, MdbpValue args = null)
         {
+            if (function == null)
+            {
+                throw new ArgumentNullException("function");
+            }
             return new MdbpValue().init(this,
-                m_executor.Evaluates(function.m_value, args.m_value));
+                m_executor.Evaluates(function.m_value, args == null ? null : args.m_value));
         }
 
         public void MdbpPerform(MdbpValue procedure, MdbpValue args = null)
         {
-            m_executor.Performs(procedure.m_value, args.m_value);
+            if (procedure == null)
+            {
+                throw new ArgumentNullException("procedure");
+            }
+            m_executor.Performs(procedure.m_value, args == null ? null : args.m_value);
         }
 
         public MdbpValue MdbpCurrent(MdbpValue variable)
         {
+            if (variable == null)
+            {
+                throw new ArgumentNullException("variable");
+            }
             return new MdbpValue().init(this, variable.m_value.MD_Variable());
         }
 
         public void MdbpAssign(MdbpValue variable, MdbpValue newCurrent)
         {
+            if (variable == null)
+            {
+                throw new ArgumentNullException("variable");
+            }
             if (newCurrent == null)
             {
                 throw new ArgumentNullException("newCurrent");
@@ -676,6 +706,10 @@ namespace Muldis.ReferenceEngine
 
         public Object MdbpExport(MdbpValue value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             Core.MD_Any v = value.m_value;
             switch (v.MD_MSBT)
             {
@@ -692,6 +726,10 @@ namespace Muldis.ReferenceEngine
 
         public KeyValuePair<String,Object> MdbpExportQualified(MdbpValue value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             Core.MD_Any v = value.m_value;
             switch (v.MD_MSBT)
             {
@@ -758,6 +796,8 @@ namespace Muldis.ReferenceEngine
         {
             return m_value.ToString();
         }
+
+        public void ProvidesMuldisDatabaseProtocolValue() {}
 
         public MdbpMachine MdbpMachine()
         {
