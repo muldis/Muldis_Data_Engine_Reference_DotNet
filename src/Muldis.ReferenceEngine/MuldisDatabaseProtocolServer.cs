@@ -8,39 +8,63 @@ using System.Numerics;
 
 namespace Muldis.ReferenceEngine
 {
-    public class MdbpInfo
+    public class MdbpEntrance
     {
-        public Boolean ProvidesMuldisDatabaseProtocolInfo()
+        public void ProvidesMuldisDatabaseProtocolEntrance() {}
+
+        public MdbpFactory NewMdbpFactory(Object requestedMdbpVersion)
         {
-            return true;
+            String[] onlySupportedMdbpVersion = new String[]
+                {"Muldis_Database_Protocol", "http://muldis.com", "0.201.0"};
+            if (requestedMdbpVersion == null
+                || requestedMdbpVersion.GetType().FullName != "System.String[]"
+                || !Enumerable.SequenceEqual(
+                    (String[])requestedMdbpVersion, onlySupportedMdbpVersion))
+            {
+                // We don't support the requested specific MDBP version.
+                return null;
+            }
+            // We support the requested specific MDBP version.
+            return new MdbpFactory().init(this);
+        }
+    }
+
+    public class MdbpFactory
+    {
+        internal MdbpEntrance m_entrance;
+
+        internal MdbpFactory init(MdbpEntrance entrance)
+        {
+            m_entrance = entrance;
+            return this;
         }
 
-        public MdbpMachine MdbpWantMachineApi(Object requestedVersion)
+        public MdbpMachine NewMdbpMachine(Object requestedModelVersion)
         {
-            String[] onlySupportedVersion = new String[]
-                {"Muldis_Database_Protocol", "http://muldis.com", "0.201.0"};
-            if (requestedVersion != null
-                && requestedVersion.GetType().FullName == "System.String[]")
+            String[] onlySupportedModelVersion = new String[]
+                {"Muldis_Data_Language", "http://muldis.com", "0.201.0"};
+            if (requestedModelVersion == null
+                || requestedModelVersion.GetType().FullName != "System.String[]"
+                || !Enumerable.SequenceEqual(
+                    (String[])requestedModelVersion, onlySupportedModelVersion))
             {
-                if (Enumerable.SequenceEqual(
-                    (String[])requestedVersion, onlySupportedVersion))
-                {
-                    // We support the requested specific MDBP version.
-                    return new MdbpMachine().init();
-                }
+                // We don't support the requested specific model version.
+                return null;
             }
-            // We don't support the requested specific MDBP version.
-            return null;
+            // We support the requested specific model version.
+            return new MdbpMachine().init(this);
         }
     }
 
     public class MdbpMachine
     {
+        internal MdbpFactory   m_factory;
         internal Core.Memory   m_memory;
         internal Core.Executor m_executor;
 
-        internal MdbpMachine init()
+        internal MdbpMachine init(MdbpFactory factory)
         {
+            m_factory  = factory;
             m_memory   = new Core.Memory();
             m_executor = m_memory.Executor;
             return this;
@@ -714,7 +738,7 @@ namespace Muldis.ReferenceEngine
 
     public class MdbpValue
     {
-        internal MdbpMachine  m_machine;
+        internal MdbpMachine m_machine;
         internal Core.MD_Any m_value;
 
         internal MdbpValue init(MdbpMachine machine)

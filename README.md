@@ -68,12 +68,12 @@ the first version to include stable .NET Standard 2.0 and .NET Core 2.0 by
 default and so is the earliest recommended version to use.  Unofficially
 any version back to MS Visual Studio 2010 inclusive would probably handle
 the C\# source files.  As of this writing, MS Visual Studio 2017 version
-15.8.5 (2018 Sep 20) is the newest stable version released.
+15.9.4 (2018 Dec 11) is the newest stable version released.
 
 On Apple MacOS, MS Visual Studio 2017 for Mac version 7.2.0 (2017 Oct 9)
 was the first version to include stable .NET Standard 2.0 and .NET Core 2.0
 by default and so is the earliest recommended version to use.  As of this
-writing, MS Visual Studio 2017 for Mac version 7.6.7 (2018 Sep 25) is the
+writing, MS Visual Studio 2017 for Mac version 7.7.2 (2018 Dec 17) is the
 newest stable version released.
 
 # DEPENDENCIES AND COMPATIBILITY (OLD VERSION, TO BE REMOVED)
