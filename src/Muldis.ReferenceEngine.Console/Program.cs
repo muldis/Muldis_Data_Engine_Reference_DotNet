@@ -29,42 +29,15 @@ namespace Muldis.ReferenceEngine.Console
             // Try and load the entrance class, or die.
             // Note, generally the class name needs to be assembly-qualified for
             // GetType() to find it; eg "Company.Project.Class,Company.Project" works.
-            Type entranceClass = Type.GetType(museEntranceClassName);
-            if (entranceClass == null)
-            {
-                System.Console.WriteLine(
-                    "The requested Muldis Service Protocol entrance class"
-                    + " [" + museEntranceClassName + "] can't be loaded;"
-                    + " perhaps it needs to be fully qualified with the assembly name.");
-                return;
-            }
-
             // Die unless the entrance class explicitly declares it implements MUSE.
-            if (entranceClass.GetMethod("ProvidesMuldisServiceProtocolEntrance") == null)
-            {
-                System.Console.WriteLine(
-                    "The requested Muldis Service Protocol entrance class"
-                    + " [" + museEntranceClassName + "]"
-                    + " doesn't declare that it provides a version of the MUSE API"
-                    + " by declaring the method [ProvidesMuldisServiceProtocolEntrance].");
-                return;
-            }
-
             // Instantiate object of a Muldis Service Protocol entrance class.
-            MuseEntrance entrance = (MuseEntrance)Activator.CreateInstance(entranceClass);
-
             // Request a factory object implementing a specific version of the
             // MUSE or what the entrance considers the next best fit version;
             // this would die if it thinks it can't satisfy an acceptable version.
             // We will use this for all the main work.
-            MuseFactory factory = entrance.NewMuseFactory(
-                new String[] {"Muldis_Service_Protocol", "http://muldis.com", "0.300.0"});
+            MuseFactory factory = MuseEntrance.NewMuseFactory(museEntranceClassName);
             if (factory == null)
             {
-                System.Console.WriteLine(
-                    "The requested Muldis Service Protocol entrance class"
-                    + " [" + museEntranceClassName + "]"
-                    + " doesn't provide the specific MUSE version needed.");
                 return;
             }
 
