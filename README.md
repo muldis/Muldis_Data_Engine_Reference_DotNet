@@ -16,7 +16,7 @@ application `Muldis.ReferenceEngine.Console`.
 
 **Muldis Reference Engine: .NET** is the reference implementation over C\# of
 **Muldis Data Language** by the authority Muldis Data Systems
-([http://muldis.com](http://muldis.com)), version number `0.201.0`.
+([http://muldis.com](http://muldis.com)), version number `0.300.0`.
 
 The Muldis Data Language specification is under active development and its
 latest version can be seen at
@@ -68,13 +68,15 @@ the first version to include stable .NET Standard 2.0 and .NET Core 2.0 by
 default and so is the earliest recommended version to use.  Unofficially
 any version back to MS Visual Studio 2010 inclusive would probably handle
 the C\# source files.  As of this writing, MS Visual Studio 2017 version
-15.9.4 (2018 Dec 11) is the newest stable version released.
+15.9.11 (2019 Apr 2) and MS Visual Studio 2019 version 16.0.2
+(2019 Apr 18) are the newest stable versions released.
 
 On Apple MacOS, MS Visual Studio 2017 for Mac version 7.2.0 (2017 Oct 9)
 was the first version to include stable .NET Standard 2.0 and .NET Core 2.0
 by default and so is the earliest recommended version to use.  As of this
-writing, MS Visual Studio 2017 for Mac version 7.7.2 (2018 Dec 17) is the
-newest stable version released.
+writing, MS Visual Studio 2017 for Mac version 7.8.3 (2019 Mar 12) and MS
+Visual Studio 2019 for Mac version 8.0.4 (2019 Apr 18) are the newest
+stable versions released.
 
 # DEPENDENCIES AND COMPATIBILITY (OLD VERSION, TO BE REMOVED)
 
@@ -198,13 +200,25 @@ Microsoft's .NET Core has official support for various Linux flavors also,
 but the author has not tried using **Muldis Reference Engine: .NET** there and so has no
 customized instructions to offer, but see the above Microsoft .NET Core url.
 
+# KNOWN ISSUES
+
+Currently `Muldis.ReferenceEngine.Console.csproj` explicitly references the
+`Muldis.ReferenceEngine` project as a dependency, but the desire is that it
+not do so in order that the 2 projects have no hard-coded references to
+each other at all.  However, as of 2018 Dec 19, a call in `Console` to
+`Type.GetType()` will fail to find a user provided class
+`Muldis.ReferenceEngine.MuseEntrance,Muldis.ReferenceEngine` unless this is
+done, even though that is assembly-qualified.  I seem to recall this worked
+without the explicit `.csproj` dependency on an earlier date, but it isn't
+now.  Assistance to make this work is welcome.
+
 # AUTHOR
 
 Darren Duncan - darren@DarrenDuncan.net
 
 # LICENSE AND COPYRIGHT
 
-**Muldis Reference Engine: .NET** is Copyright © 2015-2018, Muldis Data Systems, Inc.
+**Muldis Reference Engine: .NET** is Copyright © 2015-2019, Muldis Data Systems, Inc.
 
 [http://www.muldis.com/](http://www.muldis.com/)
 

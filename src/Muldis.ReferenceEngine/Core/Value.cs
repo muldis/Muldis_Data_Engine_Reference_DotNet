@@ -478,7 +478,7 @@ namespace Muldis.ReferenceEngine.Core
         // "length" of the Muldis D Text when all code points are in the BMP.
         // While it is possible for a .NET String to contain an isolated
         // "surrogate" Char outside of a proper "surrogate pair", both
-        // Muldis.DatabaseProtocol and Muldis.ReferenceEngine forbid such a malformed String
+        // Muldis.ServiceProtocol and Muldis.ReferenceEngine forbid such a malformed String
         // from either being used internally or being passed in by the API.
         internal String Code_Point_Members { get; set; }
 

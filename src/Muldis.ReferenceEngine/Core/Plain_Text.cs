@@ -26,7 +26,7 @@ namespace Muldis.ReferenceEngine.Core.Plain_Text
     // "Package" type, which is the "native" form of Muldis D source code
     // and a "standard compilation unit".
     // The input "Text" source code is expected to conform to the formal
-    // specification "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0'"
+    // specification "Muldis_D_Plain_Text 'http://muldis.com' '0.300.0'"
     // and would typically either be hand-written by users or be generated
     // by code such as the X or Y classes below.
     // This class is completely deterministic and its exact output Muldis D
@@ -426,7 +426,7 @@ namespace Muldis.ReferenceEngine.Core.Plain_Text
     // Provides utility pure functions that accept any Muldis D "Package"
     // value, which is a native Muldis D "standard compilation unit", and
     // derive a "Text" value that is this "Package" encoded in compliance
-    // with the "Muldis_D_Plain_Text 'http://muldis.com' '0.201.0'"
+    // with the "Muldis_D_Plain_Text 'http://muldis.com' '0.300.0'"
     // formal specification.  This outputs of this generator are intended
     // for external use, whether for storage in foo.mdpt disk files or
     // other places, viewing by users, and reading by other programs, as a
@@ -458,7 +458,7 @@ namespace Muldis.ReferenceEngine.Core.Plain_Text
         internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
         {
             return value.Memory.MD_Text(
-                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0'\u000A"
+                "Muldis_D Plain_Text 'http://muldis.com' '0.300.0'\u000A"
                 + "meta foundational\u000A"
                 + Any_Selector(value, "") + "\u000A",
                 false
@@ -468,7 +468,7 @@ namespace Muldis.ReferenceEngine.Core.Plain_Text
         internal MD_Any MD_Text_MDPT_Parsing_Unit_Predicate(Memory memory)
         {
             return memory.MD_Text(
-                "Muldis_D Plain_Text 'http://muldis.com' '0.201.0'\u000A"
+                "Muldis_D Plain_Text 'http://muldis.com' '0.300.0'\u000A"
                 + "meta foundational\u000A",
                 false
             );
