@@ -1,12 +1,11 @@
 # NAME
 
-Muldis Reference Engine: .NET (MRE) -
-Reference Implementation of Muldis Data Language Over .NET
+Muldis Reference Engine: .NET (MRE) - Reference Implementation of Muldis Data Language Over .NET
 
 # VERSION
 
 The fully-qualified name of what this document describes is
-`Muldis_Reference_Engine_DotNet http://muldis.com 0.0.0`.
+`Muldis_Reference_Engine_DotNet https://muldis.com 0.0.0`.
 
 # DESCRIPTION
 
@@ -16,7 +15,7 @@ application `Muldis.ReferenceEngine.Console`.
 
 **Muldis Reference Engine: .NET** is the reference implementation over C\# of
 **Muldis Data Language** by the authority Muldis Data Systems
-([http://muldis.com](http://muldis.com)), version number `0.300.0`.
+([https://muldis.com](https://muldis.com)), version number `0.300.0`.
 
 The Muldis Data Language specification is under active development and its
 latest version can be seen at
@@ -220,16 +219,16 @@ Darren Duncan - darren@DarrenDuncan.net
 
 **Muldis Reference Engine: .NET** is Copyright © 2015-2019, Muldis Data Systems, Inc.
 
-[http://www.muldis.com/](http://www.muldis.com/)
+[https://muldis.com](https://muldis.com)
 
 **Muldis Reference Engine: .NET** is free software; you can redistribute it and/or modify
 it under the terms of the Artistic License version 2 (AL2) as published by
-the Perl Foundation ([http://www.perlfoundation.org/](
-http://www.perlfoundation.org/)).  You should have received a copy of the
+the Perl Foundation ([https://www.perlfoundation.org](
+https://www.perlfoundation.org)).  You should have received a copy of the
 AL2 as part of the **Muldis Reference Engine: .NET** distribution, in the file named
 "LICENSE/artistic-2\_0.txt"; if not, see
-[http://www.perlfoundation.org/attachment/legal/artistic-2\_0.txt](
-http://www.perlfoundation.org/attachment/legal/artistic-2\_0.txt).
+[https://www.perlfoundation.org/artistic-license-20.html](
+https://www.perlfoundation.org/artistic-license-20.html).
 
 Any versions of **Muldis Reference Engine: .NET** that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any

@@ -46,7 +46,7 @@ namespace Muldis.ReferenceEngine.Console
             // this would die if it thinks it can't satisfy an acceptable version.
             // We will use this for all the main work.
             MuseMachine machine = factory.NewMuseMachine(
-                new String[] {"Muldis_Data_Language", "http://muldis.com", "0.300.0"});
+                new String[] {"Muldis_Data_Language", "https://muldis.com", "0.300.0"});
             if (machine == null)
             {
                 System.Console.WriteLine(

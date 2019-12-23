@@ -39,7 +39,7 @@ namespace Muldis.ReferenceEngine.Console
             // this would die if it thinks it can't satisfy an acceptable version.
             // We will use this for all the main work.
             String[] requestedMuseVersion = new String[]
-                {"Muldis_Service_Protocol", "http://muldis.com", "0.300.0"};
+                {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"};
             Object factory = entranceClass.GetMethod("NewMuseFactory")
                 .Invoke(entrance, new Object[] { requestedMuseVersion });
             if (factory == null)

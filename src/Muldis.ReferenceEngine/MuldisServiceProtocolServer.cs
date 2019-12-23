@@ -15,7 +15,7 @@ namespace Muldis.ReferenceEngine
         public MuseFactory NewMuseFactory(Object requestedMuseVersion)
         {
             String[] onlySupportedMuseVersion = new String[]
-                {"Muldis_Service_Protocol", "http://muldis.com", "0.300.0"};
+                {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"};
             if (requestedMuseVersion == null
                 || requestedMuseVersion.GetType().FullName != "System.String[]"
                 || !Enumerable.SequenceEqual(
@@ -49,7 +49,7 @@ namespace Muldis.ReferenceEngine
         public MuseMachine NewMuseMachine(Object requestedModelVersion)
         {
             String[] onlySupportedModelVersion = new String[]
-                {"Muldis_Data_Language", "http://muldis.com", "0.300.0"};
+                {"Muldis_Data_Language", "https://muldis.com", "0.300.0"};
             if (requestedModelVersion == null
                 || requestedModelVersion.GetType().FullName != "System.String[]"
                 || !Enumerable.SequenceEqual(
