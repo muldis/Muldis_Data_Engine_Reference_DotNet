@@ -217,18 +217,18 @@ Darren Duncan - darren@DarrenDuncan.net
 
 # LICENSE AND COPYRIGHT
 
-**Muldis Reference Engine: .NET** is Copyright © 2015-2019, Muldis Data Systems, Inc.
+**Muldis Reference Engine: .NET** is Copyright © 2015-2022, Muldis Data Systems, Inc.
 
 [https://muldis.com](https://muldis.com)
 
 **Muldis Reference Engine: .NET** is free software; you can redistribute it and/or modify
-it under the terms of the Artistic License version 2 (AL2) as published by
-the Perl Foundation ([https://www.perlfoundation.org](
-https://www.perlfoundation.org)).  You should have received a copy of the
+it under the terms of the Apache License, Version 2.0 (AL2) as published by
+the Apache Software Foundation ([https://www.apache.org](
+https://www.apache.org)).  You should have received a copy of the
 AL2 as part of the **Muldis Reference Engine: .NET** distribution, in the file named
-"LICENSE/artistic-2\_0.txt"; if not, see
-[https://www.perlfoundation.org/artistic-license-20.html](
-https://www.perlfoundation.org/artistic-license-20.html).
+"LICENSE/Apache-2.0.txt"; if not, see
+[https://www.apache.org/licenses/LICENSE-2.0](
+https://www.apache.org/licenses/LICENSE-2.0).
 
 Any versions of **Muldis Reference Engine: .NET** that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
