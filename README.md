@@ -15,15 +15,15 @@ application `Muldis.ReferenceEngine.Console`.
 
 **Muldis Reference Engine: .NET** is the reference implementation over C\# of
 **Muldis Data Language** by the authority Muldis Data Systems
-([https://muldis.com](https://muldis.com)), version number `0.300.0`.
+(<https://muldis.com>), version number `0.300.0`.
 
 The Muldis Data Language specification is under active development and its
 latest version can be seen at
-[https://github.com/muldis/Muldis_Data_Language](https://github.com/muldis/Muldis_Data_Language).
+<https://github.com/muldis/Muldis_Data_Language>.
 
 Muldis Data Language itself has as a primary influence the work of Chris
 Date (C.J. Date) and Hugh Darwen whose home website is
-[http://www.thethirdmanifesto.com/](http://www.thethirdmanifesto.com/).
+<http://www.thethirdmanifesto.com/>.
 
 *This documentation is pending.*
 
@@ -32,13 +32,12 @@ Date (C.J. Date) and Hugh Darwen whose home website is
 **Muldis Reference Engine: .NET** is defined in terms of Microsoft's .NET
 "dot net" developer platform.
 
-[https://www.microsoft.com/net](https://www.microsoft.com/net)
+<https://www.microsoft.com/net>
 
 **Muldis Reference Engine: .NET** officially requires the .NET Standard
 version 2.0 API (2017).
 
-[https://docs.microsoft.com/en-us/dotnet/standard/net-standard](
-https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+<https://docs.microsoft.com/en-us/dotnet/standard/net-standard>
 
 The .NET Standard version 2.0 API is provided by the following .NET
 implementations: .NET Core versions 2.0 (2017) and above, .NET Framework
@@ -60,7 +59,7 @@ The newest .NET implementations provided by Microsoft for each major
 operating system can be downloaded here, including the Visual Studio IDE
 and the .NET Core SDK:
 
-[https://www.microsoft.com/net/download](https://www.microsoft.com/net/download)
+<https://www.microsoft.com/net/download>
 
 On Microsoft Windows, MS Visual Studio 2017 version 15.4.0 (2017 Oct 9) was
 the first version to include stable .NET Standard 2.0 and .NET Core 2.0 by
@@ -92,8 +91,7 @@ isolation, should work as-is with all of:  .NET Framework versions 4.0
 (2010) and above (versions less than 4.0 are known to lack required
 features), .NET Core versions 1.0 (2016) and above, .NET Standard versions
 1.0 (2016) and above, Mono versions 2.8 (2010) and above, anything else
-listed at [https://docs.microsoft.com/en-us/dotnet/standard/library](
-https://docs.microsoft.com/en-us/dotnet/standard/library) as supported
+listed at <https://docs.microsoft.com/en-us/dotnet/standard/library> as supported
 platforms for .NET Standard versions 1.0 and above, and also a variety of
 older Portable Class Library profiles pre-dating .NET Standard.
 
@@ -113,7 +111,7 @@ have the 2017-plus-era tooling then you can use the whole of the given
 **Muldis Reference Engine: .NET** directly, widely cross-platform; otherwise you would need
 to take all the C\# files and use your own solution/project metadata files.
 
-See [https://www.microsoft.com/net/core](https://www.microsoft.com/net/core)
+See <https://www.microsoft.com/net/core>
 for instructions on how to install the dependencies.  These instructions
 are further interpreted in the following sections.
 
@@ -191,7 +189,7 @@ Another good solution is to use Microsoft's free Visual Studio Community
 for Mac which provides a GUI and debugger and is otherwise a lot like the
 Visual Studio for MS Windows.  It also understands the `Muldis.ReferenceEngine.sln`
 and `*.csproj` etc that **Muldis Reference Engine: .NET** comes with.  See
-[https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/).
+<https://www.visualstudio.com/downloads/>.
 
 ## Installation of Dependencies Under Other Operating Systems
 
@@ -219,16 +217,14 @@ Darren Duncan - darren@DarrenDuncan.net
 
 **Muldis Reference Engine: .NET** is Copyright © 2015-2022, Muldis Data Systems, Inc.
 
-[https://muldis.com](https://muldis.com)
+<https://muldis.com>
 
 **Muldis Reference Engine: .NET** is free software; you can redistribute it and/or modify
 it under the terms of the Apache License, Version 2.0 (AL2) as published by
-the Apache Software Foundation ([https://www.apache.org](
-https://www.apache.org)).  You should have received a copy of the
-AL2 as part of the **Muldis Reference Engine: .NET** distribution, in the file named
-"LICENSE/Apache-2.0.txt"; if not, see
-[https://www.apache.org/licenses/LICENSE-2.0](
-https://www.apache.org/licenses/LICENSE-2.0).
+the Apache Software Foundation (<https://www.apache.org>).  You should have received a copy of the
+AL2 as part of the **Muldis Reference Engine: .NET** distribution, in the file
+[LICENSE/Apache-2.0.txt](LICENSE/Apache-2.0.txt); if not, see
+<https://www.apache.org/licenses/LICENSE-2.0>.
 
 Any versions of **Muldis Reference Engine: .NET** that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
