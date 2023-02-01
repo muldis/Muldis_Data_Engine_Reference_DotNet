@@ -97,6 +97,7 @@ internal class MD_Any
         // D language environment, which the MD_External value is an opaque
         // and transient reference to.
     // Iff MSBT is MD_Excuse, this field holds a Dictionary<String,MD_Any> (like MD_Tuple).
+        // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object Details { get; set; }
 
     // Set of well-known Muldis D types that this Muldis D "value" is
@@ -764,6 +765,7 @@ internal class Cached_Members_Meta
 // Muldis.Data_Engine_Reference.Core.MD_Article_Struct
 // When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Article,
 // a MD_Article_Struct is used by it to hold the MD_Article-specific details.
+// TODO: Change Article so represented as Nesting+Kit pair.
 
 internal class MD_Article_Struct
 {

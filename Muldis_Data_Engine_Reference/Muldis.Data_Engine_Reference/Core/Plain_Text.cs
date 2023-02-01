@@ -17,6 +17,7 @@ internal abstract class Parser
 {
 }
 
+// TODO: Some of this text has obsolete notions and it should be rewritten.
 // Muldis.Data_Engine_Reference.Core.Plain_Text.Standard_Parser
 // Provides utility pure functions that accept Muldis D Plain Text (MDPT)
 // source code, either a complete "parsing unit" that might comprise a
@@ -26,19 +27,19 @@ internal abstract class Parser
 // "Package" type, which is the "native" form of Muldis D source code
 // and a "standard compilation unit".
 // The input "Text" source code is expected to conform to the formal
-// specification "Muldis_D_Plain_Text 'https://muldis.com' '0.300.0'"
+// specification "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
 // and would typically either be hand-written by users or be generated
 // by code such as the X or Y classes below.
 // This class is completely deterministic and its exact output Muldis D
 // Package/etc values are determined entirely by its input Text/etc values.
 // Standard_Parser only accepts input in the "foundational" flavor of
-// Muldis_D_Plain_Text, the same flavor that Standard_Generator outputs;
+// Muldis_Object_Notation_Plain_Text, the same flavor that Standard_Generator outputs;
 // it also expressly does not retain any
 // parsing meta-data as new decorations on the output code, such as
 // which exact numeric or string formats or whitespace was used.
 // Similarly, Standard_Parser has zero configuration options.
 // The more complicated reference implementation of a parser for the full
-// Muldis_D_Plain_Text grammar is in turn written in the "foundational"
+// Muldis_Object_Notation_Plain_Text grammar is in turn written in the "foundational"
 // subset of Muldis D, thus an executor for the full language is
 // bootstrapped by an executor taking just the subset.
 // The full reference parser can create decorations to support perfect
@@ -116,7 +117,7 @@ internal abstract class Generator
 
     private String Boolean_Literal(MD_Any value)
     {
-        return value.MD_Boolean().Value ? "True" : "False";
+        return value.MD_Boolean().Value ? "0bTRUE" : "0bFALSE";
     }
 
     private String Integer_Literal(MD_Any value)
@@ -175,7 +176,7 @@ internal abstract class Generator
     {
         if (Object.ReferenceEquals(value, value.Memory.MD_Bits_C0))
         {
-            return @"\~?''";
+            return "0bb";
         }
         System.Collections.IEnumerator e = value.MD_Bits().GetEnumerator();
         List<Boolean> list = new List<Boolean>();
@@ -183,58 +184,60 @@ internal abstract class Generator
         {
             list.Add((Boolean)e.Current);
         }
-        return @"\~?'0b" + String.Concat(
+        return "0bb" + String.Concat(
                 Enumerable.Select(list, m => m ? "1" : "0")
-            ) + "'";
+            );
     }
 
     private String Blob_Literal(MD_Any value)
     {
         if (Object.ReferenceEquals(value, value.Memory.MD_Blob_C0))
         {
-            return @"\~+''";
+            return "0xx";
         }
-        return @"\~+'0x" + String.Concat(
+        return "0xx" + String.Concat(
                 Enumerable.Select(value.MD_Blob(), m => m.ToString("X2"))
-            ) + "'";
+            );
     }
 
     private String Text_Literal(MD_Any value)
     {
         if (Object.ReferenceEquals(value, value.Memory.MD_Text_C0))
         {
-            return "''";
+            return "\"\"";
         }
-        return "'" + Quoted_Name_Or_Text_Segment_Content(
-            value.MD_Text().Code_Point_Members) + "'";
+        return Nonempty_Text_Literal(value.MD_Text().Code_Point_Members);
     }
 
-    private String Quoted_Name_Or_Text_Segment_Content(String value)
+    private String Nonempty_Text_Literal(String value)
+    {
+        if (value.Length == 1 && ((Char)value[0]) <= 0x1F)
+        {
+            // Format as a code-point-text.
+            return "0t" + ((Int32)(Char)value[0]);
+        }
+        // Else, format as a nonquoted-alphanumeric-text.
+        if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
+        {
+            return value;
+        }
+        // Else, format as a quoted text.
+        return "\"" + Quoted_Text_Segment_Content(value) + "\"";
+    }
+
+    private String Quoted_Text_Segment_Content(String value)
     {
         if (value == "" || !Regex.IsMatch(value,
-            "[\"\'`\\\u0000-\u001F\u0080-\u009F]"))
+            "[\u0000-\u001F\"\\`\u0080-\u009F]"))
         {
             return value;
         }
         StringBuilder sb = new StringBuilder(value.Length);
-        sb.Append(@"\");
         for (Int32 i = 0; i < value.Length; i++)
         {
             Char c = value[i];
             switch ((Int32)c)
             {
-                case 0x22:
-                    sb.Append(@"\q");
-                    break;
-                case 0x27:
-                    sb.Append(@"\a");
-                    break;
-                case 0x60:
-                    sb.Append(@"\g");
-                    break;
-                case 0x5C:
-                    sb.Append(@"\b");
-                    break;
                 case 0x9:
                     sb.Append(@"\t");
                     break;
@@ -244,10 +247,19 @@ internal abstract class Generator
                 case 0xD:
                     sb.Append(@"\r");
                     break;
+                case 0x22:
+                    sb.Append(@"\q");
+                    break;
+                case 0x5C:
+                    sb.Append(@"\b");
+                    break;
+                case 0x60:
+                    sb.Append(@"\g");
+                    break;
                 default:
                     if (c <= 0x1F || (c >= 0x80 && c <= 0x9F))
                     {
-                        sb.Append(@"\c<" + Integer_Literal((Int64)c) + ">");
+                        sb.Append(@"\[0t" + c.ToString() + "]");
                     }
                     else
                     {
@@ -261,48 +273,32 @@ internal abstract class Generator
 
     private String Attr_Name(String value)
     {
-        if (value.Length == 1 && ((Char)value[0]) <= 0x1F)
-        {
-            // Format as an ordered attribute name, an Integer in 0..31.
-            return Integer_Literal((Int64)(Char)value[0]);
-        }
-        // Else, format as a non-ordered attribute name.
-        if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
-        {
-            // Format as a bareword alphanumeric name.
-            return value;
-        }
-        // Else, format as a quoted name.
         if (value == "")
         {
             return "\"\"";
         }
-        return "\"" + Quoted_Name_Or_Text_Segment_Content(value) + "\"";
+        return Nonempty_Text_Literal(value);
     }
 
     private String Heading_Literal(MD_Any value)
     {
         Memory m = value.Memory;
         Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        if (attrs.Count == 1)
-        {
-            return @"\" + Attr_Name(attrs.First().Key);
-        }
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
-            : @"\@("
+        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Heading:())"
+            : "(Heading:("
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
                         a => Attr_Name(a.Key) + ","))
-                + ")";
+                + "))";
     }
 
     private String Array_Selector(MD_Any value, String indent)
     {
         String mei = indent + "\u0009";
         Memory m = value.Memory;
-        return Object.ReferenceEquals(value, m.MD_Array_C0) ? "[]"
-            : "[\u000A" + Array_Selector__node__tree(
-                value.MD_Array(), mei) + indent + "]";
+        return Object.ReferenceEquals(value, m.MD_Array_C0) ? "(Array:[])"
+            : "(Array:[\u000A" + Array_Selector__node__tree(
+                value.MD_Array(), mei) + indent + "])";
     }
 
     private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
@@ -343,12 +339,12 @@ internal abstract class Generator
         switch (node.Local_Symbolic_Type)
         {
             case Symbolic_Bag_Type.None:
-                return "{}";
+                return "(Set:[])";
             case Symbolic_Bag_Type.Indexed:
-                return "{\u000A" + String.Concat(Enumerable.Select(
+                return "(Set:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
                     m => mei + Any_Selector(m.Key, mei) + ",\u000A"
-                )) + indent + "}";
+                )) + indent + "])";
             default:
                 throw new NotImplementedException();
         }
@@ -362,13 +358,13 @@ internal abstract class Generator
         switch (node.Local_Symbolic_Type)
         {
             case Symbolic_Bag_Type.None:
-                return "{0:0}";
+                return "(Bag:[])";
             case Symbolic_Bag_Type.Indexed:
-                return "{\u000A" + String.Concat(Enumerable.Select(
+                return "(Bag:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
                     m => mei + Any_Selector(m.Key, mei) + " : "
                         + Integer_Literal(m.Value.Multiplicity) + ",\u000A"
-                )) + indent + "}";
+                )) + indent + "])";
             default:
                 throw new NotImplementedException();
         }
@@ -383,23 +379,25 @@ internal abstract class Generator
         String ati = indent + "\u0009";
         Memory m = value.Memory;
         Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "()"
-            : "(\u000A"
+        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Tuple:())"
+            : "(Tuple:(\u000A"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
                         a => ati + Attr_Name(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
-                + indent + ")";
+                + indent + "))";
     }
 
     private String Article_Selector(MD_Any value, String indent)
     {
-        return "(" + Any_Selector(value.MD_Article().Label, indent) + " : "
-            + Any_Selector(value.MD_Article().Attrs, indent) + ")";
+        // TODO: Change Article so represented as Nesting+Kit pair.
+        return Any_Selector(value.MD_Article().Label, indent) + "*"
+            + Any_Selector(value.MD_Article().Attrs, indent);
     }
 
     private String Excuse_Selector(MD_Any value, String indent)
     {
+        // TODO: Change Excuse so represented as Nesting+Kit pair.
         String ati = indent + "\u0009";
         Memory m = value.Memory;
         Dictionary<String,MD_Any> attrs = value.MD_Excuse();
@@ -422,11 +420,12 @@ internal abstract class Generator
     }
 }
 
+// TODO: Some of this text has obsolete notions and it should be rewritten.
 // Muldis.Data_Engine_Reference.Core.Plain_Text.Standard_Generator
 // Provides utility pure functions that accept any Muldis D "Package"
 // value, which is a native Muldis D "standard compilation unit", and
 // derive a "Text" value that is this "Package" encoded in compliance
-// with the "Muldis_D_Plain_Text 'https://muldis.com' '0.300.0'"
+// with the "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
 // formal specification.  This outputs of this generator are intended
 // for external use, whether for storage in foo.mdpt disk files or
 // other places, viewing by users, and reading by other programs, as a
@@ -440,14 +439,14 @@ internal abstract class Generator
 // serialization capability built-in whose result is easy enough to
 // read and that is easy to diff changes for.
 // This generator makes only the "foundational" flavor of
-// Muldis_D_Plain_Text and provides a literal serialization, including
+// Muldis_Object_Notation_Plain_Text and provides a literal serialization, including
 // that all annotation and decoration values are output verbatim, with
 // no interpretation and with nothing left out.  Round-tripping will
 // only work as intended with a parser that doesn't produce decorations.
 // Typically it is up to bootstrapped higher-level libraries written in
 // Muldis D to provide other generating options that are better
 // pretty-printed or provide any configuration or that serialize with
-// non-foundational Muldis_D_Plain_Text or interpret decorations.
+// non-foundational Muldis_Object_Notation_Plain_Text or interpret decorations.
 // While this generator's output includes a "parsing unit predicate" on
 // request (its optionality is the sole configuration option), that
 // does not include any preceeding "shebang line", which is up to the
@@ -458,29 +457,10 @@ internal class Standard_Generator : Generator
     internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
     {
         return value.Memory.MD_Text(
-            "Muldis_D Plain_Text 'https://muldis.com' '0.300.0'\u000A"
-            + "meta foundational\u000A"
-            + Any_Selector(value, "") + "\u000A",
+            "(Syntax:([Muldis_Object_Notation_Plain_Text,"
+            + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
+            + Any_Selector(value, "") + "))\u000A",
             false
-        );
-    }
-
-    internal MD_Any MD_Text_MDPT_Parsing_Unit_Predicate(Memory memory)
-    {
-        return memory.MD_Text(
-            "Muldis_D Plain_Text 'https://muldis.com' '0.300.0'\u000A"
-            + "meta foundational\u000A",
-            false
-        );
-    }
-
-    internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit_Subject(MD_Any value)
-    {
-        String s = Any_Selector(value, "") + "\u000A";
-        return value.Memory.MD_Text(
-            s,
-            (value.Memory.Test_Dot_Net_String(s)
-                == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
         );
     }
 
@@ -506,7 +486,7 @@ internal class Standard_Generator : Generator
 // otherwise support the means of primary/last resort for set-like
 // operations like duplicate elimination, relational joins, and more.
 // The outputs of this class may possibly conform to the
-// Muldis_D_Plain_Text specification and be parseable to yield the
+// Muldis_Object_Notation_Plain_Text specification and be parseable to yield the
 // original input values, but that is not guaranteed; even if that is
 // the case, the outputs might be considerably less "pretty" as a
 // trade-off to make the generating faster and less error-prone.
