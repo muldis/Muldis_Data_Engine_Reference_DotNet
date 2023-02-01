@@ -210,5 +210,10 @@ namespace Muldis.Data_Engine_Reference_App
         {
             return m_machine;
         }
+
+        internal Object temp_kludge_get_MUSE_server_MuseValue()
+        {
+            return m_value;
+        }
     }
 }

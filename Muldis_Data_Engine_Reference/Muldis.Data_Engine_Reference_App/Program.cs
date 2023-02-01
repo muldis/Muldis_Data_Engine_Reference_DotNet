@@ -94,11 +94,11 @@ namespace Muldis.Data_Engine_Reference_App
             // Try to parse the file content into canonical format VM source code.
             MuseValue maybe_source_code_text = machine.MuseEvaluate(
                 machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
-                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
+                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob.temp_kludge_get_MUSE_server_MuseValue()}))
             );
             if ((Boolean)machine.MuseExportQualified(machine.MuseEvaluate(
                 machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text})))).Value)
+                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text.temp_kludge_get_MUSE_server_MuseValue() })))).Value)
             {
                 System.Console.WriteLine("The requested source code providing file"
                     + " [" + sourceCodeFilePath + "] is not well-formed UTF-8 text:"
@@ -107,7 +107,7 @@ namespace Muldis.Data_Engine_Reference_App
             }
             MuseValue maybe_source_code = machine.MuseEvaluate(
                 machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
-                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text}))
+                machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text.temp_kludge_get_MUSE_server_MuseValue() }))
             );
 
             // Temporary Executor test.
