@@ -6,7 +6,7 @@ using System.Numerics;
 
 [assembly: CLSCompliant(true)]
 
-namespace Muldis.ReferenceEngine
+namespace Muldis.Data_Engine_Reference
 {
     public class MuseEntrance
     {
@@ -127,7 +127,7 @@ namespace Muldis.ReferenceEngine
 
         public MuseValue MuseImport(Object value)
         {
-            if (value != null && value.GetType().FullName == "Muldis.ReferenceEngine.MuseValue")
+            if (value != null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
             {
                 return (MuseValue)value;
             }
@@ -144,7 +144,7 @@ namespace Muldis.ReferenceEngine
             if (value != null)
             {
                 String type_name = value.GetType().FullName;
-                if (type_name == "Muldis.ReferenceEngine.MuseValue")
+                if (type_name == "Muldis.Data_Engine_Reference.MuseValue")
                 {
                     return ((MuseValue)value).m_value;
                 }
@@ -232,12 +232,12 @@ namespace Muldis.ReferenceEngine
                             }
                             return m_memory.MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                         }
-                        if (numerator.GetType().FullName == "Muldis.ReferenceEngine.MuseValue"
-                            && ((Muldis.ReferenceEngine.MuseValue)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
-                            && denominator.GetType().FullName == "Muldis.ReferenceEngine.MuseValue"
-                            && ((Muldis.ReferenceEngine.MuseValue)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
+                        if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue"
+                            && ((Muldis.Data_Engine_Reference.MuseValue)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
+                            && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue"
+                            && ((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
                         {
-                            if (((Muldis.ReferenceEngine.MuseValue)denominator).m_value.MD_Integer() == 0)
+                            if (((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_Integer() == 0)
                             {
                                 throw new ArgumentException
                                 (
@@ -246,8 +246,8 @@ namespace Muldis.ReferenceEngine
                                 );
                             }
                             return m_memory.MD_Fraction(
-                                ((Muldis.ReferenceEngine.MuseValue)numerator  ).m_value.MD_Integer(),
-                                ((Muldis.ReferenceEngine.MuseValue)denominator).m_value.MD_Integer()
+                                ((Muldis.Data_Engine_Reference.MuseValue)numerator  ).m_value.MD_Integer(),
+                                ((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_Integer()
                             );
                         }
                     }
@@ -388,18 +388,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple_Array":
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Array_C0;
                         return m_memory.MD_Tuple_Array(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         if (!m_memory.Array__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -422,18 +422,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Relation":
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Set_C0;
                         return m_memory.MD_Relation(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         if (!m_memory.Set__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -456,18 +456,18 @@ namespace Muldis.ReferenceEngine
                     }
                     break;
                 case "Tuple_Bag":
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                     {
-                        Core.MD_Any hv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         Core.MD_Any bv = m_memory.MD_Bag_C0;
                         return m_memory.MD_Tuple_Bag(hv, bv);
                     }
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue"
-                        && ((Muldis.ReferenceEngine.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
+                        && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
                     {
-                        Core.MD_Any bv = ((Muldis.ReferenceEngine.MuseValue)v).m_value;
+                        Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
                         if (!m_memory.Bag__Is_Relational(bv))
                         {
                             throw new ArgumentException
@@ -552,17 +552,17 @@ namespace Muldis.ReferenceEngine
                                 attrs_cv
                             );
                         }
-                        if (label.GetType().FullName == "Muldis.ReferenceEngine.MuseValue")
+                        if (label.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
                         {
                             return m_memory.MD_Article(Import__Tree(label), attrs_cv);
                         }
                     }
                     break;
                 case "New_Variable":
-                    if (type_name == "Muldis.ReferenceEngine.MuseValue")
+                    if (type_name == "Muldis.Data_Engine_Reference.MuseValue")
                     {
                         return m_memory.New_MD_Variable(
-                            ((Muldis.ReferenceEngine.MuseValue)v).m_value);
+                            ((Muldis.Data_Engine_Reference.MuseValue)v).m_value);
                     }
                     break;
                 case "New_Process":

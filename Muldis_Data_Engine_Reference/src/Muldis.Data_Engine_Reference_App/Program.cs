@@ -5,7 +5,7 @@ using System.Numerics;
 
 [assembly: CLSCompliant(true)]
 
-namespace Muldis.ReferenceEngine.Console
+namespace Muldis.Data_Engine_Reference_App
 {
     public class Program
     {

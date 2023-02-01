@@ -4,9 +4,9 @@ VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{04770409-3B55-4E7F-8584-D6C7A11A48BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.ReferenceEngine", "src\Muldis.ReferenceEngine\Muldis.ReferenceEngine.csproj", "{6A8C0204-808F-467D-A096-398E6CEA0297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.Data_Engine_Reference", "src\Muldis.Data_Engine_Reference\Muldis.Data_Engine_Reference.csproj", "{6A8C0204-808F-467D-A096-398E6CEA0297}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.ReferenceEngine.Console", "src\Muldis.ReferenceEngine.Console\Muldis.ReferenceEngine.Console.csproj", "{20BC7486-C075-4851-A011-05C5A7FDCAB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muldis.Data_Engine_Reference_App", "src\Muldis.Data_Engine_Reference_App\Muldis.Data_Engine_Reference_App.csproj", "{20BC7486-C075-4851-A011-05C5A7FDCAB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

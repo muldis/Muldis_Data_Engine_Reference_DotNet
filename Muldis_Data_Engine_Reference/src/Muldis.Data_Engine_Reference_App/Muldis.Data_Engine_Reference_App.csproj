@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Muldis.ReferenceEngine\Muldis.ReferenceEngine.csproj" />
+    <ProjectReference Include="..\Muldis.Data_Engine_Reference\Muldis.Data_Engine_Reference.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

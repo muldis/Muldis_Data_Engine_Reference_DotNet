@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Muldis.ReferenceEngine.Console
+namespace Muldis.Data_Engine_Reference_App
 {
     public static class MuseEntrance
     {

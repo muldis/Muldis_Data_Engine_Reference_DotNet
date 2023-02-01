@@ -5,9 +5,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Muldis.ReferenceEngine.Core
+namespace Muldis.Data_Engine_Reference.Core
 {
-    // Muldis.ReferenceEngine.Core.Memory
+    // Muldis.Data_Engine_Reference.Core.Memory
     // Provides a virtual machine memory pool where Muldis D values and
     // variables live, which exploits the "flyweight pattern" for
     // efficiency in both performance and memory usage.
