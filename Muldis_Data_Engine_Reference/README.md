@@ -224,7 +224,7 @@ you can redistribute it and/or modify it under the terms of the Apache
 License, Version 2.0 (AL2) as published by the Apache Software Foundation
 (<https://www.apache.org>).  You should have received a copy of the
 AL2 as part of the MDE distribution, in the file
-[LICENSE/Apache-2.0.txt](LICENSE/Apache-2.0.txt); if not, see
+[LICENSE/Apache-2.0.txt](../LICENSE/Apache-2.0.txt); if not, see
 <https://www.apache.org/licenses/LICENSE-2.0>.
 
 Any versions of MDE that you modify and distribute must carry prominent
