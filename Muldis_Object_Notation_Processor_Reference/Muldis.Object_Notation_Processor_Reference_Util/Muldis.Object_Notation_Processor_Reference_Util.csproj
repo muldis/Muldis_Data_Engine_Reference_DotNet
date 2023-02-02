@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Muldis.Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference.csproj" />
+  </ItemGroup>
+</Project>
