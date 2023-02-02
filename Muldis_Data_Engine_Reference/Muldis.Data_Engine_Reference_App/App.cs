@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference_App;
 
-public class Program
+public class App
 {
     public static void Main(String[] args)
     {
