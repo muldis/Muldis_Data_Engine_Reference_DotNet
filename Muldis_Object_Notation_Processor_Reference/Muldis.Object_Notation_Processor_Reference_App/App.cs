@@ -40,7 +40,7 @@ public class App
     public static void Main(String[] raw_app_args)
     {
         task_version();
-        Dictionary<App_Arg_Name, String> app_args = normalize_app_args(raw_app_args);
+        Dictionary<App_Arg_Name, String> app_args = normalized_app_args(raw_app_args);
         if (app_args.Count == 0)
         {
             System.Console.WriteLine("Fatal: Task-naming primary app argument is missing.");
@@ -78,7 +78,7 @@ public class App
         }
     }
 
-    private static Dictionary<App_Arg_Name, String> normalize_app_args(String[] raw_app_args)
+    private static Dictionary<App_Arg_Name, String> normalized_app_args(String[] raw_app_args)
     {
         // The "task" arg is expected to be positional, and the others named.
         // A positional arg does NOT start with "--", a named looks like "--foo=bar" or "--foo".
@@ -125,7 +125,7 @@ public class App
     private static void task_version()
     {
         System.Console.WriteLine("This application is"
-            + " com.muldis.object_notation_processor_reference_app.App version 0.1.");
+            + " Muldis.Object_Notation_Processor_Reference_App.App version 0.1.");
     }
 
     private static void task_help()

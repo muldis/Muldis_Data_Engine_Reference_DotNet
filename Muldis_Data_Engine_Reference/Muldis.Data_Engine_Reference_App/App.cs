@@ -90,6 +90,7 @@ public class App
         // Import the user-specified source code file's raw content into
         // the MUSE-implementing virtual machine where it would be used.
         MuseValue source_code_blob = machine.MuseImport(sourceCodeFileContent);
+        System.Console.WriteLine("Debug: source_code_blob = [" + source_code_blob + "]");
 
         // Try to parse the file content into canonical format VM source code.
         MuseValue maybe_source_code_text = machine.MuseEvaluate(
@@ -105,30 +106,46 @@ public class App
                 + " " + maybe_source_code_text.ToString());
             return;
         }
+        System.Console.WriteLine("Debug: maybe_source_code_text = [" + maybe_source_code_text + "]");
         MuseValue maybe_source_code = machine.MuseEvaluate(
             machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
             machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text.temp_kludge_get_MUSE_server_MuseValue() }))
         );
+        System.Console.WriteLine("Debug: maybe_source_code = [" + maybe_source_code + "]");
 
         // Temporary Executor test.
         MuseValue sum = machine.MuseEvaluate(
             machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
             machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
         );
+        System.Console.WriteLine("Test data: sum = [" + sum + "]");
         MuseValue that = machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+        System.Console.WriteLine("Test data: that = [" + that + "]");
         MuseValue that_too = machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
+        System.Console.WriteLine("Test data: that_too = [" + that_too + "]");
         MuseValue the_other = machine.MuseImport("Fr ⊂ ac 💩 ti ÷ on");
+        System.Console.WriteLine("Test data: the_other = [" + the_other + "]");
         MuseValue f0 = machine.MuseImport(014.0M);
+        System.Console.WriteLine("Test data: f0 = [" + f0 + "]");
         MuseValue f1 = machine.MuseImport(2.3M);
+        System.Console.WriteLine("Test data: f1 = [" + f1 + "]");
         MuseValue f2 = machine.MuseImport(02340233.23402532000M);
+        System.Console.WriteLine("Test data: f2 = [" + f2 + "]");
         MuseValue f3 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
+        System.Console.WriteLine("Test data: f3 = [" + f3 + "]");
         MuseValue f4 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
+        System.Console.WriteLine("Test data: f4 = [" + f4 + "]");
         MuseValue f5 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
+        System.Console.WriteLine("Test data: f5 = [" + f5 + "]");
         MuseValue f6 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
+        System.Console.WriteLine("Test data: f6 = [" + f6 + "]");
         MuseValue f7 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
+        System.Console.WriteLine("Test data: f7 = [" + f7 + "]");
         MuseValue f8 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
+        System.Console.WriteLine("Test data: f8 = [" + f8 + "]");
         MuseValue f9 = machine.MuseImport(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
+        System.Console.WriteLine("Test data: f9 = [" + f9 + "]");
     }
 }
