@@ -96,7 +96,7 @@ public class App
                     {
                         // Named arg format "--foo=bar", the most generic format.
                         Int32 eq_pos = raw_app_arg.IndexOf("=");
-                        arg_name = raw_app_arg.Substring(2, eq_pos);
+                        arg_name = raw_app_arg.Substring(2, eq_pos - 2);
                         arg_value = raw_app_arg.Substring(eq_pos + 1);
                     }
                     else
@@ -112,7 +112,8 @@ public class App
                     }
                     else
                     {
-                        System.Console.WriteLine("Warning: Ignoring unrecognized argument: " + arg_name);
+                        System.Console.WriteLine(
+                            "Warning: Ignoring unrecognized argument: " + arg_name);
                     }
                 }
             }
@@ -160,20 +161,25 @@ public class App
         Boolean resume_when_failure = app_args.ContainsKey(App_Arg_Name.resume);
         if (!app_args.ContainsKey(App_Arg_Name.@in))
         {
-            System.Console.WriteLine("Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@in);
+            System.Console.WriteLine(
+                "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@in);
             return;
         }
-        // If the user-specified file path is absolute, Path.Combine()
-        // will just use that as the final path; otherwise it is taken
-        // as relative to the host executable's current working directory.
-        // TODO: This class was translated roughly from Java and the file system stuff especially needs more work.
-        String path_in = Path.Combine(Directory.GetCurrentDirectory(), app_args[App_Arg_Name.@in]);
         if (!app_args.ContainsKey(App_Arg_Name.@out))
         {
-            System.Console.WriteLine("Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@out);
+            System.Console.WriteLine(
+                "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@out);
             return;
         }
-        String path_out = Path.Combine(Directory.GetCurrentDirectory(), app_args[App_Arg_Name.@out]);
+        // If a file or dir exists at the "in" path then both the path_in
+        // and path_out will be given the kind of FileSystemInfo subclass
+        // object that is appropriate for the kind of thing that "in" points to.
+        FileSystemInfo path_in = File.Exists(app_args[App_Arg_Name.@in])
+            ? new FileInfo(app_args[App_Arg_Name.@in])
+            : new DirectoryInfo(app_args[App_Arg_Name.@in]);
+        FileSystemInfo path_out = File.Exists(app_args[App_Arg_Name.@in])
+            ? new FileInfo(app_args[App_Arg_Name.@out])
+            : new DirectoryInfo(app_args[App_Arg_Name.@out]);
         Logger logger = new Logger(Console.Out, verbose ? Console.Out : null);
         Repository repository = new Repository(logger);
         repository.process_file_or_dir_recursive(processor, path_in, path_out, resume_when_failure);
