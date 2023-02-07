@@ -104,15 +104,32 @@ public class Repository
                 using (FileStream stream_in
                     = ((FileInfo)path_in).Open(FileMode.Open, FileAccess.Read))
                 {
-                    using (FileStream stream_out
-                        = ((FileInfo)path_out).Open(FileMode.CreateNew, FileAccess.Write))
+                    try
                     {
-                        // Note that Stream.ReadByte()
-                        // returns one of 0..255 when there is another octet
-                        // and it returns -1 when there is none / the end of stream was passed.
-                        processor.process(stream_in, stream_out);
+                        using (FileStream stream_out
+                            = ((FileInfo)path_out).Open(FileMode.CreateNew, FileAccess.Write))
+                        {
+                            // Note that Stream.ReadByte()
+                            // returns one of 0..255 when there is another octet
+                            // and it returns -1 when there is none / the end of stream was passed.
+                            processor.process(stream_in, stream_out);
+                        }
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        this.logger.failure("Fatal: Can't output to new regular file at path "
+                            + path_out.FullName + " because we lack write privileges for it,"
+                            + " or there was an UnauthorizedAccessException for another reason.");
+                        return false;
                     }
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                this.logger.failure("Fatal: Can't input from existing regular file at path "
+                    + path_in.FullName + " because we lack read privileges for it,"
+                    + " or there was an UnauthorizedAccessException for another reason.");
+                return false;
             }
             catch (IOException e)
             {
@@ -138,6 +155,13 @@ public class Repository
             try
             {
                 ((DirectoryInfo)path_out).Create();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                this.logger.failure("Fatal: Can't create new dir at path "
+                    + path_out.FullName + " because we lack write privileges for its parent,"
+                    + " or there was an UnauthorizedAccessException for another reason.");
+                return false;
             }
             catch (IOException e)
             {
@@ -173,6 +197,13 @@ public class Repository
                     // Else if we should continue on with trying to process the rest of the child
                     // nodes regardless of whether the child we just tried had failed, then do so.
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                this.logger.failure("Fatal: Can't input from existing dir at path "
+                    + path_in.FullName + " because we lack read privileges for it,"
+                    + " or there was an UnauthorizedAccessException for another reason.");
+                return false;
             }
             catch (IOException e)
             {
