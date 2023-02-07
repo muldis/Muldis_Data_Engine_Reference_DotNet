@@ -9,7 +9,89 @@ The fully-qualified name of what this document describes is
 
 # DESCRIPTION
 
-*TODO.*
+MDE is a work in progress as of early February, 2023.
+It is not yet ready to use for its intended purpose, nor is it yet even a
+minimum viable product.
+
+Further significant work on MDE is blocked pending the prior minimum viable
+product completion of its dependency-to-be project:
+
+[Muldis Object Notation Processor Reference: .NET (MUONP)](../Muldis_Object_Notation_Processor_Reference) - Reference implementation of MUON processing utilities
+
+This documentation will be rewritten or updated as the project develops.
+
+## What This Is Intended To Be
+
+MDE is fundamentally a library that provides an embedded virtual machine
+implementation of the Muldis Data Language which is also an embedded
+database engine and an embedded type system for the host language.
+
+The standard formats for moving data and code between the virtual machine
+and its host are Muldis Object Notation (MUON), either the string-based
+Plain Text Format or the .NET data structure based format.
+
+A utility application is also provided that reads in a Muldis Data Language
+"main program" in the form of a MUON text file and passes it to the virtual
+machine to compile and execute, essentially being a runtime of a form that
+is typical of scripting languages.  The program to run is specified with a
+command-line argument.
+
+MDE is expressly designed to have no dependencies besides a modern
+version of the core C# language and .NET standard library,
+and be a low-overhead leaf dependency for other projects.
+Since modern .NET is cross-platform, MDE should work on any
+operating system that it supports.
+
+## What This Is Today
+
+A rudimentary version of the MDE virtual machine library is implemented
+now, and one can import and export data and execute some Muldis Data
+Language routines on that data.  Import/export only works currently in
+terms of an outdated form of the Muldis Object Notation .NET hosted format,
+and the MUON Plain Text format is not yet implemented for importing.
+
+A utility application is also implemented which performs some rudimentary
+testing on the virtual machine, trying to use its API, importing some data,
+and trying to invoke a Muldis Data Language routine or two.
+
+That utility application prints out to the command-line
+quasi-MUON-Plain-Text serializations of the imported data, so that it
+actually looks like it is doing something.
+
+The utility application also reads in a MUON source file as if it was going
+to run it, but since parsing these is not yet implemented, that part no-ops.
+
+## How To Use It
+
+In order to run the MDE utility application, you first have to compile
+it, which can be done in the usual manner using Microsoft's Visual Studio,
+which can be obtained here (with no-cost Community licensing an option):
+
+<https://visualstudio.microsoft.com>
+
+MDE is implemented with .NET 6 (2021) which is cross-platform so you can
+use either the Apple MacOS or Microsoft Windows version of Visual Studio.
+I have done all development and testing so far on MacOS however.
+
+Microsoft also provides command-line alternative compilers and runtimes
+specific to modern .NET versions, instead of needing a full Visual Studio:
+
+<https://dotnet.microsoft.com>
+
+Once the MDE .NET project has been compiled to a native executable, you
+can run it on the command line, such as MacOS Terminal or Windows Console.
+
+A thin wrapper UNIX shell script has been provided that can be used once
+the project is compiled.
+
+Here is an example of its use:
+
+```
+sh muldisder.sh Muldis.Data_Engine_Reference.MuseEntrance,Muldis.Data_Engine_Reference Muldis_Object_Notation_Processor_Reference/corpora/overview.muon
+```
+
+I have not yet produced an alternate thin wrapper Windows shell script,
+but that is intended to be done soon.
 
 # AUTHOR
 
