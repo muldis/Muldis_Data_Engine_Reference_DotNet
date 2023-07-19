@@ -284,12 +284,12 @@ internal abstract class Generator
     {
         Memory m = value.Memory;
         Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Heading:())"
-            : "(Heading:("
+        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Heading:{})"
+            : "(Heading:{"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
                         a => Attr_Name(a.Key) + ","))
-                + "))";
+                + "})";
     }
 
     private String Array_Selector(MD_Any value, String indent)
@@ -379,13 +379,13 @@ internal abstract class Generator
         String ati = indent + "\u0009";
         Memory m = value.Memory;
         Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Tuple:())"
-            : "(Tuple:(\u000A"
+        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Tuple:{})"
+            : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
                         a => ati + Attr_Name(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
-                + indent + "))";
+                + indent + "})";
     }
 
     private String Article_Selector(MD_Any value, String indent)
@@ -403,20 +403,20 @@ internal abstract class Generator
         Dictionary<String,MD_Any> attrs = value.MD_Excuse();
         if (attrs.Count == 0)
         {
-            return @"\!()";
+            return "0iIGNORANCE";
         }
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
             && attrs["\u0000"].MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
             && attrs["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
         {
-            return @"\!" + Attr_Name(attrs["\u0000"].MD_Tuple().First().Key);
+            return Attr_Name(attrs["\u0000"].MD_Tuple().First().Key) + "!{}";
         }
-        return @"\!" + "(\u000A"
+        return "0iEXCUSE!" + "{\u000A"
             + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(attrs, a => a.Key),
                     a => ati + Attr_Name(a.Key) + " : "
                         + Any_Selector(a.Value, ati) + ",\u000A"))
-            + indent + ")";
+            + indent + "}";
     }
 }
 
