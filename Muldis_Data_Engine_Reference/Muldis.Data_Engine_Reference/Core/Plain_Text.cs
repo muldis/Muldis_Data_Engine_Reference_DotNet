@@ -141,7 +141,7 @@ internal abstract class Generator
         // coprime iff As_Decimal is null.
         if (fa.Is_Terminating_Decimal())
         {
-            if (fa.As_Decimal != null)
+            if (fa.As_Decimal is not null)
             {
                 String dec_digits = fa.As_Decimal.ToString();
                 // When a .NET Decimal is selected using a .NET Decimal
@@ -502,7 +502,7 @@ internal class Identity_Generator : Generator
 
     protected override String Any_Selector(MD_Any value, String indent)
     {
-        if (value.Cached_MD_Any_Identity == null)
+        if (value.Cached_MD_Any_Identity is null)
         {
             value.Cached_MD_Any_Identity
                 = Any_Selector_Foundation_Dispatch(value, indent);

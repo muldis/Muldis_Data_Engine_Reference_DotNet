@@ -16,7 +16,7 @@ public class MuseEntrance
     {
         String[] onlySupportedMuseVersion = new String[]
             {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"};
-        if (requestedMuseVersion == null
+        if (requestedMuseVersion is null
             || requestedMuseVersion.GetType().FullName != "System.String[]"
             || !Enumerable.SequenceEqual(
                 (String[])requestedMuseVersion, onlySupportedMuseVersion))
@@ -50,7 +50,7 @@ public class MuseFactory
     {
         String[] onlySupportedModelVersion = new String[]
             {"Muldis_Data_Language", "https://muldis.com", "0.300.0"};
-        if (requestedModelVersion == null
+        if (requestedModelVersion is null
             || requestedModelVersion.GetType().FullName != "System.String[]"
             || !Enumerable.SequenceEqual(
                 (String[])requestedModelVersion, onlySupportedModelVersion))
@@ -86,26 +86,26 @@ public class MuseMachine
 
     public MuseValue MuseEvaluate(MuseValue function, MuseValue args = null)
     {
-        if (function == null)
+        if (function is null)
         {
             throw new ArgumentNullException("function");
         }
         return new MuseValue().init(this,
-            m_executor.Evaluates(function.m_value, args == null ? null : args.m_value));
+            m_executor.Evaluates(function.m_value, args is null ? null : args.m_value));
     }
 
     public void MusePerform(MuseValue procedure, MuseValue args = null)
     {
-        if (procedure == null)
+        if (procedure is null)
         {
             throw new ArgumentNullException("procedure");
         }
-        m_executor.Performs(procedure.m_value, args == null ? null : args.m_value);
+        m_executor.Performs(procedure.m_value, args is null ? null : args.m_value);
     }
 
     public MuseValue MuseCurrent(MuseValue variable)
     {
-        if (variable == null)
+        if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
@@ -114,11 +114,11 @@ public class MuseMachine
 
     public void MuseAssign(MuseValue variable, MuseValue newCurrent)
     {
-        if (variable == null)
+        if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
-        if (newCurrent == null)
+        if (newCurrent is null)
         {
             throw new ArgumentNullException("newCurrent");
         }
@@ -127,7 +127,7 @@ public class MuseMachine
 
     public MuseValue MuseImport(Object value)
     {
-        if (value != null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
+        if (value is not null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
         {
             return (MuseValue)value;
         }
@@ -141,7 +141,7 @@ public class MuseMachine
 
     private Core.MD_Any Import__Tree(Object value)
     {
-        if (value != null)
+        if (value is not null)
         {
             String type_name = value.GetType().FullName;
             if (type_name == "Muldis.Data_Engine_Reference.MuseValue")
@@ -160,7 +160,7 @@ public class MuseMachine
     {
         Object v = value.Value;
         // Note that .NET guarantees the .Key is never null.
-        if (v == null && value.Key != "Excuse")
+        if (v is null && value.Key != "Excuse")
         {
             throw new ArgumentNullException
             (
@@ -169,7 +169,7 @@ public class MuseMachine
                     + " with a null Value property (except with [Excuse] Key)."
             );
         }
-        String type_name = v == null ? null : v.GetType().FullName;
+        String type_name = v is null ? null : v.GetType().FullName;
         switch (value.Key)
         {
             case "Boolean":
@@ -198,7 +198,7 @@ public class MuseMachine
                     Object numerator   = ((KeyValuePair<Object,Object>)v).Key;
                     Object denominator = ((KeyValuePair<Object,Object>)v).Value;
                     // Note that .NET guarantees the .Key is never null.
-                    if (denominator == null)
+                    if (denominator is null)
                     {
                         throw new ArgumentNullException
                         (
@@ -355,7 +355,7 @@ public class MuseMachine
                     HashSet<String> attr_names = (HashSet<String>)v;
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
                     {
-                        if (((Object[])v)[0] != null && (Boolean)((Object[])v)[0])
+                        if (((Object[])v)[0] is not null && (Boolean)((Object[])v)[0])
                         {
                             attr_names.Add(Char.ConvertFromUtf32(i));
                         }
@@ -410,7 +410,7 @@ public class MuseMachine
                         );
                     }
                     Core.MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
-                    if (hv == null)
+                    if (hv is null)
                     {
                         throw new ArgumentException
                         (
@@ -444,7 +444,7 @@ public class MuseMachine
                         );
                     }
                     Core.MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
-                    if (hv == null)
+                    if (hv is null)
                     {
                         throw new ArgumentException
                         (
@@ -478,7 +478,7 @@ public class MuseMachine
                         );
                     }
                     Core.MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
-                    if (hv == null)
+                    if (hv is null)
                     {
                         throw new ArgumentException
                         (
@@ -495,7 +495,7 @@ public class MuseMachine
                     Object label = ((KeyValuePair<Object,Object>)v).Key;
                     Object attrs = ((KeyValuePair<Object,Object>)v).Value;
                     // Note that .NET guarantees the .Key is never null.
-                    if (attrs == null)
+                    if (attrs is null)
                     {
                         throw new ArgumentNullException
                         (
@@ -566,13 +566,13 @@ public class MuseMachine
                 }
                 break;
             case "New_Process":
-                if (v == null)
+                if (v is null)
                 {
                     return m_memory.New_MD_Process();
                 }
                 break;
             case "New_Stream":
-                if (v == null)
+                if (v is null)
                 {
                     return m_memory.New_MD_Stream();
                 }
@@ -580,7 +580,7 @@ public class MuseMachine
             case "New_External":
                 return m_memory.New_MD_External(v);
             case "Excuse":
-                if (v == null)
+                if (v is null)
                 {
                     return m_memory.Simple_MD_Excuse("No_Reason");
                 }
@@ -650,7 +650,7 @@ public class MuseMachine
 
     private Core.MD_Any Import__Tree_Unqualified(Object value)
     {
-        if (value == null)
+        if (value is null)
         {
             return m_memory.Simple_MD_Excuse("No_Reason");
         }
@@ -706,7 +706,7 @@ public class MuseMachine
 
     public Object MuseExport(MuseValue value)
     {
-        if (value == null)
+        if (value is null)
         {
             throw new ArgumentNullException("value");
         }
@@ -726,7 +726,7 @@ public class MuseMachine
 
     public KeyValuePair<String,Object> MuseExportQualified(MuseValue value)
     {
-        if (value == null)
+        if (value is null)
         {
             throw new ArgumentNullException("value");
         }

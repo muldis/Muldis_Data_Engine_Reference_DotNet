@@ -36,7 +36,7 @@ public class App
         // this would die if it thinks it can't satisfy an acceptable version.
         // We will use this for all the main work.
         MuseFactory factory = MuseEntrance.NewMuseFactory(museEntranceClassName);
-        if (factory == null)
+        if (factory is null)
         {
             return;
         }
@@ -47,7 +47,7 @@ public class App
         // We will use this for all the main work.
         MuseMachine machine = factory.NewMuseMachine(
             new String[] {"Muldis_Data_Language", "https://muldis.com", "0.300.0"});
-        if (machine == null)
+        if (machine is null)
         {
             System.Console.WriteLine(
                 "The requested Muldis Service Protocol entrance class"

@@ -11,7 +11,7 @@ public static class MuseEntrance
         // Note, generally the class name needs to be assembly-qualified for
         // GetType() to find it; eg "Company.Project.Class,Company.Project" works.
         Type entranceClass = Type.GetType(museEntranceClassName);
-        if (entranceClass == null)
+        if (entranceClass is null)
         {
             System.Console.WriteLine(
                 "The requested Muldis Service Protocol entrance class"
@@ -21,7 +21,7 @@ public static class MuseEntrance
         }
 
         // Die unless the entrance class explicitly declares it implements MUSE.
-        if (entranceClass.GetMethod("ProvidesMuldisServiceProtocolEntrance") == null)
+        if (entranceClass.GetMethod("ProvidesMuldisServiceProtocolEntrance") is null)
         {
             System.Console.WriteLine(
                 "The requested Muldis Service Protocol entrance class"
@@ -42,7 +42,7 @@ public static class MuseEntrance
             {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"};
         Object factory = entranceClass.GetMethod("NewMuseFactory")
             .Invoke(entrance, new Object[] { requestedMuseVersion });
-        if (factory == null)
+        if (factory is null)
         {
             System.Console.WriteLine(
                 "The requested Muldis Service Protocol entrance class"
@@ -71,7 +71,7 @@ public class MuseFactory
     {
         Object machine = m_factory.GetType().GetMethod("NewMuseMachine")
             .Invoke(m_factory, new Object[] { requestedModelVersion });
-        if (machine == null)
+        if (machine is null)
         {
             return null;
         }
@@ -100,30 +100,30 @@ public class MuseMachine
 
     public MuseValue MuseEvaluate(MuseValue function, MuseValue args = null)
     {
-        if (function == null)
+        if (function is null)
         {
             throw new ArgumentNullException("function");
         }
         return new MuseValue().init(this,
             m_machine.GetType().GetMethod("MuseEvaluate")
             .Invoke(m_machine, new Object[]
-            { function.m_value, args == null ? null : args.m_value }));
+            { function.m_value, args is null ? null : args.m_value }));
     }
 
     public void MusePerform(MuseValue procedure, MuseValue args = null)
     {
-        if (procedure == null)
+        if (procedure is null)
         {
             throw new ArgumentNullException("procedure");
         }
         m_machine.GetType().GetMethod("MusePerform")
             .Invoke(m_machine, new Object[]
-            { procedure.m_value, args == null ? null : args.m_value });
+            { procedure.m_value, args is null ? null : args.m_value });
     }
 
     public MuseValue MuseCurrent(MuseValue variable)
     {
-        if (variable == null)
+        if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
@@ -134,11 +134,11 @@ public class MuseMachine
 
     public void MuseAssign(MuseValue variable, MuseValue newCurrent)
     {
-        if (variable == null)
+        if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
-        if (newCurrent == null)
+        if (newCurrent is null)
         {
             throw new ArgumentNullException("newCurrent");
         }
@@ -162,7 +162,7 @@ public class MuseMachine
 
     public Object MuseExport(MuseValue value)
     {
-        if (value == null)
+        if (value is null)
         {
             throw new ArgumentNullException("value");
         }
@@ -172,7 +172,7 @@ public class MuseMachine
 
     public KeyValuePair<String,Object> MuseExportQualified(MuseValue value)
     {
-        if (value == null)
+        if (value is null)
         {
             throw new ArgumentNullException("value");
         }

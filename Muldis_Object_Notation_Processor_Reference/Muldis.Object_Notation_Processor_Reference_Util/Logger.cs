@@ -13,7 +13,7 @@ public class Logger
 
     public void failure(String message)
     {
-        if (this.failure_stream != null)
+        if (this.failure_stream is not null)
         {
             this.failure_stream.WriteLine(message);
         }
@@ -21,7 +21,7 @@ public class Logger
 
     public void notice(String message)
     {
-        if (this.notice_stream != null)
+        if (this.notice_stream is not null)
         {
             this.notice_stream.WriteLine(message);
         }

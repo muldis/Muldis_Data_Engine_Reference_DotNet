@@ -670,7 +670,7 @@ internal class Memory
             {
                 return MD_Relation_D0C0;
             }
-            if (Set__Pick_Arbitrary_Member(body) != null)
+            if (Set__Pick_Arbitrary_Member(body) is not null)
             {
                 return MD_Relation_D0C1;
             }
@@ -1056,7 +1056,7 @@ internal class Memory
 
     private Boolean Array__Tree_Relational(MD_Array_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Relational == null)
+        if (node.Cached_Members_Meta.Tree_Relational is null)
         {
             Boolean tr = true;
             switch (node.Local_Symbolic_Type)
@@ -1082,7 +1082,7 @@ internal class Memory
                     MD_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A1);
                     tr = Array__Tree_Relational(node.Tree_Catenated_Members().A0)
                         && Array__Tree_Relational(node.Tree_Catenated_Members().A1)
-                        && (pm0 == null || sm0 == null || Tuple__Same_Heading(pm0, sm0));
+                        && (pm0 is null || sm0 is null || Tuple__Same_Heading(pm0, sm0));
                     break;
                 default:
                     throw new NotImplementedException();
@@ -1142,7 +1142,7 @@ internal class Memory
 
     private Boolean Bag__Tree_Relational(MD_Bag_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Relational == null)
+        if (node.Cached_Members_Meta.Tree_Relational is null)
         {
             Boolean tr = true;
             switch (node.Local_Symbolic_Type)
@@ -1180,7 +1180,7 @@ internal class Memory
                         && Bag__Tree_Relational(node.Tree_Summed_Members().A1);
                     MD_Any pam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A0);
                     MD_Any eam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A1);
-                    if (pam0 != null && eam0 != null)
+                    if (pam0 is not null && eam0 is not null)
                     {
                         tr = tr && Tuple__Same_Heading(pam0, eam0);
                     }

@@ -45,13 +45,13 @@ public class Repository
             return false;
         }
         // We intentionally do not support following symbolic links for safety/simplicity reasons.
-        if (path_in.LinkTarget != null)
+        if (path_in.LinkTarget is not null)
         {
             this.logger.failure("Fatal: Can't input from file or dir at path " + path_in.FullName
                 + " because that is a symbolic link and we don't support following those.");
             return false;
         }
-        if (path_out.LinkTarget != null)
+        if (path_out.LinkTarget is not null)
         {
             this.logger.failure("Fatal: Can't output to file or dir at path " + path_out.FullName
                 + " because that is a symbolic link and we don't support following those.");

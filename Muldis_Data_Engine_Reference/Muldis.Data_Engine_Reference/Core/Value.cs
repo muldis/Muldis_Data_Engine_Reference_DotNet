@@ -221,14 +221,14 @@ internal class MD_Any
 
     internal Nullable<Boolean> Member_Status_in_WKT(MD_Well_Known_Type type)
     {
-        return Cached_WKT_Statuses == null            ? (Nullable<Boolean>)null
+        return Cached_WKT_Statuses is null            ? (Nullable<Boolean>)null
              : !Cached_WKT_Statuses.ContainsKey(type) ? (Nullable<Boolean>)null
              :                                          Cached_WKT_Statuses[type];
     }
 
     internal void Declare_Member_Status_in_WKT(MD_Well_Known_Type type, Boolean status)
     {
-        if (Cached_WKT_Statuses == null)
+        if (Cached_WKT_Statuses is null)
         {
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>();
         }
@@ -247,12 +247,12 @@ internal class MD_Any_Comparer : EqualityComparer<MD_Any>
 {
     public override Boolean Equals(MD_Any v1, MD_Any v2)
     {
-        if (v1 == null && v2 == null)
+        if (v1 is null && v2 is null)
         {
             // Would we ever get here?
             return true;
         }
-        if (v1 == null || v2 == null)
+        if (v1 is null || v2 is null)
         {
             return false;
         }
@@ -261,7 +261,7 @@ internal class MD_Any_Comparer : EqualityComparer<MD_Any>
 
     public override Int32 GetHashCode(MD_Any v)
     {
-        if (v == null)
+        if (v is null)
         {
             // Would we ever get here?
             return 0;
@@ -312,7 +312,7 @@ internal class MD_Fraction_Struct
 
     internal void Ensure_Pair()
     {
-        if (As_Pair != null)
+        if (As_Pair is not null)
         {
             return;
         }
@@ -342,11 +342,11 @@ internal class MD_Fraction_Struct
 
     internal Boolean Is_Terminating_Decimal()
     {
-        if (As_Decimal != null)
+        if (As_Decimal is not null)
         {
             return true;
         }
-        if (As_Pair.Cached_Is_Terminating_Decimal == null)
+        if (As_Pair.Cached_Is_Terminating_Decimal is null)
         {
             Ensure_Coprime();
             Boolean found_all_2_factors = false;
@@ -387,7 +387,7 @@ internal class MD_Fraction_Struct
 
     internal Int32 Pair_Decimal_Denominator_Scale()
     {
-        if (As_Pair == null || !Is_Terminating_Decimal())
+        if (As_Pair is null || !Is_Terminating_Decimal())
         {
             throw new InvalidOperationException();
         }

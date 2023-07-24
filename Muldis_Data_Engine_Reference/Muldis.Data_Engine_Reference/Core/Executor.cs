@@ -26,7 +26,7 @@ internal class Executor
     internal MD_Any Evaluates(MD_Any function, MD_Any args = null)
     {
         Memory m = Memory;
-        if (args == null)
+        if (args is null)
         {
             args = m.MD_Tuple_D0;
         }
@@ -64,7 +64,7 @@ internal class Executor
     internal void Performs(MD_Any procedure, MD_Any args = null)
     {
         Memory m = Memory;
-        if (args == null)
+        if (args is null)
         {
             args = m.MD_Tuple_D0;
         }
@@ -490,7 +490,7 @@ internal class Executor
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
                     MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MD_Integer());
-                    if (maybe_member == null)
+                    if (maybe_member is null)
                     {
                         throw new ArgumentException(
                             m.Well_Known_Excuses["No_Such_Ord_Pos"].ToString());
@@ -531,8 +531,8 @@ internal class Executor
         {
             return false;
         }
-        if (a0.Cached_MD_Any_Identity != null
-            && a1.Cached_MD_Any_Identity != null)
+        if (a0.Cached_MD_Any_Identity is not null
+            && a1.Cached_MD_Any_Identity is not null)
         {
             if (a0.Cached_MD_Any_Identity == a1.Cached_MD_Any_Identity)
             {
@@ -557,7 +557,7 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (fs0.As_Decimal != null && fs1.As_Decimal != null)
+                if (fs0.As_Decimal is not null && fs1.As_Decimal is not null)
                 {
                     result = (fs0.As_Decimal == fs1.As_Decimal);
                     break;
@@ -757,7 +757,7 @@ internal class Executor
     internal Int64 Text__count(MD_Any text)
     {
         MD_Text_Struct node = text.MD_Text();
-        if (node.Cached_Member_Count == null)
+        if (node.Cached_Member_Count is null)
         {
             if (node.Has_Any_Non_BMP)
             {
@@ -789,7 +789,7 @@ internal class Executor
 
     private Int64 Array__node__tree_member_count(MD_Array_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Member_Count == null)
+        if (node.Cached_Members_Meta.Tree_Member_Count is null)
         {
             switch (node.Local_Symbolic_Type)
             {
@@ -889,7 +889,7 @@ internal class Executor
                 return null;
             case Symbolic_Array_Type.Catenated:
                 MD_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().A0, ord_pos);
-                if (maybe_member != null)
+                if (maybe_member is not null)
                 {
                     return maybe_member;
                 }
