@@ -1,5 +1,3 @@
-using System;
-
 [assembly: CLSCompliant(true)]
 
 namespace Muldis.Object_Notation_Processor_Reference;
