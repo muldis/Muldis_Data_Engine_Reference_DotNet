@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Muldis.Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference.csproj" />
-    <ProjectReference Include="..\Muldis.Object_Notation_Processor_Reference_Util\Muldis.Object_Notation_Processor_Reference_Util.csproj" />
+    <ProjectReference Include="..\Muldis_Object_Notation_Processor_Reference\Muldis_Object_Notation_Processor_Reference.csproj" />
+    <ProjectReference Include="..\Muldis_Object_Notation_Processor_Reference_Util\Muldis_Object_Notation_Processor_Reference_Util.csproj" />
   </ItemGroup>
 </Project>

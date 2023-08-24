@@ -4,4 +4,4 @@
 # invoked the current working directory is Muldis_Reference_Data_Tools_DotNet
 # checkout base dir; this will be improved.
 
-./Muldis_Object_Notation_Processor_Reference/Muldis.Object_Notation_Processor_Reference_App/bin/Debug/net7.0/Muldis.Object_Notation_Processor_Reference_App "$@"
+./Muldis_Object_Notation_Processor_Reference_App/bin/Debug/net7.0/Muldis_Object_Notation_Processor_Reference_App "$@"

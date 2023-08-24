@@ -4,6 +4,6 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Muldis.Data_Engine_Reference\Muldis.Data_Engine_Reference.csproj" />
+    <ProjectReference Include="..\Muldis_Data_Engine_Reference\Muldis_Data_Engine_Reference.csproj" />
   </ItemGroup>
 </Project>

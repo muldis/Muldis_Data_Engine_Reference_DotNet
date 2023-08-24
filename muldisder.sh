@@ -4,4 +4,4 @@
 # invoked the current working directory is Muldis_Reference_Data_Tools_DotNet
 # checkout base dir; this will be improved.
 
-./Muldis_Data_Engine_Reference/Muldis.Data_Engine_Reference_App/bin/Debug/net7.0/Muldis.Data_Engine_Reference_App "$@"
+./Muldis_Data_Engine_Reference_App/bin/Debug/net7.0/Muldis_Data_Engine_Reference_App "$@"

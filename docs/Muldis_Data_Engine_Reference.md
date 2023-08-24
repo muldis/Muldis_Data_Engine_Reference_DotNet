@@ -9,7 +9,7 @@ The fully-qualified name of what this document describes is
 
 # DESCRIPTION
 
-MDE is a work in progress as of early February, 2023.
+MDE is a work in progress.
 It is not yet ready to use for its intended purpose, nor is it yet even a
 minimum viable product.
 
@@ -69,7 +69,7 @@ which can be obtained here (with no-cost Community licensing an option):
 
 <https://visualstudio.microsoft.com>
 
-MDE is implemented with .NET 6 (2021) which is cross-platform so you can
+MDE is implemented with .NET 7 (2022) which is cross-platform so you can
 use either the Apple MacOS or Microsoft Windows version of Visual Studio.
 I have done all development and testing so far on MacOS however.
 
@@ -87,7 +87,7 @@ the project is compiled.
 Here is an example of its use:
 
 ```
-sh muldisder.sh Muldis.Data_Engine_Reference.MuseEntrance,Muldis.Data_Engine_Reference Muldis_Object_Notation_Processor_Reference/corpora/overview.muon
+sh muldisder.sh Muldis.Data_Engine_Reference.MuseEntrance,Muldis_Data_Engine_Reference corpora/overview.muon
 ```
 
 I have not yet produced an alternate thin wrapper Windows shell script,

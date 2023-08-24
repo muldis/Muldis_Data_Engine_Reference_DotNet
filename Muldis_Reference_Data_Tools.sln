@@ -2,15 +2,15 @@
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1704.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.Data_Engine_Reference", "Muldis_Data_Engine_Reference\Muldis.Data_Engine_Reference\Muldis.Data_Engine_Reference.csproj", "{2C1FF1A4-1E4D-477D-96D1-E34959529EBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Data_Engine_Reference", "Muldis_Data_Engine_Reference\Muldis_Data_Engine_Reference.csproj", "{2C1FF1A4-1E4D-477D-96D1-E34959529EBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.Data_Engine_Reference_App", "Muldis_Data_Engine_Reference\Muldis.Data_Engine_Reference_App\Muldis.Data_Engine_Reference_App.csproj", "{4DBE6F7D-758F-4BF9-A939-D0BB17F94D38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Data_Engine_Reference_App", "Muldis_Data_Engine_Reference_App\Muldis_Data_Engine_Reference_App.csproj", "{4DBE6F7D-758F-4BF9-A939-D0BB17F94D38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.Object_Notation_Processor_Reference", "Muldis_Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference.csproj", "{E337A0D5-5745-4BEB-A2E0-4C6050AC844A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Object_Notation_Processor_Reference", "Muldis_Object_Notation_Processor_Reference\Muldis_Object_Notation_Processor_Reference.csproj", "{E337A0D5-5745-4BEB-A2E0-4C6050AC844A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.Object_Notation_Processor_Reference_Util", "Muldis_Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference_Util\Muldis.Object_Notation_Processor_Reference_Util.csproj", "{0C6B1693-08D5-4350-B677-80F3CE442B7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Object_Notation_Processor_Reference_Util", "Muldis_Object_Notation_Processor_Reference_Util\Muldis_Object_Notation_Processor_Reference_Util.csproj", "{0C6B1693-08D5-4350-B677-80F3CE442B7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis.Object_Notation_Processor_Reference_App", "Muldis_Object_Notation_Processor_Reference\Muldis.Object_Notation_Processor_Reference_App\Muldis.Object_Notation_Processor_Reference_App.csproj", "{9BB27D8D-DAA5-442B-9442-B182A1353840}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Object_Notation_Processor_Reference_App", "Muldis_Object_Notation_Processor_Reference_App\Muldis_Object_Notation_Processor_Reference_App.csproj", "{9BB27D8D-DAA5-442B-9442-B182A1353840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
