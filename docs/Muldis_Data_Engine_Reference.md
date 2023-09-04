@@ -78,6 +78,13 @@ specific to modern .NET versions, instead of needing a full Visual Studio:
 
 <https://dotnet.microsoft.com>
 
+You would want to have a modern Microsoft `dotnet` tool
+version on your system if you want to build it on the command line:
+
+```
+dotnet clean ; dotnet build
+```
+
 Once the MDE .NET project has been compiled to a native executable, you
 can run it on the command line, such as MacOS Terminal or Windows Console.
 
