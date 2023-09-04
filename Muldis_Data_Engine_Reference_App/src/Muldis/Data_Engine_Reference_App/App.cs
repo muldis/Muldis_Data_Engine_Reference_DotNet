@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 
-[assembly: CLSCompliant(true)]
-
 namespace Muldis.Data_Engine_Reference_App;
 
 public class App

@@ -1,8 +1,6 @@
 using Muldis.Object_Notation_Processor_Reference_Util;
 using Muldis.Object_Notation_Processor_Reference_Util.Processor;
 
-[assembly: CLSCompliant(true)]
-
 namespace Muldis.Object_Notation_Processor_Reference_App;
 
 public class App

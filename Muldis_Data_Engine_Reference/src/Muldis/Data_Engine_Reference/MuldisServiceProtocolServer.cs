@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-[assembly: CLSCompliant(true)]
-
 namespace Muldis.Data_Engine_Reference;
 
 public class MuseEntrance
