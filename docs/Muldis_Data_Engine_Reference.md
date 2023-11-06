@@ -94,7 +94,7 @@ the project is compiled.
 Here is an example of its use:
 
 ```
-sh muldisder.sh Muldis.Data_Engine_Reference.MuseEntrance,Muldis_Data_Engine_Reference corpora/overview.muon
+sh muldisder.sh Muldis.Data_Engine_Reference.MuseEntrance,Muldis_Data_Engine_Reference corpora/Syntax_Plain_Text/spec_all_examples.muon
 ```
 
 I have not yet produced an alternate thin wrapper Windows shell script,
