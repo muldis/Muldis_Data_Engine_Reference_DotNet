@@ -238,20 +238,35 @@ internal abstract class Generator
             Char c = value[i];
             switch ((Int32)c)
             {
+                case 0x7:
+                    sb.Append(@"\a");
+                    break;
+                case 0x8:
+                    sb.Append(@"\b");
+                    break;
                 case 0x9:
                     sb.Append(@"\t");
                     break;
                 case 0xA:
                     sb.Append(@"\n");
                     break;
+                case 0xB:
+                    sb.Append(@"\v");
+                    break;
+                case 0xC:
+                    sb.Append(@"\f");
+                    break;
                 case 0xD:
                     sb.Append(@"\r");
+                    break;
+                case 0x1B:
+                    sb.Append(@"\e");
                     break;
                 case 0x22:
                     sb.Append(@"\q");
                     break;
                 case 0x5C:
-                    sb.Append(@"\b");
+                    sb.Append(@"\k");
                     break;
                 case 0x60:
                     sb.Append(@"\g");
@@ -259,7 +274,7 @@ internal abstract class Generator
                 default:
                     if (c <= 0x1F || (c >= 0x80 && c <= 0x9F))
                     {
-                        sb.Append(@"\[0t" + c.ToString() + "]");
+                        sb.Append(@"\(0t" + c.ToString() + ")");
                     }
                     else
                     {
@@ -391,8 +406,11 @@ internal abstract class Generator
     private String Article_Selector(MD_Any value, String indent)
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
-        return Any_Selector(value.MD_Article().Label, indent) + "*"
-            + Any_Selector(value.MD_Article().Attrs, indent);
+        return "(Article:("
+            + Any_Selector(value.MD_Article().Label, indent)
+            + " : "
+            + Any_Selector(value.MD_Article().Attrs, indent)
+            + "))";
     }
 
     private String Excuse_Selector(MD_Any value, String indent)
@@ -409,14 +427,14 @@ internal abstract class Generator
             && attrs["\u0000"].MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
             && attrs["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
         {
-            return Attr_Name(attrs["\u0000"].MD_Tuple().First().Key) + "!{}";
+            return "(Excuse:(" + Attr_Name(attrs["\u0000"].MD_Tuple().First().Key) + " : {}))";
         }
-        return "0iEXCUSE!" + "{\u000A"
+        return "(Excuse:(::\"\" : {\u000A"
             + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(attrs, a => a.Key),
                     a => ati + Attr_Name(a.Key) + " : "
                         + Any_Selector(a.Value, ati) + ",\u000A"))
-            + indent + "}";
+            + indent + "}))";
     }
 }
 
@@ -457,7 +475,7 @@ internal class Standard_Generator : Generator
     internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
     {
         return value.Memory.MD_Text(
-            "(Syntax:([Muldis_Object_Notation_Plain_Text,"
+            "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + Any_Selector(value, "") + "))\u000A",
             false
