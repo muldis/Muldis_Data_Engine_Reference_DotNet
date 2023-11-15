@@ -69,7 +69,7 @@ which can be obtained here (with no-cost Community licensing an option):
 
 <https://visualstudio.microsoft.com>
 
-MDE is implemented with .NET 7 (2022) which is cross-platform so you can
+MDE is implemented with .NET 8 (2023) which is cross-platform so you can
 use either the Apple MacOS or Microsoft Windows version of Visual Studio.
 I have done all development and testing so far on MacOS however.
 
