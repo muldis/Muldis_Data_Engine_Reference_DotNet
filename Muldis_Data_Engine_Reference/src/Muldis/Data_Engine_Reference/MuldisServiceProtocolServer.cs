@@ -6,80 +6,15 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-public class MuseEntrance
-{
-    public void ProvidesMuldisServiceProtocolEntrance() {}
-
-    public MuseFactory NewMuseFactory(Object requestedMuseVersion)
-    {
-        String[] onlySupportedMuseVersion = new String[]
-            {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"};
-        if (requestedMuseVersion is null
-            || requestedMuseVersion.GetType().FullName != "System.String[]"
-            || !Enumerable.SequenceEqual(
-                (String[])requestedMuseVersion, onlySupportedMuseVersion))
-        {
-            // We don't support the requested specific MUSE version.
-            return null;
-        }
-        // We support the requested specific MUSE version.
-        return new MuseFactory().init(this);
-    }
-}
-
-public class MuseFactory
-{
-    internal MuseEntrance m_entrance;
-
-    internal MuseFactory init(MuseEntrance entrance)
-    {
-        m_entrance = entrance;
-        return this;
-    }
-
-    public void ProvidesMuldisServiceProtocolFactory() {}
-
-    public MuseEntrance MuseEntrance()
-    {
-        return m_entrance;
-    }
-
-    public MuseMachine NewMuseMachine(Object requestedModelVersion)
-    {
-        String[] onlySupportedModelVersion = new String[]
-            {"Muldis_Data_Language", "https://muldis.com", "0.300.0"};
-        if (requestedModelVersion is null
-            || requestedModelVersion.GetType().FullName != "System.String[]"
-            || !Enumerable.SequenceEqual(
-                (String[])requestedModelVersion, onlySupportedModelVersion))
-        {
-            // We don't support the requested specific model version.
-            return null;
-        }
-        // We support the requested specific model version.
-        return new MuseMachine().init(this);
-    }
-}
-
 public class MuseMachine
 {
-    internal MuseFactory   m_factory;
     internal Core.Memory   m_memory;
     internal Core.Executor m_executor;
 
-    internal MuseMachine init(MuseFactory factory)
+    public MuseMachine()
     {
-        m_factory  = factory;
         m_memory   = new Core.Memory();
         m_executor = m_memory.Executor;
-        return this;
-    }
-
-    public void ProvidesMuldisServiceProtocolMachine() {}
-
-    public MuseFactory MuseFactory()
-    {
-        return m_factory;
     }
 
     public MuseValue MuseEvaluate(MuseValue function, MuseValue args = null)
@@ -794,8 +729,6 @@ public class MuseValue
     {
         return m_value.ToString();
     }
-
-    public void ProvidesMuldisServiceProtocolValue() {}
 
     public MuseMachine MuseMachine()
     {

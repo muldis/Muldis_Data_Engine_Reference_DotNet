@@ -23,40 +23,9 @@ public class App
             return;
         }
 
-        // Try and load the entrance class, or die.
-        // Note, generally the class name needs to be assembly-qualified for
-        // GetType() to find it; eg "Company.Project.Class,Company.Project" works.
-        // Die unless the entrance class explicitly declares it implements MUSE.
-        // Instantiate object of a Muldis Service Protocol entrance class.
-        // Request a factory object implementing a specific version of the
-        // MUSE or what the entrance considers the next best fit version;
-        // this would die if it thinks it can't satisfy an acceptable version.
+        // Request a VM object implementing the Muldis Data Language.
         // We will use this for all the main work.
-        MuseEntrance entrance = new MuseEntrance();
-        MuseFactory factory = entrance.NewMuseFactory(
-            new String[] {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"});
-        if (factory is null)
-        {
-            System.Console.WriteLine(
-                "The requested Muldis Service Protocol entrance class"
-                + " doesn't provide the specific MUSE version needed.");
-            return;
-        }
-
-        // Request a VM object implementing a specific version of the
-        // data model or what the factory considers the next best fit version;
-        // this would die if it thinks it can't satisfy an acceptable version.
-        // We will use this for all the main work.
-        MuseMachine machine = factory.NewMuseMachine(
-            new String[] {"Muldis_Data_Language", "https://muldis.com", "0.300.0"});
-        if (machine is null)
-        {
-            System.Console.WriteLine(
-                "The requested Muldis Service Protocol entrance class"
-                + " doesn't provide a factory class that provides"
-                + " the specific data model version needed.");
-            return;
-        }
+        MuseMachine machine = new MuseMachine();
 
         // File system path for the file containing plain text source
         // code that the user wishes to execute as their main program.
