@@ -26,7 +26,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Storage
 {
-    private String m_file_system_base_dir;
+    private String file_system_base_dir;
 
     internal Storage(String file_system_base_dir)
     {
@@ -36,17 +36,17 @@ internal class Storage
                 "Expected file system base directory"
                 + "[" + file_system_base_dir + "] doesn't exist.");
         }
-        m_file_system_base_dir = file_system_base_dir;
+        this.file_system_base_dir = file_system_base_dir;
     }
 
     internal String File_System_Base_Dir()
     {
-        return m_file_system_base_dir;
+        return this.file_system_base_dir;
     }
 
     private String build_file_path(String[] file_child_path)
     {
-        List<String> parts = new List<String>() { m_file_system_base_dir };
+        List<String> parts = new List<String>() { this.file_system_base_dir };
         parts.AddRange(file_child_path);
         return Path.Combine(parts.ToArray());
     }

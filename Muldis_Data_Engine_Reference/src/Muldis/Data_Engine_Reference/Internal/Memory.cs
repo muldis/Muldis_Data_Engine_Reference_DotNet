@@ -39,7 +39,7 @@ internal class Memory
     // MD_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
     // The MD_Integer 0 is the type default value.
-    private readonly Dictionary<Int32,MD_Any> m_integers;
+    private readonly Dictionary<Int32,MD_Any> integers;
 
     // MD_Fraction 0.0 (type default value).
     internal readonly MD_Any MD_Fraction_0;
@@ -66,10 +66,10 @@ internal class Memory
     internal readonly MD_Any MD_Tuple_D0;
     // Cache of MD_Tuple subtype Heading values (all Tuple attribute
     // assets are False), limited to 10K entries of shorter size.
-    private readonly Dictionary<MD_Any,MD_Any> m_heading_tuples;
+    private readonly Dictionary<MD_Any,MD_Any> heading_tuples;
     // Cache of MD_Tuple and Heading subtype Attr_Name values.
-    // The set of values in here is a proper subset of m_heading_tuples.
-    private readonly Dictionary<String,MD_Any> m_attr_name_tuples;
+    // The set of values in here is a proper subset of this.heading_tuples.
+    private readonly Dictionary<String,MD_Any> attr_name_tuples;
     internal readonly MD_Any Attr_Name_0;
     internal readonly MD_Any Attr_Name_1;
     internal readonly MD_Any Attr_Name_2;
@@ -95,7 +95,7 @@ internal class Memory
 
     // MD_Article with False label and no attributes
     // (type default value but not actually useful in practice).
-    private readonly MD_Any m_false_nullary_article;
+    private readonly MD_Any false_nullary_article;
 
     // All well known MD_Excuse values.
     internal readonly Dictionary<String,MD_Any> Well_Known_Excuses;
@@ -120,7 +120,7 @@ internal class Memory
             Details = true,
         };
 
-        m_integers = new Dictionary<Int32,MD_Any>();
+        this.integers = new Dictionary<Int32,MD_Any>();
         for (Int32 i = -1; i <= 1; i++)
         {
             MD_Any v = MD_Integer(i);
@@ -132,8 +132,8 @@ internal class Memory
             Details = new MD_Fraction_Struct {
                 As_Decimal = 0.0M,
                 As_Pair = new MD_Fraction_Pair {
-                    Numerator = m_integers[0].MD_Integer(),
-                    Denominator = m_integers[1].MD_Integer(),
+                    Numerator = this.integers[0].MD_Integer(),
+                    Denominator = this.integers[1].MD_Integer(),
                     Cached_Is_Coprime = true,
                 },
             },
@@ -208,7 +208,7 @@ internal class Memory
                 {{MD_Well_Known_Type.Heading, true}},
         };
 
-        m_attr_name_tuples = new Dictionary<String,MD_Any>()
+        this.attr_name_tuples = new Dictionary<String,MD_Any>()
         {
             {"\u0000", new MD_Any {
                 Memory = this,
@@ -232,9 +232,9 @@ internal class Memory
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
             } },
         };
-        Attr_Name_0 = m_attr_name_tuples["\u0000"];
-        Attr_Name_1 = m_attr_name_tuples["\u0001"];
-        Attr_Name_2 = m_attr_name_tuples["\u0002"];
+        Attr_Name_0 = this.attr_name_tuples["\u0000"];
+        Attr_Name_1 = this.attr_name_tuples["\u0001"];
+        Attr_Name_2 = this.attr_name_tuples["\u0002"];
 
         Heading_0_1 = new MD_Any {
             Memory = this,
@@ -270,7 +270,7 @@ internal class Memory
                 {{MD_Well_Known_Type.Heading, true}},
         };
 
-        m_heading_tuples = new Dictionary<MD_Any,MD_Any>()
+        this.heading_tuples = new Dictionary<MD_Any,MD_Any>()
         {
             {MD_Tuple_D0, MD_Tuple_D0},
             {Attr_Name_0, Attr_Name_0},
@@ -287,7 +287,7 @@ internal class Memory
             MD_Any an = MD_Attr_Name(s);
         }
 
-        m_false_nullary_article = new MD_Any {
+        this.false_nullary_article = new MD_Any {
             Memory = this,
             MD_MSBT = MD_Well_Known_Base_Type.MD_Article,
             Details = new MD_Article_Struct {
@@ -413,18 +413,18 @@ internal class Memory
     internal MD_Any MD_Integer(BigInteger value)
     {
         Boolean may_cache = value >= -2000000000 && value <= 2000000000;
-        if (may_cache && m_integers.ContainsKey((Int32)value))
+        if (may_cache && this.integers.ContainsKey((Int32)value))
         {
-            return m_integers[(Int32)value];
+            return this.integers[(Int32)value];
         }
         MD_Any integer = new MD_Any {
             Memory = this,
             MD_MSBT = MD_Well_Known_Base_Type.MD_Integer,
             Details = value,
         };
-        if (may_cache && m_integers.Count < 10000)
+        if (may_cache && this.integers.Count < 10000)
         {
-            m_integers.Add((Int32)value, integer);
+            this.integers.Add((Int32)value, integer);
         }
         return integer;
     }
@@ -596,9 +596,9 @@ internal class Memory
             KeyValuePair<String, MD_Any> only_attr = attrs.First();
             if (Object.ReferenceEquals(only_attr.Value, MD_True)
                 && only_attr.Key.Length <= 200
-                && m_attr_name_tuples.ContainsKey(only_attr.Key))
+                && this.attr_name_tuples.ContainsKey(only_attr.Key))
             {
-                return m_attr_name_tuples[only_attr.Key];
+                return this.attr_name_tuples[only_attr.Key];
             }
         }
         MD_Any tuple = new MD_Any {
@@ -613,10 +613,10 @@ internal class Memory
             {
                 tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
                 tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
-                if (only_attr.Key.Length <= 200 && m_heading_tuples.Count < 10000)
+                if (only_attr.Key.Length <= 200 && this.heading_tuples.Count < 10000)
                 {
-                    m_heading_tuples.Add(tuple, tuple);
-                    m_attr_name_tuples.Add(only_attr.Key, tuple);
+                    this.heading_tuples.Add(tuple, tuple);
+                    this.attr_name_tuples.Add(only_attr.Key, tuple);
                 }
             }
             return tuple;
@@ -627,13 +627,13 @@ internal class Memory
             tuple.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Heading, true);
             if (attrs.Count <= 30 && Enumerable.All(attrs, attr => attr.Key.Length <= 200))
             {
-                if (m_heading_tuples.ContainsKey(tuple))
+                if (this.heading_tuples.ContainsKey(tuple))
                 {
-                    return m_heading_tuples[tuple];
+                    return this.heading_tuples[tuple];
                 }
-                if (m_heading_tuples.Count < 10000)
+                if (this.heading_tuples.Count < 10000)
                 {
-                    m_heading_tuples.Add(tuple, tuple);
+                    this.heading_tuples.Add(tuple, tuple);
                 }
             }
         }
@@ -712,7 +712,7 @@ internal class Memory
         if (Object.ReferenceEquals(label, MD_False)
             && Object.ReferenceEquals(attrs, MD_Tuple_D0))
         {
-            return m_false_nullary_article;
+            return this.false_nullary_article;
         }
         // TODO: If label corresponds to a MD_Well_Known_Base_Type then
         // validate whether the label+attrs is actually a member of its
@@ -822,9 +822,9 @@ internal class Memory
 
     internal MD_Any MD_Attr_Name(String value)
     {
-        if (value.Length <= 200 && m_attr_name_tuples.ContainsKey(value))
+        if (value.Length <= 200 && this.attr_name_tuples.ContainsKey(value))
         {
-            return m_attr_name_tuples[value];
+            return this.attr_name_tuples[value];
         }
         MD_Any tuple = new MD_Any {
             Memory = this,
@@ -833,10 +833,10 @@ internal class Memory
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                 {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
         };
-        if (value.Length <= 200 && m_heading_tuples.Count < 10000)
+        if (value.Length <= 200 && this.heading_tuples.Count < 10000)
         {
-            m_heading_tuples.Add(tuple, tuple);
-            m_attr_name_tuples.Add(value, tuple);
+            this.heading_tuples.Add(tuple, tuple);
+            this.attr_name_tuples.Add(value, tuple);
         }
         return tuple;
     }
@@ -1216,9 +1216,9 @@ internal class Memory
                 return Attr_Name_2;
             }
             if (attrs.First().Key.Length <= 200
-                && m_attr_name_tuples.ContainsKey(attrs.First().Key))
+                && this.attr_name_tuples.ContainsKey(attrs.First().Key))
             {
-                return m_attr_name_tuples[attrs.First().Key];
+                return this.attr_name_tuples[attrs.First().Key];
             }
         }
         MD_Any heading = new MD_Any {
@@ -1232,23 +1232,23 @@ internal class Memory
         if (attrs.Count == 1)
         {
             heading.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name, true);
-            if (attrs.First().Key.Length <= 200 && m_heading_tuples.Count < 10000)
+            if (attrs.First().Key.Length <= 200 && this.heading_tuples.Count < 10000)
             {
-                m_heading_tuples.Add(heading, heading);
-                m_attr_name_tuples.Add(attrs.First().Key, heading);
+                this.heading_tuples.Add(heading, heading);
+                this.attr_name_tuples.Add(attrs.First().Key, heading);
             }
             return heading;
         }
         // We only get here if the tuple degree >= 2.
         if (attrs.Count <= 30 && Enumerable.All(attrs, attr => attr.Key.Length <= 200))
         {
-            if (m_heading_tuples.ContainsKey(heading))
+            if (this.heading_tuples.ContainsKey(heading))
             {
-                return m_heading_tuples[heading];
+                return this.heading_tuples[heading];
             }
-            if (m_heading_tuples.Count < 10000)
+            if (this.heading_tuples.Count < 10000)
             {
-                m_heading_tuples.Add(heading, heading);
+                this.heading_tuples.Add(heading, heading);
             }
         }
         return heading;
