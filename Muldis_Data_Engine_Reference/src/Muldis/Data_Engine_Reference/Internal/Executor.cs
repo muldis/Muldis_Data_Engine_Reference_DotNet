@@ -10,15 +10,11 @@ internal class Executor
 {
     internal readonly Memory Memory;
 
-    internal readonly Plain_Text.Standard_Parser Standard_Parser;
-
     internal readonly Plain_Text.Standard_Generator Standard_Generator;
 
     internal Executor(Memory memory)
     {
         Memory = memory;
-
-        Standard_Parser = new Plain_Text.Standard_Parser();
 
         Standard_Generator = new Plain_Text.Standard_Generator();
     }
@@ -444,7 +440,8 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
                     }
-                    return this.Standard_Parser.MDPT_Parsing_Unit_MD_Text_to_MD_Any(v);
+                    // TODO: Everything.
+                    return m.Well_Known_Excuses["No_Reason"];
                 default:
                     throw new NotImplementedException();
             }

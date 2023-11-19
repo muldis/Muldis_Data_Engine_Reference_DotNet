@@ -8,52 +8,6 @@ using Muldis.Data_Engine_Reference.Internal;
 
 namespace Muldis.Data_Engine_Reference.Internal.Plain_Text;
 
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Parser
-// Provides common implementation code for all other *_Parser
-// classes where they don't have reason to differ.
-// Or it would if there was more than one *_Parser, which there isn't.
-
-internal abstract class Parser
-{
-}
-
-// TODO: Some of this text has obsolete notions and it should be rewritten.
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Parser
-// Provides utility pure functions that accept Muldis Data Language Plain Text (MDPT)
-// source code, either a complete "parsing unit" that might comprise a
-// foo.mdpt disk file or appropriate portions of such, usually input as
-// a "Text" value, and derives by parsing it the actual Muldis Data Language "value"
-// that the source code denotes; typically the result is a value of the
-// "Package" type, which is the "native" form of Muldis Data Language source code
-// and a "standard compilation unit".
-// The input "Text" source code is expected to conform to the formal
-// specification "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
-// and would typically either be hand-written by users or be generated
-// by code such as the X or Y classes below.
-// This class is completely deterministic and its exact output Muldis Data Language
-// Package/etc values are determined entirely by its input Text/etc values.
-// Standard_Parser only accepts input in the "foundational" flavor of
-// Muldis_Object_Notation_Plain_Text, the same flavor that Standard_Generator outputs;
-// it also expressly does not retain any
-// parsing meta-data as new decorations on the output code, such as
-// which exact numeric or string formats or whitespace was used.
-// Similarly, Standard_Parser has zero configuration options.
-// The more complicated reference implementation of a parser for the full
-// Muldis_Object_Notation_Plain_Text grammar is in turn written in the "foundational"
-// subset of Muldis Data Language, thus an executor for the full language is
-// bootstrapped by an executor taking just the subset.
-// The full reference parser can create decorations to support perfect
-// round-tripping from plain text source to identical plain-text source.
-
-internal class Standard_Parser : Parser
-{
-    internal MDL_Any MDPT_Parsing_Unit_MD_Text_to_MD_Any(MDL_Any parsing_unit)
-    {
-        // TODO: Everything.
-        return parsing_unit.Memory.Well_Known_Excuses["No_Reason"];
-    }
-}
-
 // Muldis.Data_Engine_Reference.Internal.Plain_Text.Generator
 // Provides common implementation code for all other *_Generator
 // classes where they don't have reason to differ.
