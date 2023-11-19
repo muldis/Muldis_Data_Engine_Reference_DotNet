@@ -10,17 +10,17 @@ internal enum Dot_Net_String_Unicode_Test_Result
     Is_Malformed,
 }
 
-// Muldis.Data_Engine_Reference.Internal.MD_Well_Known_Type
-// Enumerates Muldis D types that are considered well-known to this
-// Muldis D language implementation.  Typically these are defined in
-// the Muldis D Foundation language spec even if most of their related
+// Muldis.Data_Engine_Reference.Internal.MDL_Well_Known_Type
+// Enumerates Muldis Data Language types that are considered well-known to this
+// Muldis Data Language implementation.  Typically these are defined in
+// the Muldis Data Language Foundation language spec even if most of their related
 // operators are not.  Typically each one is an Article subtype.
 // This set excludes on purpose the subset of well-known types that
 // should be trivial to test membership of by other means; in
 // particular it excludes {Any,None}, the Well_Known_Base_Type;
 // types not excluded are more work to test.
 
-internal enum MD_Well_Known_Type
+internal enum MDL_Well_Known_Type
 {
     Integer_NN,
     Integer_P,

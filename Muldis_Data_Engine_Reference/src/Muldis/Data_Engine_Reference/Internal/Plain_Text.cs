@@ -19,18 +19,18 @@ internal abstract class Parser
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.
 // Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Parser
-// Provides utility pure functions that accept Muldis D Plain Text (MDPT)
+// Provides utility pure functions that accept Muldis Data Language Plain Text (MDPT)
 // source code, either a complete "parsing unit" that might comprise a
 // foo.mdpt disk file or appropriate portions of such, usually input as
-// a "Text" value, and derives by parsing it the actual Muldis D "value"
+// a "Text" value, and derives by parsing it the actual Muldis Data Language "value"
 // that the source code denotes; typically the result is a value of the
-// "Package" type, which is the "native" form of Muldis D source code
+// "Package" type, which is the "native" form of Muldis Data Language source code
 // and a "standard compilation unit".
 // The input "Text" source code is expected to conform to the formal
 // specification "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
 // and would typically either be hand-written by users or be generated
 // by code such as the X or Y classes below.
-// This class is completely deterministic and its exact output Muldis D
+// This class is completely deterministic and its exact output Muldis Data Language
 // Package/etc values are determined entirely by its input Text/etc values.
 // Standard_Parser only accepts input in the "foundational" flavor of
 // Muldis_Object_Notation_Plain_Text, the same flavor that Standard_Generator outputs;
@@ -40,14 +40,14 @@ internal abstract class Parser
 // Similarly, Standard_Parser has zero configuration options.
 // The more complicated reference implementation of a parser for the full
 // Muldis_Object_Notation_Plain_Text grammar is in turn written in the "foundational"
-// subset of Muldis D, thus an executor for the full language is
+// subset of Muldis Data Language, thus an executor for the full language is
 // bootstrapped by an executor taking just the subset.
 // The full reference parser can create decorations to support perfect
 // round-tripping from plain text source to identical plain-text source.
 
 internal class Standard_Parser : Parser
 {
-    internal MD_Any MDPT_Parsing_Unit_MD_Text_to_MD_Any(MD_Any parsing_unit)
+    internal MDL_Any MDPT_Parsing_Unit_MD_Text_to_MD_Any(MDL_Any parsing_unit)
     {
         // TODO: Everything.
         return parsing_unit.Memory.Well_Known_Excuses["No_Reason"];
@@ -63,51 +63,51 @@ internal class Standard_Parser : Parser
 
 internal abstract class Generator
 {
-    protected abstract String Any_Selector(MD_Any value, String indent);
+    protected abstract String Any_Selector(MDL_Any value, String indent);
 
-    protected String Any_Selector_Foundation_Dispatch(MD_Any value, String indent)
+    protected String Any_Selector_Foundation_Dispatch(MDL_Any value, String indent)
     {
         switch (value.WKBT)
         {
-            case Well_Known_Base_Type.MD_Boolean:
+            case Well_Known_Base_Type.MDL_Boolean:
                 return Boolean_Literal(value);
-            case Well_Known_Base_Type.MD_Integer:
+            case Well_Known_Base_Type.MDL_Integer:
                 return Integer_Literal(value);
-            case Well_Known_Base_Type.MD_Fraction:
+            case Well_Known_Base_Type.MDL_Fraction:
                 return Fraction_Literal(value);
-            case Well_Known_Base_Type.MD_Bits:
+            case Well_Known_Base_Type.MDL_Bits:
                 return Bits_Literal(value);
-            case Well_Known_Base_Type.MD_Blob:
+            case Well_Known_Base_Type.MDL_Blob:
                 return Blob_Literal(value);
-            case Well_Known_Base_Type.MD_Text:
+            case Well_Known_Base_Type.MDL_Text:
                 return Text_Literal(value);
-            case Well_Known_Base_Type.MD_Array:
+            case Well_Known_Base_Type.MDL_Array:
                 return Array_Selector(value, indent);
-            case Well_Known_Base_Type.MD_Set:
+            case Well_Known_Base_Type.MDL_Set:
                 return Set_Selector(value, indent);
-            case Well_Known_Base_Type.MD_Bag:
+            case Well_Known_Base_Type.MDL_Bag:
                 return Bag_Selector(value, indent);
-            case Well_Known_Base_Type.MD_Tuple:
+            case Well_Known_Base_Type.MDL_Tuple:
                 return Tuple_Selector(value, indent);
-            case Well_Known_Base_Type.MD_Article:
+            case Well_Known_Base_Type.MDL_Article:
                 return Article_Selector(value, indent);
-            case Well_Known_Base_Type.MD_Variable:
+            case Well_Known_Base_Type.MDL_Variable:
                 // We display something useful for debugging purposes, but no
-                // (transient) MD_Variable can actually be rendered as Muldis D Plain Text.
+                // (transient) MDL_Variable can actually be rendered as Muldis Data Language Plain Text.
                 return "`Some IMD_Variable value is here.`";
-            case Well_Known_Base_Type.MD_Process:
+            case Well_Known_Base_Type.MDL_Process:
                 // We display something useful for debugging purposes, but no
-                // (transient) MD_Process can actually be rendered as Muldis D Plain Text.
+                // (transient) MDL_Process can actually be rendered as Muldis Data Language Plain Text.
                 return "`Some IMD_Process value is here.`";
-            case Well_Known_Base_Type.MD_Stream:
+            case Well_Known_Base_Type.MDL_Stream:
                 // We display something useful for debugging purposes, but no
-                // (transient) MD_Stream can actually be rendered as Muldis D Plain Text.
+                // (transient) MDL_Stream can actually be rendered as Muldis Data Language Plain Text.
                 return "`Some IMD_Stream value is here.`";
-            case Well_Known_Base_Type.MD_External:
+            case Well_Known_Base_Type.MDL_External:
                 // We display something useful for debugging purposes, but no
-                // (transient) MD_External can actually be rendered as Muldis D Plain Text.
+                // (transient) MDL_External can actually be rendered as Muldis Data Language Plain Text.
                 return "`Some IMD_External value is here.`";
-            case Well_Known_Base_Type.MD_Excuse:
+            case Well_Known_Base_Type.MDL_Excuse:
                 return Excuse_Selector(value, indent);
             default:
                 return "DIE UN-HANDLED FOUNDATION TYPE"
@@ -115,14 +115,14 @@ internal abstract class Generator
         }
     }
 
-    private String Boolean_Literal(MD_Any value)
+    private String Boolean_Literal(MDL_Any value)
     {
-        return value.MD_Boolean().Value ? "0bTRUE" : "0bFALSE";
+        return value.MDL_Boolean().Value ? "0bTRUE" : "0bFALSE";
     }
 
-    private String Integer_Literal(MD_Any value)
+    private String Integer_Literal(MDL_Any value)
     {
-        return value.MD_Integer().ToString();
+        return value.MDL_Integer().ToString();
     }
 
     private String Integer_Literal(Int64 value)
@@ -130,9 +130,9 @@ internal abstract class Generator
         return value.ToString();
     }
 
-    private String Fraction_Literal(MD_Any value)
+    private String Fraction_Literal(MDL_Any value)
     {
-        MD_Fraction_Struct fa = value.MD_Fraction();
+        MDL_Fraction_Struct fa = value.MDL_Fraction();
         // Iff the Fraction value can be exactly expressed as a
         // non-terminating decimal (includes all Fraction that can be
         // non-terminating binary/octal/hex), express in that format;
@@ -172,13 +172,13 @@ internal abstract class Generator
         return fa.As_Pair.Numerator.ToString() + "/" + fa.As_Pair.Denominator.ToString();
     }
 
-    private String Bits_Literal(MD_Any value)
+    private String Bits_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MD_Bits_C0))
+        if (Object.ReferenceEquals(value, value.Memory.MDL_Bits_C0))
         {
             return "0bb";
         }
-        System.Collections.IEnumerator e = value.MD_Bits().GetEnumerator();
+        System.Collections.IEnumerator e = value.MDL_Bits().GetEnumerator();
         List<Boolean> list = new List<Boolean>();
         while (e.MoveNext())
         {
@@ -189,24 +189,24 @@ internal abstract class Generator
             );
     }
 
-    private String Blob_Literal(MD_Any value)
+    private String Blob_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MD_Blob_C0))
+        if (Object.ReferenceEquals(value, value.Memory.MDL_Blob_C0))
         {
             return "0xx";
         }
         return "0xx" + String.Concat(
-                Enumerable.Select(value.MD_Blob(), m => m.ToString("X2"))
+                Enumerable.Select(value.MDL_Blob(), m => m.ToString("X2"))
             );
     }
 
-    private String Text_Literal(MD_Any value)
+    private String Text_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MD_Text_C0))
+        if (Object.ReferenceEquals(value, value.Memory.MDL_Text_C0))
         {
             return "\"\"";
         }
-        return Nonempty_Text_Literal(value.MD_Text().Code_Point_Members);
+        return Nonempty_Text_Literal(value.MDL_Text().Code_Point_Members);
     }
 
     private String Nonempty_Text_Literal(String value)
@@ -295,11 +295,11 @@ internal abstract class Generator
         return Nonempty_Text_Literal(value);
     }
 
-    private String Heading_Literal(MD_Any value)
+    private String Heading_Literal(MDL_Any value)
     {
         Memory m = value.Memory;
-        Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Heading:{})"
+        Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
+        return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
@@ -307,16 +307,16 @@ internal abstract class Generator
                 + "})";
     }
 
-    private String Array_Selector(MD_Any value, String indent)
+    private String Array_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
         Memory m = value.Memory;
-        return Object.ReferenceEquals(value, m.MD_Array_C0) ? "(Array:[])"
+        return Object.ReferenceEquals(value, m.MDL_Array_C0) ? "(Array:[])"
             : "(Array:[\u000A" + Array_Selector__node__tree(
-                value.MD_Array(), mei) + indent + "])";
+                value.MDL_Array(), mei) + indent + "])";
     }
 
-    private String Array_Selector__node__tree(MD_Array_Struct node, String indent)
+    private String Array_Selector__node__tree(MDL_Array_Struct node, String indent)
     {
         // Note: We always display consecutive duplicates in repeating
         // value format rather than value-count format in order to keep
@@ -346,11 +346,11 @@ internal abstract class Generator
         }
     }
 
-    private String Set_Selector(MD_Any value, String indent)
+    private String Set_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
         value.Memory.Bag__Collapse(bag: value, want_indexed: true);
-        MD_Bag_Struct node = value.MD_Bag();
+        MDL_Bag_Struct node = value.MDL_Bag();
         switch (node.Local_Symbolic_Type)
         {
             case Symbolic_Bag_Type.None:
@@ -365,11 +365,11 @@ internal abstract class Generator
         }
     }
 
-    private String Bag_Selector(MD_Any value, String indent)
+    private String Bag_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
         value.Memory.Bag__Collapse(bag: value, want_indexed: true);
-        MD_Bag_Struct node = value.MD_Bag();
+        MDL_Bag_Struct node = value.MDL_Bag();
         switch (node.Local_Symbolic_Type)
         {
             case Symbolic_Bag_Type.None:
@@ -385,16 +385,16 @@ internal abstract class Generator
         }
     }
 
-    private String Tuple_Selector(MD_Any value, String indent)
+    private String Tuple_Selector(MDL_Any value, String indent)
     {
-        if (value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
+        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true)
         {
             return Heading_Literal(value);
         }
         String ati = indent + "\u0009";
         Memory m = value.Memory;
-        Dictionary<String,MD_Any> attrs = value.MD_Tuple();
-        return Object.ReferenceEquals(value, m.MD_Tuple_D0) ? "(Tuple:{})"
+        Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
+        return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
@@ -403,31 +403,31 @@ internal abstract class Generator
                 + indent + "})";
     }
 
-    private String Article_Selector(MD_Any value, String indent)
+    private String Article_Selector(MDL_Any value, String indent)
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
         return "(Article:("
-            + Any_Selector(value.MD_Article().Label, indent)
+            + Any_Selector(value.MDL_Article().Label, indent)
             + " : "
-            + Any_Selector(value.MD_Article().Attrs, indent)
+            + Any_Selector(value.MDL_Article().Attrs, indent)
             + "))";
     }
 
-    private String Excuse_Selector(MD_Any value, String indent)
+    private String Excuse_Selector(MDL_Any value, String indent)
     {
         // TODO: Change Excuse so represented as Nesting+Kit pair.
         String ati = indent + "\u0009";
         Memory m = value.Memory;
-        Dictionary<String,MD_Any> attrs = value.MD_Excuse();
+        Dictionary<String,MDL_Any> attrs = value.MDL_Excuse();
         if (attrs.Count == 0)
         {
             return "0iIGNORANCE";
         }
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
-            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MD_Tuple
-            && attrs["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
+            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple
+            && attrs["\u0000"].Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name) == true)
         {
-            return "(Excuse:(" + Attr_Name(attrs["\u0000"].MD_Tuple().First().Key) + " : {}))";
+            return "(Excuse:(" + Attr_Name(attrs["\u0000"].MDL_Tuple().First().Key) + " : {}))";
         }
         return "(Excuse:(::\"\" : {\u000A"
             + String.Concat(Enumerable.Select(
@@ -440,16 +440,16 @@ internal abstract class Generator
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.
 // Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Generator
-// Provides utility pure functions that accept any Muldis D "Package"
-// value, which is a native Muldis D "standard compilation unit", and
+// Provides utility pure functions that accept any Muldis Data Language "Package"
+// value, which is a native Muldis Data Language "standard compilation unit", and
 // derive a "Text" value that is this "Package" encoded in compliance
 // with the "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
 // formal specification.  This outputs of this generator are intended
 // for external use, whether for storage in foo.mdpt disk files or
 // other places, viewing by users, and reading by other programs, as a
 // means of interchange with any other system conforming to the spec.
-// This generator actually handles any Muldis D "value", not just a "Package".
-// This class is completely deterministic and its exact output Muldis D
+// This generator actually handles any Muldis Data Language "value", not just a "Package".
+// This class is completely deterministic and its exact output Muldis Data Language
 // Text/etc values are determined entirely by its input Package/etc values.
 // This generator is expressly kept as simple as possible such that it
 // has zero configuration options and only does simple pretty-printing;
@@ -462,7 +462,7 @@ internal abstract class Generator
 // no interpretation and with nothing left out.  Round-tripping will
 // only work as intended with a parser that doesn't produce decorations.
 // Typically it is up to bootstrapped higher-level libraries written in
-// Muldis D to provide other generating options that are better
+// Muldis Data Language to provide other generating options that are better
 // pretty-printed or provide any configuration or that serialize with
 // non-foundational Muldis_Object_Notation_Plain_Text or interpret decorations.
 // While this generator's output includes a "parsing unit predicate" on
@@ -472,9 +472,9 @@ internal abstract class Generator
 
 internal class Standard_Generator : Generator
 {
-    internal MD_Any MD_Any_to_MD_Text_MDPT_Parsing_Unit(MD_Any value)
+    internal MDL_Any MDL_Any_to_MD_Text_MDPT_Parsing_Unit(MDL_Any value)
     {
-        return value.Memory.MD_Text(
+        return value.Memory.MDL_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + Any_Selector(value, "") + "))\u000A",
@@ -482,19 +482,19 @@ internal class Standard_Generator : Generator
         );
     }
 
-    protected override String Any_Selector(MD_Any value, String indent)
+    protected override String Any_Selector(MDL_Any value, String indent)
     {
         return Any_Selector_Foundation_Dispatch(value, indent);
     }
 }
 
 // Muldis.Data_Engine_Reference.Internal.Plain_Text.Identity_Generator
-// Provides utility pure functions that accept any Muldis D "value"
+// Provides utility pure functions that accept any Muldis Data Language "value"
 // and derive a .NET String that uniquely identifies it.
-// This class is deterministic and guarantees that iff 2 MD_Any are
-// logically considered to be the "same" Muldis D value then they will
+// This class is deterministic and guarantees that iff 2 MDL_Any are
+// logically considered to be the "same" Muldis Data Language value then they will
 // map to exactly the same .NET String value, and moreover, that iff 2
-// MD_Any are logically considered to NOT be the "same" Muldis D value,
+// MDL_Any are logically considered to NOT be the "same" Muldis Data Language value,
 // they are guaranteed to map to distinct .NET String values.
 // The outputs of this generator are intended for internal use only,
 // where the outputs are transient and only intended to be used within
@@ -508,17 +508,17 @@ internal class Standard_Generator : Generator
 // original input values, but that is not guaranteed; even if that is
 // the case, the outputs might be considerably less "pretty" as a
 // trade-off to make the generating faster and less error-prone.
-// A normal side effect of using Identity_Generator on a MD_Any/etc
+// A normal side effect of using Identity_Generator on a MDL_Any/etc
 // value is to update a cache therein to hold the serialization result.
 
 internal class Identity_Generator : Generator
 {
-    internal String MD_Any_to_Identity_String(MD_Any value)
+    internal String MDL_Any_to_Identity_String(MDL_Any value)
     {
         return Any_Selector(value, "");
     }
 
-    protected override String Any_Selector(MD_Any value, String indent)
+    protected override String Any_Selector(MDL_Any value, String indent)
     {
         if (value.Cached_MD_Any_Identity is null)
         {
@@ -530,30 +530,30 @@ internal class Identity_Generator : Generator
 }
 
 // Muldis.Data_Engine_Reference.Internal.Plain_Text.Preview_Generator
-// Provides utility pure functions that accept any Muldis D "value"
+// Provides utility pure functions that accept any Muldis Data Language "value"
 // and derive a .NET String that provides a "preview quick look"
 // serialization of that value.  The intended use of this class is to
 // underlie a .NET ToString() override for all .NET values representing
-// Muldis D values so that debuggers including MS Visual Studio can
+// Muldis Data Language values so that debuggers including MS Visual Studio can
 // assist programmers at easily determining what the current logical
 // values of their program variables are, which would otherwise be
-// quite labour intensive for humans inspeding MD_Any object fields.
+// quite labour intensive for humans inspeding MDL_Any object fields.
 // This class is explicitly NOT guaranteed to be deterministic and so
 // different runs of its functions on what are logically the same
-// Muldis D values might produce different String outputs; reasons for
+// Muldis Data Language values might produce different String outputs; reasons for
 // that include not sorting collection elements and truncating results.
 // Given its purpose in aiding debugging, it is intended that this
-// class will NOT populate any calculation caching fields in MD_Any/etc
+// class will NOT populate any calculation caching fields in MDL_Any/etc
 // objects, to help avoid heisenbugs.
 
 internal class Preview_Generator : Generator
 {
-    internal String MD_Any_To_Preview_String(MD_Any value)
+    internal String MDL_Any_To_Preview_String(MDL_Any value)
     {
         return Any_Selector(value, "");
     }
 
-    protected override String Any_Selector(MD_Any value, String indent)
+    protected override String Any_Selector(MDL_Any value, String indent)
     {
         return Any_Selector_Foundation_Dispatch(value, indent);
     }

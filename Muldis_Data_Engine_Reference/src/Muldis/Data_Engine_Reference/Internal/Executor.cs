@@ -23,14 +23,14 @@ internal class Executor
         Standard_Generator = new Plain_Text.Standard_Generator();
     }
 
-    internal MD_Any Evaluates(MD_Any function, MD_Any args = null)
+    internal MDL_Any Evaluates(MDL_Any function, MDL_Any args = null)
     {
         Memory m = Memory;
         if (args is null)
         {
-            args = m.MD_Tuple_D0;
+            args = m.MDL_Tuple_D0;
         }
-        if (args.WKBT != Well_Known_Base_Type.MD_Tuple)
+        if (args.WKBT != Well_Known_Base_Type.MDL_Tuple)
         {
             throw new ArgumentException(m.Simple_MD_Excuse(
                 "X_Args_Not_Tuple").ToString());
@@ -38,7 +38,7 @@ internal class Executor
         if (Is_Absolute_Name(function))
         {
             if (Object.ReferenceEquals(
-                Array__maybe_at(function, 0), m.MD_Attr_Name("foundation")))
+                Array__maybe_at(function, 0), m.MDL_Attr_Name("foundation")))
             {
                 return evaluate_foundation_function(
                     Array__maybe_at(function, 1), args);
@@ -61,14 +61,14 @@ internal class Executor
             "X_Malformed_Function_Call").ToString());
     }
 
-    internal void Performs(MD_Any procedure, MD_Any args = null)
+    internal void Performs(MDL_Any procedure, MDL_Any args = null)
     {
         Memory m = Memory;
         if (args is null)
         {
-            args = m.MD_Tuple_D0;
+            args = m.MDL_Tuple_D0;
         }
-        if (args.WKBT != Well_Known_Base_Type.MD_Tuple)
+        if (args.WKBT != Well_Known_Base_Type.MDL_Tuple)
         {
             throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
         }
@@ -92,104 +92,104 @@ internal class Executor
             "X_Malformed_Procedure_Call").ToString());
     }
 
-    internal Boolean Is_Excuse(MD_Any value)
+    internal Boolean Is_Excuse(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Fraction(MD_Any value)
+    internal Boolean Is_Fraction(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Bits(MD_Any value)
+    internal Boolean Is_Bits(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Blob(MD_Any value)
+    internal Boolean Is_Blob(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Text(MD_Any value)
+    internal Boolean Is_Text(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_String(MD_Any value)
+    internal Boolean Is_String(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Set(MD_Any value)
+    internal Boolean Is_Set(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Array(MD_Any value)
+    internal Boolean Is_Tuple_Array(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Relation(MD_Any value)
+    internal Boolean Is_Relation(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Bag(MD_Any value)
+    internal Boolean Is_Tuple_Bag(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Interval(MD_Any value)
+    internal Boolean Is_Interval(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Package(MD_Any value)
+    internal Boolean Is_Package(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Function(MD_Any value)
+    internal Boolean Is_Function(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Procedure(MD_Any value)
+    internal Boolean Is_Procedure(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Function_Call(MD_Any value)
+    internal Boolean Is_Function_Call(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Procedure_Call(MD_Any value)
+    internal Boolean Is_Procedure_Call(MDL_Any value)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Heading(MD_Any value)
+    internal Boolean Is_Heading(MDL_Any value)
     {
-        return value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true;
+        return value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true;
     }
 
-    internal Boolean Is_Attr_Name(MD_Any value)
+    internal Boolean Is_Attr_Name(MDL_Any value)
     {
-        return value.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true;
+        return value.Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name) == true;
     }
 
-    internal Boolean Is_Attr_Name_List(MD_Any value)
+    internal Boolean Is_Attr_Name_List(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List) == true)
+        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name_List) == true)
         {
             return true;
         }
         Memory m = Memory;
-        if (value.WKBT != Well_Known_Base_Type.MD_Array)
+        if (value.WKBT != Well_Known_Base_Type.MDL_Array)
         {
             return false;
         }
@@ -202,13 +202,13 @@ internal class Executor
                 return false;
             }
         }
-        value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name_List, true);
+        value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name_List, true);
         return true;
     }
 
-    internal Boolean Is_Local_Name(MD_Any value)
+    internal Boolean Is_Local_Name(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MD_Well_Known_Type.Local_Name) == true)
+        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Local_Name) == true)
         {
             return true;
         }
@@ -221,23 +221,23 @@ internal class Executor
         {
             return false;
         }
-        MD_Any first = Array__maybe_at(value, 0);
-        if ((Object.ReferenceEquals(first, Memory.MD_Attr_Name("foundation")) && count == 2)
-            || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("used")) && count >= 2)
-            || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("package")) && count >= 1)
-            || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("folder")) && count >= 1)
-            || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("material")) && count == 1)
-            || (Object.ReferenceEquals(first, Memory.MD_Attr_Name("floating")) && count >= 2))
+        MDL_Any first = Array__maybe_at(value, 0);
+        if ((Object.ReferenceEquals(first, Memory.MDL_Attr_Name("foundation")) && count == 2)
+            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("used")) && count >= 2)
+            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("package")) && count >= 1)
+            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("folder")) && count >= 1)
+            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("material")) && count == 1)
+            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("floating")) && count >= 2))
         {
-            value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Local_Name, true);
+            value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Local_Name, true);
             return true;
         }
         return false;
     }
 
-    internal Boolean Is_Absolute_Name(MD_Any value)
+    internal Boolean Is_Absolute_Name(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name) == true)
+        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Absolute_Name) == true)
         {
             return true;
         }
@@ -245,21 +245,21 @@ internal class Executor
         {
             return false;
         }
-        MD_Any first = Array__maybe_at(value, 0);
-        if (Object.ReferenceEquals(first, Memory.MD_Attr_Name("foundation"))
-            || Object.ReferenceEquals(first, Memory.MD_Attr_Name("used"))
-            || Object.ReferenceEquals(first, Memory.MD_Attr_Name("package")))
+        MDL_Any first = Array__maybe_at(value, 0);
+        if (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("foundation"))
+            || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("used"))
+            || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("package")))
         {
-            value.Declare_Member_Status_in_WKT(MD_Well_Known_Type.Absolute_Name, true);
+            value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Absolute_Name, true);
             return true;
         }
         return false;
     }
 
-    internal MD_Any evaluate_foundation_function(MD_Any func_name, MD_Any args)
+    internal MDL_Any evaluate_foundation_function(MDL_Any func_name, MDL_Any args)
     {
         Memory m = Memory;
-        String func_name_s = func_name.MD_Tuple().First().Key;
+        String func_name_s = func_name.MDL_Tuple().First().Key;
 
         // TYPE DEFINERS
 
@@ -270,65 +270,65 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
             }
-            MD_Any v = args.MD_Tuple()["\u0000"];
+            MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)
             {
                 case "Any":
-                    return m.MD_True;
+                    return m.MDL_True;
                 case "None":
-                    return m.MD_False;
+                    return m.MDL_False;
 
                 // FOUNDATION BASE TYPE DEFINERS
 
                 case "Boolean":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Boolean
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Boolean
                     );
                 case "Integer":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Integer
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Integer
                     );
                 case "Array":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Array
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Array
                     );
                 case "Bag":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Bag
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Bag
                     );
                 case "Tuple":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Tuple
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Tuple
                     );
                 case "Article":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Article
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Article
                     );
                 case "Handle":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Variable
-                            || v.WKBT == Well_Known_Base_Type.MD_Process
-                            || v.WKBT == Well_Known_Base_Type.MD_Stream
-                            || v.WKBT == Well_Known_Base_Type.MD_External
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Variable
+                            || v.WKBT == Well_Known_Base_Type.MDL_Process
+                            || v.WKBT == Well_Known_Base_Type.MDL_Stream
+                            || v.WKBT == Well_Known_Base_Type.MDL_External
                     );
 
                 // HANDLE SUBTYPE DEFINERS
 
                 case "Variable":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Variable
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Variable
                     );
                 case "Process":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Process
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Process
                     );
                 case "Stream":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Stream
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Stream
                     );
                 case "External":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_External
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_External
                     );
 
                 // ARRAY SUBTYPE DEFINERS
@@ -338,18 +338,18 @@ internal class Executor
                 // ARTICLE SUBTYPE DEFINERS
 
                 case "Blob":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Blob
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Blob
                     );
 
                 case "Text":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Text
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Text
                     );
 
                 case "Excuse":
-                    return m.MD_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MD_Excuse
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Excuse
                     );
 
                 default:
@@ -366,80 +366,80 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
             }
-            MD_Any v = args.MD_Tuple()["\u0000"];
+            MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)
             {
                 case "Integer_opposite":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Integer)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MD_Integer(-v.MD_Integer());
+                    return m.MDL_Integer(-v.MDL_Integer());
                 case "Integer_modulus":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Integer)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MD_Integer(BigInteger.Abs(v.MD_Integer()));
+                    return m.MDL_Integer(BigInteger.Abs(v.MDL_Integer()));
                 case "Integer_factorial":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Integer
-                        || v.MD_Integer() < 0)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Integer
+                        || v.MDL_Integer() < 0)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                     }
                     // Note that System.Numerics.BigInteger doesn't come
                     // with a Factorial(n) so we have to do it ourselves.
-                    return m.MD_Integer(Integer__factorial(v.MD_Integer()));
+                    return m.MDL_Integer(Integer__factorial(v.MDL_Integer()));
                 case "Array_count":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Array)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
-                    return m.MD_Integer(Array__count(v));
+                    return m.MDL_Integer(Array__count(v));
                 case "Bag_unique":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Bag)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Bag)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
-                    return new MD_Any {
+                    return new MDL_Any {
                         Memory = m,
-                        WKBT = Well_Known_Base_Type.MD_Bag,
-                        Details = new MD_Bag_Struct {
+                        WKBT = Well_Known_Base_Type.MDL_Bag,
+                        Details = new MDL_Bag_Struct {
                             Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                            Members = v.MD_Bag(),
+                            Members = v.MDL_Bag(),
                             Cached_Members_Meta = new Cached_Members_Meta {
                                 Tree_All_Unique = true,
                             },
                         },
                     };
                 case "Tuple_degree":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Tuple)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
-                    return m.MD_Integer(v.MD_Tuple().Count);
+                    return m.MDL_Integer(v.MDL_Tuple().Count);
                 case "Tuple_heading":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Tuple)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
                     return m.Tuple__Heading(v);
                 case "Text_from_UTF_8_Blob":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Blob)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Blob)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
-                    return m.MD_Text_from_UTF_8_MD_Blob(v);
+                    return m.MDL_Text_from_UTF_8_MD_Blob(v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
-                    if (v.WKBT != Well_Known_Base_Type.MD_Text)
+                    if (v.WKBT != Well_Known_Base_Type.MDL_Text)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
@@ -459,37 +459,37 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Binary_Function_Args_Not_Heading_0_1").ToString());
             }
-            MD_Any a0 = args.MD_Tuple()["\u0000"];
-            MD_Any a1 = args.MD_Tuple()["\u0001"];
+            MDL_Any a0 = args.MDL_Tuple()["\u0000"];
+            MDL_Any a1 = args.MDL_Tuple()["\u0001"];
             switch (func_name_s)
             {
                 case "same":
-                    return m.MD_Boolean(Any__same(a0, a1));
+                    return m.MDL_Boolean(Any__same(a0, a1));
                 case "Integer_plus":
-                    if (a0.WKBT != Well_Known_Base_Type.MD_Integer)
+                    if (a0.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_plus_Arg_0_Not_Integer").ToString());
                     }
-                    if (a1.WKBT != Well_Known_Base_Type.MD_Integer)
+                    if (a1.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
-                    return m.MD_Integer(a0.MD_Integer() + a1.MD_Integer());
+                    return m.MDL_Integer(a0.MDL_Integer() + a1.MDL_Integer());
                 case "Array_at":
-                    if (a0.WKBT != Well_Known_Base_Type.MD_Array)
+                    if (a0.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
-                    if (a1.WKBT != Well_Known_Base_Type.MD_Integer
-                        || a1.MD_Integer() < 0)
+                    if (a1.WKBT != Well_Known_Base_Type.MDL_Integer
+                        || a1.MDL_Integer() < 0)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
-                    MD_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MD_Integer());
+                    MDL_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MDL_Integer());
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
@@ -510,7 +510,7 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MD_Excuse(
                     "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
             }
-            MD_Any v = args.MD_Tuple()["\u0000"];
+            MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)
             {
                 default:
@@ -521,7 +521,7 @@ internal class Executor
         throw new NotImplementedException();
     }
 
-    internal Boolean Any__same(MD_Any a0, MD_Any a1)
+    internal Boolean Any__same(MDL_Any a0, MDL_Any a1)
     {
         if (Object.ReferenceEquals(a0, a1))
         {
@@ -544,14 +544,14 @@ internal class Executor
         Boolean result;
         switch (a0.WKBT)
         {
-            case Well_Known_Base_Type.MD_Boolean:
-                return a0.MD_Boolean() == a1.MD_Boolean();
-            case Well_Known_Base_Type.MD_Integer:
-                result = (a0.MD_Integer() == a1.MD_Integer());
+            case Well_Known_Base_Type.MDL_Boolean:
+                return a0.MDL_Boolean() == a1.MDL_Boolean();
+            case Well_Known_Base_Type.MDL_Integer:
+                result = (a0.MDL_Integer() == a1.MDL_Integer());
                 break;
-            case Well_Known_Base_Type.MD_Fraction:
-                MD_Fraction_Struct fs0 = a0.MD_Fraction();
-                MD_Fraction_Struct fs1 = a1.MD_Fraction();
+            case Well_Known_Base_Type.MDL_Fraction:
+                MDL_Fraction_Struct fs0 = a0.MDL_Fraction();
+                MDL_Fraction_Struct fs1 = a1.MDL_Fraction();
                 if (Object.ReferenceEquals(fs0, fs1))
                 {
                     result = true;
@@ -574,22 +574,22 @@ internal class Executor
                 result = (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator
                     && fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
                 break;
-            case Well_Known_Base_Type.MD_Bits:
+            case Well_Known_Base_Type.MDL_Bits:
                 result = Enumerable.SequenceEqual(
-                    BitArray_to_List(a0.MD_Bits()),
-                    BitArray_to_List(a1.MD_Bits()));
+                    BitArray_to_List(a0.MDL_Bits()),
+                    BitArray_to_List(a1.MDL_Bits()));
                 break;
-            case Well_Known_Base_Type.MD_Blob:
-                result = Enumerable.SequenceEqual(a0.MD_Blob(), a1.MD_Blob());
+            case Well_Known_Base_Type.MDL_Blob:
+                result = Enumerable.SequenceEqual(a0.MDL_Blob(), a1.MDL_Blob());
                 break;
-            case Well_Known_Base_Type.MD_Text:
-                result = (a0.MD_Text().Code_Point_Members == a1.MD_Text().Code_Point_Members);
+            case Well_Known_Base_Type.MDL_Text:
+                result = (a0.MDL_Text().Code_Point_Members == a1.MDL_Text().Code_Point_Members);
                 break;
-            case Well_Known_Base_Type.MD_Array:
+            case Well_Known_Base_Type.MDL_Array:
                 Memory.Array__Collapse(a0);
                 Memory.Array__Collapse(a1);
-                MD_Array_Struct n0 = a0.MD_Array();
-                MD_Array_Struct n1 = a1.MD_Array();
+                MDL_Array_Struct n0 = a0.MDL_Array();
+                MDL_Array_Struct n1 = a1.MDL_Array();
                 if (Object.ReferenceEquals(n0, n1))
                 {
                     result = true;
@@ -616,14 +616,14 @@ internal class Executor
                 if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
                     && n1.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
                 {
-                    // This works because MD_Any Equals() calls Any__Same().
+                    // This works because MDL_Any Equals() calls Any__Same().
                     result = Enumerable.SequenceEqual(
                         n0.Local_Arrayed_Members(),
                         n1.Local_Arrayed_Members());
                     break;
                 }
-                MD_Array_Struct n0_ = n0;
-                MD_Array_Struct n1_ = n1;
+                MDL_Array_Struct n0_ = n0;
+                MDL_Array_Struct n1_ = n1;
                 if (n0_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
                     && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
                 {
@@ -634,19 +634,19 @@ internal class Executor
                     && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
                 {
                     Multiplied_Member sm = n0_.Local_Singular_Members();
-                    List<MD_Any> am = n1_.Local_Arrayed_Members();
+                    List<MDL_Any> am = n1_.Local_Arrayed_Members();
                     result = sm.Multiplicity == am.Count
                         && Enumerable.All(am, m => Any__same(m, sm.Member));
                 }
                 // We should never get here.
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MD_Set:
-            case Well_Known_Base_Type.MD_Bag:
-                // MD_Set and MD_Bag have the same internal representation.
+            case Well_Known_Base_Type.MDL_Set:
+            case Well_Known_Base_Type.MDL_Bag:
+                // MDL_Set and MDL_Bag have the same internal representation.
                 Memory.Bag__Collapse(bag: a0, want_indexed: true);
                 Memory.Bag__Collapse(bag: a1, want_indexed: true);
-                MD_Bag_Struct bn0 = a0.MD_Bag();
-                MD_Bag_Struct bn1 = a1.MD_Bag();
+                MDL_Bag_Struct bn0 = a0.MDL_Bag();
+                MDL_Bag_Struct bn1 = a1.MDL_Bag();
                 if (Object.ReferenceEquals(bn0, bn1))
                 {
                     result = true;
@@ -664,9 +664,9 @@ internal class Executor
                 if (bn0.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed
                     && bn1.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed)
                 {
-                    Dictionary<MD_Any,Multiplied_Member> im0
+                    Dictionary<MDL_Any,Multiplied_Member> im0
                         = bn0.Local_Indexed_Members();
-                    Dictionary<MD_Any,Multiplied_Member> im1
+                    Dictionary<MDL_Any,Multiplied_Member> im1
                         = bn1.Local_Indexed_Members();
                     result = im0.Count == im1.Count
                         && Enumerable.All(
@@ -678,25 +678,25 @@ internal class Executor
                 }
                 // We should never get here.
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MD_Tuple:
-            case Well_Known_Base_Type.MD_Excuse:
-                // MD_Tuple and MD_Excuse have the same internal representation.
-                Dictionary<String,MD_Any> attrs0 = a0.MD_Tuple();
-                Dictionary<String,MD_Any> attrs1 = a1.MD_Tuple();
+            case Well_Known_Base_Type.MDL_Tuple:
+            case Well_Known_Base_Type.MDL_Excuse:
+                // MDL_Tuple and MDL_Excuse have the same internal representation.
+                Dictionary<String,MDL_Any> attrs0 = a0.MDL_Tuple();
+                Dictionary<String,MDL_Any> attrs1 = a1.MDL_Tuple();
                 // First test just that the Tuple headings are the same,
                 // and only if they are, compare the attribute values.
                 return (attrs0.Count == attrs1.Count)
                     && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                     && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
-            case Well_Known_Base_Type.MD_Article:
-                result = Any__same(a0.MD_Article().Label, a1.MD_Article().Label)
-                      && Any__same(a0.MD_Article().Attrs, a1.MD_Article().Attrs);
+            case Well_Known_Base_Type.MDL_Article:
+                result = Any__same(a0.MDL_Article().Label, a1.MDL_Article().Label)
+                      && Any__same(a0.MDL_Article().Attrs, a1.MDL_Article().Attrs);
                 break;
-            case Well_Known_Base_Type.MD_Variable:
-            case Well_Known_Base_Type.MD_Process:
-            case Well_Known_Base_Type.MD_Stream:
-            case Well_Known_Base_Type.MD_External:
-                // Every Muldis D Handle object is always distinct from every other one.
+            case Well_Known_Base_Type.MDL_Variable:
+            case Well_Known_Base_Type.MDL_Process:
+            case Well_Known_Base_Type.MDL_Stream:
+            case Well_Known_Base_Type.MDL_External:
+                // Every Muldis Data Language Handle object is always distinct from every other one.
                 return false;
             default:
                 throw new NotImplementedException();
@@ -719,10 +719,10 @@ internal class Executor
         return list;
     }
 
-    internal void merge_two_same(MD_Any a0, MD_Any a1)
+    internal void merge_two_same(MDL_Any a0, MDL_Any a1)
     {
-        // This may be run on 2 MD_Any only if it was already
-        // determined they represent the same Muldis D value; typically
+        // This may be run on 2 MDL_Any only if it was already
+        // determined they represent the same Muldis Data Language value; typically
         // it is invoked by Any__same() when it would result in true.
             // TODO: Make a more educated decision on which one to keep.
             // It should also have logic dispatching on WKBT and
@@ -744,19 +744,19 @@ internal class Executor
         return result;
     }
 
-    internal Int64 Bits__count(MD_Any bits)
+    internal Int64 Bits__count(MDL_Any bits)
     {
-        return bits.MD_Bits().Length;
+        return bits.MDL_Bits().Length;
     }
 
-    internal Int64 Blob__count(MD_Any blob)
+    internal Int64 Blob__count(MDL_Any blob)
     {
-        return blob.MD_Blob().Length;
+        return blob.MDL_Blob().Length;
     }
 
-    internal Int64 Text__count(MD_Any text)
+    internal Int64 Text__count(MDL_Any text)
     {
-        MD_Text_Struct node = text.MD_Text();
+        MDL_Text_Struct node = text.MDL_Text();
         if (node.Cached_Member_Count is null)
         {
             if (node.Has_Any_Non_BMP)
@@ -782,12 +782,12 @@ internal class Executor
         return (Int64)node.Cached_Member_Count;
     }
 
-    internal Int64 Array__count(MD_Any array)
+    internal Int64 Array__count(MDL_Any array)
     {
-        return Array__node__tree_member_count(array.MD_Array());
+        return Array__node__tree_member_count(array.MDL_Array());
     }
 
-    private Int64 Array__node__tree_member_count(MD_Array_Struct node)
+    private Int64 Array__node__tree_member_count(MDL_Array_Struct node)
     {
         if (node.Cached_Members_Meta.Tree_Member_Count is null)
         {
@@ -816,19 +816,19 @@ internal class Executor
         return (Int64)node.Cached_Members_Meta.Tree_Member_Count;
     }
 
-    private MD_Any Bits__maybe_at(MD_Any bits, Int64 ord_pos)
+    private MDL_Any Bits__maybe_at(MDL_Any bits, Int64 ord_pos)
     {
-        return Memory.MD_Integer(bits.MD_Bits()[(Int32)ord_pos] ? 1 : 0);
+        return Memory.MDL_Integer(bits.MDL_Bits()[(Int32)ord_pos] ? 1 : 0);
     }
 
-    private MD_Any Blob__maybe_at(MD_Any blob, Int64 ord_pos)
+    private MDL_Any Blob__maybe_at(MDL_Any blob, Int64 ord_pos)
     {
-        return Memory.MD_Integer(blob.MD_Blob()[(Int32)ord_pos]);
+        return Memory.MDL_Integer(blob.MDL_Blob()[(Int32)ord_pos]);
     }
 
-    private MD_Any Text__maybe_at(MD_Any text, Int64 ord_pos)
+    private MDL_Any Text__maybe_at(MDL_Any text, Int64 ord_pos)
     {
-        MD_Text_Struct node = text.MD_Text();
+        MDL_Text_Struct node = text.MDL_Text();
         if (node.Has_Any_Non_BMP)
         {
             String s = node.Code_Point_Members;
@@ -840,10 +840,10 @@ internal class Executor
                     if ((i+1) < s.Length
                         && Char.IsSurrogatePair(s[i], s[i+1]))
                     {
-                        return Memory.MD_Integer(
+                        return Memory.MDL_Integer(
                             Char.ConvertToUtf32(s[i], s[i+1]));
                     }
-                    return Memory.MD_Integer(s[i]);
+                    return Memory.MDL_Integer(s[i]);
                 }
                 logical_i++;
                 if ((i+1) < s.Length
@@ -853,16 +853,16 @@ internal class Executor
                 }
             }
         }
-        return Memory.MD_Integer(
+        return Memory.MDL_Integer(
             node.Code_Point_Members[(Int32)ord_pos]);
     }
 
-    private MD_Any Array__maybe_at(MD_Any array, Int64 ord_pos)
+    private MDL_Any Array__maybe_at(MDL_Any array, Int64 ord_pos)
     {
-        return Array__node__maybe_at(array.MD_Array(), ord_pos);
+        return Array__node__maybe_at(array.MDL_Array(), ord_pos);
     }
 
-    private MD_Any Array__node__maybe_at(MD_Array_Struct node, Int64 ord_pos)
+    private MDL_Any Array__node__maybe_at(MDL_Array_Struct node, Int64 ord_pos)
     {
         if (node.Cached_Members_Meta.Tree_Member_Count == 0)
         {
@@ -888,7 +888,7 @@ internal class Executor
                 }
                 return null;
             case Symbolic_Array_Type.Catenated:
-                MD_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().A0, ord_pos);
+                MDL_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().A0, ord_pos);
                 if (maybe_member is not null)
                 {
                     return maybe_member;
