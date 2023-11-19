@@ -10,13 +10,13 @@ internal class Executor
 {
     internal readonly Memory Memory;
 
-    internal readonly Plain_Text.Standard_Generator Standard_Generator;
+    internal readonly Standard_Generator Standard_Generator;
 
     internal Executor(Memory memory)
     {
         Memory = memory;
 
-        Standard_Generator = new Plain_Text.Standard_Generator();
+        Standard_Generator = new Standard_Generator();
     }
 
     internal MDL_Any Evaluates(MDL_Any function, MDL_Any args = null)

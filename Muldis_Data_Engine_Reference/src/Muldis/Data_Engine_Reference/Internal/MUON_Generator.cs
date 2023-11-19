@@ -4,18 +4,14 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Muldis.Data_Engine_Reference.Internal;
 
-namespace Muldis.Data_Engine_Reference.Internal.Plain_Text;
+namespace Muldis.Data_Engine_Reference.Internal;
 
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Generator
+// Muldis.Data_Engine_Reference.Internal.MUON_Generator
 // Provides common implementation code for all other *_Generator
 // classes where they don't have reason to differ.
-// In fact, presently all inheriting classes actually have identical
-// output, which is deterministic and valid Standard_Parser input;
-// this is subject to change later.
 
-internal abstract class Generator
+internal abstract class MUON_Generator
 {
     protected abstract String Any_Selector(MDL_Any value, String indent);
 
@@ -389,126 +385,5 @@ internal abstract class Generator
                     a => ati + Attr_Name(a.Key) + " : "
                         + Any_Selector(a.Value, ati) + ",\u000A"))
             + indent + "}))";
-    }
-}
-
-// TODO: Some of this text has obsolete notions and it should be rewritten.
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Generator
-// Provides utility pure functions that accept any Muldis Data Language "Package"
-// value, which is a native Muldis Data Language "standard compilation unit", and
-// derive a "Text" value that is this "Package" encoded in compliance
-// with the "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
-// formal specification.  This outputs of this generator are intended
-// for external use, whether for storage in foo.mdpt disk files or
-// other places, viewing by users, and reading by other programs, as a
-// means of interchange with any other system conforming to the spec.
-// This generator actually handles any Muldis Data Language "value", not just a "Package".
-// This class is completely deterministic and its exact output Muldis Data Language
-// Text/etc values are determined entirely by its input Package/etc values.
-// This generator is expressly kept as simple as possible such that it
-// has zero configuration options and only does simple pretty-printing;
-// it is only meant so that the Muldis_D_Foundation has a competent
-// serialization capability built-in whose result is easy enough to
-// read and that is easy to diff changes for.
-// This generator makes only the "foundational" flavor of
-// Muldis_Object_Notation_Plain_Text and provides a literal serialization, including
-// that all annotation and decoration values are output verbatim, with
-// no interpretation and with nothing left out.  Round-tripping will
-// only work as intended with a parser that doesn't produce decorations.
-// Typically it is up to bootstrapped higher-level libraries written in
-// Muldis Data Language to provide other generating options that are better
-// pretty-printed or provide any configuration or that serialize with
-// non-foundational Muldis_Object_Notation_Plain_Text or interpret decorations.
-// While this generator's output includes a "parsing unit predicate" on
-// request (its optionality is the sole configuration option), that
-// does not include any preceeding "shebang line", which is up to the
-// caller where such is desired.
-
-internal class Standard_Generator : Generator
-{
-    internal MDL_Any MDL_Any_to_MD_Text_MDPT_Parsing_Unit(MDL_Any value)
-    {
-        return value.Memory.MDL_Text(
-            "(Muldis_Object_Notation_Syntax:([Plain_Text,"
-            + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
-            + Any_Selector(value, "") + "))\u000A",
-            false
-        );
-    }
-
-    protected override String Any_Selector(MDL_Any value, String indent)
-    {
-        return Any_Selector_Foundation_Dispatch(value, indent);
-    }
-}
-
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Identity_Generator
-// Provides utility pure functions that accept any Muldis Data Language "value"
-// and derive a .NET String that uniquely identifies it.
-// This class is deterministic and guarantees that iff 2 MDL_Any are
-// logically considered to be the "same" Muldis Data Language value then they will
-// map to exactly the same .NET String value, and moreover, that iff 2
-// MDL_Any are logically considered to NOT be the "same" Muldis Data Language value,
-// they are guaranteed to map to distinct .NET String values.
-// The outputs of this generator are intended for internal use only,
-// where the outputs are transient and only intended to be used within
-// the same in-memory Muldis.Data_Engine_Reference VM instance that generated them.
-// The intended use of this class is to produce normalized identity
-// values for .NET collection indexes, Dictionary keys for example, or
-// otherwise support the means of primary/last resort for set-like
-// operations like duplicate elimination, relational joins, and more.
-// The outputs of this class may possibly conform to the
-// Muldis_Object_Notation_Plain_Text specification and be parseable to yield the
-// original input values, but that is not guaranteed; even if that is
-// the case, the outputs might be considerably less "pretty" as a
-// trade-off to make the generating faster and less error-prone.
-// A normal side effect of using Identity_Generator on a MDL_Any/etc
-// value is to update a cache therein to hold the serialization result.
-
-internal class Identity_Generator : Generator
-{
-    internal String MDL_Any_to_Identity_String(MDL_Any value)
-    {
-        return Any_Selector(value, "");
-    }
-
-    protected override String Any_Selector(MDL_Any value, String indent)
-    {
-        if (value.Cached_MD_Any_Identity is null)
-        {
-            value.Cached_MD_Any_Identity
-                = Any_Selector_Foundation_Dispatch(value, indent);
-        }
-        return value.Cached_MD_Any_Identity;
-    }
-}
-
-// Muldis.Data_Engine_Reference.Internal.Plain_Text.Preview_Generator
-// Provides utility pure functions that accept any Muldis Data Language "value"
-// and derive a .NET String that provides a "preview quick look"
-// serialization of that value.  The intended use of this class is to
-// underlie a .NET ToString() override for all .NET values representing
-// Muldis Data Language values so that debuggers including MS Visual Studio can
-// assist programmers at easily determining what the current logical
-// values of their program variables are, which would otherwise be
-// quite labour intensive for humans inspeding MDL_Any object fields.
-// This class is explicitly NOT guaranteed to be deterministic and so
-// different runs of its functions on what are logically the same
-// Muldis Data Language values might produce different String outputs; reasons for
-// that include not sorting collection elements and truncating results.
-// Given its purpose in aiding debugging, it is intended that this
-// class will NOT populate any calculation caching fields in MDL_Any/etc
-// objects, to help avoid heisenbugs.
-
-internal class Preview_Generator : Generator
-{
-    internal String MDL_Any_To_Preview_String(MDL_Any value)
-    {
-        return Any_Selector(value, "");
-    }
-
-    protected override String Any_Selector(MDL_Any value, String indent)
-    {
-        return Any_Selector_Foundation_Dispatch(value, indent);
     }
 }

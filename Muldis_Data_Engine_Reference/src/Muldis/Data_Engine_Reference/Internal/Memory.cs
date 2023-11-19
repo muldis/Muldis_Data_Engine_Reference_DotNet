@@ -26,9 +26,9 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Memory
 {
-    internal readonly Plain_Text.Identity_Generator Identity_Generator;
+    internal readonly Identity_Generator Identity_Generator;
 
-    internal readonly Plain_Text.Preview_Generator Preview_Generator;
+    internal readonly Preview_Generator Preview_Generator;
 
     internal readonly Executor Executor;
 
@@ -102,9 +102,9 @@ internal class Memory
 
     internal Memory()
     {
-        Identity_Generator = new Plain_Text.Identity_Generator();
+        Identity_Generator = new Identity_Generator();
 
-        Preview_Generator = new Plain_Text.Preview_Generator();
+        Preview_Generator = new Preview_Generator();
 
         Executor = new Executor(this);
 
