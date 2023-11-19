@@ -337,7 +337,7 @@ internal abstract class MUON_Generator
 
     private String Tuple_Selector(MDL_Any value, String indent)
     {
-        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true)
+        if (value.member_status_in_WKT(Well_Known_Type.Heading) == true)
         {
             return Heading_Literal(value);
         }
@@ -375,7 +375,7 @@ internal abstract class MUON_Generator
         }
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
             && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple
-            && attrs["\u0000"].Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name) == true)
+            && attrs["\u0000"].member_status_in_WKT(Well_Known_Type.Attr_Name) == true)
         {
             return "(Excuse:(" + Attr_Name(attrs["\u0000"].MDL_Tuple().First().Key) + " : {}))";
         }

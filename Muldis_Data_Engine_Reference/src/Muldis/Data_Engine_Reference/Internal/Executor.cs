@@ -170,17 +170,17 @@ internal class Executor
 
     internal Boolean Is_Heading(MDL_Any value)
     {
-        return value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true;
+        return value.member_status_in_WKT(Well_Known_Type.Heading) == true;
     }
 
     internal Boolean Is_Attr_Name(MDL_Any value)
     {
-        return value.Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name) == true;
+        return value.member_status_in_WKT(Well_Known_Type.Attr_Name) == true;
     }
 
     internal Boolean Is_Attr_Name_List(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name_List) == true)
+        if (value.member_status_in_WKT(Well_Known_Type.Attr_Name_List) == true)
         {
             return true;
         }
@@ -198,13 +198,13 @@ internal class Executor
                 return false;
             }
         }
-        value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Attr_Name_List, true);
+        value.declare_member_status_in_WKT(Well_Known_Type.Attr_Name_List, true);
         return true;
     }
 
     internal Boolean Is_Local_Name(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Local_Name) == true)
+        if (value.member_status_in_WKT(Well_Known_Type.Local_Name) == true)
         {
             return true;
         }
@@ -225,7 +225,7 @@ internal class Executor
             || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("material")) && count == 1)
             || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("floating")) && count >= 2))
         {
-            value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Local_Name, true);
+            value.declare_member_status_in_WKT(Well_Known_Type.Local_Name, true);
             return true;
         }
         return false;
@@ -233,7 +233,7 @@ internal class Executor
 
     internal Boolean Is_Absolute_Name(MDL_Any value)
     {
-        if (value.Member_Status_in_WKT(MDL_Well_Known_Type.Absolute_Name) == true)
+        if (value.member_status_in_WKT(Well_Known_Type.Absolute_Name) == true)
         {
             return true;
         }
@@ -246,7 +246,7 @@ internal class Executor
             || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("used"))
             || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("package")))
         {
-            value.Declare_Member_Status_in_WKT(MDL_Well_Known_Type.Absolute_Name, true);
+            value.declare_member_status_in_WKT(Well_Known_Type.Absolute_Name, true);
             return true;
         }
         return false;

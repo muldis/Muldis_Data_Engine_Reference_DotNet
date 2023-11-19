@@ -325,7 +325,7 @@ public class MDER_Machine
             case "Tuple_Array":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
                     && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
                     MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Array_C0;
@@ -359,7 +359,7 @@ public class MDER_Machine
             case "Relation":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
                     && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
                     MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Set_C0;
@@ -393,7 +393,7 @@ public class MDER_Machine
             case "Tuple_Bag":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
                     && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.Member_Status_in_WKT(MDL_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
                     MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Bag_C0;

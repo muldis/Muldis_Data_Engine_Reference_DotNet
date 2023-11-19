@@ -71,17 +71,17 @@ internal class MDL_Any
 
     // Set of well-known Muldis Data Language types that this Muldis Data Language "value" is
     // known to either be or not be a member of.  This is populated
-    // semi-lazily as needed.  Cached_WKT_Statuses is null iff the set
-    // is empty. A type is in Cached_WKT_Statuses with Boolean=true iff
+    // semi-lazily as needed.  cached_WKT_statuses is null iff the set
+    // is empty. A type is in cached_WKT_statuses with Boolean=true iff
     // we know the value is a member of the type and with Boolean=false
     // iff we know the value is not a member of the type; when
-    // Cached_WKT_Statuses doesn't mention a type at all, we either
+    // cached_WKT_statuses doesn't mention a type at all, we either
     // didn't test the membership or decided not to cache the result.
     // This set excludes on purpose the subset of well-known types that
     // should be trivial to test membership of by other means; in
     // particular it excludes {Any,None}, the Well_Known_Base_Type;
     // types not excluded are more work to test.
-    internal Dictionary<MDL_Well_Known_Type,Boolean> Cached_WKT_Statuses { get; set; }
+    internal Dictionary<Well_Known_Type,Boolean> cached_WKT_statuses { get; set; }
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
@@ -188,26 +188,26 @@ internal class MDL_Any
         return (Dictionary<String,MDL_Any>)Details;
     }
 
-    internal Nullable<Boolean> Member_Status_in_WKT(MDL_Well_Known_Type type)
+    internal Nullable<Boolean> member_status_in_WKT(Well_Known_Type type)
     {
-        return Cached_WKT_Statuses is null            ? (Nullable<Boolean>)null
-             : !Cached_WKT_Statuses.ContainsKey(type) ? (Nullable<Boolean>)null
-             :                                          Cached_WKT_Statuses[type];
+        return cached_WKT_statuses is null            ? (Nullable<Boolean>)null
+             : !cached_WKT_statuses.ContainsKey(type) ? (Nullable<Boolean>)null
+             :                                          cached_WKT_statuses[type];
     }
 
-    internal void Declare_Member_Status_in_WKT(MDL_Well_Known_Type type, Boolean status)
+    internal void declare_member_status_in_WKT(Well_Known_Type type, Boolean status)
     {
-        if (Cached_WKT_Statuses is null)
+        if (cached_WKT_statuses is null)
         {
-            Cached_WKT_Statuses = new Dictionary<MDL_Well_Known_Type,Boolean>();
+            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>();
         }
-        if (!Cached_WKT_Statuses.ContainsKey(type))
+        if (!cached_WKT_statuses.ContainsKey(type))
         {
-            Cached_WKT_Statuses.Add(type, status);
+            cached_WKT_statuses.Add(type, status);
         }
         else
         {
-            Cached_WKT_Statuses[type] = status;
+            cached_WKT_statuses[type] = status;
         }
     }
 }
