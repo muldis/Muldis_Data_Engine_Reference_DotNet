@@ -67,51 +67,51 @@ internal abstract class Generator
 
     protected String Any_Selector_Foundation_Dispatch(MD_Any value, String indent)
     {
-        switch (value.MD_MSBT)
+        switch (value.WKBT)
         {
-            case MD_Well_Known_Base_Type.MD_Boolean:
+            case Well_Known_Base_Type.MD_Boolean:
                 return Boolean_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Integer:
+            case Well_Known_Base_Type.MD_Integer:
                 return Integer_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Fraction:
+            case Well_Known_Base_Type.MD_Fraction:
                 return Fraction_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Bits:
+            case Well_Known_Base_Type.MD_Bits:
                 return Bits_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Blob:
+            case Well_Known_Base_Type.MD_Blob:
                 return Blob_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Text:
+            case Well_Known_Base_Type.MD_Text:
                 return Text_Literal(value);
-            case MD_Well_Known_Base_Type.MD_Array:
+            case Well_Known_Base_Type.MD_Array:
                 return Array_Selector(value, indent);
-            case MD_Well_Known_Base_Type.MD_Set:
+            case Well_Known_Base_Type.MD_Set:
                 return Set_Selector(value, indent);
-            case MD_Well_Known_Base_Type.MD_Bag:
+            case Well_Known_Base_Type.MD_Bag:
                 return Bag_Selector(value, indent);
-            case MD_Well_Known_Base_Type.MD_Tuple:
+            case Well_Known_Base_Type.MD_Tuple:
                 return Tuple_Selector(value, indent);
-            case MD_Well_Known_Base_Type.MD_Article:
+            case Well_Known_Base_Type.MD_Article:
                 return Article_Selector(value, indent);
-            case MD_Well_Known_Base_Type.MD_Variable:
+            case Well_Known_Base_Type.MD_Variable:
                 // We display something useful for debugging purposes, but no
                 // (transient) MD_Variable can actually be rendered as Muldis D Plain Text.
                 return "`Some IMD_Variable value is here.`";
-            case MD_Well_Known_Base_Type.MD_Process:
+            case Well_Known_Base_Type.MD_Process:
                 // We display something useful for debugging purposes, but no
                 // (transient) MD_Process can actually be rendered as Muldis D Plain Text.
                 return "`Some IMD_Process value is here.`";
-            case MD_Well_Known_Base_Type.MD_Stream:
+            case Well_Known_Base_Type.MD_Stream:
                 // We display something useful for debugging purposes, but no
                 // (transient) MD_Stream can actually be rendered as Muldis D Plain Text.
                 return "`Some IMD_Stream value is here.`";
-            case MD_Well_Known_Base_Type.MD_External:
+            case Well_Known_Base_Type.MD_External:
                 // We display something useful for debugging purposes, but no
                 // (transient) MD_External can actually be rendered as Muldis D Plain Text.
                 return "`Some IMD_External value is here.`";
-            case MD_Well_Known_Base_Type.MD_Excuse:
+            case Well_Known_Base_Type.MD_Excuse:
                 return Excuse_Selector(value, indent);
             default:
                 return "DIE UN-HANDLED FOUNDATION TYPE"
-                    + " [" + value.MD_MSBT.ToString() + "]";
+                    + " [" + value.WKBT.ToString() + "]";
         }
     }
 
@@ -424,7 +424,7 @@ internal abstract class Generator
             return "0iIGNORANCE";
         }
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
-            && attrs["\u0000"].MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MD_Tuple
             && attrs["\u0000"].Member_Status_in_WKT(MD_Well_Known_Type.Attr_Name) == true)
         {
             return "(Excuse:(" + Attr_Name(attrs["\u0000"].MD_Tuple().First().Key) + " : {}))";

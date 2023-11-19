@@ -17,7 +17,7 @@ internal enum Dot_Net_String_Unicode_Test_Result
 // operators are not.  Typically each one is an Article subtype.
 // This set excludes on purpose the subset of well-known types that
 // should be trivial to test membership of by other means; in
-// particular it excludes {Any,None}, the MD_Well_Known_Base_Type;
+// particular it excludes {Any,None}, the Well_Known_Base_Type;
 // types not excluded are more work to test.
 
 internal enum MD_Well_Known_Type

@@ -110,13 +110,13 @@ internal class Memory
 
         MD_False = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Boolean,
+            WKBT = Well_Known_Base_Type.MD_Boolean,
             Details = false,
         };
 
         MD_True = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Boolean,
+            WKBT = Well_Known_Base_Type.MD_Boolean,
             Details = true,
         };
 
@@ -128,7 +128,7 @@ internal class Memory
 
         MD_Fraction_0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+            WKBT = Well_Known_Base_Type.MD_Fraction,
             Details = new MD_Fraction_Struct {
                 As_Decimal = 0.0M,
                 As_Pair = new MD_Fraction_Pair {
@@ -141,19 +141,19 @@ internal class Memory
 
         MD_Bits_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
+            WKBT = Well_Known_Base_Type.MD_Bits,
             Details = new BitArray(0),
         };
 
         MD_Blob_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
+            WKBT = Well_Known_Base_Type.MD_Blob,
             Details = new Byte[] {},
         };
 
         MD_Text_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
+            WKBT = Well_Known_Base_Type.MD_Text,
             Details = new MD_Text_Struct {
                 Code_Point_Members = "",
                 Has_Any_Non_BMP = false,
@@ -163,7 +163,7 @@ internal class Memory
 
         MD_Array_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
+            WKBT = Well_Known_Base_Type.MD_Array,
             Details = new MD_Array_Struct {
                 Local_Symbolic_Type = Symbolic_Array_Type.None,
                 Cached_Members_Meta = new Cached_Members_Meta {
@@ -176,7 +176,7 @@ internal class Memory
 
         MD_Set_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
+            WKBT = Well_Known_Base_Type.MD_Set,
             Details = new MD_Bag_Struct {
                 Local_Symbolic_Type = Symbolic_Bag_Type.None,
                 Cached_Members_Meta = new Cached_Members_Meta {
@@ -189,7 +189,7 @@ internal class Memory
 
         MD_Bag_C0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
+            WKBT = Well_Known_Base_Type.MD_Bag,
             Details = new MD_Bag_Struct {
                 Local_Symbolic_Type = Symbolic_Bag_Type.None,
                 Cached_Members_Meta = new Cached_Members_Meta {
@@ -202,7 +202,7 @@ internal class Memory
 
         MD_Tuple_D0 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String, MD_Any>(),
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                 {{MD_Well_Known_Type.Heading, true}},
@@ -212,21 +212,21 @@ internal class Memory
         {
             {"\u0000", new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+                WKBT = Well_Known_Base_Type.MD_Tuple,
                 Details = new Dictionary<String,MD_Any>() {{"\u0000", MD_True}},
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0001", new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+                WKBT = Well_Known_Base_Type.MD_Tuple,
                 Details = new Dictionary<String,MD_Any>() {{"\u0001", MD_True}},
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0002", new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+                WKBT = Well_Known_Base_Type.MD_Tuple,
                 Details = new Dictionary<String,MD_Any>() {{"\u0002", MD_True}},
                 Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                     {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -238,7 +238,7 @@ internal class Memory
 
         Heading_0_1 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>()
                 {{"\u0000", MD_True}, {"\u0001", MD_True}},
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
@@ -246,7 +246,7 @@ internal class Memory
         };
         Heading_0_2 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>()
                 {{"\u0000", MD_True}, {"\u0002", MD_True}},
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
@@ -254,7 +254,7 @@ internal class Memory
         };
         Heading_1_2 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>()
                 {{"\u0001", MD_True}, {"\u0002", MD_True}},
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
@@ -263,7 +263,7 @@ internal class Memory
 
         Heading_0_1_2 = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>()
                 {{"\u0000", MD_True}, {"\u0001", MD_True}, {"\u0002", MD_True}},
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
@@ -289,7 +289,7 @@ internal class Memory
 
         this.false_nullary_article = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Article,
+            WKBT = Well_Known_Base_Type.MD_Article,
             Details = new MD_Article_Struct {
                 Label = MD_False,
                 Attrs = MD_Tuple_D0,
@@ -311,7 +311,7 @@ internal class Memory
                     {"heading", MD_Tuple_D0},
                     {"body", new MD_Any {
                         Memory = this,
-                        MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
+                        WKBT = Well_Known_Base_Type.MD_Array,
                         Details = new MD_Array_Struct {
                             Local_Symbolic_Type = Symbolic_Array_Type.Singular,
                             Members = new Multiplied_Member(MD_Tuple_D0),
@@ -342,7 +342,7 @@ internal class Memory
                     {"heading", MD_Tuple_D0},
                     {"body", new MD_Any {
                         Memory = this,
-                        MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
+                        WKBT = Well_Known_Base_Type.MD_Set,
                         Details = new MD_Bag_Struct {
                             Local_Symbolic_Type
                                 = Symbolic_Bag_Type.Singular,
@@ -374,7 +374,7 @@ internal class Memory
                     {"heading", MD_Tuple_D0},
                     {"body", new MD_Any {
                         Memory = this,
-                        MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
+                        WKBT = Well_Known_Base_Type.MD_Bag,
                         Details = new MD_Bag_Struct {
                             Local_Symbolic_Type
                                 = Symbolic_Bag_Type.Singular,
@@ -398,7 +398,7 @@ internal class Memory
                 s,
                 new MD_Any {
                     Memory = this,
-                    MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+                    WKBT = Well_Known_Base_Type.MD_Excuse,
                     Details = new Dictionary<String,MD_Any>() {{"\u0000", MD_Attr_Name(s)}},
                 }
             );
@@ -419,7 +419,7 @@ internal class Memory
         }
         MD_Any integer = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Integer,
+            WKBT = Well_Known_Base_Type.MD_Integer,
             Details = value,
         };
         if (may_cache && this.integers.Count < 10000)
@@ -444,7 +444,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+            WKBT = Well_Known_Base_Type.MD_Fraction,
             Details = new MD_Fraction_Struct {
                 As_Pair = new MD_Fraction_Pair {
                     Numerator = numerator,
@@ -462,7 +462,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Fraction,
+            WKBT = Well_Known_Base_Type.MD_Fraction,
             Details = new MD_Fraction_Struct {
                 As_Decimal = value,
             },
@@ -477,7 +477,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Bits,
+            WKBT = Well_Known_Base_Type.MD_Bits,
             Details = members,
         };
     }
@@ -490,7 +490,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Blob,
+            WKBT = Well_Known_Base_Type.MD_Blob,
             Details = members,
         };
     }
@@ -503,7 +503,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Text,
+            WKBT = Well_Known_Base_Type.MD_Text,
             Details = new MD_Text_Struct {
                 Code_Point_Members = members,
                 Has_Any_Non_BMP = has_any_non_BMP,
@@ -521,22 +521,22 @@ internal class Memory
         {
             return new MD_Any {
                 Memory = this,
-                MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
+                WKBT = Well_Known_Base_Type.MD_Array,
                 Details = new MD_Array_Struct {
                     Local_Symbolic_Type = Symbolic_Array_Type.Singular,
                     Members = new Multiplied_Member(members[0]),
                     Cached_Members_Meta = new Cached_Members_Meta {
                         Tree_Member_Count = 1,
                         Tree_All_Unique = true,
-                        Tree_Relational = (members[0].MD_MSBT
-                            == MD_Well_Known_Base_Type.MD_Tuple),
+                        Tree_Relational = (members[0].WKBT
+                            == Well_Known_Base_Type.MD_Tuple),
                     },
                 },
             };
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Array,
+            WKBT = Well_Known_Base_Type.MD_Array,
             Details = new MD_Array_Struct {
                 Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
                 Members = members,
@@ -553,7 +553,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Set,
+            WKBT = Well_Known_Base_Type.MD_Set,
             Details = new MD_Bag_Struct {
                 Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                 Members = new MD_Bag_Struct {
@@ -576,7 +576,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
+            WKBT = Well_Known_Base_Type.MD_Bag,
             Details = new MD_Bag_Struct {
                 Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
                 Members = members,
@@ -603,7 +603,7 @@ internal class Memory
         }
         MD_Any tuple = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = attrs,
         };
         if (attrs.Count == 1)
@@ -714,7 +714,7 @@ internal class Memory
         {
             return this.false_nullary_article;
         }
-        // TODO: If label corresponds to a MD_Well_Known_Base_Type then
+        // TODO: If label corresponds to a Well_Known_Base_Type then
         // validate whether the label+attrs is actually a member of its
         // Muldis D type, and if it is, return a MD_Any using the most
         // specific well known base type for that MD value rather than
@@ -726,7 +726,7 @@ internal class Memory
         // extant whose label is say 'Text' we know it isn't a Text value, and so on.
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Article,
+            WKBT = Well_Known_Base_Type.MD_Article,
             Details = new MD_Article_Struct {
                 Label = label,
                 Attrs = attrs,
@@ -743,7 +743,7 @@ internal class Memory
     {
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Variable,
+            WKBT = Well_Known_Base_Type.MD_Variable,
             Details = initial_current_value,
         };
     }
@@ -752,7 +752,7 @@ internal class Memory
     {
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Process,
+            WKBT = Well_Known_Base_Type.MD_Process,
             Details = null,
         };
     }
@@ -761,7 +761,7 @@ internal class Memory
     {
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Stream,
+            WKBT = Well_Known_Base_Type.MD_Stream,
             Details = null,
         };
     }
@@ -770,7 +770,7 @@ internal class Memory
     {
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_External,
+            WKBT = Well_Known_Base_Type.MD_External,
             Details = value,
         };
     }
@@ -779,7 +779,7 @@ internal class Memory
     {
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+            WKBT = Well_Known_Base_Type.MD_Excuse,
             Details = attrs.Details,
         };
     }
@@ -792,7 +792,7 @@ internal class Memory
         }
         return new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Excuse,
+            WKBT = Well_Known_Base_Type.MD_Excuse,
             Details = new Dictionary<String,MD_Any>() {{"\u0000", MD_Attr_Name(value)}},
         };
     }
@@ -828,7 +828,7 @@ internal class Memory
         }
         MD_Any tuple = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>() {{value, MD_True}},
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()
                 {{MD_Well_Known_Type.Heading, true}, {MD_Well_Known_Type.Attr_Name, true}},
@@ -928,8 +928,8 @@ internal class Memory
                     Cached_Members_Meta = new Cached_Members_Meta {
                         Tree_Member_Count = lsm.Multiplicity,
                         Tree_All_Unique = (lsm.Multiplicity == 1),
-                        Tree_Relational = (lsm.Member.MD_MSBT
-                            == MD_Well_Known_Base_Type.MD_Tuple),
+                        Tree_Relational = (lsm.Member.WKBT
+                            == Well_Known_Base_Type.MD_Tuple),
                     },
                 };
             case Symbolic_Bag_Type.Arrayed:
@@ -1065,15 +1065,15 @@ internal class Memory
                     tr = true;
                     break;
                 case Symbolic_Array_Type.Singular:
-                    tr = node.Local_Singular_Members().Member.MD_MSBT
-                        == MD_Well_Known_Base_Type.MD_Tuple;
+                    tr = node.Local_Singular_Members().Member.WKBT
+                        == Well_Known_Base_Type.MD_Tuple;
                     break;
                 case Symbolic_Array_Type.Arrayed:
                     MD_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
-                    tr = m0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    tr = m0.WKBT == Well_Known_Base_Type.MD_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            m => m.WKBT == Well_Known_Base_Type.MD_Tuple
                                 && Tuple__Same_Heading(m, m0)
                         );
                     break;
@@ -1151,24 +1151,24 @@ internal class Memory
                     tr = true;
                     break;
                 case Symbolic_Bag_Type.Singular:
-                    tr = node.Local_Singular_Members().Member.MD_MSBT
-                        == MD_Well_Known_Base_Type.MD_Tuple;
+                    tr = node.Local_Singular_Members().Member.WKBT
+                        == Well_Known_Base_Type.MD_Tuple;
                     break;
                 case Symbolic_Bag_Type.Arrayed:
                     MD_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
-                    tr = m0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    tr = m0.WKBT == Well_Known_Base_Type.MD_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.Member.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            m => m.Member.WKBT == Well_Known_Base_Type.MD_Tuple
                                 && Tuple__Same_Heading(m.Member, m0)
                         );
                     break;
                 case Symbolic_Bag_Type.Indexed:
                     MD_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
-                    tr = im0.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    tr = im0.WKBT == Well_Known_Base_Type.MD_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
-                            m => m.Member.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                            m => m.Member.WKBT == Well_Known_Base_Type.MD_Tuple
                                 && Tuple__Same_Heading(m.Member, im0)
                         );
                     break;
@@ -1223,7 +1223,7 @@ internal class Memory
         }
         MD_Any heading = new MD_Any {
             Memory = this,
-            MD_MSBT = MD_Well_Known_Base_Type.MD_Tuple,
+            WKBT = Well_Known_Base_Type.MD_Tuple,
             Details = new Dictionary<String,MD_Any>(
                 attrs.ToDictionary(a => a.Key, a => MD_True)),
             Cached_WKT_Statuses = new Dictionary<MD_Well_Known_Type,Boolean>()

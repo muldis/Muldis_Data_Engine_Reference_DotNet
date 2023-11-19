@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference.Internal;
 
-// Muldis.Data_Engine_Reference.Internal.MD_MSBT
+// Muldis.Data_Engine_Reference.Internal.Well_Known_Base_Type
 // Enumerates Muldis D base types that are considered well-known to
 // this Muldis D language implementation, and that in particular have
 // their own dedicated handling code or formats in the implementation.
@@ -16,7 +16,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // one of these types and that value is expected to be normalized
 // towards its best fit storage format.
 
-internal enum MD_Well_Known_Base_Type
+internal enum Well_Known_Base_Type
 {
     MD_Boolean,
     MD_Integer,
@@ -61,42 +61,42 @@ internal class MD_Any
     // Memory pool this Muldis D "value" lives in.
     internal Memory Memory { get; set; }
 
-    // Muldis D most specific well known base data type (MSBT) this
+    // Muldis D most specific well known base data type (WKBT) this
     // "value" is a member of.  Determines interpreting Details field.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    internal MD_Well_Known_Base_Type MD_MSBT { get; set; }
+    internal Well_Known_Base_Type WKBT { get; set; }
 
     // Details of this Muldis D "value", in one of several possible
     // specialized representation formats depending on the data type.
-    // Iff MSBT is MD_Boolean, this field holds a Nullable<Boolean>.
-    // Iff MSBT is MD_Integer, this field holds a BigInteger.
+    // Iff WKBT is MD_Boolean, this field holds a Nullable<Boolean>.
+    // Iff WKBT is MD_Integer, this field holds a BigInteger.
         // While we conceptually could special case smaller integers with
         // additional fields for performance, we won't, mainly to keep
         // things simpler, and because BigInteger special-cases internally.
-    // Iff MSBT is MD_Fraction, this field holds a MD_Fraction_Struct.
-    // Iff MSBT is MD_Bits, this field holds a BitArray.
+    // Iff WKBT is MD_Fraction, this field holds a MD_Fraction_Struct.
+    // Iff WKBT is MD_Bits, this field holds a BitArray.
         // Consider a MD_Bits_Struct if we want symbolic like MD_Array.
-    // Iff MSBT is MD_Blob, this field holds a Byte[].
+    // Iff WKBT is MD_Blob, this field holds a Byte[].
         // Consider a MD_Blob_Struct if we want symbolic like MD_Array.
-    // Iff MSBT is MD_Text, this field holds a MD_Text_Struct.
-    // Iff MSBT is MD_Array, this field holds a MD_Array_Struct.
-    // Iff MSBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
-    // Iff MSBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
-    // Iff MSBT is MD_Tuple, this field holds a Dictionary<String,MD_Any> (like MD_Excuse).
-    // Iff MSBT is MD_Article, this field holds a MD_Article_Struct.
-    // Iff MSBT is MD_Variable, this field holds a MD_Any.
+    // Iff WKBT is MD_Text, this field holds a MD_Text_Struct.
+    // Iff WKBT is MD_Array, this field holds a MD_Array_Struct.
+    // Iff WKBT is MD_Set, this field holds a MD_Bag_Struct (like MD_Bag).
+    // Iff WKBT is MD_Bag, this field holds a MD_Bag_Struct (like MD_Set).
+    // Iff WKBT is MD_Tuple, this field holds a Dictionary<String,MD_Any> (like MD_Excuse).
+    // Iff WKBT is MD_Article, this field holds a MD_Article_Struct.
+    // Iff WKBT is MD_Variable, this field holds a MD_Any.
         // For a MD_Variable, Details holds its Current_Value.
         // This can become a MD_Variable_Struct if we want to store other things.
-    // Iff MSBT is MD_Process, this field holds an Object.
+    // Iff WKBT is MD_Process, this field holds an Object.
         // TODO: Replace this with some other type when we know what that is.
-    // Iff MSBT is MD_Stream, this field holds an Object.
+    // Iff WKBT is MD_Stream, this field holds an Object.
         // TODO: Replace this with some other type when we know what that is.
-    // Iff MSBT is MD_External, this field holds an Object.
+    // Iff WKBT is MD_External, this field holds an Object.
         // The entity that is defined and managed externally to the Muldis
         // D language environment, which the MD_External value is an opaque
         // and transient reference to.
-    // Iff MSBT is MD_Excuse, this field holds a Dictionary<String,MD_Any> (like MD_Tuple).
+    // Iff WKBT is MD_Excuse, this field holds a Dictionary<String,MD_Any> (like MD_Tuple).
         // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object Details { get; set; }
 
@@ -110,7 +110,7 @@ internal class MD_Any
     // didn't test the membership or decided not to cache the result.
     // This set excludes on purpose the subset of well-known types that
     // should be trivial to test membership of by other means; in
-    // particular it excludes {Any,None}, the MD_Well_Known_Base_Type;
+    // particular it excludes {Any,None}, the Well_Known_Base_Type;
     // types not excluded are more work to test.
     internal Dictionary<MD_Well_Known_Type,Boolean> Cached_WKT_Statuses { get; set; }
 

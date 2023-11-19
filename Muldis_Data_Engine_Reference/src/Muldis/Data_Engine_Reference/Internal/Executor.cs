@@ -30,7 +30,7 @@ internal class Executor
         {
             args = m.MD_Tuple_D0;
         }
-        if (args.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+        if (args.WKBT != Well_Known_Base_Type.MD_Tuple)
         {
             throw new ArgumentException(m.Simple_MD_Excuse(
                 "X_Args_Not_Tuple").ToString());
@@ -68,7 +68,7 @@ internal class Executor
         {
             args = m.MD_Tuple_D0;
         }
-        if (args.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+        if (args.WKBT != Well_Known_Base_Type.MD_Tuple)
         {
             throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
         }
@@ -189,7 +189,7 @@ internal class Executor
             return true;
         }
         Memory m = Memory;
-        if (value.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+        if (value.WKBT != Well_Known_Base_Type.MD_Array)
         {
             return false;
         }
@@ -282,53 +282,53 @@ internal class Executor
 
                 case "Boolean":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Boolean
+                        v.WKBT == Well_Known_Base_Type.MD_Boolean
                     );
                 case "Integer":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer
+                        v.WKBT == Well_Known_Base_Type.MD_Integer
                     );
                 case "Array":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Array
+                        v.WKBT == Well_Known_Base_Type.MD_Array
                     );
                 case "Bag":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Bag
+                        v.WKBT == Well_Known_Base_Type.MD_Bag
                     );
                 case "Tuple":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                        v.WKBT == Well_Known_Base_Type.MD_Tuple
                     );
                 case "Article":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Article
+                        v.WKBT == Well_Known_Base_Type.MD_Article
                     );
                 case "Handle":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
-                            || v.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
-                            || v.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
-                            || v.MD_MSBT == MD_Well_Known_Base_Type.MD_External
+                        v.WKBT == Well_Known_Base_Type.MD_Variable
+                            || v.WKBT == Well_Known_Base_Type.MD_Process
+                            || v.WKBT == Well_Known_Base_Type.MD_Stream
+                            || v.WKBT == Well_Known_Base_Type.MD_External
                     );
 
                 // HANDLE SUBTYPE DEFINERS
 
                 case "Variable":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Variable
+                        v.WKBT == Well_Known_Base_Type.MD_Variable
                     );
                 case "Process":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Process
+                        v.WKBT == Well_Known_Base_Type.MD_Process
                     );
                 case "Stream":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Stream
+                        v.WKBT == Well_Known_Base_Type.MD_Stream
                     );
                 case "External":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_External
+                        v.WKBT == Well_Known_Base_Type.MD_External
                     );
 
                 // ARRAY SUBTYPE DEFINERS
@@ -339,17 +339,17 @@ internal class Executor
 
                 case "Blob":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Blob
+                        v.WKBT == Well_Known_Base_Type.MD_Blob
                     );
 
                 case "Text":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Text
+                        v.WKBT == Well_Known_Base_Type.MD_Text
                     );
 
                 case "Excuse":
                     return m.MD_Boolean(
-                        v.MD_MSBT == MD_Well_Known_Base_Type.MD_Excuse
+                        v.WKBT == Well_Known_Base_Type.MD_Excuse
                     );
 
                 default:
@@ -370,21 +370,21 @@ internal class Executor
             switch (func_name_s)
             {
                 case "Integer_opposite":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
                     return m.MD_Integer(-v.MD_Integer());
                 case "Integer_modulus":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
                     return m.MD_Integer(BigInteger.Abs(v.MD_Integer()));
                 case "Integer_factorial":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
+                    if (v.WKBT != Well_Known_Base_Type.MD_Integer
                         || v.MD_Integer() < 0)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
@@ -394,21 +394,21 @@ internal class Executor
                     // with a Factorial(n) so we have to do it ourselves.
                     return m.MD_Integer(Integer__factorial(v.MD_Integer()));
                 case "Array_count":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Array)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
                     return m.MD_Integer(Array__count(v));
                 case "Bag_unique":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Bag)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Bag)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MD_Any {
                         Memory = m,
-                        MD_MSBT = MD_Well_Known_Base_Type.MD_Bag,
+                        WKBT = Well_Known_Base_Type.MD_Bag,
                         Details = new MD_Bag_Struct {
                             Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
                             Members = v.MD_Bag(),
@@ -418,28 +418,28 @@ internal class Executor
                         },
                     };
                 case "Tuple_degree":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Tuple)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
                     return m.MD_Integer(v.MD_Tuple().Count);
                 case "Tuple_heading":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Tuple)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
                     return m.Tuple__Heading(v);
                 case "Text_from_UTF_8_Blob":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Blob)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Blob)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
                     return m.MD_Text_from_UTF_8_MD_Blob(v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
-                    if (v.MD_MSBT != MD_Well_Known_Base_Type.MD_Text)
+                    if (v.WKBT != Well_Known_Base_Type.MD_Text)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
@@ -466,24 +466,24 @@ internal class Executor
                 case "same":
                     return m.MD_Boolean(Any__same(a0, a1));
                 case "Integer_plus":
-                    if (a0.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                    if (a0.WKBT != Well_Known_Base_Type.MD_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_plus_Arg_0_Not_Integer").ToString());
                     }
-                    if (a1.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer)
+                    if (a1.WKBT != Well_Known_Base_Type.MD_Integer)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
                     return m.MD_Integer(a0.MD_Integer() + a1.MD_Integer());
                 case "Array_at":
-                    if (a0.MD_MSBT != MD_Well_Known_Base_Type.MD_Array)
+                    if (a0.WKBT != Well_Known_Base_Type.MD_Array)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
-                    if (a1.MD_MSBT != MD_Well_Known_Base_Type.MD_Integer
+                    if (a1.WKBT != Well_Known_Base_Type.MD_Integer
                         || a1.MD_Integer() < 0)
                     {
                         throw new ArgumentException(m.Simple_MD_Excuse(
@@ -527,7 +527,7 @@ internal class Executor
         {
             return true;
         }
-        if (a0.MD_MSBT != a1.MD_MSBT)
+        if (a0.WKBT != a1.WKBT)
         {
             return false;
         }
@@ -542,14 +542,14 @@ internal class Executor
             return false;
         }
         Boolean result;
-        switch (a0.MD_MSBT)
+        switch (a0.WKBT)
         {
-            case MD_Well_Known_Base_Type.MD_Boolean:
+            case Well_Known_Base_Type.MD_Boolean:
                 return a0.MD_Boolean() == a1.MD_Boolean();
-            case MD_Well_Known_Base_Type.MD_Integer:
+            case Well_Known_Base_Type.MD_Integer:
                 result = (a0.MD_Integer() == a1.MD_Integer());
                 break;
-            case MD_Well_Known_Base_Type.MD_Fraction:
+            case Well_Known_Base_Type.MD_Fraction:
                 MD_Fraction_Struct fs0 = a0.MD_Fraction();
                 MD_Fraction_Struct fs1 = a1.MD_Fraction();
                 if (Object.ReferenceEquals(fs0, fs1))
@@ -574,18 +574,18 @@ internal class Executor
                 result = (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator
                     && fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
                 break;
-            case MD_Well_Known_Base_Type.MD_Bits:
+            case Well_Known_Base_Type.MD_Bits:
                 result = Enumerable.SequenceEqual(
                     BitArray_to_List(a0.MD_Bits()),
                     BitArray_to_List(a1.MD_Bits()));
                 break;
-            case MD_Well_Known_Base_Type.MD_Blob:
+            case Well_Known_Base_Type.MD_Blob:
                 result = Enumerable.SequenceEqual(a0.MD_Blob(), a1.MD_Blob());
                 break;
-            case MD_Well_Known_Base_Type.MD_Text:
+            case Well_Known_Base_Type.MD_Text:
                 result = (a0.MD_Text().Code_Point_Members == a1.MD_Text().Code_Point_Members);
                 break;
-            case MD_Well_Known_Base_Type.MD_Array:
+            case Well_Known_Base_Type.MD_Array:
                 Memory.Array__Collapse(a0);
                 Memory.Array__Collapse(a1);
                 MD_Array_Struct n0 = a0.MD_Array();
@@ -640,8 +640,8 @@ internal class Executor
                 }
                 // We should never get here.
                 throw new NotImplementedException();
-            case MD_Well_Known_Base_Type.MD_Set:
-            case MD_Well_Known_Base_Type.MD_Bag:
+            case Well_Known_Base_Type.MD_Set:
+            case Well_Known_Base_Type.MD_Bag:
                 // MD_Set and MD_Bag have the same internal representation.
                 Memory.Bag__Collapse(bag: a0, want_indexed: true);
                 Memory.Bag__Collapse(bag: a1, want_indexed: true);
@@ -678,8 +678,8 @@ internal class Executor
                 }
                 // We should never get here.
                 throw new NotImplementedException();
-            case MD_Well_Known_Base_Type.MD_Tuple:
-            case MD_Well_Known_Base_Type.MD_Excuse:
+            case Well_Known_Base_Type.MD_Tuple:
+            case Well_Known_Base_Type.MD_Excuse:
                 // MD_Tuple and MD_Excuse have the same internal representation.
                 Dictionary<String,MD_Any> attrs0 = a0.MD_Tuple();
                 Dictionary<String,MD_Any> attrs1 = a1.MD_Tuple();
@@ -688,14 +688,14 @@ internal class Executor
                 return (attrs0.Count == attrs1.Count)
                     && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                     && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
-            case MD_Well_Known_Base_Type.MD_Article:
+            case Well_Known_Base_Type.MD_Article:
                 result = Any__same(a0.MD_Article().Label, a1.MD_Article().Label)
                       && Any__same(a0.MD_Article().Attrs, a1.MD_Article().Attrs);
                 break;
-            case MD_Well_Known_Base_Type.MD_Variable:
-            case MD_Well_Known_Base_Type.MD_Process:
-            case MD_Well_Known_Base_Type.MD_Stream:
-            case MD_Well_Known_Base_Type.MD_External:
+            case Well_Known_Base_Type.MD_Variable:
+            case Well_Known_Base_Type.MD_Process:
+            case Well_Known_Base_Type.MD_Stream:
+            case Well_Known_Base_Type.MD_External:
                 // Every Muldis D Handle object is always distinct from every other one.
                 return false;
             default:
@@ -725,7 +725,7 @@ internal class Executor
         // determined they represent the same Muldis D value; typically
         // it is invoked by Any__same() when it would result in true.
             // TODO: Make a more educated decision on which one to keep.
-            // It should also have logic dispatching on MD_MSBT and
+            // It should also have logic dispatching on WKBT and
             // do struct mergers as applicable eg copying identity info.
     }
 
