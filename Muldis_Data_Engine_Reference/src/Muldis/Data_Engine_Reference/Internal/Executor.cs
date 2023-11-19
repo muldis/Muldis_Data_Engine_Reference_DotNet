@@ -28,7 +28,7 @@ internal class Executor
         }
         if (args.WKBT != Well_Known_Base_Type.MDL_Tuple)
         {
-            throw new ArgumentException(m.Simple_MD_Excuse(
+            throw new ArgumentException(m.Simple_MDL_Excuse(
                 "X_Args_Not_Tuple").ToString());
         }
         if (Is_Absolute_Name(function))
@@ -53,7 +53,7 @@ internal class Executor
         {
             throw new NotImplementedException();
         }
-        throw new ArgumentException(m.Simple_MD_Excuse(
+        throw new ArgumentException(m.Simple_MDL_Excuse(
             "X_Malformed_Function_Call").ToString());
     }
 
@@ -66,7 +66,7 @@ internal class Executor
         }
         if (args.WKBT != Well_Known_Base_Type.MDL_Tuple)
         {
-            throw new ArgumentException(m.Simple_MD_Excuse("X_Args_Not_Tuple").ToString());
+            throw new ArgumentException(m.Simple_MDL_Excuse("X_Args_Not_Tuple").ToString());
         }
         if (Is_Absolute_Name(procedure))
         {
@@ -84,7 +84,7 @@ internal class Executor
         {
             throw new NotImplementedException();
         }
-        throw new ArgumentException(m.Simple_MD_Excuse(
+        throw new ArgumentException(m.Simple_MDL_Excuse(
             "X_Malformed_Procedure_Call").ToString());
     }
 
@@ -263,7 +263,7 @@ internal class Executor
         {
             if (!m.Tuple__Same_Heading(args, m.Attr_Name_0))
             {
-                throw new ArgumentException(m.Simple_MD_Excuse(
+                throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
@@ -359,7 +359,7 @@ internal class Executor
         {
             if (!m.Tuple__Same_Heading(args, m.Attr_Name_0))
             {
-                throw new ArgumentException(m.Simple_MD_Excuse(
+                throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
@@ -368,14 +368,14 @@ internal class Executor
                 case "Integer_opposite":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
                     return m.MDL_Integer(-v.MDL_Integer());
                 case "Integer_modulus":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
                     return m.MDL_Integer(BigInteger.Abs(v.MDL_Integer()));
@@ -383,7 +383,7 @@ internal class Executor
                     if (v.WKBT != Well_Known_Base_Type.MDL_Integer
                         || v.MDL_Integer() < 0)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                     }
                     // Note that System.Numerics.BigInteger doesn't come
@@ -392,14 +392,14 @@ internal class Executor
                 case "Array_count":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
                     return m.MDL_Integer(Array__count(v));
                 case "Bag_unique":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Bag)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MDL_Any {
@@ -416,28 +416,28 @@ internal class Executor
                 case "Tuple_degree":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
                     return m.MDL_Integer(v.MDL_Tuple().Count);
                 case "Tuple_heading":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
                     return m.Tuple__Heading(v);
                 case "Text_from_UTF_8_Blob":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Blob)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
-                    return m.MDL_Text_from_UTF_8_MD_Blob(v);
+                    return m.MDL_Text_from_UTF_8_MDL_Blob(v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Text)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
                     }
                     // TODO: Everything.
@@ -453,7 +453,7 @@ internal class Executor
         {
             if (!m.Tuple__Same_Heading(args, m.Heading_0_1))
             {
-                throw new ArgumentException(m.Simple_MD_Excuse(
+                throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Binary_Function_Args_Not_Heading_0_1").ToString());
             }
             MDL_Any a0 = args.MDL_Tuple()["\u0000"];
@@ -465,25 +465,25 @@ internal class Executor
                 case "Integer_plus":
                     if (a0.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_plus_Arg_0_Not_Integer").ToString());
                     }
                     if (a1.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
                     return m.MDL_Integer(a0.MDL_Integer() + a1.MDL_Integer());
                 case "Array_at":
                     if (a0.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
                     if (a1.WKBT != Well_Known_Base_Type.MDL_Integer
                         || a1.MDL_Integer() < 0)
                     {
-                        throw new ArgumentException(m.Simple_MD_Excuse(
+                        throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
                     MDL_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MDL_Integer());
@@ -504,7 +504,7 @@ internal class Executor
         {
             if (!m.Tuple__Same_Heading(args, m.Heading_0_1_2))
             {
-                throw new ArgumentException(m.Simple_MD_Excuse(
+                throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
@@ -528,10 +528,10 @@ internal class Executor
         {
             return false;
         }
-        if (a0.Cached_MD_Any_Identity is not null
-            && a1.Cached_MD_Any_Identity is not null)
+        if (a0.Cached_MDL_Any_Identity is not null
+            && a1.Cached_MDL_Any_Identity is not null)
         {
-            if (a0.Cached_MD_Any_Identity == a1.Cached_MD_Any_Identity)
+            if (a0.Cached_MDL_Any_Identity == a1.Cached_MDL_Any_Identity)
             {
                 merge_two_same(a0, a1);
                 return true;

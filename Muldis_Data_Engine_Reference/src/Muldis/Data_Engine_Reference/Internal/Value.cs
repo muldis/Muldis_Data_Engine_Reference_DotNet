@@ -89,7 +89,7 @@ internal class MDL_Any
     // The serialization format either is or resembles a Muldis Data Language Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
-    internal String Cached_MD_Any_Identity { get; set; }
+    internal String Cached_MDL_Any_Identity { get; set; }
 
     internal Boolean Same(MDL_Any value)
     {
@@ -98,7 +98,7 @@ internal class MDL_Any
 
     internal String MDL_Any_Identity()
     {
-        // This called function will test if Cached_MD_Any_Identity
+        // This called function will test if Cached_MDL_Any_Identity
         // is null and assign it a value if so and use its value if not.
         return Memory.Identity_Generator.MDL_Any_to_Identity_String(this);
     }
@@ -641,7 +641,7 @@ internal class MDL_Bag_Struct
         // can be of any type; this is the most common format for a Bag
         // that has had some searches or operations performed on it.
         // The Dictionary has one key-asset pair for each distinct Muldis Data Language
-        // "value", all of which are indexed by Cached_MD_Any_Identity.
+        // "value", all of which are indexed by Cached_MDL_Any_Identity.
         // Guarantees the Bag has at least 1 member.
     // Iff LST is Unique, this field holds a MDL_Bag_Struct.
         // This is a non-leaf node with 1 direct child Bag node;

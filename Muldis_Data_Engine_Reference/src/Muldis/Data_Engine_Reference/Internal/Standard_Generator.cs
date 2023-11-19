@@ -36,7 +36,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Standard_Generator : MUON_Generator
 {
-    internal MDL_Any MDL_Any_to_MD_Text_MDPT_Parsing_Unit(MDL_Any value)
+    internal MDL_Any MDL_Any_to_MDL_Text_MDPT_Parsing_Unit(MDL_Any value)
     {
         return value.Memory.MDL_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"

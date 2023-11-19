@@ -739,7 +739,7 @@ internal class Memory
     // as if it were a MDL_Article_Struct; these have the opposite
     // transformations as MDL_Article() above does.
 
-    internal MDL_Any New_MD_Variable(MDL_Any initial_current_value)
+    internal MDL_Any New_MDL_Variable(MDL_Any initial_current_value)
     {
         return new MDL_Any {
             Memory = this,
@@ -748,7 +748,7 @@ internal class Memory
         };
     }
 
-    internal MDL_Any New_MD_Process()
+    internal MDL_Any New_MDL_Process()
     {
         return new MDL_Any {
             Memory = this,
@@ -757,7 +757,7 @@ internal class Memory
         };
     }
 
-    internal MDL_Any New_MD_Stream()
+    internal MDL_Any New_MDL_Stream()
     {
         return new MDL_Any {
             Memory = this,
@@ -766,7 +766,7 @@ internal class Memory
         };
     }
 
-    internal MDL_Any New_MD_External(Object value)
+    internal MDL_Any New_MDL_External(Object value)
     {
         return new MDL_Any {
             Memory = this,
@@ -784,7 +784,7 @@ internal class Memory
         };
     }
 
-    internal MDL_Any Simple_MD_Excuse(String value)
+    internal MDL_Any Simple_MDL_Excuse(String value)
     {
         if (Well_Known_Excuses.ContainsKey(value))
         {
@@ -1266,7 +1266,7 @@ internal class Memory
             && Enumerable.All(attrs1, attr => attrs2.ContainsKey(attr.Key));
     }
 
-    internal MDL_Any MDL_Text_from_UTF_8_MD_Blob(MDL_Any value)
+    internal MDL_Any MDL_Text_from_UTF_8_MDL_Blob(MDL_Any value)
     {
         Byte[] octets = value.MDL_Blob();
         UTF8Encoding enc = new UTF8Encoding
@@ -1280,7 +1280,7 @@ internal class Memory
             Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
             if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
-                return Simple_MD_Excuse("X_Unicode_Blob_Not_UTF_8");
+                return Simple_MDL_Excuse("X_Unicode_Blob_Not_UTF_8");
             }
             return MDL_Text(
                 s,
@@ -1289,7 +1289,7 @@ internal class Memory
         }
         catch
         {
-            return Simple_MD_Excuse("X_Unicode_Blob_Not_UTF_8");
+            return Simple_MDL_Excuse("X_Unicode_Blob_Not_UTF_8");
         }
     }
 }

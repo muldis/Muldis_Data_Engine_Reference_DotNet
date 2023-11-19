@@ -496,32 +496,32 @@ public class MDER_Machine
             case "New_Variable":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
                 {
-                    return this.memory.New_MD_Variable(
+                    return this.memory.New_MDL_Variable(
                         ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value);
                 }
                 break;
             case "New_Process":
                 if (v is null)
                 {
-                    return this.memory.New_MD_Process();
+                    return this.memory.New_MDL_Process();
                 }
                 break;
             case "New_Stream":
                 if (v is null)
                 {
-                    return this.memory.New_MD_Stream();
+                    return this.memory.New_MDL_Stream();
                 }
                 break;
             case "New_External":
-                return this.memory.New_MD_External(v);
+                return this.memory.New_MDL_External(v);
             case "Excuse":
                 if (v is null)
                 {
-                    return this.memory.Simple_MD_Excuse("No_Reason");
+                    return this.memory.Simple_MDL_Excuse("No_Reason");
                 }
                 if (type_name == "System.DBNull")
                 {
-                    return this.memory.Simple_MD_Excuse("No_Reason");
+                    return this.memory.Simple_MDL_Excuse("No_Reason");
                 }
                 if (type_name == "System.String")
                 {
@@ -535,7 +535,7 @@ public class MDER_Machine
                                 + " that is a malformed .NET String."
                         );
                     }
-                    return this.memory.Simple_MD_Excuse((String)v);
+                    return this.memory.Simple_MDL_Excuse((String)v);
                 }
                 throw new NotImplementedException();
             case "Attr_Name":
@@ -587,12 +587,12 @@ public class MDER_Machine
     {
         if (value is null)
         {
-            return this.memory.Simple_MD_Excuse("No_Reason");
+            return this.memory.Simple_MDL_Excuse("No_Reason");
         }
         String type_name = value.GetType().FullName;
         if (type_name == "System.DBNull")
         {
-            return this.memory.Simple_MD_Excuse("No_Reason");
+            return this.memory.Simple_MDL_Excuse("No_Reason");
         }
         if (type_name == "System.Boolean")
         {
