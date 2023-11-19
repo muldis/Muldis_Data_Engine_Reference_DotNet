@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 
+using Muldis.Data_Engine_Reference;
+
 namespace Muldis.Data_Engine_Reference_App;
 
 public class App
 {
     public static void Main(String[] args)
     {
-        if (args.Length != 2)
+        if (args.Length != 1)
         {
             // TODO: Review whether hostExecutablePath reflects actual
             // main program invocation syntax or not, and accounts for
@@ -17,12 +19,9 @@ public class App
             String hostExecutablePath
                 = System.Reflection.Assembly.GetEntryAssembly().Location;
             System.Console.WriteLine("Usage: " + hostExecutablePath
-                + " <MUSE entrance class name> <source code file path>");
+                + " <source code file path>");
             return;
         }
-
-        // Name of class we expect to implement Muldis Service Protocol entrance interface.
-        String museEntranceClassName = args[0];
 
         // Try and load the entrance class, or die.
         // Note, generally the class name needs to be assembly-qualified for
@@ -33,9 +32,14 @@ public class App
         // MUSE or what the entrance considers the next best fit version;
         // this would die if it thinks it can't satisfy an acceptable version.
         // We will use this for all the main work.
-        MuseFactory factory = MuseEntrance.NewMuseFactory(museEntranceClassName);
+        MuseEntrance entrance = new MuseEntrance();
+        MuseFactory factory = entrance.NewMuseFactory(
+            new String[] {"Muldis_Service_Protocol", "https://muldis.com", "0.300.0"});
         if (factory is null)
         {
+            System.Console.WriteLine(
+                "The requested Muldis Service Protocol entrance class"
+                + " doesn't provide the specific MUSE version needed.");
             return;
         }
 
@@ -49,7 +53,6 @@ public class App
         {
             System.Console.WriteLine(
                 "The requested Muldis Service Protocol entrance class"
-                + " [" + museEntranceClassName + "]"
                 + " doesn't provide a factory class that provides"
                 + " the specific data model version needed.");
             return;
@@ -57,7 +60,7 @@ public class App
 
         // File system path for the file containing plain text source
         // code that the user wishes to execute as their main program.
-        String sourceCodeFilePath = args[1];
+        String sourceCodeFilePath = args[0];
 
         // If the user-specified file path is absolute, Path.Combine()
         // will just use that as the final path; otherwise it is taken
@@ -93,11 +96,11 @@ public class App
         // Try to parse the file content into canonical format VM source code.
         MuseValue maybe_source_code_text = machine.MuseEvaluate(
             machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
-            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob.temp_kludge_get_MUSE_server_MuseValue()}))
+            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
         );
         if ((Boolean)machine.MuseExportQualified(machine.MuseEvaluate(
             machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text.temp_kludge_get_MUSE_server_MuseValue() })))).Value)
+            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text })))).Value)
         {
             System.Console.WriteLine("The requested source code providing file"
                 + " [" + sourceCodeFilePath + "] is not well-formed UTF-8 text:"
@@ -107,7 +110,7 @@ public class App
         System.Console.WriteLine("Debug: maybe_source_code_text = [" + maybe_source_code_text + "]");
         MuseValue maybe_source_code = machine.MuseEvaluate(
             machine.MuseImport(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
-            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text.temp_kludge_get_MUSE_server_MuseValue() }))
+            machine.MuseImport(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text }))
         );
         System.Console.WriteLine("Debug: maybe_source_code = [" + maybe_source_code + "]");
 
