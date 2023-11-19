@@ -4,11 +4,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Muldis.Data_Engine_Reference.Core;
+using Muldis.Data_Engine_Reference.Internal;
 
-namespace Muldis.Data_Engine_Reference.Core.Plain_Text;
+namespace Muldis.Data_Engine_Reference.Internal.Plain_Text;
 
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Parser
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Parser
 // Provides common implementation code for all other *_Parser
 // classes where they don't have reason to differ.
 // Or it would if there was more than one *_Parser, which there isn't.
@@ -18,7 +18,7 @@ internal abstract class Parser
 }
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Standard_Parser
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Parser
 // Provides utility pure functions that accept Muldis D Plain Text (MDPT)
 // source code, either a complete "parsing unit" that might comprise a
 // foo.mdpt disk file or appropriate portions of such, usually input as
@@ -54,7 +54,7 @@ internal class Standard_Parser : Parser
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Generator
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Generator
 // Provides common implementation code for all other *_Generator
 // classes where they don't have reason to differ.
 // In fact, presently all inheriting classes actually have identical
@@ -439,7 +439,7 @@ internal abstract class Generator
 }
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Standard_Generator
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Standard_Generator
 // Provides utility pure functions that accept any Muldis D "Package"
 // value, which is a native Muldis D "standard compilation unit", and
 // derive a "Text" value that is this "Package" encoded in compliance
@@ -488,7 +488,7 @@ internal class Standard_Generator : Generator
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Identity_Generator
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Identity_Generator
 // Provides utility pure functions that accept any Muldis D "value"
 // and derive a .NET String that uniquely identifies it.
 // This class is deterministic and guarantees that iff 2 MD_Any are
@@ -529,7 +529,7 @@ internal class Identity_Generator : Generator
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.Plain_Text.Preview_Generator
+// Muldis.Data_Engine_Reference.Internal.Plain_Text.Preview_Generator
 // Provides utility pure functions that accept any Muldis D "value"
 // and derive a .NET String that provides a "preview quick look"
 // serialization of that value.  The intended use of this class is to

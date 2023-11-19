@@ -5,9 +5,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Muldis.Data_Engine_Reference.Core;
+namespace Muldis.Data_Engine_Reference.Internal;
 
-// Muldis.Data_Engine_Reference.Core.Memory
+// Muldis.Data_Engine_Reference.Internal.Memory
 // Provides a virtual machine memory pool where Muldis D values and
 // variables live, which exploits the "flyweight pattern" for
 // efficiency in both performance and memory usage.
@@ -1278,13 +1278,13 @@ internal class Memory
         {
             String s = enc.GetString(octets);
             Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
-            if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 return Simple_MD_Excuse("X_Unicode_Blob_Not_UTF_8");
             }
             return MD_Text(
                 s,
-                (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         catch

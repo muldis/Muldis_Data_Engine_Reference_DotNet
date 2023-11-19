@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
+using Muldis.Data_Engine_Reference.Internal;
+
 namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Machine
 {
-    internal Core.Memory   m_memory;
-    internal Core.Executor m_executor;
+    internal Memory   m_memory;
+    internal Executor m_executor;
 
     public MDER_Machine()
     {
-        m_memory   = new Core.Memory();
+        m_memory   = new Memory();
         m_executor = m_memory.Executor;
     }
 
@@ -72,7 +74,7 @@ public class MDER_Machine
         return new MDER_V_Any(this, Import__Tree_Qualified(value));
     }
 
-    private Core.MD_Any Import__Tree(Object value)
+    private MD_Any Import__Tree(Object value)
     {
         if (value is not null)
         {
@@ -89,7 +91,7 @@ public class MDER_Machine
         return Import__Tree_Unqualified(value);
     }
 
-    private Core.MD_Any Import__Tree_Qualified(KeyValuePair<String,Object> value)
+    private MD_Any Import__Tree_Qualified(KeyValuePair<String,Object> value)
     {
         Object v = value.Value;
         // Note that .NET guarantees the .Key is never null.
@@ -166,9 +168,9 @@ public class MDER_Machine
                         return m_memory.MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
+                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer
                         && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
+                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Integer)
                     {
                         if (((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_Integer() == 0)
                         {
@@ -202,8 +204,8 @@ public class MDER_Machine
             case "Text":
                 if (type_name == "System.String")
                 {
-                    Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)v);
-                    if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)v);
+                    if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -213,7 +215,7 @@ public class MDER_Machine
                     }
                     return m_memory.MD_Text(
                         (String)v,
-                        (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                        (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
                     );
                 }
                 break;
@@ -221,7 +223,7 @@ public class MDER_Machine
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
                     return m_memory.MD_Array(
-                        new List<Core.MD_Any>(((List<Object>)v).Select(
+                        new List<MD_Any>(((List<Object>)v).Select(
                             m => Import__Tree(m)
                         ))
                     );
@@ -231,8 +233,8 @@ public class MDER_Machine
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
                     return m_memory.MD_Set(
-                        new List<Core.Multiplied_Member>(((List<Object>)v).Select(
-                            m => new Core.Multiplied_Member(Import__Tree(m))
+                        new List<Multiplied_Member>(((List<Object>)v).Select(
+                            m => new Multiplied_Member(Import__Tree(m))
                         ))
                     );
                 }
@@ -241,8 +243,8 @@ public class MDER_Machine
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
                     return m_memory.MD_Bag(
-                        new List<Core.Multiplied_Member>(((List<Object>)v).Select(
-                            m => new Core.Multiplied_Member(Import__Tree(m))
+                        new List<Multiplied_Member>(((List<Object>)v).Select(
+                            m => new Multiplied_Member(Import__Tree(m))
                         ))
                     );
                 }
@@ -256,7 +258,7 @@ public class MDER_Machine
                         attrs.Add(Char.ConvertFromUtf32(i), ((Object[])v)[i]);
                     }
                     return m_memory.MD_Tuple(
-                        new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                        new Dictionary<String,MD_Any>(attrs.ToDictionary(
                             a => a.Key, a => Import__Tree(a.Value)))
                     );
                 }
@@ -266,7 +268,7 @@ public class MDER_Machine
                     foreach (String atnm in attrs.Keys)
                     {
                         if (m_memory.Test_Dot_Net_String(atnm)
-                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -277,7 +279,7 @@ public class MDER_Machine
                         }
                     }
                     return m_memory.MD_Tuple(
-                        new Dictionary<String,Core.MD_Any>(attrs.ToDictionary(
+                        new Dictionary<String,MD_Any>(attrs.ToDictionary(
                             a => a.Key, a => Import__Tree(a.Value)))
                     );
                 }
@@ -294,7 +296,7 @@ public class MDER_Machine
                         }
                     }
                     return m_memory.MD_Tuple(
-                        new Dictionary<String,Core.MD_Any>(
+                        new Dictionary<String,MD_Any>(
                             attr_names.ToDictionary(a => a, a => m_memory.MD_True))
                     );
                 }
@@ -304,7 +306,7 @@ public class MDER_Machine
                     foreach (String atnm in attr_names)
                     {
                         if (m_memory.Test_Dot_Net_String(atnm)
-                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -315,24 +317,24 @@ public class MDER_Machine
                         }
                     }
                     return m_memory.MD_Tuple(
-                        new Dictionary<String,Core.MD_Any>(
+                        new Dictionary<String,MD_Any>(
                             attr_names.ToDictionary(a => a, a => m_memory.MD_True))
                     );
                 }
                 break;
             case "Tuple_Array":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
-                    Core.MD_Any bv = m_memory.MD_Array_C0;
+                    MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = m_memory.MD_Array_C0;
                     return m_memory.MD_Tuple_Array(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Array)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -342,7 +344,7 @@ public class MDER_Machine
                                 + " members aren't all MD_Tuple with a common heading."
                         );
                     }
-                    Core.MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
+                    MD_Any hv = m_memory.Array__Pick_Arbitrary_Member(bv);
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -356,17 +358,17 @@ public class MDER_Machine
                 break;
             case "Relation":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
-                    Core.MD_Any bv = m_memory.MD_Set_C0;
+                    MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = m_memory.MD_Set_C0;
                     return m_memory.MD_Relation(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Set)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -376,7 +378,7 @@ public class MDER_Machine
                                 + " members aren't all MD_Tuple with a common heading."
                         );
                     }
-                    Core.MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
+                    MD_Any hv = m_memory.Set__Pick_Arbitrary_Member(bv);
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -390,17 +392,17 @@ public class MDER_Machine
                 break;
             case "Tuple_Bag":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
-                    Core.MD_Any bv = m_memory.MD_Bag_C0;
+                    MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = m_memory.MD_Bag_C0;
                     return m_memory.MD_Tuple_Bag(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == MD_Well_Known_Base_Type.MD_Bag)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
+                    MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -410,7 +412,7 @@ public class MDER_Machine
                                 + " members aren't all MD_Tuple with a common heading."
                         );
                     }
-                    Core.MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
+                    MD_Any hv = m_memory.Bag__Pick_Arbitrary_Member(bv);
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -436,8 +438,8 @@ public class MDER_Machine
                             message: "Can't select MD_Article with a null Article attrs."
                         );
                     }
-                    Core.MD_Any attrs_cv = Import__Tree(attrs);
-                    if (attrs_cv.MD_MSBT != Core.MD_Well_Known_Base_Type.MD_Tuple)
+                    MD_Any attrs_cv = Import__Tree(attrs);
+                    if (attrs_cv.MD_MSBT != MD_Well_Known_Base_Type.MD_Tuple)
                     {
                         throw new ArgumentException
                         (
@@ -449,7 +451,7 @@ public class MDER_Machine
                     if (label.GetType().FullName == "System.String")
                     {
                         if (m_memory.Test_Dot_Net_String((String)label)
-                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -468,7 +470,7 @@ public class MDER_Machine
                         foreach (String s in ((String[])label))
                         {
                             if (m_memory.Test_Dot_Net_String(s)
-                                == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                                == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                             {
                                 throw new ArgumentException
                                 (
@@ -479,7 +481,7 @@ public class MDER_Machine
                             }
                         }
                         return m_memory.MD_Article(
-                            m_memory.MD_Array(new List<Core.MD_Any>(((String[])label).Select(
+                            m_memory.MD_Array(new List<MD_Any>(((String[])label).Select(
                                 m => m_memory.MD_Attr_Name(m)
                             ))),
                             attrs_cv
@@ -524,7 +526,7 @@ public class MDER_Machine
                 if (type_name == "System.String")
                 {
                     if (m_memory.Test_Dot_Net_String((String)v)
-                        == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -540,7 +542,7 @@ public class MDER_Machine
                 if (type_name == "System.String")
                 {
                     if (m_memory.Test_Dot_Net_String((String)v)
-                        == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -557,7 +559,7 @@ public class MDER_Machine
                     foreach (String s in ((String[])v))
                     {
                         if (m_memory.Test_Dot_Net_String(s)
-                            == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -567,7 +569,7 @@ public class MDER_Machine
                             );
                         }
                     }
-                    return m_memory.MD_Array(new List<Core.MD_Any>(((String[])v).Select(
+                    return m_memory.MD_Array(new List<MD_Any>(((String[])v).Select(
                         m => m_memory.MD_Attr_Name(m)
                     )));
                 }
@@ -581,7 +583,7 @@ public class MDER_Machine
             "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
     }
 
-    private Core.MD_Any Import__Tree_Unqualified(Object value)
+    private MD_Any Import__Tree_Unqualified(Object value)
     {
         if (value is null)
         {
@@ -620,8 +622,8 @@ public class MDER_Machine
         }
         if (type_name == "System.String")
         {
-            Core.Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)value);
-            if (tr == Core.Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            Dot_Net_String_Unicode_Test_Result tr = m_memory.Test_Dot_Net_String((String)value);
+            if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
                 (
@@ -631,7 +633,7 @@ public class MDER_Machine
             }
             return m_memory.MD_Text(
                 (String)value,
-                (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         throw new NotImplementedException("Unhandled MDER value type ["+type_name+"].");
@@ -643,14 +645,14 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        Core.MD_Any v = value.m_value;
+        MD_Any v = value.m_value;
         switch (v.MD_MSBT)
         {
-            case Core.MD_Well_Known_Base_Type.MD_Boolean:
+            case MD_Well_Known_Base_Type.MD_Boolean:
                 return v.MD_Boolean().Value;
-            case Core.MD_Well_Known_Base_Type.MD_Integer:
+            case MD_Well_Known_Base_Type.MD_Integer:
                 return v.MD_Integer();
-            case Core.MD_Well_Known_Base_Type.MD_External:
+            case MD_Well_Known_Base_Type.MD_External:
                 return v.MD_External();
             default:
                 return MDER_export_qualified(value);
@@ -663,43 +665,43 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        Core.MD_Any v = value.m_value;
+        MD_Any v = value.m_value;
         switch (v.MD_MSBT)
         {
-            case Core.MD_Well_Known_Base_Type.MD_Boolean:
+            case MD_Well_Known_Base_Type.MD_Boolean:
                 return new KeyValuePair<String,Object>("Boolean",
                     v.MD_Boolean().Value);
-            case Core.MD_Well_Known_Base_Type.MD_Integer:
+            case MD_Well_Known_Base_Type.MD_Integer:
                 return new KeyValuePair<String,Object>("Integer",
                     v.MD_Integer());
-            case Core.MD_Well_Known_Base_Type.MD_Fraction:
+            case MD_Well_Known_Base_Type.MD_Fraction:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Bits:
+            case MD_Well_Known_Base_Type.MD_Bits:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Blob:
+            case MD_Well_Known_Base_Type.MD_Blob:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Text:
+            case MD_Well_Known_Base_Type.MD_Text:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Array:
+            case MD_Well_Known_Base_Type.MD_Array:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Set:
+            case MD_Well_Known_Base_Type.MD_Set:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Bag:
+            case MD_Well_Known_Base_Type.MD_Bag:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Tuple:
+            case MD_Well_Known_Base_Type.MD_Tuple:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Article:
+            case MD_Well_Known_Base_Type.MD_Article:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Variable:
+            case MD_Well_Known_Base_Type.MD_Variable:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Process:
+            case MD_Well_Known_Base_Type.MD_Process:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_Stream:
+            case MD_Well_Known_Base_Type.MD_Stream:
                 throw new NotImplementedException();
-            case Core.MD_Well_Known_Base_Type.MD_External:
+            case MD_Well_Known_Base_Type.MD_External:
                 return new KeyValuePair<String,Object>("New_External",
                     v.MD_External());
-            case Core.MD_Well_Known_Base_Type.MD_Excuse:
+            case MD_Well_Known_Base_Type.MD_Excuse:
                 throw new NotImplementedException();
             default:
                 throw new NotImplementedException();

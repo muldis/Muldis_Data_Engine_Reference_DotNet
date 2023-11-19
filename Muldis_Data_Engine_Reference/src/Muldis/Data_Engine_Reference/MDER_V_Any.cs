@@ -1,13 +1,15 @@
 using System;
 
+using Muldis.Data_Engine_Reference.Internal;
+
 namespace Muldis.Data_Engine_Reference;
 
 public class MDER_V_Any
 {
     internal MDER_Machine m_machine;
-    internal Core.MD_Any m_value;
+    internal MD_Any m_value;
 
-    internal MDER_V_Any(MDER_Machine machine, Core.MD_Any value)
+    internal MDER_V_Any(MDER_Machine machine, MD_Any value)
     {
         m_machine = machine;
         m_value   = value;

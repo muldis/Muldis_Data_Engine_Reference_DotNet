@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Muldis.Data_Engine_Reference.Core;
+namespace Muldis.Data_Engine_Reference.Internal;
 
 internal enum Dot_Net_String_Unicode_Test_Result
 {
@@ -10,7 +10,7 @@ internal enum Dot_Net_String_Unicode_Test_Result
     Is_Malformed,
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Well_Known_Type
+// Muldis.Data_Engine_Reference.Internal.MD_Well_Known_Type
 // Enumerates Muldis D types that are considered well-known to this
 // Muldis D language implementation.  Typically these are defined in
 // the Muldis D Foundation language spec even if most of their related

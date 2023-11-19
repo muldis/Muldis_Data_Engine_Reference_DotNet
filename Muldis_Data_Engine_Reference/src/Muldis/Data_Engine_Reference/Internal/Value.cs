@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Muldis.Data_Engine_Reference.Core;
+namespace Muldis.Data_Engine_Reference.Internal;
 
-// Muldis.Data_Engine_Reference.Core.MD_MSBT
+// Muldis.Data_Engine_Reference.Internal.MD_MSBT
 // Enumerates Muldis D base types that are considered well-known to
 // this Muldis D language implementation, and that in particular have
 // their own dedicated handling code or formats in the implementation.
@@ -36,7 +36,7 @@ internal enum MD_Well_Known_Base_Type
     MD_Excuse,
 };
 
-// Muldis.Data_Engine_Reference.Core.MD_Any
+// Muldis.Data_Engine_Reference.Internal.MD_Any
 // Represents a Muldis D "value", which is an individual constant that
 // is not fixed in time or space.  Every Muldis D value is unique,
 // eternal, and immutable; it has no address and can not be updated.
@@ -270,8 +270,8 @@ internal class MD_Any_Comparer : EqualityComparer<MD_Any>
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Fraction_Struct
-// When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Fraction,
+// Muldis.Data_Engine_Reference.Internal.MD_Fraction_Struct
+// When a Muldis.Data_Engine_Reference.Internal.MD_Any is representing a MD_Fraction,
 // an MD_Fraction_Struct is used by it to hold the MD_Fraction-specific details.
 
 internal class MD_Fraction_Struct
@@ -405,7 +405,7 @@ internal class MD_Fraction_Struct
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Fraction_Pair
+// Muldis.Data_Engine_Reference.Internal.MD_Fraction_Pair
 // Represents a numerator/denominator pair.
 
 internal class MD_Fraction_Pair
@@ -453,8 +453,8 @@ internal class MD_Fraction_Pair
     internal Nullable<BigInteger> Denominator_Affinity { get; set; }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Text_Struct
-// When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Text,
+// Muldis.Data_Engine_Reference.Internal.MD_Text_Struct
+// When a Muldis.Data_Engine_Reference.Internal.MD_Any is representing a MD_Text,
 // an MD_Text_Struct is used by it to hold the MD_Text-specific details.
 
 internal class MD_Text_Struct
@@ -500,7 +500,7 @@ internal class MD_Text_Struct
     internal Nullable<Int64> Cached_Member_Count { get; set; }
 }
 
-// Muldis.Data_Engine_Reference.Core.Symbolic_Array_Type
+// Muldis.Data_Engine_Reference.Internal.Symbolic_Array_Type
 // Enumerates the various ways that a MD_Array collection can be defined
 // symbolically in terms of other collections.
 // None means the collection simply has zero members.
@@ -513,8 +513,8 @@ internal enum Symbolic_Array_Type
     Catenated,
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Array_Struct
-// When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Array,
+// Muldis.Data_Engine_Reference.Internal.MD_Array_Struct
+// When a Muldis.Data_Engine_Reference.Internal.MD_Any is representing a MD_Array,
 // a MD_Array_Struct is used by it to hold the MD_Array-specific details.
 // The "tree" is actually a uni-directional graph as multiple nodes can
 // cite the same other conceptually immutable nodes as their children.
@@ -571,7 +571,7 @@ internal class MD_Array_Struct
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Array_Pair
+// Muldis.Data_Engine_Reference.Internal.MD_Array_Pair
 // Represents an ordered pair of MD_Array, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -590,7 +590,7 @@ internal class MD_Array_Pair
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.Symbolic_Bag_Type
+// Muldis.Data_Engine_Reference.Internal.Symbolic_Bag_Type
 // Enumerates the various ways that a MD_Bag collection can be defined
 // symbolically in terms of other collections.
 // None means the collection simply has zero members.
@@ -605,7 +605,7 @@ internal enum Symbolic_Bag_Type
     Summed,
 }
 
-// Muldis.Data_Engine_Reference.Core.Multiplied_Member
+// Muldis.Data_Engine_Reference.Internal.Multiplied_Member
 // Represents a multiset of 1..N members of a collection where every
 // member is the same Muldis D value.
 
@@ -629,8 +629,8 @@ internal class Multiplied_Member
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Bag_Struct
-// When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Bag,
+// Muldis.Data_Engine_Reference.Internal.MD_Bag_Struct
+// When a Muldis.Data_Engine_Reference.Internal.MD_Any is representing a MD_Bag,
 // a MD_Bag_Struct is used by it to hold the MD_Bag-specific details.
 // Also used for MD_Set, so any MD_Bag reference generally should be
 // read as either MD_Set or MD_Bag.
@@ -714,7 +714,7 @@ internal class MD_Bag_Struct
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Bag_Pair
+// Muldis.Data_Engine_Reference.Internal.MD_Bag_Pair
 // Represents an ordered pair of MD_Bag, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -733,7 +733,7 @@ internal class MD_Bag_Pair
     }
 }
 
-// Muldis.Data_Engine_Reference.Core.Cached_Members_Meta
+// Muldis.Data_Engine_Reference.Internal.Cached_Members_Meta
 // Represents cached metadata for the members of a Muldis D "discrete
 // homogeneous" collection such as an Array or Bag, particularly a
 // collection implemented as a tree of nodes, where each node may
@@ -762,8 +762,8 @@ internal class Cached_Members_Meta
     internal Nullable<Boolean> Tree_Relational { get; set; }
 }
 
-// Muldis.Data_Engine_Reference.Core.MD_Article_Struct
-// When a Muldis.Data_Engine_Reference.Core.MD_Any is representing a MD_Article,
+// Muldis.Data_Engine_Reference.Internal.MD_Article_Struct
+// When a Muldis.Data_Engine_Reference.Internal.MD_Any is representing a MD_Article,
 // a MD_Article_Struct is used by it to hold the MD_Article-specific details.
 // TODO: Change Article so represented as Nesting+Kit pair.
 

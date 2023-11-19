@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace Muldis.Data_Engine_Reference.Core;
+namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Executor
 {
