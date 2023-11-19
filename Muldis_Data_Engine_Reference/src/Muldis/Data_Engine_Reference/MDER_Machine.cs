@@ -6,28 +6,28 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-public class MuseMachine
+public class MDER_Machine
 {
     internal Core.Memory   m_memory;
     internal Core.Executor m_executor;
 
-    public MuseMachine()
+    public MDER_Machine()
     {
         m_memory   = new Core.Memory();
         m_executor = m_memory.Executor;
     }
 
-    public MuseValue MuseEvaluate(MuseValue function, MuseValue args = null)
+    public MDER_V_Any MDER_evaluate(MDER_V_Any function, MDER_V_Any args = null)
     {
         if (function is null)
         {
             throw new ArgumentNullException("function");
         }
-        return new MuseValue().init(this,
+        return new MDER_V_Any(this,
             m_executor.Evaluates(function.m_value, args is null ? null : args.m_value));
     }
 
-    public void MusePerform(MuseValue procedure, MuseValue args = null)
+    public void MDER_perform(MDER_V_Any procedure, MDER_V_Any args = null)
     {
         if (procedure is null)
         {
@@ -36,16 +36,16 @@ public class MuseMachine
         m_executor.Performs(procedure.m_value, args is null ? null : args.m_value);
     }
 
-    public MuseValue MuseCurrent(MuseValue variable)
+    public MDER_V_Any MDER_current(MDER_V_Any variable)
     {
         if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
-        return new MuseValue().init(this, variable.m_value.MD_Variable());
+        return new MDER_V_Any(this, variable.m_value.MD_Variable());
     }
 
-    public void MuseAssign(MuseValue variable, MuseValue newCurrent)
+    public void MDER_assign(MDER_V_Any variable, MDER_V_Any newCurrent)
     {
         if (variable is null)
         {
@@ -58,18 +58,18 @@ public class MuseMachine
         variable.m_value.Details = newCurrent.m_value;
     }
 
-    public MuseValue MuseImport(Object value)
+    public MDER_V_Any MDER_import(Object value)
     {
-        if (value is not null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
+        if (value is not null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any")
         {
-            return (MuseValue)value;
+            return (MDER_V_Any)value;
         }
-        return new MuseValue().init(this, Import__Tree(value));
+        return new MDER_V_Any(this, Import__Tree(value));
     }
 
-    public MuseValue MuseImportQualified(KeyValuePair<String,Object> value)
+    public MDER_V_Any MDER_import_qualified(KeyValuePair<String,Object> value)
     {
-        return new MuseValue().init(this, Import__Tree_Qualified(value));
+        return new MDER_V_Any(this, Import__Tree_Qualified(value));
     }
 
     private Core.MD_Any Import__Tree(Object value)
@@ -77,9 +77,9 @@ public class MuseMachine
         if (value is not null)
         {
             String type_name = value.GetType().FullName;
-            if (type_name == "Muldis.Data_Engine_Reference.MuseValue")
+            if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
             {
-                return ((MuseValue)value).m_value;
+                return ((MDER_V_Any)value).m_value;
             }
             if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
             {
@@ -165,12 +165,12 @@ public class MuseMachine
                         }
                         return m_memory.MD_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
-                    if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue"
-                        && ((Muldis.Data_Engine_Reference.MuseValue)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
-                        && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue"
-                        && ((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
+                    if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer
+                        && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Integer)
                     {
-                        if (((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_Integer() == 0)
+                        if (((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_Integer() == 0)
                         {
                             throw new ArgumentException
                             (
@@ -179,8 +179,8 @@ public class MuseMachine
                             );
                         }
                         return m_memory.MD_Fraction(
-                            ((Muldis.Data_Engine_Reference.MuseValue)numerator  ).m_value.MD_Integer(),
-                            ((Muldis.Data_Engine_Reference.MuseValue)denominator).m_value.MD_Integer()
+                            ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator  ).m_value.MD_Integer(),
+                            ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).m_value.MD_Integer()
                         );
                     }
                 }
@@ -321,18 +321,18 @@ public class MuseMachine
                 }
                 break;
             case "Tuple_Array":
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     Core.MD_Any bv = m_memory.MD_Array_C0;
                     return m_memory.MD_Tuple_Array(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Array)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -355,18 +355,18 @@ public class MuseMachine
                 }
                 break;
             case "Relation":
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     Core.MD_Any bv = m_memory.MD_Set_C0;
                     return m_memory.MD_Relation(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Set)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -389,18 +389,18 @@ public class MuseMachine
                 }
                 break;
             case "Tuple_Bag":
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Tuple
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.Member_Status_in_WKT(Core.MD_Well_Known_Type.Heading) == true)
                 {
-                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     Core.MD_Any bv = m_memory.MD_Bag_C0;
                     return m_memory.MD_Tuple_Bag(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue"
-                    && ((Muldis.Data_Engine_Reference.MuseValue)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value.MD_MSBT == Core.MD_Well_Known_Base_Type.MD_Bag)
                 {
-                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MuseValue)v).m_value;
+                    Core.MD_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value;
                     if (!m_memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -485,17 +485,17 @@ public class MuseMachine
                             attrs_cv
                         );
                     }
-                    if (label.GetType().FullName == "Muldis.Data_Engine_Reference.MuseValue")
+                    if (label.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any")
                     {
                         return m_memory.MD_Article(Import__Tree(label), attrs_cv);
                     }
                 }
                 break;
             case "New_Variable":
-                if (type_name == "Muldis.Data_Engine_Reference.MuseValue")
+                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
                 {
                     return m_memory.New_MD_Variable(
-                        ((Muldis.Data_Engine_Reference.MuseValue)v).m_value);
+                        ((Muldis.Data_Engine_Reference.MDER_V_Any)v).m_value);
                 }
                 break;
             case "New_Process":
@@ -574,11 +574,11 @@ public class MuseMachine
                 break;
             default:
                 throw new NotImplementedException(
-                    "Unhandled MUSE value type ["+value.Key+"]+["+type_name+"].");
+                    "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
         }
         // Duplicated as Visual Studio says otherwise not all code paths return a value.
         throw new NotImplementedException(
-            "Unhandled MUSE value type ["+value.Key+"]+["+type_name+"].");
+            "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
     }
 
     private Core.MD_Any Import__Tree_Unqualified(Object value)
@@ -634,10 +634,10 @@ public class MuseMachine
                 (tr == Core.Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
-        throw new NotImplementedException("Unhandled MUSE value type ["+type_name+"].");
+        throw new NotImplementedException("Unhandled MDER value type ["+type_name+"].");
     }
 
-    public Object MuseExport(MuseValue value)
+    public Object MDER_export(MDER_V_Any value)
     {
         if (value is null)
         {
@@ -653,11 +653,11 @@ public class MuseMachine
             case Core.MD_Well_Known_Base_Type.MD_External:
                 return v.MD_External();
             default:
-                return MuseExportQualified(value);
+                return MDER_export_qualified(value);
         }
     }
 
-    public KeyValuePair<String,Object> MuseExportQualified(MuseValue value)
+    public KeyValuePair<String,Object> MDER_export_qualified(MDER_V_Any value)
     {
         if (value is null)
         {
