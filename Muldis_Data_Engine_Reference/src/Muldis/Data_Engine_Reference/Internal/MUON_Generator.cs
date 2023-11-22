@@ -124,7 +124,7 @@ internal abstract class MUON_Generator
 
     private String Bits_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MDL_Bits_C0))
+        if (Object.ReferenceEquals(value, value.memory.MDL_Bits_C0))
         {
             return "0bb";
         }
@@ -141,7 +141,7 @@ internal abstract class MUON_Generator
 
     private String Blob_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MDL_Blob_C0))
+        if (Object.ReferenceEquals(value, value.memory.MDL_Blob_C0))
         {
             return "0xx";
         }
@@ -152,7 +152,7 @@ internal abstract class MUON_Generator
 
     private String Text_Literal(MDL_Any value)
     {
-        if (Object.ReferenceEquals(value, value.Memory.MDL_Text_C0))
+        if (Object.ReferenceEquals(value, value.memory.MDL_Text_C0))
         {
             return "\"\"";
         }
@@ -247,7 +247,7 @@ internal abstract class MUON_Generator
 
     private String Heading_Literal(MDL_Any value)
     {
-        Memory m = value.Memory;
+        Memory m = value.memory;
         Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
@@ -260,7 +260,7 @@ internal abstract class MUON_Generator
     private String Array_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
-        Memory m = value.Memory;
+        Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDL_Array_C0) ? "(Array:[])"
             : "(Array:[\u000A" + Array_Selector__node__tree(
                 value.MDL_Array(), mei) + indent + "])";
@@ -299,7 +299,7 @@ internal abstract class MUON_Generator
     private String Set_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
-        value.Memory.Bag__Collapse(bag: value, want_indexed: true);
+        value.memory.Bag__Collapse(bag: value, want_indexed: true);
         MDL_Bag_Struct node = value.MDL_Bag();
         switch (node.Local_Symbolic_Type)
         {
@@ -318,7 +318,7 @@ internal abstract class MUON_Generator
     private String Bag_Selector(MDL_Any value, String indent)
     {
         String mei = indent + "\u0009";
-        value.Memory.Bag__Collapse(bag: value, want_indexed: true);
+        value.memory.Bag__Collapse(bag: value, want_indexed: true);
         MDL_Bag_Struct node = value.MDL_Bag();
         switch (node.Local_Symbolic_Type)
         {
@@ -342,7 +342,7 @@ internal abstract class MUON_Generator
             return Heading_Literal(value);
         }
         String ati = indent + "\u0009";
-        Memory m = value.Memory;
+        Memory m = value.memory;
         Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
@@ -367,7 +367,7 @@ internal abstract class MUON_Generator
     {
         // TODO: Change Excuse so represented as Nesting+Kit pair.
         String ati = indent + "\u0009";
-        Memory m = value.Memory;
+        Memory m = value.memory;
         Dictionary<String,MDL_Any> attrs = value.MDL_Excuse();
         if (attrs.Count == 0)
         {

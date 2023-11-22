@@ -16,7 +16,7 @@ public class MDER_Machine
     public MDER_Machine()
     {
         this.memory = new Memory();
-        this.executor = this.memory.Executor;
+        this.executor = this.memory.executor;
     }
 
     public MDER_V_Any MDER_evaluate(MDER_V_Any function, MDER_V_Any args = null)

@@ -28,7 +28,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 internal class MDL_Any
 {
     // Memory pool this Muldis Data Language "value" lives in.
-    internal Memory Memory;
+    internal Memory memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
     // "value" is a member of.  Determines interpreting Details field.
@@ -93,19 +93,19 @@ internal class MDL_Any
 
     internal Boolean Same(MDL_Any value)
     {
-        return Memory.Executor.Any__same(this, value);
+        return this.memory.executor.Any__same(this, value);
     }
 
     internal String MDL_Any_Identity()
     {
         // This called function will test if Cached_MDL_Any_Identity
         // is null and assign it a value if so and use its value if not.
-        return Memory.Identity_Generator.MDL_Any_to_Identity_String(this);
+        return this.memory.identity_generator.MDL_Any_to_Identity_String(this);
     }
 
     public override String ToString()
     {
-        return Memory.Preview_Generator.MDL_Any_To_Preview_String(this);
+        return this.memory.preview_generator.MDL_Any_To_Preview_String(this);
     }
 
     internal Nullable<Boolean> MDL_Boolean()
@@ -419,7 +419,7 @@ internal class MDL_Fraction_Pair
     // when a lot of math, particularly addition and subtraction, is
     // done with rationals having a common conceptual fixed precision,
     // so that the performance is then closer to integer math.
-    // internal Nullable<BigInteger> Denominator_Affinity;
+    // internal Nullable<BigInteger> denominator_affinity;
 }
 
 // Muldis.Data_Engine_Reference.Internal.MDL_Text_Struct

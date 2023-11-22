@@ -38,7 +38,7 @@ internal class Standard_Generator : MUON_Generator
 {
     internal MDL_Any MDL_Any_to_MDL_Text_MDPT_Parsing_Unit(MDL_Any value)
     {
-        return value.Memory.MDL_Text(
+        return value.memory.MDL_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + Any_Selector(value, "") + "))\u000A",

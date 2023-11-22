@@ -8,20 +8,20 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Executor
 {
-    internal readonly Memory Memory;
+    internal readonly Memory memory;
 
-    internal readonly Standard_Generator Standard_Generator;
+    internal readonly Standard_Generator standard_generator;
 
     internal Executor(Memory memory)
     {
-        Memory = memory;
+        this.memory = memory;
 
-        Standard_Generator = new Standard_Generator();
+        this.standard_generator = new Standard_Generator();
     }
 
     internal MDL_Any Evaluates(MDL_Any function, MDL_Any args = null)
     {
-        Memory m = Memory;
+        Memory m = this.memory;
         if (args is null)
         {
             args = m.MDL_Tuple_D0;
@@ -59,7 +59,7 @@ internal class Executor
 
     internal void Performs(MDL_Any procedure, MDL_Any args = null)
     {
-        Memory m = Memory;
+        Memory m = this.memory;
         if (args is null)
         {
             args = m.MDL_Tuple_D0;
@@ -184,7 +184,7 @@ internal class Executor
         {
             return true;
         }
-        Memory m = Memory;
+        Memory m = this.memory;
         if (value.WKBT != Well_Known_Base_Type.MDL_Array)
         {
             return false;
@@ -218,12 +218,12 @@ internal class Executor
             return false;
         }
         MDL_Any first = Array__maybe_at(value, 0);
-        if ((Object.ReferenceEquals(first, Memory.MDL_Attr_Name("foundation")) && count == 2)
-            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("used")) && count >= 2)
-            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("package")) && count >= 1)
-            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("folder")) && count >= 1)
-            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("material")) && count == 1)
-            || (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("floating")) && count >= 2))
+        if ((Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("foundation")) && count == 2)
+            || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("used")) && count >= 2)
+            || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("package")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("folder")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("material")) && count == 1)
+            || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("floating")) && count >= 2))
         {
             value.declare_member_status_in_WKT(Well_Known_Type.Local_Name, true);
             return true;
@@ -242,9 +242,9 @@ internal class Executor
             return false;
         }
         MDL_Any first = Array__maybe_at(value, 0);
-        if (Object.ReferenceEquals(first, Memory.MDL_Attr_Name("foundation"))
-            || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("used"))
-            || Object.ReferenceEquals(first, Memory.MDL_Attr_Name("package")))
+        if (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("foundation"))
+            || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("used"))
+            || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("package")))
         {
             value.declare_member_status_in_WKT(Well_Known_Type.Absolute_Name, true);
             return true;
@@ -254,7 +254,7 @@ internal class Executor
 
     internal MDL_Any evaluate_foundation_function(MDL_Any func_name, MDL_Any args)
     {
-        Memory m = Memory;
+        Memory m = this.memory;
         String func_name_s = func_name.MDL_Tuple().First().Key;
 
         // TYPE DEFINERS
@@ -403,7 +403,7 @@ internal class Executor
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MDL_Any {
-                        Memory = m,
+                        memory = m,
                         WKBT = Well_Known_Base_Type.MDL_Bag,
                         Details = new MDL_Bag_Struct {
                             Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
@@ -441,7 +441,7 @@ internal class Executor
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
                     }
                     // TODO: Everything.
-                    return m.Well_Known_Excuses["No_Reason"];
+                    return m.well_known_excuses["No_Reason"];
                 default:
                     throw new NotImplementedException();
             }
@@ -490,7 +490,7 @@ internal class Executor
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
-                            m.Well_Known_Excuses["No_Such_Ord_Pos"].ToString());
+                            m.well_known_excuses["No_Such_Ord_Pos"].ToString());
                     }
                     return maybe_member;
                 default:
@@ -583,8 +583,8 @@ internal class Executor
                 result = (a0.MDL_Text().Code_Point_Members == a1.MDL_Text().Code_Point_Members);
                 break;
             case Well_Known_Base_Type.MDL_Array:
-                Memory.Array__Collapse(a0);
-                Memory.Array__Collapse(a1);
+                this.memory.Array__Collapse(a0);
+                this.memory.Array__Collapse(a1);
                 MDL_Array_Struct n0 = a0.MDL_Array();
                 MDL_Array_Struct n1 = a1.MDL_Array();
                 if (Object.ReferenceEquals(n0, n1))
@@ -640,8 +640,8 @@ internal class Executor
             case Well_Known_Base_Type.MDL_Set:
             case Well_Known_Base_Type.MDL_Bag:
                 // MDL_Set and MDL_Bag have the same internal representation.
-                Memory.Bag__Collapse(bag: a0, want_indexed: true);
-                Memory.Bag__Collapse(bag: a1, want_indexed: true);
+                this.memory.Bag__Collapse(bag: a0, want_indexed: true);
+                this.memory.Bag__Collapse(bag: a1, want_indexed: true);
                 MDL_Bag_Struct bn0 = a0.MDL_Bag();
                 MDL_Bag_Struct bn1 = a1.MDL_Bag();
                 if (Object.ReferenceEquals(bn0, bn1))
@@ -815,12 +815,12 @@ internal class Executor
 
     private MDL_Any Bits__maybe_at(MDL_Any bits, Int64 ord_pos)
     {
-        return Memory.MDL_Integer(bits.MDL_Bits()[(Int32)ord_pos] ? 1 : 0);
+        return this.memory.MDL_Integer(bits.MDL_Bits()[(Int32)ord_pos] ? 1 : 0);
     }
 
     private MDL_Any Blob__maybe_at(MDL_Any blob, Int64 ord_pos)
     {
-        return Memory.MDL_Integer(blob.MDL_Blob()[(Int32)ord_pos]);
+        return this.memory.MDL_Integer(blob.MDL_Blob()[(Int32)ord_pos]);
     }
 
     private MDL_Any Text__maybe_at(MDL_Any text, Int64 ord_pos)
@@ -837,10 +837,10 @@ internal class Executor
                     if ((i+1) < s.Length
                         && Char.IsSurrogatePair(s[i], s[i+1]))
                     {
-                        return Memory.MDL_Integer(
+                        return this.memory.MDL_Integer(
                             Char.ConvertToUtf32(s[i], s[i+1]));
                     }
-                    return Memory.MDL_Integer(s[i]);
+                    return this.memory.MDL_Integer(s[i]);
                 }
                 logical_i++;
                 if ((i+1) < s.Length
@@ -850,7 +850,7 @@ internal class Executor
                 }
             }
         }
-        return Memory.MDL_Integer(
+        return this.memory.MDL_Integer(
             node.Code_Point_Members[(Int32)ord_pos]);
     }
 
