@@ -297,7 +297,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_0bTRUE))
                     );
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
@@ -318,7 +318,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_0bTRUE))
                     );
                 }
                 break;
@@ -648,8 +648,10 @@ public class MDER_Machine
         MDL_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Boolean:
-                return ((MDL_Boolean)v).as_Boolean.Value;
+            case Well_Known_Base_Type.MDL_False:
+                return false;
+            case Well_Known_Base_Type.MDL_True:
+                return true;
             case Well_Known_Base_Type.MDL_Integer:
                 return ((MDL_Integer)v).as_BigInteger;
             case Well_Known_Base_Type.MDL_External:
@@ -668,9 +670,10 @@ public class MDER_Machine
         MDL_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Boolean:
-                return new KeyValuePair<String,Object>("Boolean",
-                    ((MDL_Boolean)v).as_Boolean.Value);
+            case Well_Known_Base_Type.MDL_False:
+                return new KeyValuePair<String,Object>("Boolean",false);
+            case Well_Known_Base_Type.MDL_True:
+                return new KeyValuePair<String,Object>("Boolean",true);
             case Well_Known_Base_Type.MDL_Integer:
                 return new KeyValuePair<String,Object>("Integer",
                     ((MDL_Integer)v).as_BigInteger);

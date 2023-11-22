@@ -270,15 +270,16 @@ internal class Executor
             switch (func_name_s)
             {
                 case "Any":
-                    return m.MDL_True;
+                    return m.MDL_0bTRUE;
                 case "None":
-                    return m.MDL_False;
+                    return m.MDL_0bFALSE;
 
                 // FOUNDATION BASE TYPE DEFINERS
 
                 case "Boolean":
                     return m.MDL_Boolean(
-                        v.WKBT == Well_Known_Base_Type.MDL_Boolean
+                        v.WKBT == Well_Known_Base_Type.MDL_False
+                            || v.WKBT == Well_Known_Base_Type.MDL_True
                     );
                 case "Integer":
                     return m.MDL_Boolean(
@@ -522,6 +523,8 @@ internal class Executor
     {
         if (Object.ReferenceEquals(a0, a1))
         {
+            // We should always get here for any singleton well known base types:
+            // MDL_False, MDL_True.
             return true;
         }
         if (a0.WKBT != a1.WKBT)
@@ -541,8 +544,10 @@ internal class Executor
         Boolean result;
         switch (a0.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Boolean:
-                return ((MDL_Boolean)a0) == ((MDL_Boolean)a1);
+            case Well_Known_Base_Type.MDL_False:
+            case Well_Known_Base_Type.MDL_True:
+                // We should never get here.
+                throw new InvalidOperationException();
             case Well_Known_Base_Type.MDL_Integer:
                 result = (((MDL_Integer)a0).as_BigInteger == ((MDL_Integer)a1).as_BigInteger);
                 break;

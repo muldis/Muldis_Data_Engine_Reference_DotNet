@@ -19,8 +19,10 @@ internal abstract class MUON_Generator
     {
         switch (value.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Boolean:
-                return Boolean_Literal((MDL_Boolean)value);
+            case Well_Known_Base_Type.MDL_False:
+                return "0bFALSE";
+            case Well_Known_Base_Type.MDL_True:
+                return "0bTRUE";
             case Well_Known_Base_Type.MDL_Integer:
                 return Integer_Literal((MDL_Integer)value);
             case Well_Known_Base_Type.MDL_Fraction:
@@ -63,11 +65,6 @@ internal abstract class MUON_Generator
                 return "DIE UN-HANDLED FOUNDATION TYPE"
                     + " [" + value.WKBT.ToString() + "]";
         }
-    }
-
-    private String Boolean_Literal(MDL_Boolean value)
-    {
-        return value.as_Boolean.Value ? "0bTRUE" : "0bFALSE";
     }
 
     private String Integer_Literal(MDL_Integer value)

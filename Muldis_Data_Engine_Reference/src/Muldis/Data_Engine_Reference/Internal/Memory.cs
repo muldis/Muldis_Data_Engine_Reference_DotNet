@@ -8,15 +8,15 @@ using System.Text;
 namespace Muldis.Data_Engine_Reference.Internal;
 
 // Muldis.Data_Engine_Reference.Internal.Memory
-// Provides a virtual machine memory pool where Muldis Data Language values and
-// variables live, which exploits the "flyweight pattern" for
+// Provides a virtual machine memory pool where Muldis Data Language values
+// and variables live, which exploits the "flyweight pattern" for
 // efficiency in both performance and memory usage.
 // Conceptually, Memory is a singleton, in that typically only one
 // would be used per virtual machine; in practice, only the set of all
 // VM values/vars/processes/etc that would interact must share one.
 // Memory might have multiple pools, say, for separate handling of
 // entities that are short-lived versus longer-lived.
-// Note that .NET Core lacks System.Runtime.Caching or similar built-in
+// ? Note that .NET Core lacks System.Runtime.Caching or similar built-in
 // so for any situations we might have used such, we roll our own.
 // Some caches are logically just HashSets, but we need the ability to
 // fetch the actual cached objects which are the set members so we can
@@ -27,14 +27,13 @@ namespace Muldis.Data_Engine_Reference.Internal;
 internal class Memory
 {
     internal readonly Identity_Generator identity_generator;
-
     internal readonly Preview_Generator preview_generator;
 
     internal readonly Executor executor;
 
-    // MDL_Boolean False (type default value) and True values.
-    internal readonly MDL_Boolean MDL_False;
-    internal readonly MDL_Boolean MDL_True;
+    // MDL_Boolean 0bFALSE (type default value) and 0bTRUE values.
+    internal readonly MDL_False MDL_0bFALSE;
+    internal readonly MDL_True MDL_0bTRUE;
 
     // MDL_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
@@ -103,14 +102,12 @@ internal class Memory
     internal Memory()
     {
         this.identity_generator = new Identity_Generator();
-
         this.preview_generator = new Preview_Generator();
 
         this.executor = new Executor(this);
 
-        this.MDL_False = new MDL_Boolean(this, false);
-
-        this.MDL_True = new MDL_Boolean(this, true);
+        this.MDL_0bFALSE = new MDL_False(this);
+        this.MDL_0bTRUE = new MDL_True(this);
 
         this.integers = new Dictionary<Int32,MDL_Integer>();
         for (Int32 i = -1; i <= 1; i++)
@@ -205,21 +202,21 @@ internal class Memory
             {"\u0000", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_0bTRUE}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0001", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0001", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0001", MDL_0bTRUE}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0002", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0002", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0002", MDL_0bTRUE}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
@@ -232,7 +229,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>()
-                {{"\u0000", MDL_True}, {"\u0001", MDL_True}},
+                {{"\u0000", MDL_0bTRUE}, {"\u0001", MDL_0bTRUE}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
@@ -240,7 +237,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>()
-                {{"\u0000", MDL_True}, {"\u0002", MDL_True}},
+                {{"\u0000", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
@@ -248,7 +245,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>()
-                {{"\u0001", MDL_True}, {"\u0002", MDL_True}},
+                {{"\u0001", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
@@ -257,7 +254,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>()
-                {{"\u0000", MDL_True}, {"\u0001", MDL_True}, {"\u0002", MDL_True}},
+                {{"\u0000", MDL_0bTRUE}, {"\u0001", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
@@ -283,7 +280,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Article,
             details = new MDL_Article_Struct {
-                label = this.MDL_False,
+                label = this.MDL_0bFALSE,
                 attrs = this.MDL_Tuple_D0,
             },
         };
@@ -399,7 +396,17 @@ internal class Memory
 
     internal MDL_Boolean MDL_Boolean(Boolean value)
     {
-        return value ? MDL_True : MDL_False;
+        return value ? MDL_0bTRUE : MDL_0bFALSE;
+    }
+
+    internal MDL_False MDL_False()
+    {
+        return this.MDL_0bFALSE;
+    }
+
+    internal MDL_True MDL_True()
+    {
+        return this.MDL_0bTRUE;
     }
 
     internal MDL_Integer MDL_Integer(BigInteger as_BigInteger)
@@ -582,7 +589,7 @@ internal class Memory
         if (attrs.Count == 1)
         {
             KeyValuePair<String, MDL_Any> only_attr = attrs.First();
-            if (Object.ReferenceEquals(only_attr.Value, MDL_True)
+            if (Object.ReferenceEquals(only_attr.Value, MDL_0bTRUE)
                 && only_attr.Key.Length <= 200
                 && this.attr_name_tuples.ContainsKey(only_attr.Key))
             {
@@ -597,7 +604,7 @@ internal class Memory
         if (attrs.Count == 1)
         {
             KeyValuePair<String, MDL_Any> only_attr = attrs.First();
-            if (Object.ReferenceEquals(only_attr.Value, MDL_True))
+            if (Object.ReferenceEquals(only_attr.Value, MDL_0bTRUE))
             {
                 tuple.declare_member_status_in_WKT(Well_Known_Type.Heading, true);
                 tuple.declare_member_status_in_WKT(Well_Known_Type.Attr_Name, true);
@@ -610,7 +617,7 @@ internal class Memory
             return tuple;
         }
         // We only get here if the tuple degree >= 2.
-        if (Enumerable.All(attrs, attr => Object.ReferenceEquals(attr.Value, MDL_True)))
+        if (Enumerable.All(attrs, attr => Object.ReferenceEquals(attr.Value, MDL_0bTRUE)))
         {
             tuple.declare_member_status_in_WKT(Well_Known_Type.Heading, true);
             if (attrs.Count <= 30 && Enumerable.All(attrs, attr => attr.Key.Length <= 200))
@@ -697,7 +704,7 @@ internal class Memory
 
     internal MDL_Any MDL_Article(MDL_Any label, MDL_Any attrs)
     {
-        if (Object.ReferenceEquals(label, MDL_False)
+        if (Object.ReferenceEquals(label, MDL_0bFALSE)
             && Object.ReferenceEquals(attrs, MDL_Tuple_D0))
         {
             return this.false_nullary_article;
@@ -817,7 +824,7 @@ internal class Memory
         MDL_Any tuple = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>() {{value, MDL_True}},
+            details = new Dictionary<String,MDL_Any>() {{value, MDL_0bTRUE}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
         };
@@ -1213,7 +1220,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>(
-                attrs.ToDictionary(a => a.Key, a => (MDL_Any)MDL_True)),
+                attrs.ToDictionary(a => a.Key, a => (MDL_Any)MDL_0bTRUE)),
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
