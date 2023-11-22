@@ -542,7 +542,7 @@ internal class Executor
         switch (a0.WKBT)
         {
             case Well_Known_Base_Type.MDL_Boolean:
-                return a0.MDL_Boolean() == a1.MDL_Boolean();
+                return ((MDL_Boolean)a0) == ((MDL_Boolean)a1);
             case Well_Known_Base_Type.MDL_Integer:
                 result = (((MDL_Integer)a0).as_BigInteger == ((MDL_Integer)a1).as_BigInteger);
                 break;

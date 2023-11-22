@@ -297,7 +297,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => this.memory.MDL_True))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True))
                     );
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
@@ -318,7 +318,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => this.memory.MDL_True))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True))
                     );
                 }
                 break;
@@ -649,7 +649,7 @@ public class MDER_Machine
         switch (v.WKBT)
         {
             case Well_Known_Base_Type.MDL_Boolean:
-                return v.MDL_Boolean().Value;
+                return ((MDL_Boolean)v).as_Boolean.Value;
             case Well_Known_Base_Type.MDL_Integer:
                 return ((MDL_Integer)v).as_BigInteger;
             case Well_Known_Base_Type.MDL_External:
@@ -670,7 +670,7 @@ public class MDER_Machine
         {
             case Well_Known_Base_Type.MDL_Boolean:
                 return new KeyValuePair<String,Object>("Boolean",
-                    v.MDL_Boolean().Value);
+                    ((MDL_Boolean)v).as_Boolean.Value);
             case Well_Known_Base_Type.MDL_Integer:
                 return new KeyValuePair<String,Object>("Integer",
                     ((MDL_Integer)v).as_BigInteger);

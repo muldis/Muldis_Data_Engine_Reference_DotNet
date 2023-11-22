@@ -33,8 +33,8 @@ internal class Memory
     internal readonly Executor executor;
 
     // MDL_Boolean False (type default value) and True values.
-    internal readonly MDL_Any MDL_False;
-    internal readonly MDL_Any MDL_True;
+    internal readonly MDL_Boolean MDL_False;
+    internal readonly MDL_Boolean MDL_True;
 
     // MDL_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
@@ -108,17 +108,9 @@ internal class Memory
 
         this.executor = new Executor(this);
 
-        this.MDL_False = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Boolean,
-            details = false,
-        };
+        this.MDL_False = new MDL_Boolean(this, false);
 
-        this.MDL_True = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Boolean,
-            details = true,
-        };
+        this.MDL_True = new MDL_Boolean(this, true);
 
         this.integers = new Dictionary<Int32,MDL_Integer>();
         for (Int32 i = -1; i <= 1; i++)
@@ -405,7 +397,7 @@ internal class Memory
         }
     }
 
-    internal MDL_Any MDL_Boolean(Boolean value)
+    internal MDL_Boolean MDL_Boolean(Boolean value)
     {
         return value ? MDL_True : MDL_False;
     }
@@ -1221,7 +1213,7 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String,MDL_Any>(
-                attrs.ToDictionary(a => a.Key, a => MDL_True)),
+                attrs.ToDictionary(a => a.Key, a => (MDL_Any)MDL_True)),
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };

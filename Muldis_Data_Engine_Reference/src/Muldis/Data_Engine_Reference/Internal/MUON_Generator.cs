@@ -20,7 +20,7 @@ internal abstract class MUON_Generator
         switch (value.WKBT)
         {
             case Well_Known_Base_Type.MDL_Boolean:
-                return Boolean_Literal(value);
+                return Boolean_Literal((MDL_Boolean)value);
             case Well_Known_Base_Type.MDL_Integer:
                 return Integer_Literal((MDL_Integer)value);
             case Well_Known_Base_Type.MDL_Fraction:
@@ -65,9 +65,9 @@ internal abstract class MUON_Generator
         }
     }
 
-    private String Boolean_Literal(MDL_Any value)
+    private String Boolean_Literal(MDL_Boolean value)
     {
-        return value.MDL_Boolean().Value ? "0bTRUE" : "0bFALSE";
+        return value.as_Boolean.Value ? "0bTRUE" : "0bFALSE";
     }
 
     private String Integer_Literal(MDL_Integer value)
