@@ -39,7 +39,7 @@ internal class Memory
     // MDL_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
     // The MDL_Integer 0 is the type default value.
-    private readonly Dictionary<Int32,MDL_Any> integers;
+    private readonly Dictionary<Int32,MDL_Integer> integers;
 
     // MDL_Fraction 0.0 (type default value).
     internal readonly MDL_Any MDL_Fraction_0;
@@ -108,50 +108,50 @@ internal class Memory
 
         this.executor = new Executor(this);
 
-        MDL_False = new MDL_Any {
+        this.MDL_False = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Boolean,
             details = false,
         };
 
-        MDL_True = new MDL_Any {
+        this.MDL_True = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Boolean,
             details = true,
         };
 
-        this.integers = new Dictionary<Int32,MDL_Any>();
+        this.integers = new Dictionary<Int32,MDL_Integer>();
         for (Int32 i = -1; i <= 1; i++)
         {
-            MDL_Any v = MDL_Integer(i);
+            MDL_Integer v = this.MDL_Integer(i);
         }
 
-        MDL_Fraction_0 = new MDL_Any {
+        this.MDL_Fraction_0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Fraction,
             details = new MDL_Fraction_Struct {
                 as_Decimal = 0.0M,
                 as_pair = new MDL_Fraction_Pair {
-                    numerator = this.integers[0].MDL_Integer(),
-                    denominator = this.integers[1].MDL_Integer(),
+                    numerator = this.integers[0].as_BigInteger,
+                    denominator = this.integers[1].as_BigInteger,
                     cached_is_coprime = true,
                 },
             },
         };
 
-        MDL_Bits_C0 = new MDL_Any {
+        this.MDL_Bits_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bits,
             details = new BitArray(0),
         };
 
-        MDL_Blob_C0 = new MDL_Any {
+        this.MDL_Blob_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Blob,
             details = new Byte[] {},
         };
 
-        MDL_Text_C0 = new MDL_Any {
+        this.MDL_Text_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Text,
             details = new MDL_Text_Struct {
@@ -161,7 +161,7 @@ internal class Memory
             },
         };
 
-        MDL_Array_C0 = new MDL_Any {
+        this.MDL_Array_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Array,
             details = new MDL_Array_Struct {
@@ -174,7 +174,7 @@ internal class Memory
             },
         };
 
-        MDL_Set_C0 = new MDL_Any {
+        this.MDL_Set_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Set,
             details = new MDL_Bag_Struct {
@@ -187,7 +187,7 @@ internal class Memory
             },
         };
 
-        MDL_Bag_C0 = new MDL_Any {
+        this.MDL_Bag_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bag,
             details = new MDL_Bag_Struct {
@@ -200,7 +200,7 @@ internal class Memory
             },
         };
 
-        MDL_Tuple_D0 = new MDL_Any {
+        this.MDL_Tuple_D0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String, MDL_Any>(),
@@ -284,26 +284,26 @@ internal class Memory
 
         foreach (String s in Constants.Strings__Seeded_Non_Positional_Attr_Names())
         {
-            MDL_Any an = MDL_Attr_Name(s);
+            MDL_Any an = this.MDL_Attr_Name(s);
         }
 
         this.false_nullary_article = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Article,
             details = new MDL_Article_Struct {
-                label = MDL_False,
-                attrs = MDL_Tuple_D0,
+                label = this.MDL_False,
+                attrs = this.MDL_Tuple_D0,
             },
         };
 
-        MDL_Tuple_Array_D0C0 = MDL_Article(
+        this.MDL_Tuple_Array_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Array_C0}})
         );
-        MDL_Tuple_Array_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
+        this.MDL_Tuple_Array_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
 
-        MDL_Tuple_Array_D0C1 = MDL_Article(
+        this.MDL_Tuple_Array_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
             MDL_Tuple(
                 new Dictionary<String,MDL_Any>()
@@ -325,16 +325,16 @@ internal class Memory
                 }
             )
         );
-        MDL_Tuple_Array_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
+        this.MDL_Tuple_Array_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
 
-        MDL_Relation_D0C0 = MDL_Article(
+        this.MDL_Relation_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Relation"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Set_C0}})
         );
-        MDL_Relation_D0C0.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
+        this.MDL_Relation_D0C0.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
 
-        MDL_Relation_D0C1 = MDL_Article(
+        this.MDL_Relation_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Relation"),
             MDL_Tuple(
                 new Dictionary<String,MDL_Any>()
@@ -357,16 +357,16 @@ internal class Memory
                 }
             )
         );
-        MDL_Relation_D0C1.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
+        this.MDL_Relation_D0C1.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
 
-        MDL_Tuple_Bag_D0C0 = MDL_Article(
+        this.MDL_Tuple_Bag_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Bag_C0}})
         );
-        MDL_Tuple_Bag_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
+        this.MDL_Tuple_Bag_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
 
-        MDL_Tuple_Bag_D0C1 = MDL_Article(
+        this.MDL_Tuple_Bag_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
             MDL_Tuple(
                 new Dictionary<String,MDL_Any>()
@@ -389,7 +389,7 @@ internal class Memory
                 }
             )
         );
-        MDL_Tuple_Bag_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
+        this.MDL_Tuple_Bag_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
 
         well_known_excuses = new Dictionary<String,MDL_Any>();
         foreach (String s in Constants.Strings__Well_Known_Excuses())
@@ -410,21 +410,17 @@ internal class Memory
         return value ? MDL_True : MDL_False;
     }
 
-    internal MDL_Any MDL_Integer(BigInteger value)
+    internal MDL_Integer MDL_Integer(BigInteger as_BigInteger)
     {
-        Boolean may_cache = value >= -2000000000 && value <= 2000000000;
-        if (may_cache && this.integers.ContainsKey((Int32)value))
+        Boolean may_cache = as_BigInteger >= -2000000000 && as_BigInteger <= 2000000000;
+        if (may_cache && this.integers.ContainsKey((Int32)as_BigInteger))
         {
-            return this.integers[(Int32)value];
+            return this.integers[(Int32)as_BigInteger];
         }
-        MDL_Any integer = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Integer,
-            details = value,
-        };
+        MDL_Integer integer = new MDL_Integer(this, as_BigInteger);
         if (may_cache && this.integers.Count < 10000)
         {
-            this.integers.Add((Int32)value, integer);
+            this.integers.Add((Int32)as_BigInteger, integer);
         }
         return integer;
     }
@@ -653,7 +649,7 @@ internal class Memory
                 return MDL_Tuple_Array_D0C1;
             }
         }
-        MDL_Any tuple_array = MDL_Article(
+        MDL_Any tuple_array = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", heading}, {"body", body}})
@@ -675,7 +671,7 @@ internal class Memory
                 return MDL_Relation_D0C1;
             }
         }
-        MDL_Any relation = MDL_Article(
+        MDL_Any relation = this.MDL_Article(
             MDL_Attr_Name("Relation"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", heading}, {"body", body}})
@@ -698,7 +694,7 @@ internal class Memory
             //    return MDL_Tuple_Bag_D0C1;
             //}
         }
-        MDL_Any tuple_bag = MDL_Article(
+        MDL_Any tuple_bag = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
             MDL_Tuple(new Dictionary<String,MDL_Any>()
                 {{"heading", heading}, {"body", body}})

@@ -21,7 +21,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Preview_Generator : MUON_Generator
 {
-    internal String MDL_Any_To_Preview_String(MDL_Any value)
+    internal String MDL_Any_as_preview_String(MDL_Any value)
     {
         return Any_Selector(value, "");
     }

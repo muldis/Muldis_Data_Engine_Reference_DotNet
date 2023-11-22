@@ -22,7 +22,7 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Boolean:
                 return Boolean_Literal(value);
             case Well_Known_Base_Type.MDL_Integer:
-                return Integer_Literal(value);
+                return Integer_Literal((MDL_Integer)value);
             case Well_Known_Base_Type.MDL_Fraction:
                 return Fraction_Literal(value);
             case Well_Known_Base_Type.MDL_Bits:
@@ -70,9 +70,9 @@ internal abstract class MUON_Generator
         return value.MDL_Boolean().Value ? "0bTRUE" : "0bFALSE";
     }
 
-    private String Integer_Literal(MDL_Any value)
+    private String Integer_Literal(MDL_Integer value)
     {
-        return value.MDL_Integer().ToString();
+        return value.as_BigInteger.ToString();
     }
 
     private String Integer_Literal(Int64 value)

@@ -27,7 +27,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class Identity_Generator : MUON_Generator
 {
-    internal String MDL_Any_to_Identity_String(MDL_Any value)
+    internal String MDL_Any_as_identity_String(MDL_Any value)
     {
         return Any_Selector(value, "");
     }

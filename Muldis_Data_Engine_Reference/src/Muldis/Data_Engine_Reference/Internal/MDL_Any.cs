@@ -39,10 +39,6 @@ internal class MDL_Any
     // Details of this Muldis Data Language "value", in one of several possible
     // specialized representation formats depending on the data type.
     // Iff WKBT is MDL_Boolean, this field holds a Nullable<Boolean>.
-    // Iff WKBT is MDL_Integer, this field holds a BigInteger.
-        // While we conceptually could special case smaller integers with
-        // additional fields for performance, we won't, mainly to keep
-        // things simpler, and because BigInteger special-cases internally.
     // Iff WKBT is MDL_Fraction, this field holds a MDL_Fraction_Struct.
     // Iff WKBT is MDL_Bits, this field holds a BitArray.
         // Consider a MDL_Bits_Struct if we want symbolic like MDL_Array.
@@ -86,36 +82,26 @@ internal class MDL_Any
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
     // typically when the "value" is a member of an indexed collection.
-    // The serialization format either is or resembles a Muldis Data Language Plain Text
+    // The serialization format either is or resembles a Muldis Object Notation Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
     internal String cached_MDL_Any_identity;
 
-    internal Boolean Same(MDL_Any value)
+    public override String ToString()
     {
-        return this.memory.executor.Any__same(this, value);
+        return this.memory.preview_generator.MDL_Any_as_preview_String(this);
     }
 
-    internal String MDL_Any_Identity()
+    internal String MDL_Any_identity()
     {
         // This called function will test if cached_MDL_Any_identity
         // is null and assign it a value if so and use its value if not.
-        return this.memory.identity_generator.MDL_Any_to_Identity_String(this);
-    }
-
-    public override String ToString()
-    {
-        return this.memory.preview_generator.MDL_Any_To_Preview_String(this);
+        return this.memory.identity_generator.MDL_Any_as_identity_String(this);
     }
 
     internal Nullable<Boolean> MDL_Boolean()
     {
         return (Nullable<Boolean>)this.details;
-    }
-
-    internal BigInteger MDL_Integer()
-    {
-        return (BigInteger)this.details;
     }
 
     internal MDL_Fraction_Struct MDL_Fraction()
@@ -225,7 +211,7 @@ internal class MDL_Any_Comparer : EqualityComparer<MDL_Any>
         {
             return false;
         }
-        return v1.Same(v2);
+        return v1.memory.executor.Any__same(v1, v2);
     }
 
     public override Int32 GetHashCode(MDL_Any v)
@@ -235,6 +221,6 @@ internal class MDL_Any_Comparer : EqualityComparer<MDL_Any>
             // Would we ever get here?
             return 0;
         }
-        return v.MDL_Any_Identity().GetHashCode();
+        return v.MDL_Any_identity().GetHashCode();
     }
 }

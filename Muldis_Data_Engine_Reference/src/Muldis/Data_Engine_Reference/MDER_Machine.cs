@@ -168,11 +168,11 @@ public class MDER_Machine
                         return this.memory.MDL_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer
+                        && ((MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer
                         && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                        && ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer)
+                        && ((MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer)
                     {
-                        if (((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).memory_value.MDL_Integer() == 0)
+                        if (((MDL_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
                         {
                             throw new ArgumentException
                             (
@@ -181,8 +181,8 @@ public class MDER_Machine
                             );
                         }
                         return this.memory.MDL_Fraction(
-                            ((Muldis.Data_Engine_Reference.MDER_V_Any)numerator  ).memory_value.MDL_Integer(),
-                            ((Muldis.Data_Engine_Reference.MDER_V_Any)denominator).memory_value.MDL_Integer()
+                            ((MDL_Integer)((MDER_V_Any)numerator  ).memory_value).as_BigInteger,
+                            ((MDL_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger
                         );
                     }
                 }
@@ -324,17 +324,17 @@ public class MDER_Machine
                 break;
             case "Tuple_Array":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
+                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
-                    MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Array_C0;
                     return this.memory.MDL_Tuple_Array(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Array)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Array)
                 {
-                    MDL_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
                     if (!this.memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -358,17 +358,17 @@ public class MDER_Machine
                 break;
             case "Relation":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
+                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
-                    MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Set_C0;
                     return this.memory.MDL_Relation(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Set)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Set)
                 {
-                    MDL_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
                     if (!this.memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -392,17 +392,17 @@ public class MDER_Machine
                 break;
             case "Tuple_Bag":
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
+                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
-                    MDL_Any hv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Bag_C0;
                     return this.memory.MDL_Tuple_Bag(hv, bv);
                 }
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
-                    && ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Bag)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Bag)
                 {
-                    MDL_Any bv = ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value;
+                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
                     if (!this.memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -497,7 +497,7 @@ public class MDER_Machine
                 if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
                 {
                     return this.memory.New_MDL_Variable(
-                        ((Muldis.Data_Engine_Reference.MDER_V_Any)v).memory_value);
+                        ((MDER_V_Any)v).memory_value);
                 }
                 break;
             case "New_Process":
@@ -651,7 +651,7 @@ public class MDER_Machine
             case Well_Known_Base_Type.MDL_Boolean:
                 return v.MDL_Boolean().Value;
             case Well_Known_Base_Type.MDL_Integer:
-                return v.MDL_Integer();
+                return ((MDL_Integer)v).as_BigInteger;
             case Well_Known_Base_Type.MDL_External:
                 return v.MDL_External();
             default:
@@ -673,7 +673,7 @@ public class MDER_Machine
                     v.MDL_Boolean().Value);
             case Well_Known_Base_Type.MDL_Integer:
                 return new KeyValuePair<String,Object>("Integer",
-                    v.MDL_Integer());
+                    ((MDL_Integer)v).as_BigInteger);
             case Well_Known_Base_Type.MDL_Fraction:
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Bits:

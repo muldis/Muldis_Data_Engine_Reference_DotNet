@@ -371,24 +371,24 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MDL_Integer(-v.MDL_Integer());
+                    return m.MDL_Integer(-((MDL_Integer)v).as_BigInteger);
                 case "Integer_modulus":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Integer)
                     {
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MDL_Integer(BigInteger.Abs(v.MDL_Integer()));
+                    return m.MDL_Integer(BigInteger.Abs(((MDL_Integer)v).as_BigInteger));
                 case "Integer_factorial":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Integer
-                        || v.MDL_Integer() < 0)
+                        || ((MDL_Integer)v).as_BigInteger < 0)
                     {
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                     }
                     // Note that System.Numerics.BigInteger doesn't come
                     // with a Factorial(n) so we have to do it ourselves.
-                    return m.MDL_Integer(Integer__factorial(v.MDL_Integer()));
+                    return m.MDL_Integer(Integer__factorial(((MDL_Integer)v).as_BigInteger));
                 case "Array_count":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
@@ -473,7 +473,7 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
-                    return m.MDL_Integer(a0.MDL_Integer() + a1.MDL_Integer());
+                    return m.MDL_Integer(((MDL_Integer)a0).as_BigInteger + ((MDL_Integer)a1).as_BigInteger);
                 case "Array_at":
                     if (a0.WKBT != Well_Known_Base_Type.MDL_Array)
                     {
@@ -481,12 +481,12 @@ internal class Executor
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
                     if (a1.WKBT != Well_Known_Base_Type.MDL_Integer
-                        || a1.MDL_Integer() < 0)
+                        || ((MDL_Integer)a1).as_BigInteger < 0)
                     {
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
-                    MDL_Any maybe_member = Array__maybe_at(a0, (Int64)a1.MDL_Integer());
+                    MDL_Any maybe_member = Array__maybe_at(a0, (Int64)((MDL_Integer)a1).as_BigInteger);
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
@@ -544,7 +544,7 @@ internal class Executor
             case Well_Known_Base_Type.MDL_Boolean:
                 return a0.MDL_Boolean() == a1.MDL_Boolean();
             case Well_Known_Base_Type.MDL_Integer:
-                result = (a0.MDL_Integer() == a1.MDL_Integer());
+                result = (((MDL_Integer)a0).as_BigInteger == ((MDL_Integer)a1).as_BigInteger);
                 break;
             case Well_Known_Base_Type.MDL_Fraction:
                 MDL_Fraction_Struct fs0 = a0.MDL_Fraction();
