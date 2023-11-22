@@ -28,13 +28,13 @@ namespace Muldis.Data_Engine_Reference.Internal;
 internal class MDL_Any
 {
     // Memory pool this Muldis Data Language "value" lives in.
-    internal Memory Memory { get; set; }
+    internal Memory Memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
     // "value" is a member of.  Determines interpreting Details field.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    internal Well_Known_Base_Type WKBT { get; set; }
+    internal Well_Known_Base_Type WKBT;
 
     // Details of this Muldis Data Language "value", in one of several possible
     // specialized representation formats depending on the data type.
@@ -67,7 +67,7 @@ internal class MDL_Any
         // and transient reference to.
     // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String,MDL_Any> (like MDL_Tuple).
         // TODO: Change Excuse so represented as Nesting+Kit pair.
-    internal Object Details { get; set; }
+    internal Object Details;
 
     // Set of well-known Muldis Data Language types that this Muldis Data Language "value" is
     // known to either be or not be a member of.  This is populated
@@ -81,7 +81,7 @@ internal class MDL_Any
     // should be trivial to test membership of by other means; in
     // particular it excludes {Any,None}, the Well_Known_Base_Type;
     // types not excluded are more work to test.
-    internal Dictionary<Well_Known_Type,Boolean> cached_WKT_statuses { get; set; }
+    internal Dictionary<Well_Known_Type,Boolean> cached_WKT_statuses;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
@@ -89,7 +89,7 @@ internal class MDL_Any
     // The serialization format either is or resembles a Muldis Data Language Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
-    internal String Cached_MDL_Any_Identity { get; set; }
+    internal String Cached_MDL_Any_Identity;
 
     internal Boolean Same(MDL_Any value)
     {
@@ -252,14 +252,14 @@ internal class MDL_Fraction_Struct
     // from the system as such; a MDL_Fraction input first as a Decimal
     // is only copied to the As_Pair field when needed;
     // if both said fields are valued at once, they are redundant.
-    internal Nullable<Decimal> As_Decimal { get; set; }
+    internal Nullable<Decimal> As_Decimal;
 
     // The As_Pair field, comprising a Numerator+Denominator field
     // pair, can represent any
     // MDL_Fraction value at all, such that the Fraction's value is
     // defined as the fractional division of Numerator by Denominator.
     // As_Pair might not be defined if As_Decimal is defined.
-    internal MDL_Fraction_Pair As_Pair { get; set; }
+    internal MDL_Fraction_Pair As_Pair;
 
     internal void Ensure_Coprime()
     {
@@ -384,8 +384,8 @@ internal class MDL_Fraction_Pair
     // defined as the fractional division of Numerator by Denominator.
     // Denominator may never be zero; otherwise, the pair must always
     // be normalized at least such that the Denominator is positive.
-    internal BigInteger Numerator { get; set; }
-    internal BigInteger Denominator { get; set; }
+    internal BigInteger Numerator;
+    internal BigInteger Denominator;
 
     // This is true iff we know that the Numerator and
     // Denominator are coprime (their greatest common divisor is 1);
@@ -393,7 +393,7 @@ internal class MDL_Fraction_Pair
     // While the pair typically need to be coprime in order to reliably
     // determine if 2 MDL_Fraction represent the same Muldis Data Language value,
     // we don't necessarily store them that way for efficiency sake.
-    internal Nullable<Boolean> Cached_Is_Coprime { get; set; }
+    internal Nullable<Boolean> Cached_Is_Coprime;
 
     // This is true iff we know that the MDL_Fraction value can be
     // represented as a terminating decimal number, meaning that the
@@ -406,7 +406,7 @@ internal class MDL_Fraction_Pair
     // number iff it would terminate and a coprime integer pair otherwise.
     // This field may be true even if Cached_Is_Coprime isn't because
     // this MDL_Fraction_Pair was derived from a Decimal.
-    internal Nullable<Boolean> Cached_Is_Terminating_Decimal { get; set; }
+    internal Nullable<Boolean> Cached_Is_Terminating_Decimal;
 
     // Iff this field is defined, we ensure that both the current
     // MDL_Fraction_Struct has a Denominator equal to it, and also that
@@ -419,7 +419,7 @@ internal class MDL_Fraction_Pair
     // when a lot of math, particularly addition and subtraction, is
     // done with rationals having a common conceptual fixed precision,
     // so that the performance is then closer to integer math.
-    internal Nullable<BigInteger> Denominator_Affinity { get; set; }
+    // internal Nullable<BigInteger> Denominator_Affinity;
 }
 
 // Muldis.Data_Engine_Reference.Internal.MDL_Text_Struct
@@ -450,7 +450,7 @@ internal class MDL_Text_Struct
     // "surrogate" Char outside of a proper "surrogate pair", both
     // Muldis.Data_Engine_Reference forbids such a malformed String
     // from either being used internally or being passed in by the API.
-    internal String Code_Point_Members { get; set; }
+    internal String Code_Point_Members;
 
     // Nullable Boolean
     // This is true iff we know that at least 1 code point member is NOT
@@ -463,10 +463,10 @@ internal class MDL_Text_Struct
     // This field is always defined as a side-effect of Muldis.Data_Engine_Reference
     // forbidding a malformed String and so they are always tested at
     // the borders, that test also revealing if a String has non-BMP chars.
-    internal Boolean Has_Any_Non_BMP { get; set; }
+    internal Boolean Has_Any_Non_BMP;
 
     // Cached count of code point members of the Muldis Data Language Text.
-    internal Nullable<Int64> Cached_Member_Count { get; set; }
+    internal Nullable<Int64> Cached_Member_Count;
 }
 
 // Muldis.Data_Engine_Reference.Internal.Symbolic_Array_Type
@@ -495,7 +495,7 @@ internal class MDL_Array_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
     // the tree.  Determines interpreting Members field.
-    internal Symbolic_Array_Type Local_Symbolic_Type { get; set; }
+    internal Symbolic_Array_Type Local_Symbolic_Type;
 
     // Members of this Muldis Data Language Array, in one of several possible
     // specialized representation formats depending on the data type.
@@ -519,10 +519,10 @@ internal class MDL_Array_Struct
         // this Array's members are defined as the catenation of
         // the pair's A0 and A1 nodes in that order.
         // Makes no guarantees that the Array is none/singular/otherwise.
-    internal Object Members { get; set; }
+    internal Object Members;
 
     // A cache of calculations about this Array's members.
-    internal Cached_Members_Meta Cached_Members_Meta { get; set; }
+    internal Cached_Members_Meta Cached_Members_Meta;
 
     internal Multiplied_Member Local_Singular_Members()
     {
@@ -547,10 +547,10 @@ internal class MDL_Array_Struct
 internal class MDL_Array_Pair
 {
     // This is the first conceptually-ordered arg/attr.
-    internal MDL_Array_Struct A0 { get; set; }
+    internal MDL_Array_Struct A0;
 
     // This is the second conceptually-ordered arg/attr.
-    internal MDL_Array_Struct A1 { get; set; }
+    internal MDL_Array_Struct A1;
 
     internal MDL_Array_Pair(MDL_Array_Struct a0, MDL_Array_Struct a1)
     {
@@ -581,10 +581,10 @@ internal enum Symbolic_Bag_Type
 internal class Multiplied_Member
 {
     // The Muldis Data Language value that every member of this multiset is.
-    internal MDL_Any Member { get; set; }
+    internal MDL_Any Member;
 
     // The count of members of this multiset.
-    internal Int64 Multiplicity { get; set; }
+    internal Int64 Multiplicity;
 
     internal Multiplied_Member(MDL_Any member, Int64 multiplicity = 1)
     {
@@ -616,7 +616,7 @@ internal class MDL_Bag_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
     // the tree.  Determines interpreting Members field.
-    internal Symbolic_Bag_Type Local_Symbolic_Type { get; set; }
+    internal Symbolic_Bag_Type Local_Symbolic_Type;
 
     // Members of this Muldis Data Language Bag, in one of several possible
     // specialized representation formats depending on the data type.
@@ -652,10 +652,10 @@ internal class MDL_Bag_Struct
         // this Bag's members are defined as the catenation of
         // the pair's A0 and A1 nodes in that order.
         // Makes no guarantees that the Bag is none/singular/otherwise.
-    internal Object Members { get; set; }
+    internal Object Members;
 
     // A cache of calculations about this Bag's members.
-    internal Cached_Members_Meta Cached_Members_Meta { get; set; }
+    internal Cached_Members_Meta Cached_Members_Meta;
 
     internal Multiplied_Member Local_Singular_Members()
     {
@@ -690,10 +690,10 @@ internal class MDL_Bag_Struct
 internal class MDL_Bag_Pair
 {
     // This is the first conceptually-ordered arg/attr.
-    internal MDL_Bag_Struct A0 { get; set; }
+    internal MDL_Bag_Struct A0;
 
     // This is the second conceptually-ordered arg/attr.
-    internal MDL_Bag_Struct A1 { get; set; }
+    internal MDL_Bag_Struct A1;
 
     internal MDL_Bag_Pair(MDL_Bag_Struct a0, MDL_Bag_Struct a1)
     {
@@ -713,14 +713,14 @@ internal class Cached_Members_Meta
     // Nullable Integer
     // Cached count of members of the Muldis Data Language Array/Bag represented by
     // this tree node including those defined by it and child nodes.
-    internal Nullable<Int64> Tree_Member_Count { get; set; }
+    internal Nullable<Int64> Tree_Member_Count;
 
     // Nullable Boolean
     // This is true iff we know that no 2 members of the Muldis Data Language
     // Array/Bag represented by this tree node (including child nodes)
     // are the same value, and false iff we know that at least 2
     // members are the same value.
-    internal Nullable<Boolean> Tree_All_Unique { get; set; }
+    internal Nullable<Boolean> Tree_All_Unique;
 
     // Nullable Boolean
     // This is true iff we know that the Muldis Data Language Array/Bag represented
@@ -728,7 +728,7 @@ internal class Cached_Members_Meta
     // is not a Muldis Data Language Tuple and has no 2 members that do not have
     // the same heading; this is false iff we know that any member is
     // not a Tuple or that any 2 members do not have the same heading.
-    internal Nullable<Boolean> Tree_Relational { get; set; }
+    internal Nullable<Boolean> Tree_Relational;
 }
 
 // Muldis.Data_Engine_Reference.Internal.MDL_Article_Struct
@@ -739,8 +739,8 @@ internal class Cached_Members_Meta
 internal class MDL_Article_Struct
 {
     // The Muldis Data Language value that is the "label" of this MDL_Article value.
-    internal MDL_Any Label { get; set; }
+    internal MDL_Any Label;
 
     // The Muldis Data Language value that is the "attributes" of this MDL_Article value.
-    internal MDL_Any Attrs { get; set; }
+    internal MDL_Any Attrs;
 }
