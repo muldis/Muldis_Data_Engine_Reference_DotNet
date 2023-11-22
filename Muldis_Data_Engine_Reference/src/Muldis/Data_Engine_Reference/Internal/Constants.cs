@@ -15,7 +15,6 @@ internal static class Constants
     internal static String[] Strings__Well_Known_Excuses()
     {
         return new String[] {
-            "No_Reason",
             "Before_All_Others",
             "After_All_Others",
             "Div_By_Zero",
@@ -136,7 +135,7 @@ internal static class Constants
         return new HashSet<String> {
             "Any",
             "None",
-            "Excuse",
+            "Ignorance",
             "Boolean",
             "Integer",
             "Integer_NN",
@@ -156,6 +155,7 @@ internal static class Constants
             "Tuple_Bag",
             "Interval",
             "Article",
+            "Excuse",
             "Handle",
             "Variable",
             "Process",

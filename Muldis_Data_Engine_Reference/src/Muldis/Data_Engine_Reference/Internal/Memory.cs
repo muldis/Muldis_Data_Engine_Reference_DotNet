@@ -31,6 +31,9 @@ internal class Memory
 
     internal readonly Executor executor;
 
+    // MDL_Ignorance 0iIGNORANCE (type default value) value.
+    private readonly MDL_Ignorance MDL_0iIGNORANCE;
+
     // MDL_Boolean 0bFALSE (type default value) and 0bTRUE values.
     internal readonly MDL_False MDL_0bFALSE;
     internal readonly MDL_True MDL_0bTRUE;
@@ -105,6 +108,8 @@ internal class Memory
         this.preview_generator = new Preview_Generator();
 
         this.executor = new Executor(this);
+
+        this.MDL_0iIGNORANCE = new MDL_Ignorance(this);
 
         this.MDL_0bFALSE = new MDL_False(this);
         this.MDL_0bTRUE = new MDL_True(this);
@@ -384,6 +389,11 @@ internal class Memory
                 }
             );
         }
+    }
+
+    internal MDL_Ignorance MDL_Ignorance()
+    {
+        return this.MDL_0iIGNORANCE;
     }
 
     internal MDL_Boolean MDL_Boolean(Boolean value)

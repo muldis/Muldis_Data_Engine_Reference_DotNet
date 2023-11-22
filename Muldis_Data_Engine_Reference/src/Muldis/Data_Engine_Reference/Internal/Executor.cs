@@ -276,6 +276,10 @@ internal class Executor
 
                 // FOUNDATION BASE TYPE DEFINERS
 
+                case "Ignorance":
+                    return m.MDL_Boolean(
+                        v.WKBT == Well_Known_Base_Type.MDL_Ignorance
+                    );
                 case "Boolean":
                     return m.MDL_Boolean(
                         v.WKBT == Well_Known_Base_Type.MDL_False
@@ -442,7 +446,7 @@ internal class Executor
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
                     }
                     // TODO: Everything.
-                    return m.well_known_excuses["No_Reason"];
+                    return m.MDL_Ignorance();
                 default:
                     throw new NotImplementedException();
             }
@@ -524,7 +528,7 @@ internal class Executor
         if (Object.ReferenceEquals(a0, a1))
         {
             // We should always get here for any singleton well known base types:
-            // MDL_False, MDL_True.
+            // MDL_Ignorance, MDL_False, MDL_True.
             return true;
         }
         if (a0.WKBT != a1.WKBT)
@@ -544,6 +548,7 @@ internal class Executor
         Boolean result;
         switch (a0.WKBT)
         {
+            case Well_Known_Base_Type.MDL_Ignorance:
             case Well_Known_Base_Type.MDL_False:
             case Well_Known_Base_Type.MDL_True:
                 // We should never get here.

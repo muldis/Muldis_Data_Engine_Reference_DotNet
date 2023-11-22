@@ -95,13 +95,17 @@ public class MDER_Machine
     {
         Object v = value.Value;
         // Note that .NET guarantees the .Key is never null.
-        if (v is null && value.Key != "Excuse")
+        if (v is null)
         {
+            if (String.Equals(value.Key, "Ignorance"))
+            {
+                return this.memory.MDL_Ignorance();
+            }
             throw new ArgumentNullException
             (
                 paramName: "value",
                 message: "Can't select MDL_Any with a KeyValuePair operand"
-                    + " with a null Value property (except with [Excuse] Key)."
+                    + " with a null Value property (except with [Ignorance] Key)."
             );
         }
         String type_name = v is null ? null : v.GetType().FullName;
@@ -515,14 +519,6 @@ public class MDER_Machine
             case "New_External":
                 return this.memory.New_MDL_External(v);
             case "Excuse":
-                if (v is null)
-                {
-                    return this.memory.Simple_MDL_Excuse("No_Reason");
-                }
-                if (type_name == "System.DBNull")
-                {
-                    return this.memory.Simple_MDL_Excuse("No_Reason");
-                }
                 if (type_name == "System.String")
                 {
                     if (this.memory.Test_Dot_Net_String((String)v)
@@ -587,13 +583,9 @@ public class MDER_Machine
     {
         if (value is null)
         {
-            return this.memory.Simple_MDL_Excuse("No_Reason");
+            return this.memory.MDL_Ignorance();
         }
         String type_name = value.GetType().FullName;
-        if (type_name == "System.DBNull")
-        {
-            return this.memory.Simple_MDL_Excuse("No_Reason");
-        }
         if (type_name == "System.Boolean")
         {
             return this.memory.MDL_Boolean((Boolean)value);
@@ -648,6 +640,8 @@ public class MDER_Machine
         MDL_Any v = value.memory_value;
         switch (v.WKBT)
         {
+            case Well_Known_Base_Type.MDL_Ignorance:
+                return null;
             case Well_Known_Base_Type.MDL_False:
                 return false;
             case Well_Known_Base_Type.MDL_True:
@@ -670,6 +664,8 @@ public class MDER_Machine
         MDL_Any v = value.memory_value;
         switch (v.WKBT)
         {
+            case Well_Known_Base_Type.MDL_Ignorance:
+                return new KeyValuePair<String,Object>("Ignorance",null);
             case Well_Known_Base_Type.MDL_False:
                 return new KeyValuePair<String,Object>("Boolean",false);
             case Well_Known_Base_Type.MDL_True:

@@ -13,6 +13,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal enum Well_Known_Base_Type
 {
+    MDL_Ignorance,
     MDL_False,
     MDL_True,
     MDL_Integer,

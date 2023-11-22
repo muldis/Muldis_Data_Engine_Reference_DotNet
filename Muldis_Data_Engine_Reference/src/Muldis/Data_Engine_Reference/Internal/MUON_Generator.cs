@@ -19,6 +19,8 @@ internal abstract class MUON_Generator
     {
         switch (value.WKBT)
         {
+            case Well_Known_Base_Type.MDL_Ignorance:
+                return "0iIGNORANCE";
             case Well_Known_Base_Type.MDL_False:
                 return "0bFALSE";
             case Well_Known_Base_Type.MDL_True:
@@ -366,10 +368,6 @@ internal abstract class MUON_Generator
         String ati = indent + "\u0009";
         Memory m = value.memory;
         Dictionary<String,MDL_Any> attrs = value.MDL_Excuse();
-        if (attrs.Count == 0)
-        {
-            return "0iIGNORANCE";
-        }
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
             && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple
             && attrs["\u0000"].member_status_in_WKT(Well_Known_Type.Attr_Name) == true)
