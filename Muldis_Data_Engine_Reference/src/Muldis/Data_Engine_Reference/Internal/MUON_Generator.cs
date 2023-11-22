@@ -32,7 +32,7 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Blob:
                 return Blob_Literal(value);
             case Well_Known_Base_Type.MDL_Text:
-                return Text_Literal(value);
+                return Text_Literal((MDL_Text)value);
             case Well_Known_Base_Type.MDL_Array:
                 return Array_Selector(value, indent);
             case Well_Known_Base_Type.MDL_Set:
@@ -147,13 +147,13 @@ internal abstract class MUON_Generator
             );
     }
 
-    private String Text_Literal(MDL_Any value)
+    private String Text_Literal(MDL_Text value)
     {
         if (Object.ReferenceEquals(value, value.memory.MDL_Text_C0))
         {
             return "\"\"";
         }
-        return Nonempty_Text_Literal(value.MDL_Text().code_point_members);
+        return Nonempty_Text_Literal(value.code_point_members);
     }
 
     private String Nonempty_Text_Literal(String value)

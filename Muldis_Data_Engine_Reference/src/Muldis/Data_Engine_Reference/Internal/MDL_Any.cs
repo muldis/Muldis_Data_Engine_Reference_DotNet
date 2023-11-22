@@ -43,7 +43,6 @@ internal class MDL_Any
         // Consider a MDL_Bits_Struct if we want symbolic like MDL_Array.
     // Iff WKBT is MDL_Blob, this field holds a Byte[].
         // Consider a MDL_Blob_Struct if we want symbolic like MDL_Array.
-    // Iff WKBT is MDL_Text, this field holds a MDL_Text_Struct.
     // Iff WKBT is MDL_Array, this field holds a MDL_Array_Struct.
     // Iff WKBT is MDL_Set, this field holds a MDL_Bag_Struct (like MDL_Bag).
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
@@ -111,11 +110,6 @@ internal class MDL_Any
     internal Byte[] MDL_Blob()
     {
         return (Byte[])this.details;
-    }
-
-    internal MDL_Text_Struct MDL_Text()
-    {
-        return (MDL_Text_Struct)this.details;
     }
 
     internal MDL_Array_Struct MDL_Array()

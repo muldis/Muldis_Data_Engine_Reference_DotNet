@@ -585,7 +585,8 @@ internal class Executor
                 result = Enumerable.SequenceEqual(a0.MDL_Blob(), a1.MDL_Blob());
                 break;
             case Well_Known_Base_Type.MDL_Text:
-                result = (a0.MDL_Text().code_point_members == a1.MDL_Text().code_point_members);
+                result = String.Equals(((MDL_Text)a0).code_point_members,
+                    ((MDL_Text)a1).code_point_members);
                 break;
             case Well_Known_Base_Type.MDL_Array:
                 this.memory.Array__Collapse(a0);
@@ -756,9 +757,8 @@ internal class Executor
         return blob.MDL_Blob().Length;
     }
 
-    internal Int64 Text__count(MDL_Any text)
+    internal Int64 Text__count(MDL_Text node)
     {
-        MDL_Text_Struct node = text.MDL_Text();
         if (node.cached_member_count is null)
         {
             if (node.has_any_non_BMP)
@@ -828,9 +828,8 @@ internal class Executor
         return this.memory.MDL_Integer(blob.MDL_Blob()[(Int32)ord_pos]);
     }
 
-    private MDL_Any Text__maybe_at(MDL_Any text, Int64 ord_pos)
+    private MDL_Any Text__maybe_at(MDL_Text node, Int64 ord_pos)
     {
-        MDL_Text_Struct node = text.MDL_Text();
         if (node.has_any_non_BMP)
         {
             String s = node.code_point_members;

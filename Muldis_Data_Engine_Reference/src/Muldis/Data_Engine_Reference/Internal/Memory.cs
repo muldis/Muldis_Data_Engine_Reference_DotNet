@@ -50,7 +50,7 @@ internal class Memory
     internal readonly MDL_Any MDL_Blob_C0;
 
     // MDL_Text with no members (type default value).
-    internal readonly MDL_Any MDL_Text_C0;
+    internal readonly MDL_Text MDL_Text_C0;
 
     // MDL_Array with no members (type default value).
     internal readonly MDL_Any MDL_Array_C0;
@@ -140,15 +140,7 @@ internal class Memory
             details = new Byte[] {},
         };
 
-        this.MDL_Text_C0 = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Text,
-            details = new MDL_Text_Struct {
-                code_point_members = "",
-                has_any_non_BMP = false,
-                cached_member_count = 0,
-            },
-        };
+        this.MDL_Text_C0 = new MDL_Text(this, "", false, 0);
 
         this.MDL_Array_C0 = new MDL_Any {
             memory = this,
@@ -496,14 +488,7 @@ internal class Memory
         {
             return MDL_Text_C0;
         }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Text,
-            details = new MDL_Text_Struct {
-                code_point_members = members,
-                has_any_non_BMP = has_any_non_BMP,
-            },
-        };
+        return new MDL_Text(this, members, has_any_non_BMP);
     }
 
     internal MDL_Any MDL_Array(List<MDL_Any> members)
@@ -1277,7 +1262,7 @@ internal class Memory
             {
                 return Simple_MDL_Excuse("X_Unicode_Blob_Not_UTF_8");
             }
-            return MDL_Text(
+            return this.MDL_Text(
                 s,
                 (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
