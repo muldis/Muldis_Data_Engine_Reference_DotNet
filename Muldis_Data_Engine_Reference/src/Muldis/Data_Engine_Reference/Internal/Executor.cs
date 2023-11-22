@@ -405,11 +405,11 @@ internal class Executor
                     return new MDL_Any {
                         memory = m,
                         WKBT = Well_Known_Base_Type.MDL_Bag,
-                        Details = new MDL_Bag_Struct {
-                            Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                            Members = v.MDL_Bag(),
-                            Cached_Members_Meta = new Cached_Members_Meta {
-                                Tree_All_Unique = true,
+                        details = new MDL_Bag_Struct {
+                            local_symbolic_type = Symbolic_Bag_Type.Unique,
+                            members = v.MDL_Bag(),
+                            cached_members_meta = new Cached_Members_Meta {
+                                tree_all_unique = true,
                             },
                         },
                     };
@@ -528,10 +528,10 @@ internal class Executor
         {
             return false;
         }
-        if (a0.Cached_MDL_Any_Identity is not null
-            && a1.Cached_MDL_Any_Identity is not null)
+        if (a0.cached_MDL_Any_identity is not null
+            && a1.cached_MDL_Any_identity is not null)
         {
-            if (a0.Cached_MDL_Any_Identity == a1.Cached_MDL_Any_Identity)
+            if (a0.cached_MDL_Any_identity == a1.cached_MDL_Any_identity)
             {
                 merge_two_same(a0, a1);
                 return true;
@@ -554,22 +554,22 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (fs0.As_Decimal is not null && fs1.As_Decimal is not null)
+                if (fs0.as_Decimal is not null && fs1.as_Decimal is not null)
                 {
-                    result = (fs0.As_Decimal == fs1.As_Decimal);
+                    result = (fs0.as_Decimal == fs1.as_Decimal);
                     break;
                 }
                 fs0.Ensure_Pair();
                 fs1.Ensure_Pair();
-                if (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator)
+                if (fs0.as_pair.denominator == fs1.as_pair.denominator)
                 {
-                    result = (fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
+                    result = (fs0.as_pair.numerator == fs1.as_pair.numerator);
                     break;
                 }
                 fs0.Ensure_Coprime();
                 fs1.Ensure_Coprime();
-                result = (fs0.As_Pair.Denominator == fs1.As_Pair.Denominator
-                    && fs0.As_Pair.Numerator == fs1.As_Pair.Numerator);
+                result = (fs0.as_pair.denominator == fs1.as_pair.denominator
+                    && fs0.as_pair.numerator == fs1.as_pair.numerator);
                 break;
             case Well_Known_Base_Type.MDL_Bits:
                 result = Enumerable.SequenceEqual(
@@ -580,7 +580,7 @@ internal class Executor
                 result = Enumerable.SequenceEqual(a0.MDL_Blob(), a1.MDL_Blob());
                 break;
             case Well_Known_Base_Type.MDL_Text:
-                result = (a0.MDL_Text().Code_Point_Members == a1.MDL_Text().Code_Point_Members);
+                result = (a0.MDL_Text().code_point_members == a1.MDL_Text().code_point_members);
                 break;
             case Well_Known_Base_Type.MDL_Array:
                 this.memory.Array__Collapse(a0);
@@ -592,8 +592,8 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (n0.Local_Symbolic_Type == Symbolic_Array_Type.None
-                    && n1.Local_Symbolic_Type == Symbolic_Array_Type.None)
+                if (n0.local_symbolic_type == Symbolic_Array_Type.None
+                    && n1.local_symbolic_type == Symbolic_Array_Type.None)
                 {
                     // In theory we should never get here assuming that
                     // the empty Array is optimized to return a constant
@@ -601,17 +601,17 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Singular
-                    && n1.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
+                if (n0.local_symbolic_type == Symbolic_Array_Type.Singular
+                    && n1.local_symbolic_type == Symbolic_Array_Type.Singular)
                 {
-                    result = ((n0.Local_Singular_Members().Multiplicity
-                            == n1.Local_Singular_Members().Multiplicity)
-                        && Any__same(n0.Local_Singular_Members().Member,
-                            n1.Local_Singular_Members().Member));
+                    result = ((n0.Local_Singular_Members().multiplicity
+                            == n1.Local_Singular_Members().multiplicity)
+                        && Any__same(n0.Local_Singular_Members().member,
+                            n1.Local_Singular_Members().member));
                     break;
                 }
-                if (n0.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
-                    && n1.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
+                if (n0.local_symbolic_type == Symbolic_Array_Type.Arrayed
+                    && n1.local_symbolic_type == Symbolic_Array_Type.Arrayed)
                 {
                     // This works because MDL_Any Equals() calls Any__Same().
                     result = Enumerable.SequenceEqual(
@@ -621,19 +621,19 @@ internal class Executor
                 }
                 MDL_Array_Struct n0_ = n0;
                 MDL_Array_Struct n1_ = n1;
-                if (n0_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed
-                    && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Singular)
+                if (n0_.local_symbolic_type == Symbolic_Array_Type.Arrayed
+                    && n1_.local_symbolic_type == Symbolic_Array_Type.Singular)
                 {
                      n1_ = n0;
                      n0_ = n1;
                 }
-                if (n0_.Local_Symbolic_Type == Symbolic_Array_Type.Singular
-                    && n1_.Local_Symbolic_Type == Symbolic_Array_Type.Arrayed)
+                if (n0_.local_symbolic_type == Symbolic_Array_Type.Singular
+                    && n1_.local_symbolic_type == Symbolic_Array_Type.Arrayed)
                 {
                     Multiplied_Member sm = n0_.Local_Singular_Members();
                     List<MDL_Any> am = n1_.Local_Arrayed_Members();
-                    result = sm.Multiplicity == am.Count
-                        && Enumerable.All(am, m => Any__same(m, sm.Member));
+                    result = sm.multiplicity == am.Count
+                        && Enumerable.All(am, m => Any__same(m, sm.member));
                 }
                 // We should never get here.
                 throw new NotImplementedException();
@@ -649,8 +649,8 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (bn0.Local_Symbolic_Type == Symbolic_Bag_Type.None
-                    && bn1.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                if (bn0.local_symbolic_type == Symbolic_Bag_Type.None
+                    && bn1.local_symbolic_type == Symbolic_Bag_Type.None)
                 {
                     // In theory we should never get here assuming that
                     // the empty Array is optimized to return a constant
@@ -658,8 +658,8 @@ internal class Executor
                     result = true;
                     break;
                 }
-                if (bn0.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed
-                    && bn1.Local_Symbolic_Type == Symbolic_Bag_Type.Indexed)
+                if (bn0.local_symbolic_type == Symbolic_Bag_Type.Indexed
+                    && bn1.local_symbolic_type == Symbolic_Bag_Type.Indexed)
                 {
                     Dictionary<MDL_Any,Multiplied_Member> im0
                         = bn0.Local_Indexed_Members();
@@ -668,8 +668,8 @@ internal class Executor
                     result = im0.Count == im1.Count
                         && Enumerable.All(
                             im0.Values,
-                            m => im1.ContainsKey(m.Member)
-                                && im1[m.Member].Multiplicity == m.Multiplicity
+                            m => im1.ContainsKey(m.member)
+                                && im1[m.member].multiplicity == m.multiplicity
                         );
                     break;
                 }
@@ -686,8 +686,8 @@ internal class Executor
                     && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                     && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
             case Well_Known_Base_Type.MDL_Article:
-                result = Any__same(a0.MDL_Article().Label, a1.MDL_Article().Label)
-                      && Any__same(a0.MDL_Article().Attrs, a1.MDL_Article().Attrs);
+                result = Any__same(a0.MDL_Article().label, a1.MDL_Article().label)
+                      && Any__same(a0.MDL_Article().attrs, a1.MDL_Article().attrs);
                 break;
             case Well_Known_Base_Type.MDL_Variable:
             case Well_Known_Base_Type.MDL_Process:
@@ -754,11 +754,11 @@ internal class Executor
     internal Int64 Text__count(MDL_Any text)
     {
         MDL_Text_Struct node = text.MDL_Text();
-        if (node.Cached_Member_Count is null)
+        if (node.cached_member_count is null)
         {
-            if (node.Has_Any_Non_BMP)
+            if (node.has_any_non_BMP)
             {
-                String s = node.Code_Point_Members;
+                String s = node.code_point_members;
                 Int32 count = 0;
                 for (Int32 i = 0; i < s.Length; i++)
                 {
@@ -769,14 +769,14 @@ internal class Executor
                         i++;
                     }
                 }
-                node.Cached_Member_Count = count;
+                node.cached_member_count = count;
             }
             else
             {
-                node.Cached_Member_Count = node.Code_Point_Members.Length;
+                node.cached_member_count = node.code_point_members.Length;
             }
         }
-        return (Int64)node.Cached_Member_Count;
+        return (Int64)node.cached_member_count;
     }
 
     internal Int64 Array__count(MDL_Any array)
@@ -786,31 +786,31 @@ internal class Executor
 
     private Int64 Array__node__tree_member_count(MDL_Array_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Member_Count is null)
+        if (node.cached_members_meta.tree_member_count is null)
         {
-            switch (node.Local_Symbolic_Type)
+            switch (node.local_symbolic_type)
             {
                 case Symbolic_Array_Type.None:
-                    node.Cached_Members_Meta.Tree_Member_Count = 0;
+                    node.cached_members_meta.tree_member_count = 0;
                     break;
                 case Symbolic_Array_Type.Singular:
-                    node.Cached_Members_Meta.Tree_Member_Count
-                        = node.Local_Singular_Members().Multiplicity;
+                    node.cached_members_meta.tree_member_count
+                        = node.Local_Singular_Members().multiplicity;
                     break;
                 case Symbolic_Array_Type.Arrayed:
-                    node.Cached_Members_Meta.Tree_Member_Count
+                    node.cached_members_meta.tree_member_count
                         = node.Local_Arrayed_Members().Count;
                     break;
                 case Symbolic_Array_Type.Catenated:
-                    node.Cached_Members_Meta.Tree_Member_Count
-                        = Array__node__tree_member_count(node.Tree_Catenated_Members().A0)
-                        + Array__node__tree_member_count(node.Tree_Catenated_Members().A1);
+                    node.cached_members_meta.tree_member_count
+                        = Array__node__tree_member_count(node.Tree_Catenated_Members().a0)
+                        + Array__node__tree_member_count(node.Tree_Catenated_Members().a1);
                     break;
                 default:
                     throw new NotImplementedException();
             }
         }
-        return (Int64)node.Cached_Members_Meta.Tree_Member_Count;
+        return (Int64)node.cached_members_meta.tree_member_count;
     }
 
     private MDL_Any Bits__maybe_at(MDL_Any bits, Int64 ord_pos)
@@ -826,9 +826,9 @@ internal class Executor
     private MDL_Any Text__maybe_at(MDL_Any text, Int64 ord_pos)
     {
         MDL_Text_Struct node = text.MDL_Text();
-        if (node.Has_Any_Non_BMP)
+        if (node.has_any_non_BMP)
         {
-            String s = node.Code_Point_Members;
+            String s = node.code_point_members;
             Int64 logical_i = 0;
             for (Int32 i = 0; i < s.Length; i++)
             {
@@ -851,7 +851,7 @@ internal class Executor
             }
         }
         return this.memory.MDL_Integer(
-            node.Code_Point_Members[(Int32)ord_pos]);
+            node.code_point_members[(Int32)ord_pos]);
     }
 
     private MDL_Any Array__maybe_at(MDL_Any array, Int64 ord_pos)
@@ -861,19 +861,19 @@ internal class Executor
 
     private MDL_Any Array__node__maybe_at(MDL_Array_Struct node, Int64 ord_pos)
     {
-        if (node.Cached_Members_Meta.Tree_Member_Count == 0)
+        if (node.cached_members_meta.tree_member_count == 0)
         {
             return null;
         }
         Int64 maybe_last_ord_pos_seen = -1;
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Array_Type.None:
                 return null;
             case Symbolic_Array_Type.Singular:
-                if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().Multiplicity))
+                if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().multiplicity))
                 {
-                    return node.Local_Singular_Members().Member;
+                    return node.Local_Singular_Members().member;
                 }
                 return null;
             case Symbolic_Array_Type.Arrayed:
@@ -885,18 +885,18 @@ internal class Executor
                 }
                 return null;
             case Symbolic_Array_Type.Catenated:
-                MDL_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().A0, ord_pos);
+                MDL_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos);
                 if (maybe_member is not null)
                 {
                     return maybe_member;
                 }
-                maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Tree_Catenated_Members().A0);
+                maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Tree_Catenated_Members().a0);
                 if (ord_pos <= maybe_last_ord_pos_seen)
                 {
                     return null;
                 }
                 Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
-                return Array__node__maybe_at(node.Tree_Catenated_Members().A1, ord_pos_within_succ);
+                return Array__node__maybe_at(node.Tree_Catenated_Members().a1, ord_pos_within_succ);
             default:
                 throw new NotImplementedException();
         }

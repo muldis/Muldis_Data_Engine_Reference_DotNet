@@ -111,13 +111,13 @@ internal class Memory
         MDL_False = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Boolean,
-            Details = false,
+            details = false,
         };
 
         MDL_True = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Boolean,
-            Details = true,
+            details = true,
         };
 
         this.integers = new Dictionary<Int32,MDL_Any>();
@@ -129,12 +129,12 @@ internal class Memory
         MDL_Fraction_0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Fraction,
-            Details = new MDL_Fraction_Struct {
-                As_Decimal = 0.0M,
-                As_Pair = new MDL_Fraction_Pair {
-                    Numerator = this.integers[0].MDL_Integer(),
-                    Denominator = this.integers[1].MDL_Integer(),
-                    Cached_Is_Coprime = true,
+            details = new MDL_Fraction_Struct {
+                as_Decimal = 0.0M,
+                as_pair = new MDL_Fraction_Pair {
+                    numerator = this.integers[0].MDL_Integer(),
+                    denominator = this.integers[1].MDL_Integer(),
+                    cached_is_coprime = true,
                 },
             },
         };
@@ -142,34 +142,34 @@ internal class Memory
         MDL_Bits_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bits,
-            Details = new BitArray(0),
+            details = new BitArray(0),
         };
 
         MDL_Blob_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Blob,
-            Details = new Byte[] {},
+            details = new Byte[] {},
         };
 
         MDL_Text_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Text,
-            Details = new MDL_Text_Struct {
-                Code_Point_Members = "",
-                Has_Any_Non_BMP = false,
-                Cached_Member_Count = 0,
+            details = new MDL_Text_Struct {
+                code_point_members = "",
+                has_any_non_BMP = false,
+                cached_member_count = 0,
             },
         };
 
         MDL_Array_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Array,
-            Details = new MDL_Array_Struct {
-                Local_Symbolic_Type = Symbolic_Array_Type.None,
-                Cached_Members_Meta = new Cached_Members_Meta {
-                    Tree_Member_Count = 0,
-                    Tree_All_Unique = true,
-                    Tree_Relational = true,
+            details = new MDL_Array_Struct {
+                local_symbolic_type = Symbolic_Array_Type.None,
+                cached_members_meta = new Cached_Members_Meta {
+                    tree_member_count = 0,
+                    tree_all_unique = true,
+                    tree_relational = true,
                 },
             },
         };
@@ -177,12 +177,12 @@ internal class Memory
         MDL_Set_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Set,
-            Details = new MDL_Bag_Struct {
-                Local_Symbolic_Type = Symbolic_Bag_Type.None,
-                Cached_Members_Meta = new Cached_Members_Meta {
-                    Tree_Member_Count = 0,
-                    Tree_All_Unique = true,
-                    Tree_Relational = true,
+            details = new MDL_Bag_Struct {
+                local_symbolic_type = Symbolic_Bag_Type.None,
+                cached_members_meta = new Cached_Members_Meta {
+                    tree_member_count = 0,
+                    tree_all_unique = true,
+                    tree_relational = true,
                 },
             },
         };
@@ -190,12 +190,12 @@ internal class Memory
         MDL_Bag_C0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bag,
-            Details = new MDL_Bag_Struct {
-                Local_Symbolic_Type = Symbolic_Bag_Type.None,
-                Cached_Members_Meta = new Cached_Members_Meta {
-                    Tree_Member_Count = 0,
-                    Tree_All_Unique = true,
-                    Tree_Relational = true,
+            details = new MDL_Bag_Struct {
+                local_symbolic_type = Symbolic_Bag_Type.None,
+                cached_members_meta = new Cached_Members_Meta {
+                    tree_member_count = 0,
+                    tree_all_unique = true,
+                    tree_relational = true,
                 },
             },
         };
@@ -203,7 +203,7 @@ internal class Memory
         MDL_Tuple_D0 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String, MDL_Any>(),
+            details = new Dictionary<String, MDL_Any>(),
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
@@ -213,21 +213,21 @@ internal class Memory
             {"\u0000", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                Details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_True}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0001", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                Details = new Dictionary<String,MDL_Any>() {{"\u0001", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0001", MDL_True}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0002", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                Details = new Dictionary<String,MDL_Any>() {{"\u0002", MDL_True}},
+                details = new Dictionary<String,MDL_Any>() {{"\u0002", MDL_True}},
                 cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
@@ -239,7 +239,7 @@ internal class Memory
         Heading_0_1 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String,MDL_Any>()
                 {{"\u0000", MDL_True}, {"\u0001", MDL_True}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
@@ -247,7 +247,7 @@ internal class Memory
         Heading_0_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String,MDL_Any>()
                 {{"\u0000", MDL_True}, {"\u0002", MDL_True}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
@@ -255,7 +255,7 @@ internal class Memory
         Heading_1_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String,MDL_Any>()
                 {{"\u0001", MDL_True}, {"\u0002", MDL_True}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
@@ -264,7 +264,7 @@ internal class Memory
         Heading_0_1_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String,MDL_Any>()
                 {{"\u0000", MDL_True}, {"\u0001", MDL_True}, {"\u0002", MDL_True}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},
@@ -290,9 +290,9 @@ internal class Memory
         this.false_nullary_article = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Article,
-            Details = new MDL_Article_Struct {
-                Label = MDL_False,
-                Attrs = MDL_Tuple_D0,
+            details = new MDL_Article_Struct {
+                label = MDL_False,
+                attrs = MDL_Tuple_D0,
             },
         };
 
@@ -312,13 +312,13 @@ internal class Memory
                     {"body", new MDL_Any {
                         memory = this,
                         WKBT = Well_Known_Base_Type.MDL_Array,
-                        Details = new MDL_Array_Struct {
-                            Local_Symbolic_Type = Symbolic_Array_Type.Singular,
-                            Members = new Multiplied_Member(MDL_Tuple_D0),
-                            Cached_Members_Meta = new Cached_Members_Meta {
-                                Tree_Member_Count = 1,
-                                Tree_All_Unique = true,
-                                Tree_Relational = true,
+                        details = new MDL_Array_Struct {
+                            local_symbolic_type = Symbolic_Array_Type.Singular,
+                            members = new Multiplied_Member(MDL_Tuple_D0),
+                            cached_members_meta = new Cached_Members_Meta {
+                                tree_member_count = 1,
+                                tree_all_unique = true,
+                                tree_relational = true,
                             },
                         },
                     }},
@@ -343,14 +343,14 @@ internal class Memory
                     {"body", new MDL_Any {
                         memory = this,
                         WKBT = Well_Known_Base_Type.MDL_Set,
-                        Details = new MDL_Bag_Struct {
-                            Local_Symbolic_Type
+                        details = new MDL_Bag_Struct {
+                            local_symbolic_type
                                 = Symbolic_Bag_Type.Singular,
-                            Members = new Multiplied_Member(MDL_Tuple_D0),
-                            Cached_Members_Meta = new Cached_Members_Meta {
-                                Tree_Member_Count = 1,
-                                Tree_All_Unique = true,
-                                Tree_Relational = true,
+                            members = new Multiplied_Member(MDL_Tuple_D0),
+                            cached_members_meta = new Cached_Members_Meta {
+                                tree_member_count = 1,
+                                tree_all_unique = true,
+                                tree_relational = true,
                             },
                         },
                     }},
@@ -375,14 +375,14 @@ internal class Memory
                     {"body", new MDL_Any {
                         memory = this,
                         WKBT = Well_Known_Base_Type.MDL_Bag,
-                        Details = new MDL_Bag_Struct {
-                            Local_Symbolic_Type
+                        details = new MDL_Bag_Struct {
+                            local_symbolic_type
                                 = Symbolic_Bag_Type.Singular,
-                            Members = new Multiplied_Member(MDL_Tuple_D0),
-                            Cached_Members_Meta = new Cached_Members_Meta {
-                                Tree_Member_Count = 1,
-                                Tree_All_Unique = true,
-                                Tree_Relational = true,
+                            members = new Multiplied_Member(MDL_Tuple_D0),
+                            cached_members_meta = new Cached_Members_Meta {
+                                tree_member_count = 1,
+                                tree_all_unique = true,
+                                tree_relational = true,
                             },
                         },
                     }},
@@ -399,7 +399,7 @@ internal class Memory
                 new MDL_Any {
                     memory = this,
                     WKBT = Well_Known_Base_Type.MDL_Excuse,
-                    Details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(s)}},
+                    details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(s)}},
                 }
             );
         }
@@ -420,7 +420,7 @@ internal class Memory
         MDL_Any integer = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Integer,
-            Details = value,
+            details = value,
         };
         if (may_cache && this.integers.Count < 10000)
         {
@@ -445,10 +445,10 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Fraction,
-            Details = new MDL_Fraction_Struct {
-                As_Pair = new MDL_Fraction_Pair {
-                    Numerator = numerator,
-                    Denominator = denominator,
+            details = new MDL_Fraction_Struct {
+                as_pair = new MDL_Fraction_Pair {
+                    numerator = numerator,
+                    denominator = denominator,
                 },
             },
         };
@@ -463,8 +463,8 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Fraction,
-            Details = new MDL_Fraction_Struct {
-                As_Decimal = value,
+            details = new MDL_Fraction_Struct {
+                as_Decimal = value,
             },
         };
     }
@@ -478,7 +478,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bits,
-            Details = members,
+            details = members,
         };
     }
 
@@ -491,7 +491,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Blob,
-            Details = members,
+            details = members,
         };
     }
 
@@ -504,9 +504,9 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Text,
-            Details = new MDL_Text_Struct {
-                Code_Point_Members = members,
-                Has_Any_Non_BMP = has_any_non_BMP,
+            details = new MDL_Text_Struct {
+                code_point_members = members,
+                has_any_non_BMP = has_any_non_BMP,
             },
         };
     }
@@ -522,13 +522,13 @@ internal class Memory
             return new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Array,
-                Details = new MDL_Array_Struct {
-                    Local_Symbolic_Type = Symbolic_Array_Type.Singular,
-                    Members = new Multiplied_Member(members[0]),
-                    Cached_Members_Meta = new Cached_Members_Meta {
-                        Tree_Member_Count = 1,
-                        Tree_All_Unique = true,
-                        Tree_Relational = (members[0].WKBT
+                details = new MDL_Array_Struct {
+                    local_symbolic_type = Symbolic_Array_Type.Singular,
+                    members = new Multiplied_Member(members[0]),
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = 1,
+                        tree_all_unique = true,
+                        tree_relational = (members[0].WKBT
                             == Well_Known_Base_Type.MDL_Tuple),
                     },
                 },
@@ -537,10 +537,10 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Array,
-            Details = new MDL_Array_Struct {
-                Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
-                Members = members,
-                Cached_Members_Meta = new Cached_Members_Meta(),
+            details = new MDL_Array_Struct {
+                local_symbolic_type = Symbolic_Array_Type.Arrayed,
+                members = members,
+                cached_members_meta = new Cached_Members_Meta(),
             },
         };
     }
@@ -554,15 +554,15 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Set,
-            Details = new MDL_Bag_Struct {
-                Local_Symbolic_Type = Symbolic_Bag_Type.Unique,
-                Members = new MDL_Bag_Struct {
-                    Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
-                    Members = members,
-                    Cached_Members_Meta = new Cached_Members_Meta(),
+            details = new MDL_Bag_Struct {
+                local_symbolic_type = Symbolic_Bag_Type.Unique,
+                members = new MDL_Bag_Struct {
+                    local_symbolic_type = Symbolic_Bag_Type.Arrayed,
+                    members = members,
+                    cached_members_meta = new Cached_Members_Meta(),
                 },
-                Cached_Members_Meta = new Cached_Members_Meta {
-                    Tree_All_Unique = true,
+                cached_members_meta = new Cached_Members_Meta {
+                    tree_all_unique = true,
                 },
             },
         };
@@ -577,10 +577,10 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Bag,
-            Details = new MDL_Bag_Struct {
-                Local_Symbolic_Type = Symbolic_Bag_Type.Arrayed,
-                Members = members,
-                Cached_Members_Meta = new Cached_Members_Meta(),
+            details = new MDL_Bag_Struct {
+                local_symbolic_type = Symbolic_Bag_Type.Arrayed,
+                members = members,
+                cached_members_meta = new Cached_Members_Meta(),
             },
         };
     }
@@ -604,7 +604,7 @@ internal class Memory
         MDL_Any tuple = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = attrs,
+            details = attrs,
         };
         if (attrs.Count == 1)
         {
@@ -727,9 +727,9 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Article,
-            Details = new MDL_Article_Struct {
-                Label = label,
-                Attrs = attrs,
+            details = new MDL_Article_Struct {
+                label = label,
+                attrs = attrs,
             },
         };
     }
@@ -744,7 +744,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Variable,
-            Details = initial_current_value,
+            details = initial_current_value,
         };
     }
 
@@ -753,7 +753,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Process,
-            Details = null,
+            details = null,
         };
     }
 
@@ -762,7 +762,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Stream,
-            Details = null,
+            details = null,
         };
     }
 
@@ -771,7 +771,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_External,
-            Details = value,
+            details = value,
         };
     }
 
@@ -780,7 +780,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Excuse,
-            Details = attrs.Details,
+            details = attrs.details,
         };
     }
 
@@ -793,7 +793,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Excuse,
-            Details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(value)}},
+            details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(value)}},
         };
     }
 
@@ -829,7 +829,7 @@ internal class Memory
         MDL_Any tuple = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>() {{value, MDL_True}},
+            details = new Dictionary<String,MDL_Any>() {{value, MDL_True}},
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
         };
@@ -843,12 +843,12 @@ internal class Memory
 
     internal void Array__Collapse(MDL_Any array)
     {
-        array.Details = Array__Collapsed_Struct(array.MDL_Array());
+        array.details = Array__Collapsed_Struct(array.MDL_Array());
     }
 
     private MDL_Array_Struct Array__Collapsed_Struct(MDL_Array_Struct node)
     {
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Array_Type.None:
                 // Node is already collapsed.
@@ -861,35 +861,35 @@ internal class Memory
                 // Node is already collapsed.
                 return node;
             case Symbolic_Array_Type.Catenated:
-                MDL_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().A0);
-                MDL_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().A1);
-                if (n0.Local_Symbolic_Type == Symbolic_Array_Type.None)
+                MDL_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a0);
+                MDL_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a1);
+                if (n0.local_symbolic_type == Symbolic_Array_Type.None)
                 {
                     return n1;
                 }
-                if (n1.Local_Symbolic_Type == Symbolic_Array_Type.None)
+                if (n1.local_symbolic_type == Symbolic_Array_Type.None)
                 {
                     return n0;
                 }
                 // Both child nodes have at least 1 member, so we will
                 // use Arrayed format for merger even if the input
                 // members are the same value.
-                // This will die if Multiplicity greater than an Int32.
+                // This will die if multiplicity greater than an Int32.
                 return new MDL_Array_Struct {
-                    Local_Symbolic_Type = Symbolic_Array_Type.Arrayed,
-                    Members = Enumerable.Concat(
-                        (n0.Local_Symbolic_Type == Symbolic_Array_Type.Singular
-                            ? Enumerable.Repeat(n0.Local_Singular_Members().Member,
-                                (Int32)n0.Local_Singular_Members().Multiplicity)
+                    local_symbolic_type = Symbolic_Array_Type.Arrayed,
+                    members = Enumerable.Concat(
+                        (n0.local_symbolic_type == Symbolic_Array_Type.Singular
+                            ? Enumerable.Repeat(n0.Local_Singular_Members().member,
+                                (Int32)n0.Local_Singular_Members().multiplicity)
                             : n0.Local_Arrayed_Members()),
-                        (n1.Local_Symbolic_Type == Symbolic_Array_Type.Singular
-                            ? Enumerable.Repeat(n1.Local_Singular_Members().Member,
-                                (Int32)n1.Local_Singular_Members().Multiplicity)
+                        (n1.local_symbolic_type == Symbolic_Array_Type.Singular
+                            ? Enumerable.Repeat(n1.Local_Singular_Members().member,
+                                (Int32)n1.Local_Singular_Members().multiplicity)
                             : n1.Local_Arrayed_Members())
                     ),
-                    Cached_Members_Meta = new Cached_Members_Meta(),
+                    cached_members_meta = new Cached_Members_Meta(),
                         // TODO: Merge existing source meta where efficient,
-                        // Tree_Member_Count and Tree_Relational in particular.
+                        // tree_member_count and tree_relational in particular.
                 };
             default:
                 throw new NotImplementedException();
@@ -898,7 +898,7 @@ internal class Memory
 
     internal void Bag__Collapse(MDL_Any bag, Boolean want_indexed = false)
     {
-        bag.Details = Bag__Collapsed_Struct(bag.MDL_Bag(), want_indexed);
+        bag.details = Bag__Collapsed_Struct(bag.MDL_Bag(), want_indexed);
     }
 
     private MDL_Bag_Struct Bag__Collapsed_Struct(MDL_Bag_Struct node,
@@ -906,7 +906,7 @@ internal class Memory
     {
         // Note: want_indexed only causes Indexed result when Singular
         // or Arrayed otherwise would be used; None still also used.
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:
                 // Node is already collapsed.
@@ -922,13 +922,13 @@ internal class Memory
                 }
                 Multiplied_Member lsm = node.Local_Singular_Members();
                 return new MDL_Bag_Struct {
-                    Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                    Members = new Dictionary<MDL_Any,Multiplied_Member>()
-                        {{lsm.Member, lsm}},
-                    Cached_Members_Meta = new Cached_Members_Meta {
-                        Tree_Member_Count = lsm.Multiplicity,
-                        Tree_All_Unique = (lsm.Multiplicity == 1),
-                        Tree_Relational = (lsm.Member.WKBT
+                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                    members = new Dictionary<MDL_Any,Multiplied_Member>()
+                        {{lsm.member, lsm}},
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = lsm.multiplicity,
+                        tree_all_unique = (lsm.multiplicity == 1),
+                        tree_relational = (lsm.member.WKBT
                             == Well_Known_Base_Type.MDL_Tuple),
                     },
                 };
@@ -943,22 +943,22 @@ internal class Memory
                     = new Dictionary<MDL_Any,Multiplied_Member>();
                 foreach (Multiplied_Member m in ary_src_list)
                 {
-                    if (!ary_res_dict.ContainsKey(m.Member))
+                    if (!ary_res_dict.ContainsKey(m.member))
                     {
-                        ary_res_dict.Add(m.Member, m.Clone());
+                        ary_res_dict.Add(m.member, m.Clone());
                     }
                     else
                     {
-                        ary_res_dict[m.Member].Multiplicity ++;
+                        ary_res_dict[m.member].multiplicity ++;
                     }
                 }
                 return new MDL_Bag_Struct {
-                    Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                    Members = ary_res_dict,
-                    Cached_Members_Meta = new Cached_Members_Meta {
-                        Tree_Member_Count = ary_src_list.Count,
-                        Tree_All_Unique = node.Cached_Members_Meta.Tree_All_Unique,
-                        Tree_Relational = node.Cached_Members_Meta.Tree_Relational,
+                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                    members = ary_res_dict,
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = ary_src_list.Count,
+                        tree_all_unique = node.cached_members_meta.tree_all_unique,
+                        tree_relational = node.cached_members_meta.tree_relational,
                     },
                 };
             case Symbolic_Bag_Type.Indexed:
@@ -967,32 +967,32 @@ internal class Memory
             case Symbolic_Bag_Type.Unique:
                 MDL_Bag_Struct uni_pa = Bag__Collapsed_Struct(
                     node: node.Tree_Unique_Members(), want_indexed: true);
-                if (uni_pa.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                if (uni_pa.local_symbolic_type == Symbolic_Bag_Type.None)
                 {
                     return uni_pa;
                 }
                 Dictionary<MDL_Any,Multiplied_Member> uni_src_dict
                     = uni_pa.Local_Indexed_Members();
                 return new MDL_Bag_Struct {
-                    Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                    Members = uni_src_dict.ToDictionary(
+                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                    members = uni_src_dict.ToDictionary(
                         m => m.Key, m => new Multiplied_Member(m.Key, 1)),
-                    Cached_Members_Meta = new Cached_Members_Meta {
-                        Tree_Member_Count = uni_src_dict.Count,
-                        Tree_All_Unique = true,
-                        Tree_Relational = uni_pa.Cached_Members_Meta.Tree_Relational,
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = uni_src_dict.Count,
+                        tree_all_unique = true,
+                        tree_relational = uni_pa.cached_members_meta.tree_relational,
                     },
                 };
             case Symbolic_Bag_Type.Summed:
                 MDL_Bag_Struct n0 = Bag__Collapsed_Struct(
-                    node: node.Tree_Summed_Members().A0, want_indexed: true);
+                    node: node.Tree_Summed_Members().a0, want_indexed: true);
                 MDL_Bag_Struct n1 = Bag__Collapsed_Struct(
-                    node: node.Tree_Summed_Members().A1, want_indexed: true);
-                if (n0.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                    node: node.Tree_Summed_Members().a1, want_indexed: true);
+                if (n0.local_symbolic_type == Symbolic_Bag_Type.None)
                 {
                     return n1;
                 }
-                if (n1.Local_Symbolic_Type == Symbolic_Bag_Type.None)
+                if (n1.local_symbolic_type == Symbolic_Bag_Type.None)
                 {
                     return n0;
                 }
@@ -1004,22 +1004,22 @@ internal class Memory
                     = new Dictionary<MDL_Any,Multiplied_Member>(n0_src_dict);
                 foreach (Multiplied_Member m in n1_src_dict.Values)
                 {
-                    if (!res_dict.ContainsKey(m.Member))
+                    if (!res_dict.ContainsKey(m.member))
                     {
-                        res_dict.Add(m.Member, m);
+                        res_dict.Add(m.member, m);
                     }
                     else
                     {
-                        res_dict[m.Member] = new Multiplied_Member(m.Member,
-                            res_dict[m.Member].Multiplicity + m.Multiplicity);
+                        res_dict[m.member] = new Multiplied_Member(m.member,
+                            res_dict[m.member].multiplicity + m.multiplicity);
                     }
                 }
                 return new MDL_Bag_Struct {
-                    Local_Symbolic_Type = Symbolic_Bag_Type.Indexed,
-                    Members = res_dict,
-                    Cached_Members_Meta = new Cached_Members_Meta(),
+                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                    members = res_dict,
+                    cached_members_meta = new Cached_Members_Meta(),
                         // TODO: Merge existing source meta where efficient,
-                        // Tree_Member_Count and Tree_Relational in particular.
+                        // tree_member_count and tree_relational in particular.
                 };
             default:
                 throw new NotImplementedException();
@@ -1033,17 +1033,17 @@ internal class Memory
 
     private MDL_Any Array__Pick_Arbitrary_Node_Member(MDL_Array_Struct node)
     {
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Array_Type.None:
                 return null;
             case Symbolic_Array_Type.Singular:
-                return node.Local_Singular_Members().Member;
+                return node.Local_Singular_Members().member;
             case Symbolic_Array_Type.Arrayed:
                 return node.Local_Arrayed_Members()[0];
             case Symbolic_Array_Type.Catenated:
-                return Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A0)
-                    ?? Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A1);
+                return Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
+                    ?? Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
             default:
                 throw new NotImplementedException();
         }
@@ -1056,16 +1056,16 @@ internal class Memory
 
     private Boolean Array__Tree_Relational(MDL_Array_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Relational is null)
+        if (node.cached_members_meta.tree_relational is null)
         {
             Boolean tr = true;
-            switch (node.Local_Symbolic_Type)
+            switch (node.local_symbolic_type)
             {
                 case Symbolic_Array_Type.None:
                     tr = true;
                     break;
                 case Symbolic_Array_Type.Singular:
-                    tr = node.Local_Singular_Members().Member.WKBT
+                    tr = node.Local_Singular_Members().member.WKBT
                         == Well_Known_Base_Type.MDL_Tuple;
                     break;
                 case Symbolic_Array_Type.Arrayed:
@@ -1078,30 +1078,30 @@ internal class Memory
                         );
                     break;
                 case Symbolic_Array_Type.Catenated:
-                    MDL_Any pm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A0);
-                    MDL_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().A1);
-                    tr = Array__Tree_Relational(node.Tree_Catenated_Members().A0)
-                        && Array__Tree_Relational(node.Tree_Catenated_Members().A1)
+                    MDL_Any pm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0);
+                    MDL_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
+                    tr = Array__Tree_Relational(node.Tree_Catenated_Members().a0)
+                        && Array__Tree_Relational(node.Tree_Catenated_Members().a1)
                         && (pm0 is null || sm0 is null || Tuple__Same_Heading(pm0, sm0));
                     break;
                 default:
                     throw new NotImplementedException();
             }
-            node.Cached_Members_Meta.Tree_Relational = tr;
+            node.cached_members_meta.tree_relational = tr;
         }
-        return (Boolean)node.Cached_Members_Meta.Tree_Relational;
+        return (Boolean)node.cached_members_meta.tree_relational;
     }
 
     internal MDL_Any Set__Pick_Arbitrary_Member(MDL_Any set)
     {
         return Bag__Pick_Arbitrary_Member(
-            set.MDL_Article().Attrs.MDL_Tuple().First().Value);
+            set.MDL_Article().attrs.MDL_Tuple().First().Value);
     }
 
     internal Boolean Set__Is_Relational(MDL_Any set)
     {
         return Bag__Is_Relational(
-            set.MDL_Article().Attrs.MDL_Tuple().First().Value);
+            set.MDL_Article().attrs.MDL_Tuple().First().Value);
     }
 
     internal MDL_Any Bag__Pick_Arbitrary_Member(MDL_Any bag)
@@ -1111,25 +1111,25 @@ internal class Memory
 
     private MDL_Any Bag__Pick_Arbitrary_Node_Member(MDL_Bag_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Member_Count == 0)
+        if (node.cached_members_meta.tree_member_count == 0)
         {
             return null;
         }
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:
                 return null;
             case Symbolic_Bag_Type.Singular:
-                return node.Local_Singular_Members().Member;
+                return node.Local_Singular_Members().member;
             case Symbolic_Bag_Type.Arrayed:
-                return node.Local_Arrayed_Members()[0].Member;
+                return node.Local_Arrayed_Members()[0].member;
             case Symbolic_Bag_Type.Indexed:
-                return node.Local_Indexed_Members().First().Value.Member;
+                return node.Local_Indexed_Members().First().Value.member;
             case Symbolic_Bag_Type.Unique:
                 return Bag__Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
             case Symbolic_Bag_Type.Summed:
-                return Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A0)
-                    ?? Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A1);
+                return Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
+                    ?? Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
             default:
                 throw new NotImplementedException();
         }
@@ -1142,16 +1142,16 @@ internal class Memory
 
     private Boolean Bag__Tree_Relational(MDL_Bag_Struct node)
     {
-        if (node.Cached_Members_Meta.Tree_Relational is null)
+        if (node.cached_members_meta.tree_relational is null)
         {
             Boolean tr = true;
-            switch (node.Local_Symbolic_Type)
+            switch (node.local_symbolic_type)
             {
                 case Symbolic_Bag_Type.None:
                     tr = true;
                     break;
                 case Symbolic_Bag_Type.Singular:
-                    tr = node.Local_Singular_Members().Member.WKBT
+                    tr = node.Local_Singular_Members().member.WKBT
                         == Well_Known_Base_Type.MDL_Tuple;
                     break;
                 case Symbolic_Bag_Type.Arrayed:
@@ -1159,8 +1159,8 @@ internal class Memory
                     tr = m0.WKBT == Well_Known_Base_Type.MDL_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.Member.WKBT == Well_Known_Base_Type.MDL_Tuple
-                                && Tuple__Same_Heading(m.Member, m0)
+                            m => m.member.WKBT == Well_Known_Base_Type.MDL_Tuple
+                                && Tuple__Same_Heading(m.member, m0)
                         );
                     break;
                 case Symbolic_Bag_Type.Indexed:
@@ -1168,18 +1168,18 @@ internal class Memory
                     tr = im0.WKBT == Well_Known_Base_Type.MDL_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
-                            m => m.Member.WKBT == Well_Known_Base_Type.MDL_Tuple
-                                && Tuple__Same_Heading(m.Member, im0)
+                            m => m.member.WKBT == Well_Known_Base_Type.MDL_Tuple
+                                && Tuple__Same_Heading(m.member, im0)
                         );
                     break;
                 case Symbolic_Bag_Type.Unique:
                     tr = Bag__Tree_Relational(node.Tree_Unique_Members());
                     break;
                 case Symbolic_Bag_Type.Summed:
-                    tr = Bag__Tree_Relational(node.Tree_Summed_Members().A0)
-                        && Bag__Tree_Relational(node.Tree_Summed_Members().A1);
-                    MDL_Any pam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A0);
-                    MDL_Any eam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().A1);
+                    tr = Bag__Tree_Relational(node.Tree_Summed_Members().a0)
+                        && Bag__Tree_Relational(node.Tree_Summed_Members().a1);
+                    MDL_Any pam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0);
+                    MDL_Any eam0 = Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
                     if (pam0 is not null && eam0 is not null)
                     {
                         tr = tr && Tuple__Same_Heading(pam0, eam0);
@@ -1188,9 +1188,9 @@ internal class Memory
                 default:
                     throw new NotImplementedException();
             }
-            node.Cached_Members_Meta.Tree_Relational = tr;
+            node.cached_members_meta.tree_relational = tr;
         }
-        return (Boolean)node.Cached_Members_Meta.Tree_Relational;
+        return (Boolean)node.cached_members_meta.tree_relational;
     }
 
     internal MDL_Any Tuple__Heading(MDL_Any tuple)
@@ -1224,7 +1224,7 @@ internal class Memory
         MDL_Any heading = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            Details = new Dictionary<String,MDL_Any>(
+            details = new Dictionary<String,MDL_Any>(
                 attrs.ToDictionary(a => a.Key, a => MDL_True)),
             cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
                 {{Well_Known_Type.Heading, true}},

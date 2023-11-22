@@ -31,7 +31,7 @@ internal class MDL_Any
     internal Memory memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
-    // "value" is a member of.  Determines interpreting Details field.
+    // "value" is a member of.  Determines interpreting "details" field.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
     internal Well_Known_Base_Type WKBT;
@@ -55,7 +55,7 @@ internal class MDL_Any
     // Iff WKBT is MDL_Tuple, this field holds a Dictionary<String,MDL_Any> (like MDL_Excuse).
     // Iff WKBT is MDL_Article, this field holds a MDL_Article_Struct.
     // Iff WKBT is MDL_Variable, this field holds a MDL_Any.
-        // For a MDL_Variable, Details holds its Current_Value.
+        // For a MDL_Variable, "details" holds its current_value.
         // This can become a MDL_Variable_Struct if we want to store other things.
     // Iff WKBT is MDL_Process, this field holds an Object.
         // TODO: Replace this with some other type when we know what that is.
@@ -67,7 +67,7 @@ internal class MDL_Any
         // and transient reference to.
     // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String,MDL_Any> (like MDL_Tuple).
         // TODO: Change Excuse so represented as Nesting+Kit pair.
-    internal Object Details;
+    internal Object details;
 
     // Set of well-known Muldis Data Language types that this Muldis Data Language "value" is
     // known to either be or not be a member of.  This is populated
@@ -89,7 +89,7 @@ internal class MDL_Any
     // The serialization format either is or resembles a Muldis Data Language Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
-    internal String Cached_MDL_Any_Identity;
+    internal String cached_MDL_Any_identity;
 
     internal Boolean Same(MDL_Any value)
     {
@@ -98,7 +98,7 @@ internal class MDL_Any
 
     internal String MDL_Any_Identity()
     {
-        // This called function will test if Cached_MDL_Any_Identity
+        // This called function will test if cached_MDL_Any_identity
         // is null and assign it a value if so and use its value if not.
         return this.memory.identity_generator.MDL_Any_to_Identity_String(this);
     }
@@ -110,37 +110,37 @@ internal class MDL_Any
 
     internal Nullable<Boolean> MDL_Boolean()
     {
-        return (Nullable<Boolean>)Details;
+        return (Nullable<Boolean>)this.details;
     }
 
     internal BigInteger MDL_Integer()
     {
-        return (BigInteger)Details;
+        return (BigInteger)this.details;
     }
 
     internal MDL_Fraction_Struct MDL_Fraction()
     {
-        return (MDL_Fraction_Struct)Details;
+        return (MDL_Fraction_Struct)this.details;
     }
 
     internal BitArray MDL_Bits()
     {
-        return (BitArray)Details;
+        return (BitArray)this.details;
     }
 
     internal Byte[] MDL_Blob()
     {
-        return (Byte[])Details;
+        return (Byte[])this.details;
     }
 
     internal MDL_Text_Struct MDL_Text()
     {
-        return (MDL_Text_Struct)Details;
+        return (MDL_Text_Struct)this.details;
     }
 
     internal MDL_Array_Struct MDL_Array()
     {
-        return (MDL_Array_Struct)Details;
+        return (MDL_Array_Struct)this.details;
     }
 
     internal MDL_Bag_Struct MDL_Set()
@@ -150,64 +150,64 @@ internal class MDL_Any
 
     internal MDL_Bag_Struct MDL_Bag()
     {
-        return (MDL_Bag_Struct)Details;
+        return (MDL_Bag_Struct)this.details;
     }
 
     internal Dictionary<String,MDL_Any> MDL_Tuple()
     {
-        return (Dictionary<String,MDL_Any>)Details;
+        return (Dictionary<String,MDL_Any>)this.details;
     }
 
     internal MDL_Article_Struct MDL_Article()
     {
-        return (MDL_Article_Struct)Details;
+        return (MDL_Article_Struct)this.details;
     }
 
     internal MDL_Any MDL_Variable()
     {
-        return (MDL_Any)Details;
+        return (MDL_Any)this.details;
     }
 
     internal Object MDL_Process()
     {
-        return (Object)Details;
+        return (Object)this.details;
     }
 
     internal Object MDL_Stream()
     {
-        return (Object)Details;
+        return (Object)this.details;
     }
 
     internal Object MDL_External()
     {
-        return (Object)Details;
+        return (Object)this.details;
     }
 
     internal Dictionary<String,MDL_Any> MDL_Excuse()
     {
-        return (Dictionary<String,MDL_Any>)Details;
+        return (Dictionary<String,MDL_Any>)this.details;
     }
 
     internal Nullable<Boolean> member_status_in_WKT(Well_Known_Type type)
     {
-        return cached_WKT_statuses is null            ? (Nullable<Boolean>)null
-             : !cached_WKT_statuses.ContainsKey(type) ? (Nullable<Boolean>)null
-             :                                          cached_WKT_statuses[type];
+        return this.cached_WKT_statuses is null            ? (Nullable<Boolean>)null
+             : !this.cached_WKT_statuses.ContainsKey(type) ? (Nullable<Boolean>)null
+             :                                               this.cached_WKT_statuses[type];
     }
 
     internal void declare_member_status_in_WKT(Well_Known_Type type, Boolean status)
     {
-        if (cached_WKT_statuses is null)
+        if (this.cached_WKT_statuses is null)
         {
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>();
+            this.cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>();
         }
-        if (!cached_WKT_statuses.ContainsKey(type))
+        if (!this.cached_WKT_statuses.ContainsKey(type))
         {
-            cached_WKT_statuses.Add(type, status);
+            this.cached_WKT_statuses.Add(type, status);
         }
         else
         {
-            cached_WKT_statuses[type] = status;
+            this.cached_WKT_statuses[type] = status;
         }
     }
 }
@@ -245,48 +245,48 @@ internal class MDL_Any_Comparer : EqualityComparer<MDL_Any>
 
 internal class MDL_Fraction_Struct
 {
-    // The As_Decimal field is optionally valued if the MDL_Fraction
+    // The as_Decimal field is optionally valued if the MDL_Fraction
     // value is known small enough to fit in the range it can represent
     // and it is primarily used when the MDL_Fraction value was input to
     // the system as a .NET Decimal in the first place or was output
     // from the system as such; a MDL_Fraction input first as a Decimal
-    // is only copied to the As_Pair field when needed;
+    // is only copied to the as_pair field when needed;
     // if both said fields are valued at once, they are redundant.
-    internal Nullable<Decimal> As_Decimal;
+    internal Nullable<Decimal> as_Decimal;
 
-    // The As_Pair field, comprising a Numerator+Denominator field
+    // The as_pair field, comprising a numerator+denominator field
     // pair, can represent any
     // MDL_Fraction value at all, such that the Fraction's value is
-    // defined as the fractional division of Numerator by Denominator.
-    // As_Pair might not be defined if As_Decimal is defined.
-    internal MDL_Fraction_Pair As_Pair;
+    // defined as the fractional division of numerator by denominator.
+    // as_pair might not be defined if as_Decimal is defined.
+    internal MDL_Fraction_Pair as_pair;
 
     internal void Ensure_Coprime()
     {
         Ensure_Pair();
-        if (As_Pair.Cached_Is_Coprime == true)
+        if (this.as_pair.cached_is_coprime == true)
         {
             return;
         }
         // Note that GreatestCommonDivisor() always has a non-negative result.
-        BigInteger gcd = BigInteger.GreatestCommonDivisor(As_Pair.Numerator, As_Pair.Denominator);
+        BigInteger gcd = BigInteger.GreatestCommonDivisor(this.as_pair.numerator, this.as_pair.denominator);
         if (gcd > 1)
         {
             // Make the numerator and denominator coprime.
-            As_Pair.Numerator   = As_Pair.Numerator   / gcd;
-            As_Pair.Denominator = As_Pair.Denominator / gcd;
+            this.as_pair.numerator   = this.as_pair.numerator   / gcd;
+            this.as_pair.denominator = this.as_pair.denominator / gcd;
         }
-        As_Pair.Cached_Is_Coprime = true;
+        this.as_pair.cached_is_coprime = true;
     }
 
     internal void Ensure_Pair()
     {
-        if (As_Pair is not null)
+        if (this.as_pair is not null)
         {
             return;
         }
-        // If Numerator+Denominator are null, As_Decimal must not be.
-        Int32[] dec_bits = Decimal.GetBits((Decimal)As_Decimal);
+        // If numerator+denominator are null, as_Decimal must not be.
+        Int32[] dec_bits = Decimal.GetBits((Decimal)this.as_Decimal);
         // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
         // The GetBits spec says that it returns 4 32-bit integers
         // representing the 128 bits of the Decimal itself; of these,
@@ -301,26 +301,26 @@ internal class MDL_Fraction_Struct
         {
             denominator_dec = denominator_dec * 10M;
         }
-        Decimal numerator_dec = (Decimal)As_Decimal * denominator_dec;
-        As_Pair = new MDL_Fraction_Pair {
-            Numerator = new BigInteger(numerator_dec),
-            Denominator = new BigInteger(denominator_dec),
-            Cached_Is_Terminating_Decimal = true,
+        Decimal numerator_dec = (Decimal)this.as_Decimal * denominator_dec;
+        as_pair = new MDL_Fraction_Pair {
+            numerator = new BigInteger(numerator_dec),
+            denominator = new BigInteger(denominator_dec),
+            cached_is_terminating_decimal = true,
         };
     }
 
     internal Boolean Is_Terminating_Decimal()
     {
-        if (As_Decimal is not null)
+        if (this.as_Decimal is not null)
         {
             return true;
         }
-        if (As_Pair.Cached_Is_Terminating_Decimal is null)
+        if (this.as_pair.cached_is_terminating_decimal is null)
         {
             Ensure_Coprime();
             Boolean found_all_2_factors = false;
             Boolean found_all_5_factors = false;
-            BigInteger confirmed_quotient = As_Pair.Denominator;
+            BigInteger confirmed_quotient = this.as_pair.denominator;
             BigInteger attempt_quotient = 1;
             BigInteger attempt_remainder = 0;
             while (!found_all_2_factors)
@@ -349,14 +349,14 @@ internal class MDL_Fraction_Struct
                     confirmed_quotient = attempt_quotient;
                 }
             }
-            As_Pair.Cached_Is_Terminating_Decimal = (confirmed_quotient == 1);
+            this.as_pair.cached_is_terminating_decimal = (confirmed_quotient == 1);
         }
-        return (Boolean)As_Pair.Cached_Is_Terminating_Decimal;
+        return (Boolean)this.as_pair.cached_is_terminating_decimal;
     }
 
     internal Int32 Pair_Decimal_Denominator_Scale()
     {
-        if (As_Pair is null || !Is_Terminating_Decimal())
+        if (this.as_pair is null || !Is_Terminating_Decimal())
         {
             throw new InvalidOperationException();
         }
@@ -364,12 +364,12 @@ internal class MDL_Fraction_Struct
         for (Int32 dec_scale = 0; dec_scale <= Int32.MaxValue; dec_scale++)
         {
             // BigInteger.Pow() can only take an Int32 exponent anyway.
-            if (BigInteger.Remainder(BigInteger.Pow(10,dec_scale), As_Pair.Denominator) == 0)
+            if (BigInteger.Remainder(BigInteger.Pow(10,dec_scale), this.as_pair.denominator) == 0)
             {
                 return dec_scale;
             }
         }
-        // If somehow the Denominator can be big enough that we'd actually get here.
+        // If somehow the denominator can be big enough that we'd actually get here.
         throw new NotImplementedException();
     }
 }
@@ -379,39 +379,39 @@ internal class MDL_Fraction_Struct
 
 internal class MDL_Fraction_Pair
 {
-    // The Numerator+Denominator field pair can represent any
+    // The numerator+denominator field pair can represent any
     // MDL_Fraction value at all, such that the Fraction's value is
-    // defined as the fractional division of Numerator by Denominator.
-    // Denominator may never be zero; otherwise, the pair must always
-    // be normalized at least such that the Denominator is positive.
-    internal BigInteger Numerator;
-    internal BigInteger Denominator;
+    // defined as the fractional division of numerator by denominator.
+    // denominator may never be zero; otherwise, the pair must always
+    // be normalized at least such that the denominator is positive.
+    internal BigInteger numerator;
+    internal BigInteger denominator;
 
-    // This is true iff we know that the Numerator and
-    // Denominator are coprime (their greatest common divisor is 1);
+    // This is true iff we know that the numerator and
+    // denominator are coprime (their greatest common divisor is 1);
     // this is false iff we know that they are not coprime.
     // While the pair typically need to be coprime in order to reliably
     // determine if 2 MDL_Fraction represent the same Muldis Data Language value,
     // we don't necessarily store them that way for efficiency sake.
-    internal Nullable<Boolean> Cached_Is_Coprime;
+    internal Nullable<Boolean> cached_is_coprime;
 
     // This is true iff we know that the MDL_Fraction value can be
     // represented as a terminating decimal number, meaning that the
-    // prime factorization of the MDL_Fraction's coprime Denominator
+    // prime factorization of the MDL_Fraction's coprime denominator
     // consists only of 2s and 5s; this is false iff we know that the
     // MDL_Fraction value would be an endlessly repeating decimal
-    // number, meaning that the MDL_Fraction's coprime Denominator has
+    // number, meaning that the MDL_Fraction's coprime denominator has
     // at least 1 prime factor that is not a 2 or a 5.
     // The identity serialization of a MDL_Fraction uses a single decimal
     // number iff it would terminate and a coprime integer pair otherwise.
-    // This field may be true even if Cached_Is_Coprime isn't because
+    // This field may be true even if cached_is_coprime isn't because
     // this MDL_Fraction_Pair was derived from a Decimal.
-    internal Nullable<Boolean> Cached_Is_Terminating_Decimal;
+    internal Nullable<Boolean> cached_is_terminating_decimal;
 
     // Iff this field is defined, we ensure that both the current
-    // MDL_Fraction_Struct has a Denominator equal to it, and also that
+    // MDL_Fraction_Struct has a denominator equal to it, and also that
     // any other MDL_Fraction_Struct derived from it has the same
-    // Denominator as well, iff the MDL_Fraction value can be exactly
+    // denominator as well, iff the MDL_Fraction value can be exactly
     // represented by such a MDL_Fraction_Struct.
     // Having this field defined tends to suppress automatic efforts to
     // normalize the MDL_Fraction_Struct to a coprime state.
@@ -438,7 +438,7 @@ internal class MDL_Text_Struct
     // is those member values in the range {0..0xD7FF,0xE000..0xFFFF},
     // or from either of the 16 supplementary planes, which is those
     // member values in the range {0x10000..0x10FFFF}.
-    // Code_Point_Members is represented using a standard .NET
+    // code_point_members is represented using a standard .NET
     // String value for simplicity but a String has a different native
     // concept of components; it is formally an array of .NET Char
     // each of which is either a whole BMP code point or half of a
@@ -450,7 +450,7 @@ internal class MDL_Text_Struct
     // "surrogate" Char outside of a proper "surrogate pair", both
     // Muldis.Data_Engine_Reference forbids such a malformed String
     // from either being used internally or being passed in by the API.
-    internal String Code_Point_Members;
+    internal String code_point_members;
 
     // Nullable Boolean
     // This is true iff we know that at least 1 code point member is NOT
@@ -463,10 +463,10 @@ internal class MDL_Text_Struct
     // This field is always defined as a side-effect of Muldis.Data_Engine_Reference
     // forbidding a malformed String and so they are always tested at
     // the borders, that test also revealing if a String has non-BMP chars.
-    internal Boolean Has_Any_Non_BMP;
+    internal Boolean has_any_non_BMP;
 
     // Cached count of code point members of the Muldis Data Language Text.
-    internal Nullable<Int64> Cached_Member_Count;
+    internal Nullable<Int64> cached_member_count;
 }
 
 // Muldis.Data_Engine_Reference.Internal.Symbolic_Array_Type
@@ -494,8 +494,8 @@ internal enum Symbolic_Array_Type
 internal class MDL_Array_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
-    // the tree.  Determines interpreting Members field.
-    internal Symbolic_Array_Type Local_Symbolic_Type;
+    // the tree.  Determines interpreting "members" field.
+    internal Symbolic_Array_Type local_symbolic_type;
 
     // Members of this Muldis Data Language Array, in one of several possible
     // specialized representation formats depending on the data type.
@@ -517,26 +517,26 @@ internal class MDL_Array_Struct
     // Iff LST is Catenated, this field holds a MDL_Array_Pair.
         // This is a non-leaf node with 2 direct child Array nodes;
         // this Array's members are defined as the catenation of
-        // the pair's A0 and A1 nodes in that order.
+        // the pair's a0 and a1 nodes in that order.
         // Makes no guarantees that the Array is none/singular/otherwise.
-    internal Object Members;
+    internal Object members;
 
     // A cache of calculations about this Array's members.
-    internal Cached_Members_Meta Cached_Members_Meta;
+    internal Cached_Members_Meta cached_members_meta;
 
     internal Multiplied_Member Local_Singular_Members()
     {
-        return (Multiplied_Member)Members;
+        return (Multiplied_Member)this.members;
     }
 
     internal List<MDL_Any> Local_Arrayed_Members()
     {
-        return (List<MDL_Any>)Members;
+        return (List<MDL_Any>)this.members;
     }
 
     internal MDL_Array_Pair Tree_Catenated_Members()
     {
-        return (MDL_Array_Pair)Members;
+        return (MDL_Array_Pair)this.members;
     }
 }
 
@@ -547,15 +547,15 @@ internal class MDL_Array_Struct
 internal class MDL_Array_Pair
 {
     // This is the first conceptually-ordered arg/attr.
-    internal MDL_Array_Struct A0;
+    internal MDL_Array_Struct a0;
 
     // This is the second conceptually-ordered arg/attr.
-    internal MDL_Array_Struct A1;
+    internal MDL_Array_Struct a1;
 
     internal MDL_Array_Pair(MDL_Array_Struct a0, MDL_Array_Struct a1)
     {
-        A0 = a0;
-        A1 = a1;
+        this.a0 = a0;
+        this.a1 = a1;
     }
 }
 
@@ -581,15 +581,15 @@ internal enum Symbolic_Bag_Type
 internal class Multiplied_Member
 {
     // The Muldis Data Language value that every member of this multiset is.
-    internal MDL_Any Member;
+    internal MDL_Any member;
 
     // The count of members of this multiset.
-    internal Int64 Multiplicity;
+    internal Int64 multiplicity;
 
     internal Multiplied_Member(MDL_Any member, Int64 multiplicity = 1)
     {
-        Member       = member;
-        Multiplicity = multiplicity;
+        this.member       = member;
+        this.multiplicity = multiplicity;
     }
 
     internal Multiplied_Member Clone()
@@ -615,8 +615,8 @@ internal class Multiplied_Member
 internal class MDL_Bag_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
-    // the tree.  Determines interpreting Members field.
-    internal Symbolic_Bag_Type Local_Symbolic_Type;
+    // the tree.  Determines interpreting "members" field.
+    internal Symbolic_Bag_Type local_symbolic_type;
 
     // Members of this Muldis Data Language Bag, in one of several possible
     // specialized representation formats depending on the data type.
@@ -641,7 +641,7 @@ internal class MDL_Bag_Struct
         // can be of any type; this is the most common format for a Bag
         // that has had some searches or operations performed on it.
         // The Dictionary has one key-asset pair for each distinct Muldis Data Language
-        // "value", all of which are indexed by Cached_MDL_Any_Identity.
+        // "value", all of which are indexed by cached_MDL_Any_identity.
         // Guarantees the Bag has at least 1 member.
     // Iff LST is Unique, this field holds a MDL_Bag_Struct.
         // This is a non-leaf node with 1 direct child Bag node;
@@ -650,36 +650,36 @@ internal class MDL_Bag_Struct
     // Iff LST is Summed, this field holds a MDL_Bag_Pair.
         // This is a non-leaf node with 2 direct child Bag nodes;
         // this Bag's members are defined as the catenation of
-        // the pair's A0 and A1 nodes in that order.
+        // the pair's a0 and a1 nodes in that order.
         // Makes no guarantees that the Bag is none/singular/otherwise.
-    internal Object Members;
+    internal Object members;
 
     // A cache of calculations about this Bag's members.
-    internal Cached_Members_Meta Cached_Members_Meta;
+    internal Cached_Members_Meta cached_members_meta;
 
     internal Multiplied_Member Local_Singular_Members()
     {
-        return (Multiplied_Member)Members;
+        return (Multiplied_Member)this.members;
     }
 
     internal List<Multiplied_Member> Local_Arrayed_Members()
     {
-        return (List<Multiplied_Member>)Members;
+        return (List<Multiplied_Member>)this.members;
     }
 
     internal Dictionary<MDL_Any,Multiplied_Member> Local_Indexed_Members()
     {
-        return (Dictionary<MDL_Any,Multiplied_Member>)Members;
+        return (Dictionary<MDL_Any,Multiplied_Member>)this.members;
     }
 
     internal MDL_Bag_Struct Tree_Unique_Members()
     {
-        return (MDL_Bag_Struct)Members;
+        return (MDL_Bag_Struct)this.members;
     }
 
     internal MDL_Bag_Pair Tree_Summed_Members()
     {
-        return (MDL_Bag_Pair)Members;
+        return (MDL_Bag_Pair)this.members;
     }
 }
 
@@ -690,19 +690,19 @@ internal class MDL_Bag_Struct
 internal class MDL_Bag_Pair
 {
     // This is the first conceptually-ordered arg/attr.
-    internal MDL_Bag_Struct A0;
+    internal MDL_Bag_Struct a0;
 
     // This is the second conceptually-ordered arg/attr.
-    internal MDL_Bag_Struct A1;
+    internal MDL_Bag_Struct a1;
 
     internal MDL_Bag_Pair(MDL_Bag_Struct a0, MDL_Bag_Struct a1)
     {
-        A0 = a0;
-        A1 = a1;
+        this.a0 = a0;
+        this.a1 = a1;
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.Cached_Members_Meta
+// Muldis.Data_Engine_Reference.Internal.cached_members_meta
 // Represents cached metadata for the members of a Muldis Data Language "discrete
 // homogeneous" collection such as an Array or Bag, particularly a
 // collection implemented as a tree of nodes, where each node may
@@ -713,22 +713,22 @@ internal class Cached_Members_Meta
     // Nullable Integer
     // Cached count of members of the Muldis Data Language Array/Bag represented by
     // this tree node including those defined by it and child nodes.
-    internal Nullable<Int64> Tree_Member_Count;
+    internal Nullable<Int64> tree_member_count;
 
     // Nullable Boolean
     // This is true iff we know that no 2 members of the Muldis Data Language
     // Array/Bag represented by this tree node (including child nodes)
     // are the same value, and false iff we know that at least 2
     // members are the same value.
-    internal Nullable<Boolean> Tree_All_Unique;
+    internal Nullable<Boolean> tree_all_unique;
 
     // Nullable Boolean
     // This is true iff we know that the Muldis Data Language Array/Bag represented
-    // by this tree node (as with Tree_All_Unique) has no member that
+    // by this tree node (as with tree_all_unique) has no member that
     // is not a Muldis Data Language Tuple and has no 2 members that do not have
     // the same heading; this is false iff we know that any member is
     // not a Tuple or that any 2 members do not have the same heading.
-    internal Nullable<Boolean> Tree_Relational;
+    internal Nullable<Boolean> tree_relational;
 }
 
 // Muldis.Data_Engine_Reference.Internal.MDL_Article_Struct
@@ -739,8 +739,8 @@ internal class Cached_Members_Meta
 internal class MDL_Article_Struct
 {
     // The Muldis Data Language value that is the "label" of this MDL_Article value.
-    internal MDL_Any Label;
+    internal MDL_Any label;
 
     // The Muldis Data Language value that is the "attributes" of this MDL_Article value.
-    internal MDL_Any Attrs;
+    internal MDL_Any attrs;
 }

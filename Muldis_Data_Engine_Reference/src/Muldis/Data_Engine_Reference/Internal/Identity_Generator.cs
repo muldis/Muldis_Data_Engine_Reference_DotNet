@@ -34,11 +34,11 @@ internal class Identity_Generator : MUON_Generator
 
     protected override String Any_Selector(MDL_Any value, String indent)
     {
-        if (value.Cached_MDL_Any_Identity is null)
+        if (value.cached_MDL_Any_identity is null)
         {
-            value.Cached_MDL_Any_Identity
+            value.cached_MDL_Any_identity
                 = Any_Selector_Foundation_Dispatch(value, indent);
         }
-        return value.Cached_MDL_Any_Identity;
+        return value.cached_MDL_Any_identity;
     }
 }

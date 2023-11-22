@@ -57,7 +57,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("new_current");
         }
-        variable.memory_value.Details = new_current.memory_value;
+        variable.memory_value.details = new_current.memory_value;
     }
 
     public MDER_V_Any MDER_import(Object value)

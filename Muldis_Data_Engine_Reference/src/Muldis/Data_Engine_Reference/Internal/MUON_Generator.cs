@@ -87,13 +87,13 @@ internal abstract class MUON_Generator
         // non-terminating decimal (includes all Fraction that can be
         // non-terminating binary/octal/hex), express in that format;
         // otherwise, express as a coprime numerator/denominator pair.
-        // Note, Is_Terminating_Decimal() will ensure As_Pair is
-        // coprime iff As_Decimal is null.
+        // Note, Is_Terminating_Decimal() will ensure as_pair is
+        // coprime iff as_Decimal is null.
         if (fa.Is_Terminating_Decimal())
         {
-            if (fa.As_Decimal is not null)
+            if (fa.as_Decimal is not null)
             {
-                String dec_digits = fa.As_Decimal.ToString();
+                String dec_digits = fa.as_Decimal.ToString();
                 // When a .NET Decimal is selected using a .NET Decimal
                 // literal having trailing zeroes, those trailing
                 // zeroes will persist in the .ToString() result
@@ -109,17 +109,17 @@ internal abstract class MUON_Generator
             if (dec_scale == 0)
             {
                 // We have an integer expressed as a Fraction.
-                return fa.As_Pair.Numerator.ToString() + ".0";
+                return fa.as_pair.numerator.ToString() + ".0";
             }
             BigInteger dec_denominator = BigInteger.Pow(10,dec_scale);
-            BigInteger dec_numerator = fa.As_Pair.Numerator
-                * BigInteger.Divide(dec_denominator, fa.As_Pair.Denominator);
+            BigInteger dec_numerator = fa.as_pair.numerator
+                * BigInteger.Divide(dec_denominator, fa.as_pair.denominator);
             String numerator_digits = dec_numerator.ToString();
             Int32 left_size = numerator_digits.Length - dec_scale;
             return numerator_digits.Substring(0, left_size)
                 + "." + numerator_digits.Substring(left_size);
         }
-        return fa.As_Pair.Numerator.ToString() + "/" + fa.As_Pair.Denominator.ToString();
+        return fa.as_pair.numerator.ToString() + "/" + fa.as_pair.denominator.ToString();
     }
 
     private String Bits_Literal(MDL_Any value)
@@ -156,7 +156,7 @@ internal abstract class MUON_Generator
         {
             return "\"\"";
         }
-        return Nonempty_Text_Literal(value.MDL_Text().Code_Point_Members);
+        return Nonempty_Text_Literal(value.MDL_Text().code_point_members);
     }
 
     private String Nonempty_Text_Literal(String value)
@@ -273,24 +273,24 @@ internal abstract class MUON_Generator
         // everything simple and reliable in the 99% common case; we
         // assume that it would only be a rare edge case to have a
         // sparse array that we would want to output in that manner.
-        // TODO: Rendering a Singular with a higher Multiplicity than
+        // TODO: Rendering a Singular with a higher multiplicity than
         // an Int32 can hold will throw a runtime exception; we can
         // deal with that later if an actual use case runs afowl of it.
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Array_Type.None:
                 return "";
             case Symbolic_Array_Type.Singular:
                 return String.Concat(Enumerable.Repeat(
-                    indent + Any_Selector(node.Local_Singular_Members().Member, indent) + ",\u000A",
-                    (Int32)node.Local_Singular_Members().Multiplicity));
+                    indent + Any_Selector(node.Local_Singular_Members().member, indent) + ",\u000A",
+                    (Int32)node.Local_Singular_Members().multiplicity));
             case Symbolic_Array_Type.Arrayed:
                 return String.Concat(Enumerable.Select(
                     node.Local_Arrayed_Members(),
                     m => indent + Any_Selector(m, indent) + ",\u000A"));
             case Symbolic_Array_Type.Catenated:
-                return Array_Selector__node__tree(node.Tree_Catenated_Members().A0, indent)
-                    + Array_Selector__node__tree(node.Tree_Catenated_Members().A1, indent);
+                return Array_Selector__node__tree(node.Tree_Catenated_Members().a0, indent)
+                    + Array_Selector__node__tree(node.Tree_Catenated_Members().a1, indent);
             default:
                 throw new NotImplementedException();
         }
@@ -301,7 +301,7 @@ internal abstract class MUON_Generator
         String mei = indent + "\u0009";
         value.memory.Bag__Collapse(bag: value, want_indexed: true);
         MDL_Bag_Struct node = value.MDL_Bag();
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:
                 return "(Set:[])";
@@ -320,7 +320,7 @@ internal abstract class MUON_Generator
         String mei = indent + "\u0009";
         value.memory.Bag__Collapse(bag: value, want_indexed: true);
         MDL_Bag_Struct node = value.MDL_Bag();
-        switch (node.Local_Symbolic_Type)
+        switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:
                 return "(Bag:[])";
@@ -328,7 +328,7 @@ internal abstract class MUON_Generator
                 return "(Bag:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
                     m => mei + Any_Selector(m.Key, mei) + " : "
-                        + Integer_Literal(m.Value.Multiplicity) + ",\u000A"
+                        + Integer_Literal(m.Value.multiplicity) + ",\u000A"
                 )) + indent + "])";
             default:
                 throw new NotImplementedException();
@@ -357,9 +357,9 @@ internal abstract class MUON_Generator
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
         return "(Article:("
-            + Any_Selector(value.MDL_Article().Label, indent)
+            + Any_Selector(value.MDL_Article().label, indent)
             + " : "
-            + Any_Selector(value.MDL_Article().Attrs, indent)
+            + Any_Selector(value.MDL_Article().attrs, indent)
             + "))";
     }
 
