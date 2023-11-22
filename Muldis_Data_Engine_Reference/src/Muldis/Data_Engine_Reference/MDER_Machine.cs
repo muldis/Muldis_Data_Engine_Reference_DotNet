@@ -301,7 +301,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_0bTRUE))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
                     );
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
@@ -322,7 +322,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDL_Tuple(
                         new Dictionary<String,MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_0bTRUE))
+                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
                     );
                 }
                 break;

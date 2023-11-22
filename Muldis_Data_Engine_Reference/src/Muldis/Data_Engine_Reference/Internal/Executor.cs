@@ -270,9 +270,9 @@ internal class Executor
             switch (func_name_s)
             {
                 case "Any":
-                    return m.MDL_0bTRUE;
+                    return m.MDL_True();
                 case "None":
-                    return m.MDL_0bFALSE;
+                    return m.MDL_False();
 
                 // FOUNDATION BASE TYPE DEFINERS
 

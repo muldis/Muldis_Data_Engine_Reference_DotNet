@@ -35,8 +35,8 @@ internal class Memory
     private readonly MDL_Ignorance MDL_0iIGNORANCE;
 
     // MDL_Boolean 0bFALSE (type default value) and 0bTRUE values.
-    internal readonly MDL_False MDL_0bFALSE;
-    internal readonly MDL_True MDL_0bTRUE;
+    private readonly MDL_False MDL_0bFALSE;
+    private readonly MDL_True MDL_0bTRUE;
 
     // MDL_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
@@ -44,7 +44,7 @@ internal class Memory
     private readonly Dictionary<Int32,MDL_Integer> integers;
 
     // MDL_Fraction 0.0 (type default value).
-    internal readonly MDL_Any MDL_Fraction_0;
+    private readonly MDL_Any MDL_Fraction_0;
 
     // MDL_Bits with no members (type default value).
     internal readonly MDL_Any MDL_Bits_C0;
