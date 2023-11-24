@@ -531,21 +531,6 @@ public class MDER_Machine
                     return this.memory.Simple_MDL_Excuse((String)v);
                 }
                 throw new NotImplementedException();
-            case "Attr_Name":
-                if (String.Equals(type_name, "System.String"))
-                {
-                    if (this.memory.Test_Dot_Net_String((String)v)
-                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "value",
-                            message: "Can't select MDL_Attr_Name with a malformed .NET String."
-                        );
-                    }
-                    return this.memory.MDL_Attr_Name((String)v);
-                }
-                break;
             case "Attr_Name_List":
                 if (String.Equals(type_name, "System.String[]"))
                 {

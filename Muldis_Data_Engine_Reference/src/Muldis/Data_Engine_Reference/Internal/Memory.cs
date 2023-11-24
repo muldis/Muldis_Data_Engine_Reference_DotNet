@@ -70,12 +70,9 @@ internal class Memory
     // Cache of MDL_Tuple subtype Heading values (all Tuple attribute
     // assets are False), limited to 10K entries of shorter size.
     private readonly Dictionary<MDL_Any, MDL_Any> heading_tuples;
-    // Cache of MDL_Tuple and Heading subtype Attr_Name values.
-    // The set of values in here is a proper subset of this.heading_tuples.
-    private readonly Dictionary<String, MDL_Any> attr_name_tuples;
-    internal readonly MDL_Any Attr_Name_0;
-    internal readonly MDL_Any Attr_Name_1;
-    internal readonly MDL_Any Attr_Name_2;
+    internal readonly MDL_Any Heading_0;
+    internal readonly MDL_Any Heading_1;
+    internal readonly MDL_Any Heading_2;
     internal readonly MDL_Any Heading_0_1;
     internal readonly MDL_Any Heading_0_2;
     internal readonly MDL_Any Heading_1_2;
@@ -129,7 +126,11 @@ internal class Memory
         this.MDL_Blob_C0 = new MDL_Blob(this, new Byte[] {});
 
         this.texts = new Dictionary<String, MDL_Text>();
-        foreach (String s in new String[] {""})
+        foreach (String s in new String[] {"", "\u0000", "\u0001", "\u0002"})
+        {
+            MDL_Text v = this.MDL_Text(s, false);
+        }
+        foreach (String s in Constants.Strings__Seeded_Non_Positional_Attr_Names())
         {
             MDL_Text v = this.MDL_Text(s, false);
         }
@@ -181,33 +182,27 @@ internal class Memory
                 {{Well_Known_Type.Heading, true}},
         };
 
-        this.attr_name_tuples = new Dictionary<String, MDL_Any>()
-        {
-            {"\u0000", new MDL_Any {
-                memory = this,
-                WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String, MDL_Any>() {{"\u0000", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
-                    {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
-            } },
-            {"\u0001", new MDL_Any {
-                memory = this,
-                WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String, MDL_Any>() {{"\u0001", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
-                    {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
-            } },
-            {"\u0002", new MDL_Any {
-                memory = this,
-                WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String, MDL_Any>() {{"\u0002", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
-                    {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
-            } },
+        Heading_0 = new MDL_Any {
+            memory = this,
+            WKBT = Well_Known_Base_Type.MDL_Tuple,
+            details = new Dictionary<String, MDL_Any>() {{"\u0000", MDL_0bTRUE}},
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
+                {{Well_Known_Type.Heading, true}},
         };
-        Attr_Name_0 = this.attr_name_tuples["\u0000"];
-        Attr_Name_1 = this.attr_name_tuples["\u0001"];
-        Attr_Name_2 = this.attr_name_tuples["\u0002"];
+        Heading_1 = new MDL_Any {
+            memory = this,
+            WKBT = Well_Known_Base_Type.MDL_Tuple,
+            details = new Dictionary<String, MDL_Any>() {{"\u0001", MDL_0bTRUE}},
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
+                {{Well_Known_Type.Heading, true}},
+        };
+        Heading_2 = new MDL_Any {
+            memory = this,
+            WKBT = Well_Known_Base_Type.MDL_Tuple,
+            details = new Dictionary<String, MDL_Any>() {{"\u0002", MDL_0bTRUE}},
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
+                {{Well_Known_Type.Heading, true}},
+        };
 
         Heading_0_1 = new MDL_Any {
             memory = this,
@@ -246,19 +241,14 @@ internal class Memory
         this.heading_tuples = new Dictionary<MDL_Any, MDL_Any>()
         {
             {MDL_Tuple_D0, MDL_Tuple_D0},
-            {Attr_Name_0, Attr_Name_0},
-            {Attr_Name_1, Attr_Name_1},
-            {Attr_Name_2, Attr_Name_2},
+            {Heading_0, Heading_0},
+            {Heading_1, Heading_1},
+            {Heading_2, Heading_2},
             {Heading_0_1, Heading_0_1},
             {Heading_0_2, Heading_0_2},
             {Heading_1_2, Heading_1_2},
             {Heading_0_1_2, Heading_0_1_2},
         };
-
-        foreach (String s in Constants.Strings__Seeded_Non_Positional_Attr_Names())
-        {
-            MDL_Any an = this.MDL_Attr_Name(s);
-        }
 
         this.false_nullary_article = new MDL_Any {
             memory = this,
@@ -471,6 +461,12 @@ internal class Memory
         return text;
     }
 
+    // Temporary wrapper.
+    internal MDL_Text MDL_Attr_Name(String code_point_members)
+    {
+        return this.MDL_Text(code_point_members, false);
+    }
+
     internal MDL_Any MDL_Array(List<MDL_Any> members)
     {
         if (members.Count == 0)
@@ -551,37 +547,11 @@ internal class Memory
         {
             return MDL_Tuple_D0;
         }
-        if (attrs.Count == 1)
-        {
-            KeyValuePair<String, MDL_Any> only_attr = attrs.First();
-            if (Object.ReferenceEquals(only_attr.Value, MDL_0bTRUE)
-                && only_attr.Key.Length <= 200
-                && this.attr_name_tuples.ContainsKey(only_attr.Key))
-            {
-                return this.attr_name_tuples[only_attr.Key];
-            }
-        }
         MDL_Any tuple = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = attrs,
         };
-        if (attrs.Count == 1)
-        {
-            KeyValuePair<String, MDL_Any> only_attr = attrs.First();
-            if (Object.ReferenceEquals(only_attr.Value, MDL_0bTRUE))
-            {
-                tuple.declare_member_status_in_WKT(Well_Known_Type.Heading, true);
-                tuple.declare_member_status_in_WKT(Well_Known_Type.Attr_Name, true);
-                if (only_attr.Key.Length <= 200 && this.heading_tuples.Count < 10000)
-                {
-                    this.heading_tuples.Add(tuple, tuple);
-                    this.attr_name_tuples.Add(only_attr.Key, tuple);
-                }
-            }
-            return tuple;
-        }
-        // We only get here if the tuple degree >= 2.
         if (Enumerable.All(attrs, attr => Object.ReferenceEquals(attr.Value, MDL_0bTRUE)))
         {
             tuple.declare_member_status_in_WKT(Well_Known_Type.Heading, true);
@@ -762,27 +732,6 @@ internal class Memory
             }
         }
         return ok_result;
-    }
-
-    internal MDL_Any MDL_Attr_Name(String value)
-    {
-        if (value.Length <= 200 && this.attr_name_tuples.ContainsKey(value))
-        {
-            return this.attr_name_tuples[value];
-        }
-        MDL_Any tuple = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String, MDL_Any>() {{value, MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
-                {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
-        };
-        if (value.Length <= 200 && this.heading_tuples.Count < 10000)
-        {
-            this.heading_tuples.Add(tuple, tuple);
-            this.attr_name_tuples.Add(value, tuple);
-        }
-        return tuple;
     }
 
     internal void Array__Collapse(MDL_Any array)
@@ -1145,26 +1094,6 @@ internal class Memory
         }
         // If we get here, the Tuple/Heading degree is guaranteed > 0.
         Dictionary<String, MDL_Any> attrs = tuple.MDL_Tuple();
-        if (attrs.Count == 1)
-        {
-            if (attrs.ContainsKey("\u0000"))
-            {
-                return Attr_Name_0;
-            }
-            if (attrs.ContainsKey("\u0001"))
-            {
-                return Attr_Name_1;
-            }
-            if (attrs.ContainsKey("\u0002"))
-            {
-                return Attr_Name_2;
-            }
-            if (attrs.First().Key.Length <= 200
-                && this.attr_name_tuples.ContainsKey(attrs.First().Key))
-            {
-                return this.attr_name_tuples[attrs.First().Key];
-            }
-        }
         MDL_Any heading = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
@@ -1173,17 +1102,6 @@ internal class Memory
             cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
-        if (attrs.Count == 1)
-        {
-            heading.declare_member_status_in_WKT(Well_Known_Type.Attr_Name, true);
-            if (attrs.First().Key.Length <= 200 && this.heading_tuples.Count < 10000)
-            {
-                this.heading_tuples.Add(heading, heading);
-                this.attr_name_tuples.Add(attrs.First().Key, heading);
-            }
-            return heading;
-        }
-        // We only get here if the tuple degree >= 2.
         if (attrs.Count <= 30 && Enumerable.All(attrs, attr => attr.Key.Length <= 200))
         {
             if (this.heading_tuples.ContainsKey(heading))

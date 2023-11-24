@@ -147,15 +147,15 @@ internal abstract class MUON_Generator
 
     private String Text_Literal(MDL_Text value)
     {
-        if (String.Equals(value.code_point_members, ""))
+        return Text_Literal_from_String(value.code_point_members);
+    }
+
+    private String Text_Literal_from_String(String value)
+    {
+        if (String.Equals(value, ""))
         {
             return "\"\"";
         }
-        return Nonempty_Text_Literal(value.code_point_members);
-    }
-
-    private String Nonempty_Text_Literal(String value)
-    {
         if (value.Length == 1 && ((Char)value[0]) <= 0x1F)
         {
             // Format as a code-point-text.
@@ -231,15 +231,6 @@ internal abstract class MUON_Generator
         return sb.ToString();
     }
 
-    private String Attr_Name(String value)
-    {
-        if (String.Equals(value, ""))
-        {
-            return "\"\"";
-        }
-        return Nonempty_Text_Literal(value);
-    }
-
     private String Heading_Literal(MDL_Any value)
     {
         Memory m = value.memory;
@@ -248,7 +239,7 @@ internal abstract class MUON_Generator
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
-                        a => Attr_Name(a.Key) + ","))
+                        a => Text_Literal_from_String(a.Key) + ","))
                 + "})";
     }
 
@@ -343,7 +334,7 @@ internal abstract class MUON_Generator
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(attrs, a => a.Key),
-                        a => ati + Attr_Name(a.Key) + " : "
+                        a => ati + Text_Literal_from_String(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
                 + indent + "})";
     }
@@ -365,15 +356,14 @@ internal abstract class MUON_Generator
         Memory m = value.memory;
         Dictionary<String, MDL_Any> attrs = value.MDL_Excuse();
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
-            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple
-            && attrs["\u0000"].member_status_in_WKT(Well_Known_Type.Attr_Name) == true)
+            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple)
         {
-            return "(Excuse:(" + Attr_Name(attrs["\u0000"].MDL_Tuple().First().Key) + " : {}))";
+            return "(Excuse:(" + Text_Literal_from_String(((MDL_Text)attrs["\u0000"]).code_point_members) + " : {}))";
         }
         return "(Excuse:(::\"\" : {\u000A"
             + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(attrs, a => a.Key),
-                    a => ati + Attr_Name(a.Key) + " : "
+                    a => ati + Text_Literal_from_String(a.Key) + " : "
                         + Any_Selector(a.Value, ati) + ",\u000A"))
             + indent + "}))";
     }

@@ -56,7 +56,6 @@ internal enum Well_Known_Type
     Leave,
     Iterate,
     Heading,
-    Attr_Name,
     Attr_Name_List,
     Local_Name,
     Absolute_Name,

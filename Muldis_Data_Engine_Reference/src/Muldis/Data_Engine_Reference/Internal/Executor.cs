@@ -107,7 +107,7 @@ internal class Executor
 
     internal Boolean Is_Text(MDL_Any value)
     {
-        throw new NotImplementedException();
+        return value.WKBT == Well_Known_Base_Type.MDL_Text;
     }
 
     internal Boolean Is_String(MDL_Any value)
@@ -170,11 +170,6 @@ internal class Executor
         return value.member_status_in_WKT(Well_Known_Type.Heading) == true;
     }
 
-    internal Boolean Is_Attr_Name(MDL_Any value)
-    {
-        return value.member_status_in_WKT(Well_Known_Type.Attr_Name) == true;
-    }
-
     internal Boolean Is_Attr_Name_List(MDL_Any value)
     {
         if (value.member_status_in_WKT(Well_Known_Type.Attr_Name_List) == true)
@@ -190,7 +185,7 @@ internal class Executor
         Int64 count = Array__count(value);
         for (Int64 i = 0; i < count; i++)
         {
-            if (!Is_Attr_Name(Array__maybe_at(value, i)))
+            if (!Is_Text(Array__maybe_at(value, i)))
             {
                 return false;
             }
@@ -252,13 +247,13 @@ internal class Executor
     internal MDL_Any evaluate_foundation_function(MDL_Any func_name, MDL_Any args)
     {
         Memory m = this.memory;
-        String func_name_s = func_name.MDL_Tuple().First().Key;
+        String func_name_s = ((MDL_Text)func_name).code_point_members;
 
         // TYPE DEFINERS
 
         if (Constants.Strings__Foundation_Type_Definer_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Attr_Name_0))
+            if (!m.Tuple__Same_Heading(args, m.Heading_0))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
@@ -359,7 +354,7 @@ internal class Executor
 
         if (Constants.Strings__Foundation_NTD_Unary_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Attr_Name_0))
+            if (!m.Tuple__Same_Heading(args, m.Heading_0))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
