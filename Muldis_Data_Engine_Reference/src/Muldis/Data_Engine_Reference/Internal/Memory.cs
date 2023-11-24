@@ -41,7 +41,7 @@ internal class Memory
     // MDL_Integer value cache.
     // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
     // The MDL_Integer 0 is the type default value.
-    private readonly Dictionary<Int32,MDL_Integer> integers;
+    private readonly Dictionary<Int32, MDL_Integer> integers;
 
     // MDL_Fraction 0.0 (type default value).
     private readonly MDL_Fraction MDL_Fraction_0;
@@ -68,10 +68,10 @@ internal class Memory
     internal readonly MDL_Any MDL_Tuple_D0;
     // Cache of MDL_Tuple subtype Heading values (all Tuple attribute
     // assets are False), limited to 10K entries of shorter size.
-    private readonly Dictionary<MDL_Any,MDL_Any> heading_tuples;
+    private readonly Dictionary<MDL_Any, MDL_Any> heading_tuples;
     // Cache of MDL_Tuple and Heading subtype Attr_Name values.
     // The set of values in here is a proper subset of this.heading_tuples.
-    private readonly Dictionary<String,MDL_Any> attr_name_tuples;
+    private readonly Dictionary<String, MDL_Any> attr_name_tuples;
     internal readonly MDL_Any Attr_Name_0;
     internal readonly MDL_Any Attr_Name_1;
     internal readonly MDL_Any Attr_Name_2;
@@ -100,7 +100,7 @@ internal class Memory
     private readonly MDL_Any false_nullary_article;
 
     // All well known MDL_Excuse values.
-    internal readonly Dictionary<String,MDL_Any> well_known_excuses;
+    internal readonly Dictionary<String, MDL_Any> well_known_excuses;
 
     internal Memory()
     {
@@ -114,7 +114,7 @@ internal class Memory
         this.MDL_0bFALSE = new MDL_False(this);
         this.MDL_0bTRUE = new MDL_True(this);
 
-        this.integers = new Dictionary<Int32,MDL_Integer>();
+        this.integers = new Dictionary<Int32, MDL_Integer>();
         for (Int32 i = -1; i <= 1; i++)
         {
             MDL_Integer v = this.MDL_Integer(i);
@@ -172,31 +172,31 @@ internal class Memory
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
             details = new Dictionary<String, MDL_Any>(),
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
 
-        this.attr_name_tuples = new Dictionary<String,MDL_Any>()
+        this.attr_name_tuples = new Dictionary<String, MDL_Any>()
         {
             {"\u0000", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+                details = new Dictionary<String, MDL_Any>() {{"\u0000", MDL_0bTRUE}},
+                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0001", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0001", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+                details = new Dictionary<String, MDL_Any>() {{"\u0001", MDL_0bTRUE}},
+                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
             {"\u0002", new MDL_Any {
                 memory = this,
                 WKBT = Well_Known_Base_Type.MDL_Tuple,
-                details = new Dictionary<String,MDL_Any>() {{"\u0002", MDL_0bTRUE}},
-                cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+                details = new Dictionary<String, MDL_Any>() {{"\u0002", MDL_0bTRUE}},
+                cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                     {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
             } },
         };
@@ -207,38 +207,38 @@ internal class Memory
         Heading_0_1 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String, MDL_Any>()
                 {{"\u0000", MDL_0bTRUE}, {"\u0001", MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
         Heading_0_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String, MDL_Any>()
                 {{"\u0000", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
         Heading_1_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String, MDL_Any>()
                 {{"\u0001", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
 
         Heading_0_1_2 = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>()
+            details = new Dictionary<String, MDL_Any>()
                 {{"\u0000", MDL_0bTRUE}, {"\u0001", MDL_0bTRUE}, {"\u0002", MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
 
-        this.heading_tuples = new Dictionary<MDL_Any,MDL_Any>()
+        this.heading_tuples = new Dictionary<MDL_Any, MDL_Any>()
         {
             {MDL_Tuple_D0, MDL_Tuple_D0},
             {Attr_Name_0, Attr_Name_0},
@@ -266,7 +266,7 @@ internal class Memory
 
         this.MDL_Tuple_Array_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Array_C0}})
         );
         this.MDL_Tuple_Array_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
@@ -274,7 +274,7 @@ internal class Memory
         this.MDL_Tuple_Array_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
             MDL_Tuple(
-                new Dictionary<String,MDL_Any>()
+                new Dictionary<String, MDL_Any>()
                 {
                     {"heading", MDL_Tuple_D0},
                     {"body", new MDL_Any {
@@ -297,7 +297,7 @@ internal class Memory
 
         this.MDL_Relation_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Relation"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Set_C0}})
         );
         this.MDL_Relation_D0C0.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
@@ -305,7 +305,7 @@ internal class Memory
         this.MDL_Relation_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Relation"),
             MDL_Tuple(
-                new Dictionary<String,MDL_Any>()
+                new Dictionary<String, MDL_Any>()
                 {
                     {"heading", MDL_Tuple_D0},
                     {"body", new MDL_Any {
@@ -329,7 +329,7 @@ internal class Memory
 
         this.MDL_Tuple_Bag_D0C0 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", MDL_Tuple_D0}, {"body", MDL_Bag_C0}})
         );
         this.MDL_Tuple_Bag_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
@@ -337,7 +337,7 @@ internal class Memory
         this.MDL_Tuple_Bag_D0C1 = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
             MDL_Tuple(
-                new Dictionary<String,MDL_Any>()
+                new Dictionary<String, MDL_Any>()
                 {
                     {"heading", MDL_Tuple_D0},
                     {"body", new MDL_Any {
@@ -359,7 +359,7 @@ internal class Memory
         );
         this.MDL_Tuple_Bag_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
 
-        well_known_excuses = new Dictionary<String,MDL_Any>();
+        well_known_excuses = new Dictionary<String, MDL_Any>();
         foreach (String s in Constants.Strings__Well_Known_Excuses())
         {
             well_known_excuses.Add(
@@ -367,7 +367,7 @@ internal class Memory
                 new MDL_Any {
                     memory = this,
                     WKBT = Well_Known_Base_Type.MDL_Excuse,
-                    details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(s)}},
+                    details = new Dictionary<String, MDL_Any>() {{"\u0000", MDL_Attr_Name(s)}},
                 }
             );
         }
@@ -534,7 +534,7 @@ internal class Memory
         };
     }
 
-    internal MDL_Any MDL_Tuple(Dictionary<String,MDL_Any> attrs)
+    internal MDL_Any MDL_Tuple(Dictionary<String, MDL_Any> attrs)
     {
         if (attrs.Count == 0)
         {
@@ -604,7 +604,7 @@ internal class Memory
         }
         MDL_Any tuple_array = this.MDL_Article(
             MDL_Attr_Name("Tuple_Array"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
         );
         tuple_array.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
@@ -626,7 +626,7 @@ internal class Memory
         }
         MDL_Any relation = this.MDL_Article(
             MDL_Attr_Name("Relation"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
         );
         relation.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
@@ -649,7 +649,7 @@ internal class Memory
         }
         MDL_Any tuple_bag = this.MDL_Article(
             MDL_Attr_Name("Tuple_Bag"),
-            MDL_Tuple(new Dictionary<String,MDL_Any>()
+            MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
         );
         tuple_bag.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
@@ -726,7 +726,7 @@ internal class Memory
         return new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Excuse,
-            details = new Dictionary<String,MDL_Any>() {{"\u0000", MDL_Attr_Name(value)}},
+            details = new Dictionary<String, MDL_Any>() {{"\u0000", MDL_Attr_Name(value)}},
         };
     }
 
@@ -762,8 +762,8 @@ internal class Memory
         MDL_Any tuple = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>() {{value, MDL_0bTRUE}},
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            details = new Dictionary<String, MDL_Any>() {{value, MDL_0bTRUE}},
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}, {Well_Known_Type.Attr_Name, true}},
         };
         if (value.Length <= 200 && this.heading_tuples.Count < 10000)
@@ -856,7 +856,7 @@ internal class Memory
                 Multiplied_Member lsm = node.Local_Singular_Members();
                 return new MDL_Bag_Struct {
                     local_symbolic_type = Symbolic_Bag_Type.Indexed,
-                    members = new Dictionary<MDL_Any,Multiplied_Member>()
+                    members = new Dictionary<MDL_Any, Multiplied_Member>()
                         {{lsm.member, lsm}},
                     cached_members_meta = new Cached_Members_Meta {
                         tree_member_count = lsm.multiplicity,
@@ -872,8 +872,8 @@ internal class Memory
                     return node;
                 }
                 List<Multiplied_Member> ary_src_list = node.Local_Arrayed_Members();
-                Dictionary<MDL_Any,Multiplied_Member> ary_res_dict
-                    = new Dictionary<MDL_Any,Multiplied_Member>();
+                Dictionary<MDL_Any, Multiplied_Member> ary_res_dict
+                    = new Dictionary<MDL_Any, Multiplied_Member>();
                 foreach (Multiplied_Member m in ary_src_list)
                 {
                     if (!ary_res_dict.ContainsKey(m.member))
@@ -904,7 +904,7 @@ internal class Memory
                 {
                     return uni_pa;
                 }
-                Dictionary<MDL_Any,Multiplied_Member> uni_src_dict
+                Dictionary<MDL_Any, Multiplied_Member> uni_src_dict
                     = uni_pa.Local_Indexed_Members();
                 return new MDL_Bag_Struct {
                     local_symbolic_type = Symbolic_Bag_Type.Indexed,
@@ -929,12 +929,12 @@ internal class Memory
                 {
                     return n0;
                 }
-                Dictionary<MDL_Any,Multiplied_Member> n0_src_dict
+                Dictionary<MDL_Any, Multiplied_Member> n0_src_dict
                     = n0.Local_Indexed_Members();
-                Dictionary<MDL_Any,Multiplied_Member> n1_src_dict
+                Dictionary<MDL_Any, Multiplied_Member> n1_src_dict
                     = n1.Local_Indexed_Members();
-                Dictionary<MDL_Any,Multiplied_Member> res_dict
-                    = new Dictionary<MDL_Any,Multiplied_Member>(n0_src_dict);
+                Dictionary<MDL_Any, Multiplied_Member> res_dict
+                    = new Dictionary<MDL_Any, Multiplied_Member>(n0_src_dict);
                 foreach (Multiplied_Member m in n1_src_dict.Values)
                 {
                     if (!res_dict.ContainsKey(m.member))
@@ -1133,7 +1133,7 @@ internal class Memory
             return tuple;
         }
         // If we get here, the Tuple/Heading degree is guaranteed > 0.
-        Dictionary<String,MDL_Any> attrs = tuple.MDL_Tuple();
+        Dictionary<String, MDL_Any> attrs = tuple.MDL_Tuple();
         if (attrs.Count == 1)
         {
             if (attrs.ContainsKey("\u0000"))
@@ -1157,9 +1157,9 @@ internal class Memory
         MDL_Any heading = new MDL_Any {
             memory = this,
             WKBT = Well_Known_Base_Type.MDL_Tuple,
-            details = new Dictionary<String,MDL_Any>(
+            details = new Dictionary<String, MDL_Any>(
                 attrs.ToDictionary(a => a.Key, a => (MDL_Any)MDL_0bTRUE)),
-            cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>()
+            cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>()
                 {{Well_Known_Type.Heading, true}},
         };
         if (attrs.Count == 1)
@@ -1193,8 +1193,8 @@ internal class Memory
         {
             return true;
         }
-        Dictionary<String,MDL_Any> attrs1 = t1.MDL_Tuple();
-        Dictionary<String,MDL_Any> attrs2 = t2.MDL_Tuple();
+        Dictionary<String, MDL_Any> attrs1 = t1.MDL_Tuple();
+        Dictionary<String, MDL_Any> attrs2 = t2.MDL_Tuple();
         return (attrs1.Count == attrs2.Count)
             && Enumerable.All(attrs1, attr => attrs2.ContainsKey(attr.Key));
     }

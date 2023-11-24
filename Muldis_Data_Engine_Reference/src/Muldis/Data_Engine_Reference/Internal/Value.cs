@@ -170,7 +170,7 @@ internal class MDL_Bag_Struct
         // that is just storing members without any operations.
         // Guarantees the Bag has at least 2 members but does not
         // guarantee that at least 2 members have distinct values.
-    // Iff LST is Indexed, this field holds a Dictionary<MDL_Any,Multiplied_Member>.
+    // Iff LST is Indexed, this field holds a Dictionary<MDL_Any, Multiplied_Member>.
         // This is a leaf node defining 2..N Bag members, each of which
         // can be of any type; this is the most common format for a Bag
         // that has had some searches or operations performed on it.
@@ -201,9 +201,9 @@ internal class MDL_Bag_Struct
         return (List<Multiplied_Member>)this.members;
     }
 
-    internal Dictionary<MDL_Any,Multiplied_Member> Local_Indexed_Members()
+    internal Dictionary<MDL_Any, Multiplied_Member> Local_Indexed_Members()
     {
-        return (Dictionary<MDL_Any,Multiplied_Member>)this.members;
+        return (Dictionary<MDL_Any, Multiplied_Member>)this.members;
     }
 
     internal MDL_Bag_Struct Tree_Unique_Members()

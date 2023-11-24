@@ -40,9 +40,9 @@ internal class MDL_Any
     // Iff WKBT is MDL_Array, this field holds a MDL_Array_Struct.
     // Iff WKBT is MDL_Set, this field holds a MDL_Bag_Struct (like MDL_Bag).
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
-    // Iff WKBT is MDL_Tuple, this field holds a Dictionary<String,MDL_Any> (like MDL_Excuse).
+    // Iff WKBT is MDL_Tuple, this field holds a Dictionary<String, MDL_Any> (like MDL_Excuse).
     // Iff WKBT is MDL_Article, this field holds a MDL_Article_Struct.
-    // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String,MDL_Any> (like MDL_Tuple).
+    // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String, MDL_Any> (like MDL_Tuple).
         // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object details;
 
@@ -56,9 +56,9 @@ internal class MDL_Any
     // didn't test the membership or decided not to cache the result.
     // This set excludes on purpose the subset of well-known types that
     // should be trivial to test membership of by other means; in
-    // particular it excludes {Any,None}, the Well_Known_Base_Type;
+    // particular it excludes {Any, None}, the Well_Known_Base_Type;
     // types not excluded are more work to test.
-    internal Dictionary<Well_Known_Type,Boolean> cached_WKT_statuses;
+    internal Dictionary<Well_Known_Type, Boolean> cached_WKT_statuses;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
@@ -95,9 +95,9 @@ internal class MDL_Any
         return (MDL_Bag_Struct)this.details;
     }
 
-    internal Dictionary<String,MDL_Any> MDL_Tuple()
+    internal Dictionary<String, MDL_Any> MDL_Tuple()
     {
-        return (Dictionary<String,MDL_Any>)this.details;
+        return (Dictionary<String, MDL_Any>)this.details;
     }
 
     internal MDL_Article_Struct MDL_Article()
@@ -105,9 +105,9 @@ internal class MDL_Any
         return (MDL_Article_Struct)this.details;
     }
 
-    internal Dictionary<String,MDL_Any> MDL_Excuse()
+    internal Dictionary<String, MDL_Any> MDL_Excuse()
     {
-        return (Dictionary<String,MDL_Any>)this.details;
+        return (Dictionary<String, MDL_Any>)this.details;
     }
 
     internal Nullable<Boolean> member_status_in_WKT(Well_Known_Type type)
@@ -121,7 +121,7 @@ internal class MDL_Any
     {
         if (this.cached_WKT_statuses is null)
         {
-            this.cached_WKT_statuses = new Dictionary<Well_Known_Type,Boolean>();
+            this.cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>();
         }
         if (!this.cached_WKT_statuses.ContainsKey(type))
         {

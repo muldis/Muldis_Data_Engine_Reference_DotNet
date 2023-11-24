@@ -7,7 +7,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // operators are not.  Typically each one is an Article subtype.
 // This set excludes on purpose the subset of well-known types that
 // should be trivial to test membership of by other means; in
-// particular it excludes {Any,None}, the Well_Known_Base_Type;
+// particular it excludes {Any, None}, the Well_Known_Base_Type;
 // types not excluded are more work to test.
 
 internal enum Well_Known_Type

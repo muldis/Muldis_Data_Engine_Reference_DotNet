@@ -69,7 +69,7 @@ public class MDER_Machine
         return new MDER_V_Any(this, import__tree(value));
     }
 
-    public MDER_V_Any MDER_import_qualified(KeyValuePair<String,Object> value)
+    public MDER_V_Any MDER_import_qualified(KeyValuePair<String, Object> value)
     {
         return new MDER_V_Any(this, import__tree_qualified(value));
     }
@@ -85,13 +85,13 @@ public class MDER_Machine
             }
             if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
             {
-                return import__tree_qualified((KeyValuePair<String,Object>)value);
+                return import__tree_qualified((KeyValuePair<String, Object>)value);
             }
         }
         return import__tree_unqualified(value);
     }
 
-    private MDL_Any import__tree_qualified(KeyValuePair<String,Object> value)
+    private MDL_Any import__tree_qualified(KeyValuePair<String, Object> value)
     {
         Object v = value.Value;
         // Note that .NET guarantees the .Key is never null.
@@ -134,8 +134,8 @@ public class MDER_Machine
                 }
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
-                    Object numerator   = ((KeyValuePair<Object,Object>)v).Key;
-                    Object denominator = ((KeyValuePair<Object,Object>)v).Value;
+                    Object numerator   = ((KeyValuePair<Object, Object>)v).Key;
+                    Object denominator = ((KeyValuePair<Object, Object>)v).Value;
                     // Note that .NET guarantees the .Key is never null.
                     if (denominator is null)
                     {
@@ -256,19 +256,19 @@ public class MDER_Machine
             case "Tuple":
                 if (type_name == "System.Object[]")
                 {
-                    Dictionary<String,Object> attrs = new Dictionary<String,Object>();
+                    Dictionary<String, Object> attrs = new Dictionary<String, Object>();
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
                     {
                         attrs.Add(Char.ConvertFromUtf32(i), ((Object[])v)[i]);
                     }
                     return this.memory.MDL_Tuple(
-                        new Dictionary<String,MDL_Any>(attrs.ToDictionary(
+                        new Dictionary<String, MDL_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
                 if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
                 {
-                    Dictionary<String,Object> attrs = (Dictionary<String,Object>)v;
+                    Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
                     {
                         if (this.memory.Test_Dot_Net_String(atnm)
@@ -283,7 +283,7 @@ public class MDER_Machine
                         }
                     }
                     return this.memory.MDL_Tuple(
-                        new Dictionary<String,MDL_Any>(attrs.ToDictionary(
+                        new Dictionary<String, MDL_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
@@ -300,7 +300,7 @@ public class MDER_Machine
                         }
                     }
                     return this.memory.MDL_Tuple(
-                        new Dictionary<String,MDL_Any>(
+                        new Dictionary<String, MDL_Any>(
                             attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
                     );
                 }
@@ -321,7 +321,7 @@ public class MDER_Machine
                         }
                     }
                     return this.memory.MDL_Tuple(
-                        new Dictionary<String,MDL_Any>(
+                        new Dictionary<String, MDL_Any>(
                             attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
                     );
                 }
@@ -431,8 +431,8 @@ public class MDER_Machine
             case "Article":
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
-                    Object label = ((KeyValuePair<Object,Object>)v).Key;
-                    Object attrs = ((KeyValuePair<Object,Object>)v).Value;
+                    Object label = ((KeyValuePair<Object, Object>)v).Key;
+                    Object attrs = ((KeyValuePair<Object, Object>)v).Value;
                     // Note that .NET guarantees the .Key is never null.
                     if (attrs is null)
                     {
@@ -655,7 +655,7 @@ public class MDER_Machine
         }
     }
 
-    public KeyValuePair<String,Object> MDER_export_qualified(MDER_V_Any value)
+    public KeyValuePair<String, Object> MDER_export_qualified(MDER_V_Any value)
     {
         if (value is null)
         {
@@ -665,13 +665,13 @@ public class MDER_Machine
         switch (v.WKBT)
         {
             case Well_Known_Base_Type.MDL_Ignorance:
-                return new KeyValuePair<String,Object>("Ignorance",null);
+                return new KeyValuePair<String, Object>("Ignorance",null);
             case Well_Known_Base_Type.MDL_False:
-                return new KeyValuePair<String,Object>("Boolean",false);
+                return new KeyValuePair<String, Object>("Boolean",false);
             case Well_Known_Base_Type.MDL_True:
-                return new KeyValuePair<String,Object>("Boolean",true);
+                return new KeyValuePair<String, Object>("Boolean",true);
             case Well_Known_Base_Type.MDL_Integer:
-                return new KeyValuePair<String,Object>("Integer",
+                return new KeyValuePair<String, Object>("Integer",
                     ((MDL_Integer)v).as_BigInteger);
             case Well_Known_Base_Type.MDL_Fraction:
                 throw new NotImplementedException();
@@ -698,7 +698,7 @@ public class MDER_Machine
             case Well_Known_Base_Type.MDL_Stream:
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_External:
-                return new KeyValuePair<String,Object>("New_External",
+                return new KeyValuePair<String, Object>("New_External",
                     ((MDL_External)v).external_value);
             case Well_Known_Base_Type.MDL_Excuse:
                 throw new NotImplementedException();

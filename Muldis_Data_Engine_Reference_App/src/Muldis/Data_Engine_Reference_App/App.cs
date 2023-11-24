@@ -91,7 +91,7 @@ public class App
         System.Console.WriteLine("Test data: sum = [" + sum + "]");
         MDER_V_Any that = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
         System.Console.WriteLine("Test data: that = [" + that + "]");
-        MDER_V_Any that_too = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Dictionary<String,Object>()
+        MDER_V_Any that_too = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Dictionary<String, Object>()
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
         System.Console.WriteLine("Test data: that_too = [" + that_too + "]");

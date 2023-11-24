@@ -246,7 +246,7 @@ internal abstract class MUON_Generator
     private String Heading_Literal(MDL_Any value)
     {
         Memory m = value.memory;
-        Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
+        Dictionary<String, MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
@@ -341,7 +341,7 @@ internal abstract class MUON_Generator
         }
         String ati = indent + "\u0009";
         Memory m = value.memory;
-        Dictionary<String,MDL_Any> attrs = value.MDL_Tuple();
+        Dictionary<String, MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
@@ -366,7 +366,7 @@ internal abstract class MUON_Generator
         // TODO: Change Excuse so represented as Nesting+Kit pair.
         String ati = indent + "\u0009";
         Memory m = value.memory;
-        Dictionary<String,MDL_Any> attrs = value.MDL_Excuse();
+        Dictionary<String, MDL_Any> attrs = value.MDL_Excuse();
         if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
             && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple
             && attrs["\u0000"].member_status_in_WKT(Well_Known_Type.Attr_Name) == true)

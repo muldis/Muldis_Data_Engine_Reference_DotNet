@@ -667,9 +667,9 @@ internal class Executor
                 if (bn0.local_symbolic_type == Symbolic_Bag_Type.Indexed
                     && bn1.local_symbolic_type == Symbolic_Bag_Type.Indexed)
                 {
-                    Dictionary<MDL_Any,Multiplied_Member> im0
+                    Dictionary<MDL_Any, Multiplied_Member> im0
                         = bn0.Local_Indexed_Members();
-                    Dictionary<MDL_Any,Multiplied_Member> im1
+                    Dictionary<MDL_Any, Multiplied_Member> im1
                         = bn1.Local_Indexed_Members();
                     result = im0.Count == im1.Count
                         && Enumerable.All(
@@ -684,8 +684,8 @@ internal class Executor
             case Well_Known_Base_Type.MDL_Tuple:
             case Well_Known_Base_Type.MDL_Excuse:
                 // MDL_Tuple and MDL_Excuse have the same internal representation.
-                Dictionary<String,MDL_Any> attrs0 = a0.MDL_Tuple();
-                Dictionary<String,MDL_Any> attrs1 = a1.MDL_Tuple();
+                Dictionary<String, MDL_Any> attrs0 = a0.MDL_Tuple();
+                Dictionary<String, MDL_Any> attrs1 = a1.MDL_Tuple();
                 // First test just that the Tuple headings are the same,
                 // and only if they are, compare the attribute values.
                 return (attrs0.Count == attrs1.Count)
