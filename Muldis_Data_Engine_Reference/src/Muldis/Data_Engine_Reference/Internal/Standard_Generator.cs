@@ -1,5 +1,3 @@
-using System;
-
 namespace Muldis.Data_Engine_Reference.Internal;
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.

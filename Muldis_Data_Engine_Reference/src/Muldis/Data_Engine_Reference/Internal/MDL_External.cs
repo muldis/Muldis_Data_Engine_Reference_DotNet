@@ -1,5 +1,3 @@
-using System;
-
 namespace Muldis.Data_Engine_Reference.Internal;
 
 internal class MDL_External : MDL_NQA
