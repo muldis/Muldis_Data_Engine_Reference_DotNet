@@ -44,7 +44,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("variable");
         }
-        return new MDER_V_Any(this, variable.memory_value.MDL_Variable());
+        return new MDER_V_Any(this, ((MDL_Variable)variable.memory_value).current_value);
     }
 
     public void MDER_assign(MDER_V_Any variable, MDER_V_Any new_current)
@@ -649,7 +649,7 @@ public class MDER_Machine
             case Well_Known_Base_Type.MDL_Integer:
                 return ((MDL_Integer)v).as_BigInteger;
             case Well_Known_Base_Type.MDL_External:
-                return v.MDL_External();
+                return ((MDL_External)v).external_value;
             default:
                 return MDER_export_qualified(value);
         }
@@ -699,7 +699,7 @@ public class MDER_Machine
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_External:
                 return new KeyValuePair<String,Object>("New_External",
-                    v.MDL_External());
+                    ((MDL_External)v).external_value);
             case Well_Known_Base_Type.MDL_Excuse:
                 throw new NotImplementedException();
             default:

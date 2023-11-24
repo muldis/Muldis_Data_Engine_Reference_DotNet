@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference.Internal;
 
@@ -48,17 +47,6 @@ internal class MDL_Any
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
     // Iff WKBT is MDL_Tuple, this field holds a Dictionary<String,MDL_Any> (like MDL_Excuse).
     // Iff WKBT is MDL_Article, this field holds a MDL_Article_Struct.
-    // Iff WKBT is MDL_Variable, this field holds a MDL_Any.
-        // For a MDL_Variable, "details" holds its current_value.
-        // This can become a MDL_Variable_Struct if we want to store other things.
-    // Iff WKBT is MDL_Process, this field holds an Object.
-        // TODO: Replace this with some other type when we know what that is.
-    // Iff WKBT is MDL_Stream, this field holds an Object.
-        // TODO: Replace this with some other type when we know what that is.
-    // Iff WKBT is MDL_External, this field holds an Object.
-        // The entity that is defined and managed externally to the Muldis
-        // D language environment, which the MDL_External value is an opaque
-        // and transient reference to.
     // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String,MDL_Any> (like MDL_Tuple).
         // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object details;
@@ -135,26 +123,6 @@ internal class MDL_Any
     internal MDL_Article_Struct MDL_Article()
     {
         return (MDL_Article_Struct)this.details;
-    }
-
-    internal MDL_Any MDL_Variable()
-    {
-        return (MDL_Any)this.details;
-    }
-
-    internal Object MDL_Process()
-    {
-        return (Object)this.details;
-    }
-
-    internal Object MDL_Stream()
-    {
-        return (Object)this.details;
-    }
-
-    internal Object MDL_External()
-    {
-        return (Object)this.details;
     }
 
     internal Dictionary<String,MDL_Any> MDL_Excuse()

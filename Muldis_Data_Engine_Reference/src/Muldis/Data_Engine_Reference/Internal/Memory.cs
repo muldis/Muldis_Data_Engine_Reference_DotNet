@@ -731,38 +731,22 @@ internal class Memory
 
     internal MDL_Any New_MDL_Variable(MDL_Any initial_current_value)
     {
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Variable,
-            details = initial_current_value,
-        };
+        return new MDL_Variable(this, initial_current_value);
     }
 
     internal MDL_Any New_MDL_Process()
     {
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Process,
-            details = null,
-        };
+        return new MDL_Process(this);
     }
 
     internal MDL_Any New_MDL_Stream()
     {
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Stream,
-            details = null,
-        };
+        return new MDL_Stream(this);
     }
 
-    internal MDL_Any New_MDL_External(Object value)
+    internal MDL_Any New_MDL_External(Object external_value)
     {
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_External,
-            details = value,
-        };
+        return new MDL_External(this, external_value);
     }
 
     internal MDL_Any MDL_Excuse(MDL_Any attrs)

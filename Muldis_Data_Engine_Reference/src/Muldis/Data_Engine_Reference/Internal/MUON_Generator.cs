@@ -48,19 +48,19 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Variable:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_Variable can actually be rendered as Muldis Data Language Plain Text.
-                return "`Some IMD_Variable value is here.`";
+                return "`Some MDL_Variable value is here.`";
             case Well_Known_Base_Type.MDL_Process:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_Process can actually be rendered as Muldis Data Language Plain Text.
-                return "`Some IMD_Process value is here.`";
+                return "`Some MDL_Process value is here.`";
             case Well_Known_Base_Type.MDL_Stream:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_Stream can actually be rendered as Muldis Data Language Plain Text.
-                return "`Some IMD_Stream value is here.`";
+                return "`Some MDL_Stream value is here.`";
             case Well_Known_Base_Type.MDL_External:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_External can actually be rendered as Muldis Data Language Plain Text.
-                return "`Some IMD_External value is here.`";
+                return "`Some MDL_External value is here.`";
             case Well_Known_Base_Type.MDL_Excuse:
                 return Excuse_Selector(value, indent);
             default:
