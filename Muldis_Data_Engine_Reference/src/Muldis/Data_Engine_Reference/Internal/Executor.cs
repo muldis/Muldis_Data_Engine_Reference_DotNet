@@ -557,29 +557,22 @@ internal class Executor
                 result = (((MDL_Integer)a0).as_BigInteger == ((MDL_Integer)a1).as_BigInteger);
                 break;
             case Well_Known_Base_Type.MDL_Fraction:
-                MDL_Fraction_Struct fs0 = a0.MDL_Fraction();
-                MDL_Fraction_Struct fs1 = a1.MDL_Fraction();
-                if (Object.ReferenceEquals(fs0, fs1))
+                MDL_Fraction fa0 = (MDL_Fraction)a0;
+                MDL_Fraction fa1 = (MDL_Fraction)a1;
+                if (fa0.maybe_as_Decimal() is not null && fa1.maybe_as_Decimal() is not null)
                 {
-                    result = true;
+                    result = (fa0.maybe_as_Decimal() == fa1.maybe_as_Decimal());
                     break;
                 }
-                if (fs0.as_Decimal is not null && fs1.as_Decimal is not null)
+                if (fa0.denominator() == fa1.denominator())
                 {
-                    result = (fs0.as_Decimal == fs1.as_Decimal);
+                    result = (fa0.numerator() == fa1.numerator());
                     break;
                 }
-                fs0.Ensure_Pair();
-                fs1.Ensure_Pair();
-                if (fs0.as_pair.denominator == fs1.as_pair.denominator)
-                {
-                    result = (fs0.as_pair.numerator == fs1.as_pair.numerator);
-                    break;
-                }
-                fs0.Ensure_Coprime();
-                fs1.Ensure_Coprime();
-                result = (fs0.as_pair.denominator == fs1.as_pair.denominator
-                    && fs0.as_pair.numerator == fs1.as_pair.numerator);
+                fa0.ensure_coprime();
+                fa1.ensure_coprime();
+                result = (fa0.denominator() == fa1.denominator()
+                    && fa0.numerator() == fa1.numerator());
                 break;
             case Well_Known_Base_Type.MDL_Bits:
                 result = Enumerable.SequenceEqual(

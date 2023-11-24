@@ -37,7 +37,6 @@ internal class MDL_Any
 
     // Details of this Muldis Data Language "value", in one of several possible
     // specialized representation formats depending on the data type.
-    // Iff WKBT is MDL_Fraction, this field holds a MDL_Fraction_Struct.
     // Iff WKBT is MDL_Array, this field holds a MDL_Array_Struct.
     // Iff WKBT is MDL_Set, this field holds a MDL_Bag_Struct (like MDL_Bag).
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
@@ -79,11 +78,6 @@ internal class MDL_Any
         // This called function will test if cached_MDL_Any_identity
         // is null and assign it a value if so and use its value if not.
         return this.memory.identity_generator.MDL_Any_as_identity_String(this);
-    }
-
-    internal MDL_Fraction_Struct MDL_Fraction()
-    {
-        return (MDL_Fraction_Struct)this.details;
     }
 
     internal MDL_Array_Struct MDL_Array()

@@ -28,7 +28,7 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Integer:
                 return Integer_Literal((MDL_Integer)value);
             case Well_Known_Base_Type.MDL_Fraction:
-                return Fraction_Literal(value);
+                return Fraction_Literal((MDL_Fraction)value);
             case Well_Known_Base_Type.MDL_Bits:
                 return Bits_Literal((MDL_Bits)value);
             case Well_Known_Base_Type.MDL_Blob:
@@ -79,20 +79,19 @@ internal abstract class MUON_Generator
         return value.ToString();
     }
 
-    private String Fraction_Literal(MDL_Any value)
+    private String Fraction_Literal(MDL_Fraction fa)
     {
-        MDL_Fraction_Struct fa = value.MDL_Fraction();
         // Iff the Fraction value can be exactly expressed as a
         // non-terminating decimal (includes all Fraction that can be
         // non-terminating binary/octal/hex), express in that format;
         // otherwise, express as a coprime numerator/denominator pair.
-        // Note, Is_Terminating_Decimal() will ensure as_pair is
+        // Note, is_terminating_decimal() will ensure as_pair is
         // coprime iff as_Decimal is null.
-        if (fa.Is_Terminating_Decimal())
+        if (fa.is_terminating_decimal())
         {
-            if (fa.as_Decimal is not null)
+            if (fa.maybe_as_Decimal() is not null)
             {
-                String dec_digits = fa.as_Decimal.ToString();
+                String dec_digits = fa.maybe_as_Decimal().ToString();
                 // When a .NET Decimal is selected using a .NET Decimal
                 // literal having trailing zeroes, those trailing
                 // zeroes will persist in the .ToString() result
@@ -104,21 +103,21 @@ internal abstract class MUON_Generator
                 return dec_digits.Substring(dec_digits.Length-1,1) == "."
                     ? dec_digits + "0" : dec_digits;
             }
-            Int32 dec_scale = fa.Pair_Decimal_Denominator_Scale();
+            Int32 dec_scale = fa.pair_decimal_denominator_scale();
             if (dec_scale == 0)
             {
                 // We have an integer expressed as a Fraction.
-                return fa.as_pair.numerator.ToString() + ".0";
+                return fa.numerator().ToString() + ".0";
             }
             BigInteger dec_denominator = BigInteger.Pow(10,dec_scale);
-            BigInteger dec_numerator = fa.as_pair.numerator
-                * BigInteger.Divide(dec_denominator, fa.as_pair.denominator);
+            BigInteger dec_numerator = fa.numerator()
+                * BigInteger.Divide(dec_denominator, fa.denominator());
             String numerator_digits = dec_numerator.ToString();
             Int32 left_size = numerator_digits.Length - dec_scale;
             return numerator_digits.Substring(0, left_size)
                 + "." + numerator_digits.Substring(left_size);
         }
-        return fa.as_pair.numerator.ToString() + "/" + fa.as_pair.denominator.ToString();
+        return fa.numerator().ToString() + "/" + fa.denominator().ToString();
     }
 
     private String Bits_Literal(MDL_Bits value)

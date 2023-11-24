@@ -44,7 +44,7 @@ internal class Memory
     private readonly Dictionary<Int32,MDL_Integer> integers;
 
     // MDL_Fraction 0.0 (type default value).
-    private readonly MDL_Any MDL_Fraction_0;
+    private readonly MDL_Fraction MDL_Fraction_0;
 
     // MDL_Bits with no members (type default value).
     internal readonly MDL_Bits MDL_Bits_C0;
@@ -120,18 +120,8 @@ internal class Memory
             MDL_Integer v = this.MDL_Integer(i);
         }
 
-        this.MDL_Fraction_0 = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Fraction,
-            details = new MDL_Fraction_Struct {
-                as_Decimal = 0.0M,
-                as_pair = new MDL_Fraction_Pair {
-                    numerator = this.integers[0].as_BigInteger,
-                    denominator = this.integers[1].as_BigInteger,
-                    cached_is_coprime = true,
-                },
-            },
-        };
+        this.MDL_Fraction_0 = new MDL_Fraction(this, 0.0M,
+            this.integers[0].as_BigInteger, this.integers[1].as_BigInteger);
 
         this.MDL_Bits_C0 = new MDL_Bits(this, new BitArray(0));
 
@@ -418,7 +408,16 @@ internal class Memory
         return integer;
     }
 
-    internal MDL_Any MDL_Fraction(BigInteger numerator, BigInteger denominator)
+    internal MDL_Fraction MDL_Fraction(Decimal as_Decimal)
+    {
+        if (as_Decimal == 0)
+        {
+            return MDL_Fraction_0;
+        }
+        return new MDL_Fraction(this, as_Decimal);
+    }
+
+    internal MDL_Fraction MDL_Fraction(BigInteger numerator, BigInteger denominator)
     {
         // Note we assume our caller has already ensured denominator is not zero.
         if (numerator == 0)
@@ -431,31 +430,7 @@ internal class Memory
             denominator = -denominator;
             numerator   = -numerator  ;
         }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Fraction,
-            details = new MDL_Fraction_Struct {
-                as_pair = new MDL_Fraction_Pair {
-                    numerator = numerator,
-                    denominator = denominator,
-                },
-            },
-        };
-    }
-
-    internal MDL_Any MDL_Fraction(Decimal value)
-    {
-        if (value == 0)
-        {
-            return MDL_Fraction_0;
-        }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Fraction,
-            details = new MDL_Fraction_Struct {
-                as_Decimal = value,
-            },
-        };
+        return new MDL_Fraction(this, numerator, denominator);
     }
 
     internal MDL_Bits MDL_Bits(BitArray bit_members)
