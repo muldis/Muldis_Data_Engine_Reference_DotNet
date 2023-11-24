@@ -30,9 +30,9 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Fraction:
                 return Fraction_Literal(value);
             case Well_Known_Base_Type.MDL_Bits:
-                return Bits_Literal(value);
+                return Bits_Literal((MDL_Bits)value);
             case Well_Known_Base_Type.MDL_Blob:
-                return Blob_Literal(value);
+                return Blob_Literal((MDL_Blob)value);
             case Well_Known_Base_Type.MDL_Text:
                 return Text_Literal((MDL_Text)value);
             case Well_Known_Base_Type.MDL_Array:
@@ -121,13 +121,13 @@ internal abstract class MUON_Generator
         return fa.as_pair.numerator.ToString() + "/" + fa.as_pair.denominator.ToString();
     }
 
-    private String Bits_Literal(MDL_Any value)
+    private String Bits_Literal(MDL_Bits value)
     {
         if (Object.ReferenceEquals(value, value.memory.MDL_Bits_C0))
         {
             return "0bb";
         }
-        System.Collections.IEnumerator e = value.MDL_Bits().GetEnumerator();
+        System.Collections.IEnumerator e = value.bit_members.GetEnumerator();
         List<Boolean> list = new List<Boolean>();
         while (e.MoveNext())
         {
@@ -138,14 +138,14 @@ internal abstract class MUON_Generator
             );
     }
 
-    private String Blob_Literal(MDL_Any value)
+    private String Blob_Literal(MDL_Blob value)
     {
         if (Object.ReferenceEquals(value, value.memory.MDL_Blob_C0))
         {
             return "0xx";
         }
         return "0xx" + String.Concat(
-                Enumerable.Select(value.MDL_Blob(), m => m.ToString("X2"))
+                Enumerable.Select(value.octet_members, m => m.ToString("X2"))
             );
     }
 

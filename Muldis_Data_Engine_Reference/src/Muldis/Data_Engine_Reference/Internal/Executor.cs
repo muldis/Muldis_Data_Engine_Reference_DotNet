@@ -438,7 +438,7 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
-                    return m.MDL_Text_from_UTF_8_MDL_Blob(v);
+                    return m.MDL_Text_from_UTF_8_MDL_Blob((MDL_Blob)v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Text)
                     {
@@ -583,11 +583,13 @@ internal class Executor
                 break;
             case Well_Known_Base_Type.MDL_Bits:
                 result = Enumerable.SequenceEqual(
-                    BitArray_to_List(a0.MDL_Bits()),
-                    BitArray_to_List(a1.MDL_Bits()));
+                    BitArray_to_List(((MDL_Bits)a0).bit_members),
+                    BitArray_to_List(((MDL_Bits)a1).bit_members));
                 break;
             case Well_Known_Base_Type.MDL_Blob:
-                result = Enumerable.SequenceEqual(a0.MDL_Blob(), a1.MDL_Blob());
+                result = Enumerable.SequenceEqual(
+                    ((MDL_Blob)a0).octet_members,
+                    ((MDL_Blob)a1).octet_members);
                 break;
             case Well_Known_Base_Type.MDL_Text:
                 result = String.Equals(((MDL_Text)a0).code_point_members,
@@ -752,14 +754,14 @@ internal class Executor
         return result;
     }
 
-    internal Int64 Bits__count(MDL_Any bits)
+    internal Int64 Bits__count(MDL_Bits bits)
     {
-        return bits.MDL_Bits().Length;
+        return bits.bit_members.Length;
     }
 
-    internal Int64 Blob__count(MDL_Any blob)
+    internal Int64 Blob__count(MDL_Blob blob)
     {
-        return blob.MDL_Blob().Length;
+        return blob.octet_members.Length;
     }
 
     internal Int64 Text__count(MDL_Text node)
@@ -823,14 +825,14 @@ internal class Executor
         return (Int64)node.cached_members_meta.tree_member_count;
     }
 
-    private MDL_Any Bits__maybe_at(MDL_Any bits, Int64 ord_pos)
+    private MDL_Any Bits__maybe_at(MDL_Bits bits, Int64 ord_pos)
     {
-        return this.memory.MDL_Integer(bits.MDL_Bits()[(Int32)ord_pos] ? 1 : 0);
+        return this.memory.MDL_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
     }
 
-    private MDL_Any Blob__maybe_at(MDL_Any blob, Int64 ord_pos)
+    private MDL_Any Blob__maybe_at(MDL_Blob blob, Int64 ord_pos)
     {
-        return this.memory.MDL_Integer(blob.MDL_Blob()[(Int32)ord_pos]);
+        return this.memory.MDL_Integer(blob.octet_members[(Int32)ord_pos]);
     }
 
     private MDL_Any Text__maybe_at(MDL_Text node, Int64 ord_pos)

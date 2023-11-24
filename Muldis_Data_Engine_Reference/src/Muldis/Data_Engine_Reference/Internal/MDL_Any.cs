@@ -38,10 +38,6 @@ internal class MDL_Any
     // Details of this Muldis Data Language "value", in one of several possible
     // specialized representation formats depending on the data type.
     // Iff WKBT is MDL_Fraction, this field holds a MDL_Fraction_Struct.
-    // Iff WKBT is MDL_Bits, this field holds a BitArray.
-        // Consider a MDL_Bits_Struct if we want symbolic like MDL_Array.
-    // Iff WKBT is MDL_Blob, this field holds a Byte[].
-        // Consider a MDL_Blob_Struct if we want symbolic like MDL_Array.
     // Iff WKBT is MDL_Array, this field holds a MDL_Array_Struct.
     // Iff WKBT is MDL_Set, this field holds a MDL_Bag_Struct (like MDL_Bag).
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
@@ -88,16 +84,6 @@ internal class MDL_Any
     internal MDL_Fraction_Struct MDL_Fraction()
     {
         return (MDL_Fraction_Struct)this.details;
-    }
-
-    internal BitArray MDL_Bits()
-    {
-        return (BitArray)this.details;
-    }
-
-    internal Byte[] MDL_Blob()
-    {
-        return (Byte[])this.details;
     }
 
     internal MDL_Array_Struct MDL_Array()

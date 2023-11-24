@@ -47,10 +47,10 @@ internal class Memory
     private readonly MDL_Any MDL_Fraction_0;
 
     // MDL_Bits with no members (type default value).
-    internal readonly MDL_Any MDL_Bits_C0;
+    internal readonly MDL_Bits MDL_Bits_C0;
 
     // MDL_Blob with no members (type default value).
-    internal readonly MDL_Any MDL_Blob_C0;
+    internal readonly MDL_Blob MDL_Blob_C0;
 
     // MDL_Text with no members (type default value).
     internal readonly MDL_Text MDL_Text_C0;
@@ -133,17 +133,9 @@ internal class Memory
             },
         };
 
-        this.MDL_Bits_C0 = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Bits,
-            details = new BitArray(0),
-        };
+        this.MDL_Bits_C0 = new MDL_Bits(this, new BitArray(0));
 
-        this.MDL_Blob_C0 = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Blob,
-            details = new Byte[] {},
-        };
+        this.MDL_Blob_C0 = new MDL_Blob(this, new Byte[] {});
 
         this.MDL_Text_C0 = new MDL_Text(this, "", false, 0);
 
@@ -466,39 +458,31 @@ internal class Memory
         };
     }
 
-    internal MDL_Any MDL_Bits(BitArray members)
+    internal MDL_Bits MDL_Bits(BitArray bit_members)
     {
-        if (members.Length == 0)
+        if (bit_members.Length == 0)
         {
             return MDL_Bits_C0;
         }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Bits,
-            details = members,
-        };
+        return new MDL_Bits(this, bit_members);
     }
 
-    internal MDL_Any MDL_Blob(Byte[] members)
+    internal MDL_Blob MDL_Blob(Byte[] octet_members)
     {
-        if (members.Length == 0)
+        if (octet_members.Length == 0)
         {
             return MDL_Blob_C0;
         }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Blob,
-            details = members,
-        };
+        return new MDL_Blob(this, octet_members);
     }
 
-    internal MDL_Any MDL_Text(String members, Boolean has_any_non_BMP)
+    internal MDL_Text MDL_Text(String code_point_members, Boolean has_any_non_BMP)
     {
-        if (members == "")
+        if (code_point_members == "")
         {
             return MDL_Text_C0;
         }
-        return new MDL_Text(this, members, has_any_non_BMP);
+        return new MDL_Text(this, code_point_members, has_any_non_BMP);
     }
 
     internal MDL_Any MDL_Array(List<MDL_Any> members)
@@ -1240,9 +1224,9 @@ internal class Memory
             && Enumerable.All(attrs1, attr => attrs2.ContainsKey(attr.Key));
     }
 
-    internal MDL_Any MDL_Text_from_UTF_8_MDL_Blob(MDL_Any value)
+    internal MDL_Any MDL_Text_from_UTF_8_MDL_Blob(MDL_Blob value)
     {
-        Byte[] octets = value.MDL_Blob();
+        Byte[] octets = value.octet_members;
         UTF8Encoding enc = new UTF8Encoding
         (
             encoderShouldEmitUTF8Identifier: false,
