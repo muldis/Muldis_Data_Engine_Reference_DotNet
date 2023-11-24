@@ -97,7 +97,7 @@ internal abstract class MUON_Generator
                 // except for a single trailing zero after the radix
                 // point when the value is an integer.
                 dec_digits = dec_digits.TrimEnd(new Char[] {'0'});
-                return dec_digits.Substring(dec_digits.Length-1,1) == "."
+                return String.Equals(dec_digits.Substring(dec_digits.Length-1,1), ".")
                     ? dec_digits + "0" : dec_digits;
             }
             Int32 dec_scale = fa.pair_decimal_denominator_scale();
@@ -147,7 +147,7 @@ internal abstract class MUON_Generator
 
     private String Text_Literal(MDL_Text value)
     {
-        if (Object.ReferenceEquals(value, value.memory.MDL_Text_C0))
+        if (String.Equals(value.code_point_members, ""))
         {
             return "\"\"";
         }
@@ -172,7 +172,7 @@ internal abstract class MUON_Generator
 
     private String Quoted_Text_Segment_Content(String value)
     {
-        if (value == "" || !Regex.IsMatch(value,
+        if (String.Equals(value, "") || !Regex.IsMatch(value,
             "[\u0000-\u001F\"\\`\u0080-\u009F]"))
         {
             return value;
@@ -233,7 +233,7 @@ internal abstract class MUON_Generator
 
     private String Attr_Name(String value)
     {
-        if (value == "")
+        if (String.Equals(value, ""))
         {
             return "\"\"";
         }

@@ -43,15 +43,6 @@ internal class MDL_Text : MDL_NQA
     internal Nullable<Int64> cached_member_count;
 
     internal MDL_Text(Memory memory, String code_point_members,
-        Boolean has_any_non_BMP, Nullable<Int64> cached_member_count)
-        : base(memory, Well_Known_Base_Type.MDL_Text)
-    {
-        this.code_point_members = code_point_members;
-        this.has_any_non_BMP = has_any_non_BMP;
-        this.cached_member_count = cached_member_count;
-    }
-
-    internal MDL_Text(Memory memory, String code_point_members,
         Boolean has_any_non_BMP)
         : base(memory, Well_Known_Base_Type.MDL_Text)
     {

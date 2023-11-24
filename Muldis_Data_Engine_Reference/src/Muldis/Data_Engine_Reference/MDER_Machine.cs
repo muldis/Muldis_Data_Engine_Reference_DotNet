@@ -59,7 +59,7 @@ public class MDER_Machine
 
     public MDER_V_Any MDER_import(Object value)
     {
-        if (value is not null && value.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any")
+        if (value is not null && String.Equals(value.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
         {
             return (MDER_V_Any)value;
         }
@@ -76,7 +76,7 @@ public class MDER_Machine
         if (value is not null)
         {
             String type_name = value.GetType().FullName;
-            if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
+            if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
             {
                 return ((MDER_V_Any)value).memory_value;
             }
@@ -109,23 +109,23 @@ public class MDER_Machine
         switch (value.Key)
         {
             case "Boolean":
-                if (type_name == "System.Boolean")
+                if (String.Equals(type_name, "System.Boolean"))
                 {
                     return this.memory.MDL_Boolean((Boolean)v);
                 }
                 break;
             case "Integer":
-                if (type_name == "System.Int32")
+                if (String.Equals(type_name, "System.Int32"))
                 {
                     return this.memory.MDL_Integer((Int32)v);
                 }
-                if (type_name == "System.Numerics.BigInteger")
+                if (String.Equals(type_name, "System.Numerics.BigInteger"))
                 {
                     return this.memory.MDL_Integer((BigInteger)v);
                 }
                 break;
             case "Fraction":
-                if (type_name == "System.Decimal")
+                if (String.Equals(type_name, "System.Decimal"))
                 {
                     return this.memory.MDL_Fraction((Decimal)v);
                 }
@@ -142,8 +142,8 @@ public class MDER_Machine
                             message: "Can't select MDL_Fraction with a null denominator."
                         );
                     }
-                    if (numerator.GetType().FullName == "System.Int32"
-                        && denominator.GetType().FullName == "System.Int32")
+                    if (String.Equals(numerator.GetType().FullName, "System.Int32")
+                        && String.Equals(denominator.GetType().FullName, "System.Int32"))
                     {
                         if (((Int32)denominator) == 0)
                         {
@@ -155,8 +155,8 @@ public class MDER_Machine
                         }
                         return this.memory.MDL_Fraction((Int32)numerator, (Int32)denominator);
                     }
-                    if (numerator.GetType().FullName == "System.Numerics.BigInteger"
-                        && denominator.GetType().FullName == "System.Numerics.BigInteger")
+                    if (String.Equals(numerator.GetType().FullName, "System.Numerics.BigInteger")
+                        && String.Equals(denominator.GetType().FullName, "System.Numerics.BigInteger"))
                     {
                         if (((BigInteger)denominator) == 0)
                         {
@@ -168,9 +168,9 @@ public class MDER_Machine
                         }
                         return this.memory.MDL_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
-                    if (numerator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                    if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
                         && ((MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer
-                        && denominator.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                        && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
                         && ((MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer)
                     {
                         if (((MDL_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
@@ -189,21 +189,21 @@ public class MDER_Machine
                 }
                 break;
             case "Bits":
-                if (type_name == "System.Collections.BitArray")
+                if (String.Equals(type_name, "System.Collections.BitArray"))
                 {
                     // BitArrays are mutable so clone argument to protect our internals.
                     return this.memory.MDL_Bits(new BitArray((BitArray)v));
                 }
                 break;
             case "Blob":
-                if (type_name == "System.Byte[]")
+                if (String.Equals(type_name, "System.Byte[]"))
                 {
                     // Arrays are mutable so clone argument to protect our internals.
                     return this.memory.MDL_Blob(((Byte[])v).ToArray());
                 }
                 break;
             case "Text":
-                if (type_name == "System.String")
+                if (String.Equals(type_name, "System.String"))
                 {
                     Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)v);
                     if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -251,7 +251,7 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple":
-                if (type_name == "System.Object[]")
+                if (String.Equals(type_name, "System.Object[]"))
                 {
                     Dictionary<String, Object> attrs = new Dictionary<String, Object>();
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
@@ -286,7 +286,7 @@ public class MDER_Machine
                 }
                 break;
             case "Heading":
-                if (type_name == "System.Object[]")
+                if (String.Equals(type_name, "System.Object[]"))
                 {
                     HashSet<String> attr_names = (HashSet<String>)v;
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
@@ -324,7 +324,7 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Array":
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
                     && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
@@ -332,7 +332,7 @@ public class MDER_Machine
                     MDL_Any bv = this.memory.MDL_Array_C0;
                     return this.memory.MDL_Tuple_Array(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Array)
                 {
                     MDL_Any bv = ((MDER_V_Any)v).memory_value;
@@ -358,7 +358,7 @@ public class MDER_Machine
                 }
                 break;
             case "Relation":
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
                     && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
@@ -366,7 +366,7 @@ public class MDER_Machine
                     MDL_Any bv = this.memory.MDL_Set_C0;
                     return this.memory.MDL_Relation(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Set)
                 {
                     MDL_Any bv = ((MDER_V_Any)v).memory_value;
@@ -392,7 +392,7 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Bag":
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
                     && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
                 {
@@ -400,7 +400,7 @@ public class MDER_Machine
                     MDL_Any bv = this.memory.MDL_Bag_C0;
                     return this.memory.MDL_Tuple_Bag(hv, bv);
                 }
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any"
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Bag)
                 {
                     MDL_Any bv = ((MDER_V_Any)v).memory_value;
@@ -449,7 +449,7 @@ public class MDER_Machine
                                 + " that doesn't evaluate as a MDL_Tuple."
                         );
                     }
-                    if (label.GetType().FullName == "System.String")
+                    if (String.Equals(label.GetType().FullName, "System.String"))
                     {
                         if (this.memory.Test_Dot_Net_String((String)label)
                             == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -466,7 +466,7 @@ public class MDER_Machine
                             attrs_cv
                         );
                     }
-                    if (label.GetType().FullName == "System.String[]")
+                    if (String.Equals(label.GetType().FullName, "System.String[]"))
                     {
                         foreach (String s in ((String[])label))
                         {
@@ -488,14 +488,14 @@ public class MDER_Machine
                             attrs_cv
                         );
                     }
-                    if (label.GetType().FullName == "Muldis.Data_Engine_Reference.MDER_V_Any")
+                    if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                     {
                         return this.memory.MDL_Article(import__tree(label), attrs_cv);
                     }
                 }
                 break;
             case "New_Variable":
-                if (type_name == "Muldis.Data_Engine_Reference.MDER_V_Any")
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                 {
                     return this.memory.New_MDL_Variable(
                         ((MDER_V_Any)v).memory_value);
@@ -516,7 +516,7 @@ public class MDER_Machine
             case "New_External":
                 return this.memory.New_MDL_External(v);
             case "Excuse":
-                if (type_name == "System.String")
+                if (String.Equals(type_name, "System.String"))
                 {
                     if (this.memory.Test_Dot_Net_String((String)v)
                         == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -532,7 +532,7 @@ public class MDER_Machine
                 }
                 throw new NotImplementedException();
             case "Attr_Name":
-                if (type_name == "System.String")
+                if (String.Equals(type_name, "System.String"))
                 {
                     if (this.memory.Test_Dot_Net_String((String)v)
                         == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -547,7 +547,7 @@ public class MDER_Machine
                 }
                 break;
             case "Attr_Name_List":
-                if (type_name == "System.String[]")
+                if (String.Equals(type_name, "System.String[]"))
                 {
                     foreach (String s in ((String[])v))
                     {
@@ -583,33 +583,33 @@ public class MDER_Machine
             return this.memory.MDL_Ignorance();
         }
         String type_name = value.GetType().FullName;
-        if (type_name == "System.Boolean")
+        if (String.Equals(type_name, "System.Boolean"))
         {
             return this.memory.MDL_Boolean((Boolean)value);
         }
-        if (type_name == "System.Int32")
+        if (String.Equals(type_name, "System.Int32"))
         {
             return this.memory.MDL_Integer((Int32)value);
         }
-        if (type_name == "System.Numerics.BigInteger")
+        if (String.Equals(type_name, "System.Numerics.BigInteger"))
         {
             return this.memory.MDL_Integer((BigInteger)value);
         }
-        if (type_name == "System.Decimal")
+        if (String.Equals(type_name, "System.Decimal"))
         {
             return this.memory.MDL_Fraction((Decimal)value);
         }
-        if (type_name == "System.Collections.BitArray")
+        if (String.Equals(type_name, "System.Collections.BitArray"))
         {
             // BitArrays are mutable so clone argument to protect our internals.
             return this.memory.MDL_Bits(new BitArray((BitArray)value));
         }
-        if (type_name == "System.Byte[]")
+        if (String.Equals(type_name, "System.Byte[]"))
         {
             // Arrays are mutable so clone argument to protect our internals.
             return this.memory.MDL_Blob(((Byte[])value).ToArray());
         }
-        if (type_name == "System.String")
+        if (String.Equals(type_name, "System.String"))
         {
             Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)value);
             if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)

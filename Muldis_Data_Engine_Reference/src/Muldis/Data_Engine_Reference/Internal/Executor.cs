@@ -535,7 +535,7 @@ internal class Executor
         if (a0.cached_MDL_Any_identity is not null
             && a1.cached_MDL_Any_identity is not null)
         {
-            if (a0.cached_MDL_Any_identity == a1.cached_MDL_Any_identity)
+            if (String.Equals(a0.cached_MDL_Any_identity, a1.cached_MDL_Any_identity))
             {
                 merge_two_same(a0, a1);
                 return true;

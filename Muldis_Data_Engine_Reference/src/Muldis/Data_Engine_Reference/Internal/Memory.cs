@@ -36,7 +36,8 @@ internal class Memory
     private readonly MDL_True MDL_0bTRUE;
 
     // MDL_Integer value cache.
-    // Seeded with {-1,0,1}, limited to 10K entries in range 2B..2B.
+    // Seeded with {-1,0,1}.
+    // Limited to 10K entries each in range -2B..2B (signed 32-bit integer).
     // The MDL_Integer 0 is the type default value.
     private readonly Dictionary<Int32, MDL_Integer> integers;
 
@@ -49,8 +50,11 @@ internal class Memory
     // MDL_Blob with no members (type default value).
     internal readonly MDL_Blob MDL_Blob_C0;
 
-    // MDL_Text with no members (type default value).
-    internal readonly MDL_Text MDL_Text_C0;
+    // MDL_Text value cache.
+    // Seeded with empty string and well-known attribute names.
+    // Limited to 10K entries each not more than 200 code points length.
+    // The MDL_Text empty string is the type default value.
+    private readonly Dictionary<String, MDL_Text> texts;
 
     // MDL_Array with no members (type default value).
     internal readonly MDL_Any MDL_Array_C0;
@@ -124,7 +128,11 @@ internal class Memory
 
         this.MDL_Blob_C0 = new MDL_Blob(this, new Byte[] {});
 
-        this.MDL_Text_C0 = new MDL_Text(this, "", false, 0);
+        this.texts = new Dictionary<String, MDL_Text>();
+        foreach (String s in new String[] {""})
+        {
+            MDL_Text v = this.MDL_Text(s, false);
+        }
 
         this.MDL_Array_C0 = new MDL_Any {
             memory = this,
@@ -450,11 +458,17 @@ internal class Memory
 
     internal MDL_Text MDL_Text(String code_point_members, Boolean has_any_non_BMP)
     {
-        if (code_point_members == "")
+        Boolean may_cache = code_point_members.Length <= 200;
+        if (may_cache && this.texts.ContainsKey(code_point_members))
         {
-            return MDL_Text_C0;
+            return this.texts[code_point_members];
         }
-        return new MDL_Text(this, code_point_members, has_any_non_BMP);
+        MDL_Text text = new MDL_Text(this, code_point_members, has_any_non_BMP);
+        if (may_cache && this.texts.Count < 10000)
+        {
+            this.texts.Add(code_point_members, text);
+        }
+        return text;
     }
 
     internal MDL_Any MDL_Array(List<MDL_Any> members)
