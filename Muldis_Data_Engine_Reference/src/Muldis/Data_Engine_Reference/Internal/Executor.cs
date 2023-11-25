@@ -688,6 +688,18 @@ internal class Executor
                 return (attrs0.Count == attrs1.Count)
                     && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                     && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
+            case Well_Known_Base_Type.MDL_Tuple_Array:
+                result = Any__same(((MDL_Tuple_Array)a0).heading, ((MDL_Tuple_Array)a1).heading)
+                      && Any__same(((MDL_Tuple_Array)a0).body, ((MDL_Tuple_Array)a1).body);
+                break;
+            case Well_Known_Base_Type.MDL_Relation:
+                result = Any__same(((MDL_Relation)a0).heading, ((MDL_Relation)a1).heading)
+                      && Any__same(((MDL_Relation)a0).body, ((MDL_Relation)a1).body);
+                break;
+            case Well_Known_Base_Type.MDL_Tuple_Bag:
+                result = Any__same(((MDL_Tuple_Bag)a0).heading, ((MDL_Tuple_Bag)a1).heading)
+                      && Any__same(((MDL_Tuple_Bag)a0).body, ((MDL_Tuple_Bag)a1).body);
+                break;
             case Well_Known_Base_Type.MDL_Excuse:
                 Dictionary<String, MDL_Any> eattrs0 = a0.MDL_Excuse();
                 Dictionary<String, MDL_Any> eattrs1 = a1.MDL_Excuse();

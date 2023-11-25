@@ -42,6 +42,12 @@ internal abstract class MUON_Generator
                 return Heading_Literal((MDL_Heading)value);
             case Well_Known_Base_Type.MDL_Tuple:
                 return Tuple_Selector((MDL_Tuple)value, indent);
+            case Well_Known_Base_Type.MDL_Tuple_Array:
+                return Tuple_Array_Selector((MDL_Tuple_Array)value, indent);
+            case Well_Known_Base_Type.MDL_Relation:
+                return Relation_Selector((MDL_Relation)value, indent);
+            case Well_Known_Base_Type.MDL_Tuple_Bag:
+                return Tuple_Bag_Selector((MDL_Tuple_Bag)value, indent);
             case Well_Known_Base_Type.MDL_Article:
                 return Article_Selector((MDL_Article)value, indent);
             case Well_Known_Base_Type.MDL_Variable:
@@ -333,6 +339,33 @@ internal abstract class MUON_Generator
                         a => ati + Text_Literal_from_String(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
                 + indent + "})";
+    }
+
+    private String Tuple_Array_Selector(MDL_Tuple_Array value, String indent)
+    {
+        return "(Tuple_Array:("
+            + Heading_Literal(value.heading)
+            + " : "
+            + Any_Selector(value.body, indent)
+            + "))";
+    }
+
+    private String Relation_Selector(MDL_Relation value, String indent)
+    {
+        return "(Relation:("
+            + Heading_Literal(value.heading)
+            + " : "
+            + Any_Selector(value.body, indent)
+            + "))";
+    }
+
+    private String Tuple_Bag_Selector(MDL_Tuple_Bag value, String indent)
+    {
+        return "(Tuple_Bag:("
+            + Heading_Literal(value.heading)
+            + " : "
+            + Any_Selector(value.body, indent)
+            + "))";
     }
 
     private String Article_Selector(MDL_Article value, String indent)

@@ -83,18 +83,18 @@ internal class Memory
 
     // MDL_Tuple_Array with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Article MDL_Tuple_Array_D0C0;
-    internal readonly MDL_Article MDL_Tuple_Array_D0C1;
+    internal readonly MDL_Tuple_Array MDL_Tuple_Array_D0C0;
+    internal readonly MDL_Tuple_Array MDL_Tuple_Array_D0C1;
 
     // MDL_Relation with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Article MDL_Relation_D0C0;
-    internal readonly MDL_Article MDL_Relation_D0C1;
+    internal readonly MDL_Relation MDL_Relation_D0C0;
+    internal readonly MDL_Relation MDL_Relation_D0C1;
 
     // MDL_Tuple_Bag with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Article MDL_Tuple_Bag_D0C0;
-    internal readonly MDL_Article MDL_Tuple_Bag_D0C1;
+    internal readonly MDL_Tuple_Bag MDL_Tuple_Bag_D0C0;
+    internal readonly MDL_Tuple_Bag MDL_Tuple_Bag_D0C1;
 
     // MDL_Article with False label and no attributes
     // (type default value but not actually useful in practice).
@@ -199,100 +199,65 @@ internal class Memory
         this.false_nullary_article
             = new MDL_Article(this, this.MDL_0bFALSE, this.MDL_Tuple_D0);
 
-        this.MDL_Tuple_Array_D0C0 = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Array"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", MDL_Heading_D0}, {"body", MDL_Array_C0}})
-        );
-        this.MDL_Tuple_Array_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
+        this.MDL_Tuple_Array_D0C0 = new MDL_Tuple_Array(this,
+            MDL_Heading_D0, MDL_Array_C0);
 
-        this.MDL_Tuple_Array_D0C1 = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Array"),
-            this.MDL_Tuple(
-                new Dictionary<String, MDL_Any>()
-                {
-                    {"heading", MDL_Heading_D0},
-                    {"body", new MDL_Any {
-                        memory = this,
-                        WKBT = Well_Known_Base_Type.MDL_Array,
-                        details = new MDL_Array_Struct {
-                            local_symbolic_type = Symbolic_Array_Type.Singular,
-                            members = new Multiplied_Member(MDL_Tuple_D0),
-                            cached_members_meta = new Cached_Members_Meta {
-                                tree_member_count = 1,
-                                tree_all_unique = true,
-                                tree_relational = true,
-                            },
-                        },
-                    }},
-                }
-            )
+        this.MDL_Tuple_Array_D0C1 = new MDL_Tuple_Array(this,
+            MDL_Heading_D0,
+            new MDL_Any {
+                memory = this,
+                WKBT = Well_Known_Base_Type.MDL_Array,
+                details = new MDL_Array_Struct {
+                    local_symbolic_type = Symbolic_Array_Type.Singular,
+                    members = new Multiplied_Member(MDL_Tuple_D0),
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = 1,
+                        tree_all_unique = true,
+                        tree_relational = true,
+                    },
+                },
+            }
         );
-        this.MDL_Tuple_Array_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
 
-        this.MDL_Relation_D0C0 = this.MDL_Article(
-            this.MDL_Attr_Name("Relation"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", MDL_Heading_D0}, {"body", MDL_Set_C0}})
-        );
-        this.MDL_Relation_D0C0.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
+        this.MDL_Relation_D0C0 = new MDL_Relation(this,
+            MDL_Heading_D0, MDL_Set_C0);
 
-        this.MDL_Relation_D0C1 = this.MDL_Article(
-            this.MDL_Attr_Name("Relation"),
-            this.MDL_Tuple(
-                new Dictionary<String, MDL_Any>()
-                {
-                    {"heading", MDL_Heading_D0},
-                    {"body", new MDL_Any {
-                        memory = this,
-                        WKBT = Well_Known_Base_Type.MDL_Set,
-                        details = new MDL_Bag_Struct {
-                            local_symbolic_type
-                                = Symbolic_Bag_Type.Singular,
-                            members = new Multiplied_Member(MDL_Tuple_D0),
-                            cached_members_meta = new Cached_Members_Meta {
-                                tree_member_count = 1,
-                                tree_all_unique = true,
-                                tree_relational = true,
-                            },
-                        },
-                    }},
-                }
-            )
+        this.MDL_Relation_D0C1 = new MDL_Relation(this,
+            MDL_Heading_D0,
+            new MDL_Any {
+                memory = this,
+                WKBT = Well_Known_Base_Type.MDL_Set,
+                details = new MDL_Bag_Struct {
+                    local_symbolic_type = Symbolic_Bag_Type.Singular,
+                    members = new Multiplied_Member(MDL_Tuple_D0),
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = 1,
+                        tree_all_unique = true,
+                        tree_relational = true,
+                    },
+                },
+            }
         );
-        this.MDL_Relation_D0C1.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
 
-        this.MDL_Tuple_Bag_D0C0 = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Bag"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", MDL_Heading_D0}, {"body", MDL_Bag_C0}})
-        );
-        this.MDL_Tuple_Bag_D0C0.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
+        this.MDL_Tuple_Bag_D0C0 = new MDL_Tuple_Bag(this,
+            MDL_Heading_D0, MDL_Bag_C0);
 
-        this.MDL_Tuple_Bag_D0C1 = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Bag"),
-            this.MDL_Tuple(
-                new Dictionary<String, MDL_Any>()
-                {
-                    {"heading", MDL_Heading_D0},
-                    {"body", new MDL_Any {
-                        memory = this,
-                        WKBT = Well_Known_Base_Type.MDL_Bag,
-                        details = new MDL_Bag_Struct {
-                            local_symbolic_type
-                                = Symbolic_Bag_Type.Singular,
-                            members = new Multiplied_Member(MDL_Tuple_D0),
-                            cached_members_meta = new Cached_Members_Meta {
-                                tree_member_count = 1,
-                                tree_all_unique = true,
-                                tree_relational = true,
-                            },
-                        },
-                    }},
-                }
-            )
+        this.MDL_Tuple_Bag_D0C1 = new MDL_Tuple_Bag(this,
+            MDL_Heading_D0,
+            new MDL_Any {
+                memory = this,
+                WKBT = Well_Known_Base_Type.MDL_Bag,
+                details = new MDL_Bag_Struct {
+                    local_symbolic_type = Symbolic_Bag_Type.Singular,
+                    members = new Multiplied_Member(MDL_Tuple_D0),
+                    cached_members_meta = new Cached_Members_Meta {
+                        tree_member_count = 1,
+                        tree_all_unique = true,
+                        tree_relational = true,
+                    },
+                },
+            }
         );
-        this.MDL_Tuple_Bag_D0C1.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
 
         well_known_excuses = new Dictionary<String, MDL_Any>();
         foreach (String s in Constants.Strings__Well_Known_Excuses())
@@ -506,7 +471,7 @@ internal class Memory
         return new MDL_Tuple(this, attrs);
     }
 
-    internal MDL_Article MDL_Tuple_Array(MDL_Heading heading, MDL_Any body)
+    internal MDL_Tuple_Array MDL_Tuple_Array(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -519,16 +484,10 @@ internal class Memory
                 return MDL_Tuple_Array_D0C1;
             }
         }
-        MDL_Article tuple_array = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Array"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", heading}, {"body", body}})
-        );
-        tuple_array.declare_member_status_in_WKT(Well_Known_Type.Tuple_Array, true);
-        return tuple_array;
+        return new MDL_Tuple_Array(this, heading, body);
     }
 
-    internal MDL_Article MDL_Relation(MDL_Heading heading, MDL_Any body)
+    internal MDL_Relation MDL_Relation(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -541,16 +500,10 @@ internal class Memory
                 return MDL_Relation_D0C1;
             }
         }
-        MDL_Article relation = this.MDL_Article(
-            this.MDL_Attr_Name("Relation"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", heading}, {"body", body}})
-        );
-        relation.declare_member_status_in_WKT(Well_Known_Type.Relation, true);
-        return relation;
+        return new MDL_Relation(this, heading, body);
     }
 
-    internal MDL_Article MDL_Tuple_Bag(MDL_Heading heading, MDL_Any body)
+    internal MDL_Tuple_Bag MDL_Tuple_Bag(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -564,13 +517,7 @@ internal class Memory
             //    return MDL_Tuple_Bag_D0C1;
             //}
         }
-        MDL_Article tuple_bag = this.MDL_Article(
-            this.MDL_Attr_Name("Tuple_Bag"),
-            this.MDL_Tuple(new Dictionary<String, MDL_Any>()
-                {{"heading", heading}, {"body", body}})
-        );
-        tuple_bag.declare_member_status_in_WKT(Well_Known_Type.Tuple_Bag, true);
-        return tuple_bag;
+        return new MDL_Tuple_Bag(this, heading, body);
     }
 
     internal MDL_Article MDL_Article(MDL_Any label, MDL_Tuple attrs)
