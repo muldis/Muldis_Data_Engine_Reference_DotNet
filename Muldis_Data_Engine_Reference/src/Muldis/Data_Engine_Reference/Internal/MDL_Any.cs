@@ -40,20 +40,6 @@ internal class MDL_Any
         // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object details;
 
-    // Set of well-known Muldis Data Language types that this Muldis Data Language "value" is
-    // known to either be or not be a member of.  This is populated
-    // semi-lazily as needed.  cached_WKT_statuses is null iff the set
-    // is empty. A type is in cached_WKT_statuses with Boolean=true iff
-    // we know the value is a member of the type and with Boolean=false
-    // iff we know the value is not a member of the type; when
-    // cached_WKT_statuses doesn't mention a type at all, we either
-    // didn't test the membership or decided not to cache the result.
-    // This set excludes on purpose the subset of well-known types that
-    // should be trivial to test membership of by other means; in
-    // particular it excludes {Any, None}, the Well_Known_Base_Type;
-    // types not excluded are more work to test.
-    internal Dictionary<Well_Known_Type, Boolean> cached_WKT_statuses;
-
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
     // typically when the "value" is a member of an indexed collection.
@@ -92,29 +78,6 @@ internal class MDL_Any
     internal Dictionary<String, MDL_Any> MDL_Excuse()
     {
         return (Dictionary<String, MDL_Any>)this.details;
-    }
-
-    internal Nullable<Boolean> member_status_in_WKT(Well_Known_Type type)
-    {
-        return this.cached_WKT_statuses is null            ? (Nullable<Boolean>)null
-             : !this.cached_WKT_statuses.ContainsKey(type) ? (Nullable<Boolean>)null
-             :                                               this.cached_WKT_statuses[type];
-    }
-
-    internal void declare_member_status_in_WKT(Well_Known_Type type, Boolean status)
-    {
-        if (this.cached_WKT_statuses is null)
-        {
-            this.cached_WKT_statuses = new Dictionary<Well_Known_Type, Boolean>();
-        }
-        if (!this.cached_WKT_statuses.ContainsKey(type))
-        {
-            this.cached_WKT_statuses.Add(type, status);
-        }
-        else
-        {
-            this.cached_WKT_statuses[type] = status;
-        }
     }
 }
 

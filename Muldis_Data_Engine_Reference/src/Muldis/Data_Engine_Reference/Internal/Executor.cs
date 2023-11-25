@@ -174,10 +174,6 @@ internal class Executor
 
     internal Boolean Is_Attr_Name_List(MDL_Any value)
     {
-        if (value.member_status_in_WKT(Well_Known_Type.Attr_Name_List) == true)
-        {
-            return true;
-        }
         Memory m = this.memory;
         if (value.WKBT != Well_Known_Base_Type.MDL_Array)
         {
@@ -192,16 +188,11 @@ internal class Executor
                 return false;
             }
         }
-        value.declare_member_status_in_WKT(Well_Known_Type.Attr_Name_List, true);
         return true;
     }
 
     internal Boolean Is_Local_Name(MDL_Any value)
     {
-        if (value.member_status_in_WKT(Well_Known_Type.Local_Name) == true)
-        {
-            return true;
-        }
         if (!Is_Attr_Name_List(value))
         {
             return false;
@@ -219,7 +210,6 @@ internal class Executor
             || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("material")) && count == 1)
             || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("floating")) && count >= 2))
         {
-            value.declare_member_status_in_WKT(Well_Known_Type.Local_Name, true);
             return true;
         }
         return false;
@@ -227,10 +217,6 @@ internal class Executor
 
     internal Boolean Is_Absolute_Name(MDL_Any value)
     {
-        if (value.member_status_in_WKT(Well_Known_Type.Absolute_Name) == true)
-        {
-            return true;
-        }
         if (!Is_Local_Name(value))
         {
             return false;
@@ -240,7 +226,6 @@ internal class Executor
             || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("used"))
             || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("package")))
         {
-            value.declare_member_status_in_WKT(Well_Known_Type.Absolute_Name, true);
             return true;
         }
         return false;
