@@ -288,7 +288,7 @@ public class MDER_Machine
             case "Heading":
                 if (String.Equals(type_name, "System.Object[]"))
                 {
-                    HashSet<String> attr_names = (HashSet<String>)v;
+                    HashSet<String> attr_names = new HashSet<String>();
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
                     {
                         if (((Object[])v)[0] is not null && (Boolean)((Object[])v)[0])
@@ -296,10 +296,7 @@ public class MDER_Machine
                             attr_names.Add(Char.ConvertFromUtf32(i));
                         }
                     }
-                    return this.memory.MDL_Tuple(
-                        new Dictionary<String, MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
-                    );
+                    return this.memory.MDL_Heading(attr_names);
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                 {
@@ -317,18 +314,14 @@ public class MDER_Machine
                             );
                         }
                     }
-                    return this.memory.MDL_Tuple(
-                        new Dictionary<String, MDL_Any>(
-                            attr_names.ToDictionary(a => a, a => (MDL_Any)this.memory.MDL_True()))
-                    );
+                    return this.memory.MDL_Heading(new HashSet<String>(attr_names));
                 }
                 break;
             case "Tuple_Array":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
-                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
+                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Array_C0;
                     return this.memory.MDL_Tuple_Array(hv, bv);
                 }
@@ -345,7 +338,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Any hv = this.memory.Array__Pick_Arbitrary_Member(bv);
+                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Array__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -359,10 +352,9 @@ public class MDER_Machine
                 break;
             case "Relation":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
-                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
+                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Set_C0;
                     return this.memory.MDL_Relation(hv, bv);
                 }
@@ -379,7 +371,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Any hv = this.memory.Set__Pick_Arbitrary_Member(bv);
+                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Set__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -393,10 +385,9 @@ public class MDER_Machine
                 break;
             case "Tuple_Bag":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Tuple
-                    && ((MDER_V_Any)v).memory_value.member_status_in_WKT(Well_Known_Type.Heading) == true)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
-                    MDL_Any hv = ((MDER_V_Any)v).memory_value;
+                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
                     MDL_Any bv = this.memory.MDL_Bag_C0;
                     return this.memory.MDL_Tuple_Bag(hv, bv);
                 }
@@ -413,7 +404,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Any hv = this.memory.Bag__Pick_Arbitrary_Member(bv);
+                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Bag__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException

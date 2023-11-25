@@ -38,6 +38,8 @@ internal abstract class MUON_Generator
                 return Set_Selector(value, indent);
             case Well_Known_Base_Type.MDL_Bag:
                 return Bag_Selector(value, indent);
+            case Well_Known_Base_Type.MDL_Heading:
+                return Heading_Literal((MDL_Heading)value);
             case Well_Known_Base_Type.MDL_Tuple:
                 return Tuple_Selector(value, indent);
             case Well_Known_Base_Type.MDL_Article:
@@ -231,15 +233,14 @@ internal abstract class MUON_Generator
         return sb.ToString();
     }
 
-    private String Heading_Literal(MDL_Any value)
+    private String Heading_Literal(MDL_Heading value)
     {
         Memory m = value.memory;
-        Dictionary<String, MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
-                        Enumerable.OrderBy(attrs, a => a.Key),
-                        a => Text_Literal_from_String(a.Key) + ","))
+                        Enumerable.OrderBy(value.attr_names, a => a),
+                        a => Text_Literal_from_String(a) + ","))
                 + "})";
     }
 
@@ -323,17 +324,12 @@ internal abstract class MUON_Generator
 
     private String Tuple_Selector(MDL_Any value, String indent)
     {
-        if (value.member_status_in_WKT(Well_Known_Type.Heading) == true)
-        {
-            return Heading_Literal(value);
-        }
         String ati = indent + "\u0009";
         Memory m = value.memory;
-        Dictionary<String, MDL_Any> attrs = value.MDL_Tuple();
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
-                        Enumerable.OrderBy(attrs, a => a.Key),
+                        Enumerable.OrderBy(value.MDL_Tuple(), a => a.Key),
                         a => ati + Text_Literal_from_String(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
                 + indent + "})";

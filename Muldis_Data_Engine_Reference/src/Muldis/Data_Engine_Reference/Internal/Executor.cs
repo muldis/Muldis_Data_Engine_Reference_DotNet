@@ -167,7 +167,7 @@ internal class Executor
 
     internal Boolean Is_Heading(MDL_Any value)
     {
-        return value.member_status_in_WKT(Well_Known_Type.Heading) == true;
+        return value.WKBT == Well_Known_Base_Type.MDL_Heading;
     }
 
     internal Boolean Is_Attr_Name_List(MDL_Any value)
@@ -253,10 +253,10 @@ internal class Executor
 
         if (Constants.Strings__Foundation_Type_Definer_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Heading_0))
+            if (!m.Tuple__Has_Heading(args, m.MDL_Heading_0))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
-                    "X_Type_Definer_Function_Args_Not_Heading_0").ToString());
+                    "X_Type_Definer_Function_Args_Not_MDL_Heading_0").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)
@@ -354,10 +354,10 @@ internal class Executor
 
         if (Constants.Strings__Foundation_NTD_Unary_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Heading_0))
+            if (!m.Tuple__Has_Heading(args, m.MDL_Heading_0))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
-                    "X_Non_Type_Definer_Unary_Function_Args_Not_Heading_0").ToString());
+                    "X_Non_Type_Definer_Unary_Function_Args_Not_MDL_Heading_0").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)
@@ -448,10 +448,10 @@ internal class Executor
 
         if (Constants.Strings__Foundation_Binary_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Heading_0_1))
+            if (!m.Tuple__Has_Heading(args, m.MDL_Heading_0_1))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
-                    "X_Binary_Function_Args_Not_Heading_0_1").ToString());
+                    "X_Binary_Function_Args_Not_MDL_Heading_0_1").ToString());
             }
             MDL_Any a0 = args.MDL_Tuple()["\u0000"];
             MDL_Any a1 = args.MDL_Tuple()["\u0001"];
@@ -499,10 +499,10 @@ internal class Executor
 
         if (Constants.Strings__Foundation_Ternary_Function_Names().Contains(func_name_s))
         {
-            if (!m.Tuple__Same_Heading(args, m.Heading_0_1_2))
+            if (!m.Tuple__Has_Heading(args, m.MDL_Heading_0_1_2))
             {
                 throw new ArgumentException(m.Simple_MDL_Excuse(
-                    "X_Ternary_Function_Args_Not_Heading_0_1_2").ToString());
+                    "X_Ternary_Function_Args_Not_MDL_Heading_0_1_2").ToString());
             }
             MDL_Any v = args.MDL_Tuple()["\u0000"];
             switch (func_name_s)

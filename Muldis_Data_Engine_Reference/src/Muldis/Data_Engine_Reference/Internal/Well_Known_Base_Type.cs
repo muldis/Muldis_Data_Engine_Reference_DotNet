@@ -24,6 +24,7 @@ internal enum Well_Known_Base_Type
     MDL_Array,
     MDL_Set,
     MDL_Bag,
+    MDL_Heading,
     MDL_Tuple,
     MDL_Article,
     MDL_Variable,

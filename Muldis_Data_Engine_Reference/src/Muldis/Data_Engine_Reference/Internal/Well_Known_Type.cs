@@ -55,7 +55,6 @@ internal enum Well_Known_Type
     Block,
     Leave,
     Iterate,
-    Heading,
     Attr_Name_List,
     Local_Name,
     Absolute_Name,
