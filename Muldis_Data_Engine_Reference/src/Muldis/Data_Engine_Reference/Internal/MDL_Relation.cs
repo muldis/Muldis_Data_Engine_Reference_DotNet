@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Relation : MDL_NQA
+internal class MDL_Relation : MDL_Any
 {
     internal readonly MDL_Heading heading;
     internal readonly MDL_Set body;

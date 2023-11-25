@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Integer : MDL_NQA
+internal class MDL_Integer : MDL_Any
 {
     // While we conceptually could special case smaller integers with
     // additional fields for performance, we won't, mainly to keep

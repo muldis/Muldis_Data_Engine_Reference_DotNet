@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Tuple_Bag : MDL_NQA
+internal class MDL_Tuple_Bag : MDL_Any
 {
     internal readonly MDL_Heading heading;
     internal readonly MDL_Bag body;

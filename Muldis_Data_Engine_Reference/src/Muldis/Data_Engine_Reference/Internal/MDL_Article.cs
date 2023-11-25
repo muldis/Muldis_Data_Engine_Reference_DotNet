@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Article : MDL_NQA
+internal class MDL_Article : MDL_Any
 {
     // The Muldis Data Language value that is the "label" of this MDL_Article value.
     // TODO: Change this to a MDL_Nesting.

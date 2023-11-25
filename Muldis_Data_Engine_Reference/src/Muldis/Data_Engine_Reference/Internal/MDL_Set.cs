@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Set : MDL_NQA
+internal class MDL_Set : MDL_Any
 {
     internal MDL_Bag_Struct tree_root_node;
 

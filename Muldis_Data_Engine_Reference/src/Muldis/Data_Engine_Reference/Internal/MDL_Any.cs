@@ -20,17 +20,17 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // Iff a Muldis Data Language "value" is a "Handle" then it references something
 // that possibly can mutate, such as a Muldis Data Language "variable".
 
-internal class MDL_Any
+internal abstract class MDL_Any
 {
     // Memory pool this Muldis Data Language "value" lives in.
-    internal Memory memory;
+    internal readonly Memory memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
     // "value" is a member of.  Helps interpret which subtype of MDL_Any
     // we have without having to use the language's type reflection system.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    internal Well_Known_Base_Type WKBT;
+    internal readonly Well_Known_Base_Type WKBT;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
@@ -39,6 +39,12 @@ internal class MDL_Any
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
     internal String cached_MDL_Any_identity;
+
+    internal MDL_Any(Memory memory, Well_Known_Base_Type WKBT)
+    {
+        this.memory = memory;
+        this.WKBT = WKBT;
+    }
 
     public override String ToString()
     {

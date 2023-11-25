@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_External : MDL_NQA
+internal class MDL_External : MDL_Any
 {
     internal readonly Object external_value;
 

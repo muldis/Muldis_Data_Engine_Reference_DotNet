@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Bits : MDL_NQA
+internal class MDL_Bits : MDL_Any
 {
     internal readonly BitArray bit_members;
 

@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Variable : MDL_NQA
+internal class MDL_Variable : MDL_Any
 {
     internal MDL_Any current_value;
 

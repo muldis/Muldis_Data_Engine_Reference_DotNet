@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference.Internal;
 
-internal class MDL_Heading : MDL_NQA
+internal class MDL_Heading : MDL_Any
 {
     internal readonly HashSet<String> attr_names;
 
