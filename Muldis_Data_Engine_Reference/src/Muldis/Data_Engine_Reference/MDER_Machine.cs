@@ -54,7 +54,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("new_current");
         }
-        variable.memory_value.details = new_current.memory_value;
+        ((MDL_Variable)variable.memory_value).current_value = new_current.memory_value;
     }
 
     public MDER_V_Any MDER_import(Object value)
@@ -322,13 +322,13 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
                     MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Any bv = this.memory.MDL_Array_C0;
+                    MDL_Array bv = this.memory.MDL_Array_C0;
                     return this.memory.MDL_Tuple_Array(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Array)
                 {
-                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
+                    MDL_Array bv = (MDL_Array)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -355,13 +355,13 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
                     MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Any bv = this.memory.MDL_Set_C0;
+                    MDL_Set bv = this.memory.MDL_Set_C0;
                     return this.memory.MDL_Relation(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Set)
                 {
-                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
+                    MDL_Set bv = (MDL_Set)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -388,13 +388,13 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
                 {
                     MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Any bv = this.memory.MDL_Bag_C0;
+                    MDL_Bag bv = this.memory.MDL_Bag_C0;
                     return this.memory.MDL_Tuple_Bag(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Bag)
                 {
-                    MDL_Any bv = ((MDER_V_Any)v).memory_value;
+                    MDL_Bag bv = (MDL_Bag)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException

@@ -33,11 +33,11 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Text:
                 return Text_Literal((MDL_Text)value);
             case Well_Known_Base_Type.MDL_Array:
-                return Array_Selector(value, indent);
+                return Array_Selector((MDL_Array)value, indent);
             case Well_Known_Base_Type.MDL_Set:
-                return Set_Selector(value, indent);
+                return Set_Selector((MDL_Set)value, indent);
             case Well_Known_Base_Type.MDL_Bag:
-                return Bag_Selector(value, indent);
+                return Bag_Selector((MDL_Bag)value, indent);
             case Well_Known_Base_Type.MDL_Heading:
                 return Heading_Literal((MDL_Heading)value);
             case Well_Known_Base_Type.MDL_Tuple:
@@ -250,13 +250,13 @@ internal abstract class MUON_Generator
                 + "})";
     }
 
-    private String Array_Selector(MDL_Any value, String indent)
+    private String Array_Selector(MDL_Array value, String indent)
     {
         String mei = indent + "\u0009";
         Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDL_Array_C0) ? "(Array:[])"
             : "(Array:[\u000A" + Array_Selector__node__tree(
-                value.MDL_Array(), mei) + indent + "])";
+                value.tree_root_node, mei) + indent + "])";
     }
 
     private String Array_Selector__node__tree(MDL_Array_Struct node, String indent)
@@ -289,11 +289,11 @@ internal abstract class MUON_Generator
         }
     }
 
-    private String Set_Selector(MDL_Any value, String indent)
+    private String Set_Selector(MDL_Set value, String indent)
     {
         String mei = indent + "\u0009";
-        value.memory.Bag__Collapse(bag: value, want_indexed: true);
-        MDL_Bag_Struct node = value.MDL_Bag();
+        value.memory.Set__Collapse(set: value, want_indexed: true);
+        MDL_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:
@@ -308,11 +308,11 @@ internal abstract class MUON_Generator
         }
     }
 
-    private String Bag_Selector(MDL_Any value, String indent)
+    private String Bag_Selector(MDL_Bag value, String indent)
     {
         String mei = indent + "\u0009";
         value.memory.Bag__Collapse(bag: value, want_indexed: true);
-        MDL_Bag_Struct node = value.MDL_Bag();
+        MDL_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
             case Symbolic_Bag_Type.None:

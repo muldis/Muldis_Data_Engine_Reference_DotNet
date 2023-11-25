@@ -32,10 +32,10 @@ internal class Executor
         if (Is_Absolute_Name(function))
         {
             if (Object.ReferenceEquals(
-                Array__maybe_at(function, 0), m.MDL_Attr_Name("foundation")))
+                Array__maybe_at((MDL_Array)function, 0), m.MDL_Attr_Name("foundation")))
             {
                 return evaluate_foundation_function(
-                    (MDL_Text)Array__maybe_at(function, 1), args_as_Tuple);
+                    (MDL_Text)Array__maybe_at((MDL_Array)function, 1), args_as_Tuple);
             }
             throw new NotImplementedException();
         }
@@ -180,10 +180,10 @@ internal class Executor
             return false;
         }
         // TODO: Replace this loop with an "All" higher order function call.
-        Int64 count = Array__count(value);
+        Int64 count = Array__count((MDL_Array)value);
         for (Int64 i = 0; i < count; i++)
         {
-            if (!Is_Text(Array__maybe_at(value, i)))
+            if (!Is_Text(Array__maybe_at((MDL_Array)value, i)))
             {
                 return false;
             }
@@ -197,12 +197,12 @@ internal class Executor
         {
             return false;
         }
-        Int64 count = Array__count(value);
+        Int64 count = Array__count((MDL_Array)value);
         if (count == 0)
         {
             return false;
         }
-        MDL_Any first = Array__maybe_at(value, 0);
+        MDL_Any first = Array__maybe_at((MDL_Array)value, 0);
         if ((Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("foundation")) && count == 2)
             || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("used")) && count >= 2)
             || (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("package")) && count >= 1)
@@ -221,7 +221,7 @@ internal class Executor
         {
             return false;
         }
-        MDL_Any first = Array__maybe_at(value, 0);
+        MDL_Any first = Array__maybe_at((MDL_Array)value, 0);
         if (Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("foundation"))
             || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("used"))
             || Object.ReferenceEquals(first, this.memory.MDL_Attr_Name("package")))
@@ -379,24 +379,22 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
-                    return m.MDL_Integer(Array__count(v));
+                    return m.MDL_Integer(Array__count((MDL_Array)v));
                 case "Bag_unique":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Bag)
                     {
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
-                    return new MDL_Any {
-                        memory = m,
-                        WKBT = Well_Known_Base_Type.MDL_Bag,
-                        details = new MDL_Bag_Struct {
+                    return new MDL_Bag(m,
+                        new MDL_Bag_Struct {
                             local_symbolic_type = Symbolic_Bag_Type.Unique,
-                            members = v.MDL_Bag(),
+                            members = ((MDL_Bag)v).tree_root_node,
                             cached_members_meta = new Cached_Members_Meta {
                                 tree_all_unique = true,
                             },
-                        },
-                    };
+                        }
+                    );
                 case "Tuple_degree":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
@@ -470,7 +468,7 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
-                    MDL_Any maybe_member = Array__maybe_at(a0, (Int64)((MDL_Integer)a1).as_BigInteger);
+                    MDL_Any maybe_member = Array__maybe_at((MDL_Array)a0, (Int64)((MDL_Integer)a1).as_BigInteger);
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
@@ -568,98 +566,25 @@ internal class Executor
                     ((MDL_Text)a1).code_point_members);
                 break;
             case Well_Known_Base_Type.MDL_Array:
-                this.memory.Array__Collapse(a0);
-                this.memory.Array__Collapse(a1);
-                MDL_Array_Struct n0 = a0.MDL_Array();
-                MDL_Array_Struct n1 = a1.MDL_Array();
-                if (Object.ReferenceEquals(n0, n1))
-                {
-                    result = true;
-                    break;
-                }
-                if (n0.local_symbolic_type == Symbolic_Array_Type.None
-                    && n1.local_symbolic_type == Symbolic_Array_Type.None)
-                {
-                    // In theory we should never get here assuming that
-                    // the empty Array is optimized to return a constant
-                    // at selection time, but we will check anyway.
-                    result = true;
-                    break;
-                }
-                if (n0.local_symbolic_type == Symbolic_Array_Type.Singular
-                    && n1.local_symbolic_type == Symbolic_Array_Type.Singular)
-                {
-                    result = ((n0.Local_Singular_Members().multiplicity
-                            == n1.Local_Singular_Members().multiplicity)
-                        && Any__same(n0.Local_Singular_Members().member,
-                            n1.Local_Singular_Members().member));
-                    break;
-                }
-                if (n0.local_symbolic_type == Symbolic_Array_Type.Arrayed
-                    && n1.local_symbolic_type == Symbolic_Array_Type.Arrayed)
-                {
-                    // This works because MDL_Any Equals() calls Any__Same().
-                    result = Enumerable.SequenceEqual(
-                        n0.Local_Arrayed_Members(),
-                        n1.Local_Arrayed_Members());
-                    break;
-                }
-                MDL_Array_Struct n0_ = n0;
-                MDL_Array_Struct n1_ = n1;
-                if (n0_.local_symbolic_type == Symbolic_Array_Type.Arrayed
-                    && n1_.local_symbolic_type == Symbolic_Array_Type.Singular)
-                {
-                     n1_ = n0;
-                     n0_ = n1;
-                }
-                if (n0_.local_symbolic_type == Symbolic_Array_Type.Singular
-                    && n1_.local_symbolic_type == Symbolic_Array_Type.Arrayed)
-                {
-                    Multiplied_Member sm = n0_.Local_Singular_Members();
-                    List<MDL_Any> am = n1_.Local_Arrayed_Members();
-                    result = sm.multiplicity == am.Count
-                        && Enumerable.All(am, m => Any__same(m, sm.member));
-                }
-                // We should never get here.
-                throw new NotImplementedException();
+                this.memory.Array__Collapse((MDL_Array)a0);
+                this.memory.Array__Collapse((MDL_Array)a1);
+                result = this.collapsed_Array_Struct_same(
+                    ((MDL_Array)a0).tree_root_node, ((MDL_Array)a0).tree_root_node);
+                break;
             case Well_Known_Base_Type.MDL_Set:
+                // MDL_Set and MDL_Bag have the same internal representation.
+                this.memory.Set__Collapse(set: ((MDL_Set)a0), want_indexed: true);
+                this.memory.Set__Collapse(set: ((MDL_Set)a1), want_indexed: true);
+                result = this.collapsed_Bag_Struct_same(
+                    ((MDL_Set)a0).tree_root_node, ((MDL_Set)a0).tree_root_node);
+                break;
             case Well_Known_Base_Type.MDL_Bag:
                 // MDL_Set and MDL_Bag have the same internal representation.
-                this.memory.Bag__Collapse(bag: a0, want_indexed: true);
-                this.memory.Bag__Collapse(bag: a1, want_indexed: true);
-                MDL_Bag_Struct bn0 = a0.MDL_Bag();
-                MDL_Bag_Struct bn1 = a1.MDL_Bag();
-                if (Object.ReferenceEquals(bn0, bn1))
-                {
-                    result = true;
-                    break;
-                }
-                if (bn0.local_symbolic_type == Symbolic_Bag_Type.None
-                    && bn1.local_symbolic_type == Symbolic_Bag_Type.None)
-                {
-                    // In theory we should never get here assuming that
-                    // the empty Array is optimized to return a constant
-                    // at selection time, but we will check anyway.
-                    result = true;
-                    break;
-                }
-                if (bn0.local_symbolic_type == Symbolic_Bag_Type.Indexed
-                    && bn1.local_symbolic_type == Symbolic_Bag_Type.Indexed)
-                {
-                    Dictionary<MDL_Any, Multiplied_Member> im0
-                        = bn0.Local_Indexed_Members();
-                    Dictionary<MDL_Any, Multiplied_Member> im1
-                        = bn1.Local_Indexed_Members();
-                    result = im0.Count == im1.Count
-                        && Enumerable.All(
-                            im0.Values,
-                            m => im1.ContainsKey(m.member)
-                                && im1[m.member].multiplicity == m.multiplicity
-                        );
-                    break;
-                }
-                // We should never get here.
-                throw new NotImplementedException();
+                this.memory.Bag__Collapse(bag: ((MDL_Bag)a0), want_indexed: true);
+                this.memory.Bag__Collapse(bag: ((MDL_Bag)a1), want_indexed: true);
+                result = this.collapsed_Bag_Struct_same(
+                    ((MDL_Set)a0).tree_root_node, ((MDL_Set)a0).tree_root_node);
+                break;
             case Well_Known_Base_Type.MDL_Heading:
                 HashSet<String> atnms0 = ((MDL_Heading)a0).attr_names;
                 HashSet<String> atnms1 = ((MDL_Heading)a1).attr_names;
@@ -713,7 +638,7 @@ internal class Executor
         return result;
     }
 
-    internal List<Boolean> BitArray_to_List(BitArray value)
+    private List<Boolean> BitArray_to_List(BitArray value)
     {
         System.Collections.IEnumerator e = value.GetEnumerator();
         List<Boolean> list = new List<Boolean>();
@@ -722,6 +647,90 @@ internal class Executor
             list.Add((Boolean)e.Current);
         }
         return list;
+    }
+
+    private Boolean collapsed_Array_Struct_same(
+        MDL_Array_Struct n0, MDL_Array_Struct n1)
+    {
+        if (Object.ReferenceEquals(n0, n1))
+        {
+            return true;
+        }
+        if (n0.local_symbolic_type == Symbolic_Array_Type.None
+            && n1.local_symbolic_type == Symbolic_Array_Type.None)
+        {
+            // In theory we should never get here assuming that
+            // the empty Array is optimized to return a constant
+            // at selection time, but we will check anyway.
+            return true;
+        }
+        if (n0.local_symbolic_type == Symbolic_Array_Type.Singular
+            && n1.local_symbolic_type == Symbolic_Array_Type.Singular)
+        {
+            return ((n0.Local_Singular_Members().multiplicity
+                    == n1.Local_Singular_Members().multiplicity)
+                && Any__same(n0.Local_Singular_Members().member,
+                    n1.Local_Singular_Members().member));
+        }
+        if (n0.local_symbolic_type == Symbolic_Array_Type.Arrayed
+            && n1.local_symbolic_type == Symbolic_Array_Type.Arrayed)
+        {
+            // This works because MDL_Any Equals() calls Any__Same().
+            return Enumerable.SequenceEqual(
+                n0.Local_Arrayed_Members(),
+                n1.Local_Arrayed_Members());
+        }
+        MDL_Array_Struct n0_ = n0;
+        MDL_Array_Struct n1_ = n1;
+        if (n0_.local_symbolic_type == Symbolic_Array_Type.Arrayed
+            && n1_.local_symbolic_type == Symbolic_Array_Type.Singular)
+        {
+             n1_ = n0;
+             n0_ = n1;
+        }
+        if (n0_.local_symbolic_type == Symbolic_Array_Type.Singular
+            && n1_.local_symbolic_type == Symbolic_Array_Type.Arrayed)
+        {
+            Multiplied_Member sm = n0_.Local_Singular_Members();
+            List<MDL_Any> am = n1_.Local_Arrayed_Members();
+            return sm.multiplicity == am.Count
+                && Enumerable.All(am, m => Any__same(m, sm.member));
+        }
+        // We should never get here.
+        throw new NotImplementedException();
+    }
+
+    private Boolean collapsed_Bag_Struct_same(
+        MDL_Bag_Struct n0, MDL_Bag_Struct n1)
+    {
+        if (Object.ReferenceEquals(n0, n1))
+        {
+            return true;
+        }
+        if (n0.local_symbolic_type == Symbolic_Bag_Type.None
+            && n1.local_symbolic_type == Symbolic_Bag_Type.None)
+        {
+            // In theory we should never get here assuming that
+            // the empty Array is optimized to return a constant
+            // at selection time, but we will check anyway.
+            return true;
+        }
+        if (n0.local_symbolic_type == Symbolic_Bag_Type.Indexed
+            && n1.local_symbolic_type == Symbolic_Bag_Type.Indexed)
+        {
+            Dictionary<MDL_Any, Multiplied_Member> im0
+                = n0.Local_Indexed_Members();
+            Dictionary<MDL_Any, Multiplied_Member> im1
+                = n1.Local_Indexed_Members();
+            return im0.Count == im1.Count
+                && Enumerable.All(
+                    im0.Values,
+                    m => im1.ContainsKey(m.member)
+                        && im1[m.member].multiplicity == m.multiplicity
+                );
+        }
+        // We should never get here.
+        throw new NotImplementedException();
     }
 
     internal void merge_two_same(MDL_Any a0, MDL_Any a1)
@@ -786,9 +795,9 @@ internal class Executor
         return (Int64)node.cached_member_count;
     }
 
-    internal Int64 Array__count(MDL_Any array)
+    internal Int64 Array__count(MDL_Array array)
     {
-        return Array__node__tree_member_count(array.MDL_Array());
+        return Array__node__tree_member_count(array.tree_root_node);
     }
 
     private Int64 Array__node__tree_member_count(MDL_Array_Struct node)
@@ -860,9 +869,9 @@ internal class Executor
             node.code_point_members[(Int32)ord_pos]);
     }
 
-    private MDL_Any Array__maybe_at(MDL_Any array, Int64 ord_pos)
+    private MDL_Any Array__maybe_at(MDL_Array array, Int64 ord_pos)
     {
-        return Array__node__maybe_at(array.MDL_Array(), ord_pos);
+        return Array__node__maybe_at(array.tree_root_node, ord_pos);
     }
 
     private MDL_Any Array__node__maybe_at(MDL_Array_Struct node, Int64 ord_pos)
