@@ -101,7 +101,7 @@ internal class Memory
     private readonly MDL_Article false_nullary_article;
 
     // All well known MDL_Excuse values.
-    internal readonly Dictionary<String, MDL_Any> well_known_excuses;
+    internal readonly Dictionary<String, MDL_Excuse> well_known_excuses;
 
     internal Memory()
     {
@@ -247,17 +247,11 @@ internal class Memory
             )
         );
 
-        well_known_excuses = new Dictionary<String, MDL_Any>();
+        well_known_excuses = new Dictionary<String, MDL_Excuse>();
         foreach (String s in Constants.Strings__Well_Known_Excuses())
         {
-            well_known_excuses.Add(
-                s,
-                new MDL_Any {
-                    memory = this,
-                    WKBT = Well_Known_Base_Type.MDL_Excuse,
-                    details = new Dictionary<String, MDL_Any>() {{"\u0000", this.MDL_Attr_Name(s)}},
-                }
-            );
+            well_known_excuses.Add(s,
+                new MDL_Excuse(this, this.MDL_Attr_Name(s), this.MDL_Tuple_D0));
         }
     }
 
@@ -520,6 +514,20 @@ internal class Memory
         return new MDL_Article(this, label, attrs);
     }
 
+    internal MDL_Excuse MDL_Excuse(MDL_Any label, MDL_Tuple attrs)
+    {
+        return new MDL_Excuse(this, label, attrs);
+    }
+
+    internal MDL_Excuse Simple_MDL_Excuse(String value)
+    {
+        if (well_known_excuses.ContainsKey(value))
+        {
+            return well_known_excuses[value];
+        }
+        return new MDL_Excuse(this, this.MDL_Attr_Name(value), this.MDL_Tuple_D0);
+    }
+
     // TODO: Here or in Executor also have Article_attrs() etc functions
     // that take anything conceptually a Article and let users use it
     // as if it were a MDL_Article_Struct; these have the opposite
@@ -543,28 +551,6 @@ internal class Memory
     internal MDL_External New_MDL_External(Object external_value)
     {
         return new MDL_External(this, external_value);
-    }
-
-    internal MDL_Any MDL_Excuse(MDL_Any attrs)
-    {
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Excuse,
-            details = attrs.details,
-        };
-    }
-
-    internal MDL_Any Simple_MDL_Excuse(String value)
-    {
-        if (well_known_excuses.ContainsKey(value))
-        {
-            return well_known_excuses[value];
-        }
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Excuse,
-            details = new Dictionary<String, MDL_Any>() {{"\u0000", this.MDL_Attr_Name(value)}},
-        };
     }
 
     internal Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)

@@ -610,17 +610,13 @@ internal class Executor
                 result = Any__same(((MDL_Tuple_Bag)a0).heading, ((MDL_Tuple_Bag)a1).heading)
                       && Any__same(((MDL_Tuple_Bag)a0).body, ((MDL_Tuple_Bag)a1).body);
                 break;
-            case Well_Known_Base_Type.MDL_Excuse:
-                Dictionary<String, MDL_Any> eattrs0 = a0.MDL_Excuse();
-                Dictionary<String, MDL_Any> eattrs1 = a1.MDL_Excuse();
-                // First test just that the Tuple headings are the same,
-                // and only if they are, compare the attribute values.
-                return (eattrs0.Count == eattrs1.Count)
-                    && Enumerable.All(eattrs0, attr => eattrs1.ContainsKey(attr.Key))
-                    && Enumerable.All(eattrs0, attr => Any__same(attr.Value, eattrs1[attr.Key]));
             case Well_Known_Base_Type.MDL_Article:
                 result = Any__same(((MDL_Article)a0).label, ((MDL_Article)a1).label)
                       && Any__same(((MDL_Article)a0).attrs, ((MDL_Article)a1).attrs);
+                break;
+            case Well_Known_Base_Type.MDL_Excuse:
+                result = Any__same(((MDL_Excuse)a0).label, ((MDL_Excuse)a1).label)
+                      && Any__same(((MDL_Excuse)a0).attrs, ((MDL_Excuse)a1).attrs);
                 break;
             case Well_Known_Base_Type.MDL_Variable:
             case Well_Known_Base_Type.MDL_Process:
@@ -829,17 +825,17 @@ internal class Executor
         return (Int64)node.cached_members_meta.tree_member_count;
     }
 
-    private MDL_Any Bits__maybe_at(MDL_Bits bits, Int64 ord_pos)
+    private MDL_Integer Bits__maybe_at(MDL_Bits bits, Int64 ord_pos)
     {
         return this.memory.MDL_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
     }
 
-    private MDL_Any Blob__maybe_at(MDL_Blob blob, Int64 ord_pos)
+    private MDL_Integer Blob__maybe_at(MDL_Blob blob, Int64 ord_pos)
     {
         return this.memory.MDL_Integer(blob.octet_members[(Int32)ord_pos]);
     }
 
-    private MDL_Any Text__maybe_at(MDL_Text node, Int64 ord_pos)
+    private MDL_Integer Text__maybe_at(MDL_Text node, Int64 ord_pos)
     {
         if (node.has_any_non_BMP)
         {

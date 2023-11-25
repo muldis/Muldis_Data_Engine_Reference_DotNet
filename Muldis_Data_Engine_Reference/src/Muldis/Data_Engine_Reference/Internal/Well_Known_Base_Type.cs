@@ -30,9 +30,9 @@ internal enum Well_Known_Base_Type
     MDL_Heading,
     MDL_Tuple,
     MDL_Article,
+    MDL_Excuse,
     MDL_Variable,
     MDL_Process,
     MDL_Stream,
     MDL_External,
-    MDL_Excuse,
 }

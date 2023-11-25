@@ -26,16 +26,11 @@ internal class MDL_Any
     internal Memory memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
-    // "value" is a member of.  Determines interpreting "details" field.
+    // "value" is a member of.  Helps interpret which subtype of MDL_Any
+    // we have without having to use the language's type reflection system.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
     internal Well_Known_Base_Type WKBT;
-
-    // Details of this Muldis Data Language "value", in one of several possible
-    // specialized representation formats depending on the data type.
-    // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String, MDL_Any>.
-        // TODO: Change Excuse so represented as Nesting+Kit pair.
-    internal Object details;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDL_Any represents.  This is calculated lazily if needed,
@@ -55,11 +50,6 @@ internal class MDL_Any
         // This called function will test if cached_MDL_Any_identity
         // is null and assign it a value if so and use its value if not.
         return this.memory.identity_generator.MDL_Any_as_identity_String(this);
-    }
-
-    internal Dictionary<String, MDL_Any> MDL_Excuse()
-    {
-        return (Dictionary<String, MDL_Any>)this.details;
     }
 }
 

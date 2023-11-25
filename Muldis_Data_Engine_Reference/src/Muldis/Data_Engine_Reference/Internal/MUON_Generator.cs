@@ -50,6 +50,8 @@ internal abstract class MUON_Generator
                 return Tuple_Bag_Selector((MDL_Tuple_Bag)value, indent);
             case Well_Known_Base_Type.MDL_Article:
                 return Article_Selector((MDL_Article)value, indent);
+            case Well_Known_Base_Type.MDL_Excuse:
+                return Excuse_Selector((MDL_Excuse)value, indent);
             case Well_Known_Base_Type.MDL_Variable:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_Variable can actually be rendered as Muldis Data Language Plain Text.
@@ -66,8 +68,6 @@ internal abstract class MUON_Generator
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_External can actually be rendered as Muldis Data Language Plain Text.
                 return "`Some MDL_External value is here.`";
-            case Well_Known_Base_Type.MDL_Excuse:
-                return Excuse_Selector(value, indent);
             default:
                 return "DIE UN-HANDLED FOUNDATION TYPE"
                     + " [" + value.WKBT.ToString() + "]";
@@ -378,22 +378,13 @@ internal abstract class MUON_Generator
             + "))";
     }
 
-    private String Excuse_Selector(MDL_Any value, String indent)
+    private String Excuse_Selector(MDL_Excuse value, String indent)
     {
         // TODO: Change Excuse so represented as Nesting+Kit pair.
-        String ati = indent + "\u0009";
-        Memory m = value.memory;
-        Dictionary<String, MDL_Any> attrs = value.MDL_Excuse();
-        if (attrs.Count == 1 && attrs.ContainsKey("\u0000")
-            && attrs["\u0000"].WKBT == Well_Known_Base_Type.MDL_Tuple)
-        {
-            return "(Excuse:(" + Text_Literal_from_String(((MDL_Text)attrs["\u0000"]).code_point_members) + " : {}))";
-        }
-        return "(Excuse:(::\"\" : {\u000A"
-            + String.Concat(Enumerable.Select(
-                    Enumerable.OrderBy(attrs, a => a.Key),
-                    a => ati + Text_Literal_from_String(a.Key) + " : "
-                        + Any_Selector(a.Value, ati) + ",\u000A"))
-            + indent + "}))";
+        return "(Excuse:("
+            + Any_Selector(value.label, indent)
+            + " : "
+            + Any_Selector(value.attrs, indent)
+            + "))";
     }
 }

@@ -250,6 +250,38 @@ public class MDER_Machine
                     );
                 }
                 break;
+            case "Heading":
+                if (String.Equals(type_name, "System.Object[]"))
+                {
+                    HashSet<String> attr_names = new HashSet<String>();
+                    for (Int32 i = 0; i < ((Object[])v).Length; i++)
+                    {
+                        if (((Object[])v)[0] is not null && (Boolean)((Object[])v)[0])
+                        {
+                            attr_names.Add(Char.ConvertFromUtf32(i));
+                        }
+                    }
+                    return this.memory.MDL_Heading(attr_names);
+                }
+                if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
+                {
+                    HashSet<String> attr_names = (HashSet<String>)v;
+                    foreach (String atnm in attr_names)
+                    {
+                        if (this.memory.Test_Dot_Net_String(atnm)
+                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        {
+                            throw new ArgumentException
+                            (
+                                paramName: "value",
+                                message: "Can't select MDL_Heading with attribute"
+                                    + " name that is a malformed .NET String."
+                            );
+                        }
+                    }
+                    return this.memory.MDL_Heading(new HashSet<String>(attr_names));
+                }
+                break;
             case "Tuple":
                 if (String.Equals(type_name, "System.Object[]"))
                 {
@@ -283,38 +315,6 @@ public class MDER_Machine
                         new Dictionary<String, MDL_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
-                }
-                break;
-            case "Heading":
-                if (String.Equals(type_name, "System.Object[]"))
-                {
-                    HashSet<String> attr_names = new HashSet<String>();
-                    for (Int32 i = 0; i < ((Object[])v).Length; i++)
-                    {
-                        if (((Object[])v)[0] is not null && (Boolean)((Object[])v)[0])
-                        {
-                            attr_names.Add(Char.ConvertFromUtf32(i));
-                        }
-                    }
-                    return this.memory.MDL_Heading(attr_names);
-                }
-                if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
-                {
-                    HashSet<String> attr_names = (HashSet<String>)v;
-                    foreach (String atnm in attr_names)
-                    {
-                        if (this.memory.Test_Dot_Net_String(atnm)
-                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                        {
-                            throw new ArgumentException
-                            (
-                                paramName: "value",
-                                message: "Can't select MDL_Heading with attribute"
-                                    + " name that is a malformed .NET String."
-                            );
-                        }
-                    }
-                    return this.memory.MDL_Heading(new HashSet<String>(attr_names));
                 }
                 break;
             case "Tuple_Array":
@@ -486,6 +486,22 @@ public class MDER_Machine
                     }
                 }
                 break;
+            case "Excuse":
+                if (String.Equals(type_name, "System.String"))
+                {
+                    if (this.memory.Test_Dot_Net_String((String)v)
+                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    {
+                        throw new ArgumentException
+                        (
+                            paramName: "value",
+                            message: "Can't select MDL_Excuse with label"
+                                + " that is a malformed .NET String."
+                        );
+                    }
+                    return this.memory.Simple_MDL_Excuse((String)v);
+                }
+                throw new NotImplementedException();
             case "New_Variable":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                 {
@@ -507,22 +523,6 @@ public class MDER_Machine
                 break;
             case "New_External":
                 return this.memory.New_MDL_External(v);
-            case "Excuse":
-                if (String.Equals(type_name, "System.String"))
-                {
-                    if (this.memory.Test_Dot_Net_String((String)v)
-                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-                    {
-                        throw new ArgumentException
-                        (
-                            paramName: "value",
-                            message: "Can't select MDL_Excuse with label"
-                                + " that is a malformed .NET String."
-                        );
-                    }
-                    return this.memory.Simple_MDL_Excuse((String)v);
-                }
-                throw new NotImplementedException();
             case "Attr_Name_List":
                 if (String.Equals(type_name, "System.String[]"))
                 {
@@ -667,6 +667,8 @@ public class MDER_Machine
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Article:
                 throw new NotImplementedException();
+            case Well_Known_Base_Type.MDL_Excuse:
+                throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Variable:
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Process:
@@ -676,8 +678,6 @@ public class MDER_Machine
             case Well_Known_Base_Type.MDL_External:
                 return new KeyValuePair<String, Object>("New_External",
                     ((MDL_External)v).external_value);
-            case Well_Known_Base_Type.MDL_Excuse:
-                throw new NotImplementedException();
             default:
                 throw new NotImplementedException();
         }
