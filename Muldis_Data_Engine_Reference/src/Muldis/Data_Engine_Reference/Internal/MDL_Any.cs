@@ -36,9 +36,8 @@ internal class MDL_Any
     // Iff WKBT is MDL_Array, this field holds a MDL_Array_Struct.
     // Iff WKBT is MDL_Set, this field holds a MDL_Bag_Struct (like MDL_Bag).
     // Iff WKBT is MDL_Bag, this field holds a MDL_Bag_Struct (like MDL_Set).
-    // Iff WKBT is MDL_Tuple, this field holds a Dictionary<String, MDL_Any> (like MDL_Excuse).
     // Iff WKBT is MDL_Article, this field holds a MDL_Article_Struct.
-    // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String, MDL_Any> (like MDL_Tuple).
+    // Iff WKBT is MDL_Excuse, this field holds a Dictionary<String, MDL_Any>.
         // TODO: Change Excuse so represented as Nesting+Kit pair.
     internal Object details;
 
@@ -89,11 +88,6 @@ internal class MDL_Any
     internal MDL_Bag_Struct MDL_Bag()
     {
         return (MDL_Bag_Struct)this.details;
-    }
-
-    internal Dictionary<String, MDL_Any> MDL_Tuple()
-    {
-        return (Dictionary<String, MDL_Any>)this.details;
     }
 
     internal MDL_Article_Struct MDL_Article()

@@ -41,7 +41,7 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Heading:
                 return Heading_Literal((MDL_Heading)value);
             case Well_Known_Base_Type.MDL_Tuple:
-                return Tuple_Selector(value, indent);
+                return Tuple_Selector((MDL_Tuple)value, indent);
             case Well_Known_Base_Type.MDL_Article:
                 return Article_Selector(value, indent);
             case Well_Known_Base_Type.MDL_Variable:
@@ -322,14 +322,14 @@ internal abstract class MUON_Generator
         }
     }
 
-    private String Tuple_Selector(MDL_Any value, String indent)
+    private String Tuple_Selector(MDL_Tuple value, String indent)
     {
         String ati = indent + "\u0009";
         Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(
-                        Enumerable.OrderBy(value.MDL_Tuple(), a => a.Key),
+                        Enumerable.OrderBy(value.attrs, a => a.Key),
                         a => ati + Text_Literal_from_String(a.Key) + " : "
                             + Any_Selector(a.Value, ati) + ",\u000A"))
                 + indent + "})";

@@ -28,13 +28,14 @@ internal class Executor
             throw new ArgumentException(m.Simple_MDL_Excuse(
                 "X_Args_Not_Tuple").ToString());
         }
+        MDL_Tuple args_as_Tuple = (MDL_Tuple)args;
         if (Is_Absolute_Name(function))
         {
             if (Object.ReferenceEquals(
                 Array__maybe_at(function, 0), m.MDL_Attr_Name("foundation")))
             {
                 return evaluate_foundation_function(
-                    Array__maybe_at(function, 1), args);
+                    (MDL_Text)Array__maybe_at(function, 1), args_as_Tuple);
             }
             throw new NotImplementedException();
         }
@@ -65,6 +66,7 @@ internal class Executor
         {
             throw new ArgumentException(m.Simple_MDL_Excuse("X_Args_Not_Tuple").ToString());
         }
+        MDL_Tuple args_as_Tuple = (MDL_Tuple)args;
         if (Is_Absolute_Name(procedure))
         {
             throw new NotImplementedException();
@@ -244,10 +246,10 @@ internal class Executor
         return false;
     }
 
-    internal MDL_Any evaluate_foundation_function(MDL_Any func_name, MDL_Any args)
+    internal MDL_Any evaluate_foundation_function(MDL_Text func_name, MDL_Tuple args)
     {
         Memory m = this.memory;
-        String func_name_s = ((MDL_Text)func_name).code_point_members;
+        String func_name_s = func_name.code_point_members;
 
         // TYPE DEFINERS
 
@@ -258,7 +260,7 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Type_Definer_Function_Args_Not_MDL_Heading_0").ToString());
             }
-            MDL_Any v = args.MDL_Tuple()["\u0000"];
+            MDL_Any v = args.attrs["\u0000"];
             switch (func_name_s)
             {
                 case "Any":
@@ -359,7 +361,7 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Non_Type_Definer_Unary_Function_Args_Not_MDL_Heading_0").ToString());
             }
-            MDL_Any v = args.MDL_Tuple()["\u0000"];
+            MDL_Any v = args.attrs["\u0000"];
             switch (func_name_s)
             {
                 case "Integer_opposite":
@@ -416,14 +418,14 @@ internal class Executor
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
-                    return m.MDL_Integer(v.MDL_Tuple().Count);
+                    return m.MDL_Integer(((MDL_Tuple)v).attrs.Count);
                 case "Tuple_heading":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Tuple)
                     {
                         throw new ArgumentException(m.Simple_MDL_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
-                    return m.Tuple__Heading(v);
+                    return m.Tuple__Heading((MDL_Tuple)v);
                 case "Text_from_UTF_8_Blob":
                     if (v.WKBT != Well_Known_Base_Type.MDL_Blob)
                     {
@@ -453,8 +455,8 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Binary_Function_Args_Not_MDL_Heading_0_1").ToString());
             }
-            MDL_Any a0 = args.MDL_Tuple()["\u0000"];
-            MDL_Any a1 = args.MDL_Tuple()["\u0001"];
+            MDL_Any a0 = args.attrs["\u0000"];
+            MDL_Any a1 = args.attrs["\u0001"];
             switch (func_name_s)
             {
                 case "same":
@@ -504,7 +506,7 @@ internal class Executor
                 throw new ArgumentException(m.Simple_MDL_Excuse(
                     "X_Ternary_Function_Args_Not_MDL_Heading_0_1_2").ToString());
             }
-            MDL_Any v = args.MDL_Tuple()["\u0000"];
+            MDL_Any v = args.attrs["\u0000"];
             switch (func_name_s)
             {
                 default:
@@ -676,8 +678,8 @@ internal class Executor
             case Well_Known_Base_Type.MDL_Tuple:
             case Well_Known_Base_Type.MDL_Excuse:
                 // MDL_Tuple and MDL_Excuse have the same internal representation.
-                Dictionary<String, MDL_Any> attrs0 = a0.MDL_Tuple();
-                Dictionary<String, MDL_Any> attrs1 = a1.MDL_Tuple();
+                Dictionary<String, MDL_Any> attrs0 = a0.MDL_Excuse();
+                Dictionary<String, MDL_Any> attrs1 = a1.MDL_Excuse();
                 // First test just that the Tuple headings are the same,
                 // and only if they are, compare the attribute values.
                 return (attrs0.Count == attrs1.Count)

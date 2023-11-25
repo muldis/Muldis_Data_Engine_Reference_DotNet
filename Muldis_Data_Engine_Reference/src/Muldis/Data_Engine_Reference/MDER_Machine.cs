@@ -338,7 +338,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Array__Pick_Arbitrary_Member(bv));
+                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Array__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -371,7 +371,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Set__Pick_Arbitrary_Member(bv));
+                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Set__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -404,7 +404,7 @@ public class MDER_Machine
                                 + " members aren't all MDL_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading(this.memory.Bag__Pick_Arbitrary_Member(bv));
+                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Bag__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -440,6 +440,7 @@ public class MDER_Machine
                                 + " that doesn't evaluate as a MDL_Tuple."
                         );
                     }
+                    MDL_Tuple attrs_cv_as_MDL_Tuple = (MDL_Tuple)attrs_cv;
                     if (String.Equals(label.GetType().FullName, "System.String"))
                     {
                         if (this.memory.Test_Dot_Net_String((String)label)
@@ -454,7 +455,7 @@ public class MDER_Machine
                         }
                         return this.memory.MDL_Article(
                             this.memory.MDL_Attr_Name((String)label),
-                            attrs_cv
+                            attrs_cv_as_MDL_Tuple
                         );
                     }
                     if (String.Equals(label.GetType().FullName, "System.String[]"))
@@ -476,12 +477,12 @@ public class MDER_Machine
                             this.memory.MDL_Array(new List<MDL_Any>(((String[])label).Select(
                                 m => this.memory.MDL_Attr_Name(m)
                             ))),
-                            attrs_cv
+                            attrs_cv_as_MDL_Tuple
                         );
                     }
                     if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                     {
-                        return this.memory.MDL_Article(import__tree(label), attrs_cv);
+                        return this.memory.MDL_Article(import__tree(label), attrs_cv_as_MDL_Tuple);
                     }
                 }
                 break;

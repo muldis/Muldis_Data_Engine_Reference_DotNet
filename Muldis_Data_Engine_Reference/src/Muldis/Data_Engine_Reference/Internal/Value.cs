@@ -273,5 +273,5 @@ internal class MDL_Article_Struct
     internal MDL_Any label;
 
     // The Muldis Data Language value that is the "attributes" of this MDL_Article value.
-    internal MDL_Any attrs;
+    internal MDL_Tuple attrs;
 }
