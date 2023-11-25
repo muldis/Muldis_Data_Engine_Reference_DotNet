@@ -43,7 +43,7 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_Tuple:
                 return Tuple_Selector((MDL_Tuple)value, indent);
             case Well_Known_Base_Type.MDL_Article:
-                return Article_Selector(value, indent);
+                return Article_Selector((MDL_Article)value, indent);
             case Well_Known_Base_Type.MDL_Variable:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDL_Variable can actually be rendered as Muldis Data Language Plain Text.
@@ -335,13 +335,13 @@ internal abstract class MUON_Generator
                 + indent + "})";
     }
 
-    private String Article_Selector(MDL_Any value, String indent)
+    private String Article_Selector(MDL_Article value, String indent)
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
         return "(Article:("
-            + Any_Selector(value.MDL_Article().label, indent)
+            + Any_Selector(value.label, indent)
             + " : "
-            + Any_Selector(value.MDL_Article().attrs, indent)
+            + Any_Selector(value.attrs, indent)
             + "))";
     }
 

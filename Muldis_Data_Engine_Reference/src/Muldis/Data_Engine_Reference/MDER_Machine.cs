@@ -661,6 +661,8 @@ public class MDER_Machine
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Bag:
                 throw new NotImplementedException();
+            case Well_Known_Base_Type.MDL_Heading:
+                throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Tuple:
                 throw new NotImplementedException();
             case Well_Known_Base_Type.MDL_Article:

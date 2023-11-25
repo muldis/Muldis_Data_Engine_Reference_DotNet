@@ -83,22 +83,22 @@ internal class Memory
 
     // MDL_Tuple_Array with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Any MDL_Tuple_Array_D0C0;
-    internal readonly MDL_Any MDL_Tuple_Array_D0C1;
+    internal readonly MDL_Article MDL_Tuple_Array_D0C0;
+    internal readonly MDL_Article MDL_Tuple_Array_D0C1;
 
     // MDL_Relation with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Any MDL_Relation_D0C0;
-    internal readonly MDL_Any MDL_Relation_D0C1;
+    internal readonly MDL_Article MDL_Relation_D0C0;
+    internal readonly MDL_Article MDL_Relation_D0C1;
 
     // MDL_Tuple_Bag with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDL_Any MDL_Tuple_Bag_D0C0;
-    internal readonly MDL_Any MDL_Tuple_Bag_D0C1;
+    internal readonly MDL_Article MDL_Tuple_Bag_D0C0;
+    internal readonly MDL_Article MDL_Tuple_Bag_D0C1;
 
     // MDL_Article with False label and no attributes
     // (type default value but not actually useful in practice).
-    private readonly MDL_Any false_nullary_article;
+    private readonly MDL_Article false_nullary_article;
 
     // All well known MDL_Excuse values.
     internal readonly Dictionary<String, MDL_Any> well_known_excuses;
@@ -196,14 +196,8 @@ internal class Memory
 
         this.MDL_Tuple_D0 = new MDL_Tuple(this, new Dictionary<String, MDL_Any>());
 
-        this.false_nullary_article = new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Article,
-            details = new MDL_Article_Struct {
-                label = this.MDL_0bFALSE,
-                attrs = this.MDL_Tuple_D0,
-            },
-        };
+        this.false_nullary_article
+            = new MDL_Article(this, this.MDL_0bFALSE, this.MDL_Tuple_D0);
 
         this.MDL_Tuple_Array_D0C0 = this.MDL_Article(
             this.MDL_Attr_Name("Tuple_Array"),
@@ -512,7 +506,7 @@ internal class Memory
         return new MDL_Tuple(this, attrs);
     }
 
-    internal MDL_Any MDL_Tuple_Array(MDL_Heading heading, MDL_Any body)
+    internal MDL_Article MDL_Tuple_Array(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -525,7 +519,7 @@ internal class Memory
                 return MDL_Tuple_Array_D0C1;
             }
         }
-        MDL_Any tuple_array = this.MDL_Article(
+        MDL_Article tuple_array = this.MDL_Article(
             this.MDL_Attr_Name("Tuple_Array"),
             this.MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
@@ -534,7 +528,7 @@ internal class Memory
         return tuple_array;
     }
 
-    internal MDL_Any MDL_Relation(MDL_Heading heading, MDL_Any body)
+    internal MDL_Article MDL_Relation(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -547,7 +541,7 @@ internal class Memory
                 return MDL_Relation_D0C1;
             }
         }
-        MDL_Any relation = this.MDL_Article(
+        MDL_Article relation = this.MDL_Article(
             this.MDL_Attr_Name("Relation"),
             this.MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
@@ -556,7 +550,7 @@ internal class Memory
         return relation;
     }
 
-    internal MDL_Any MDL_Tuple_Bag(MDL_Heading heading, MDL_Any body)
+    internal MDL_Article MDL_Tuple_Bag(MDL_Heading heading, MDL_Any body)
     {
         if (Object.ReferenceEquals(heading, MDL_Heading_D0))
         {
@@ -570,7 +564,7 @@ internal class Memory
             //    return MDL_Tuple_Bag_D0C1;
             //}
         }
-        MDL_Any tuple_bag = this.MDL_Article(
+        MDL_Article tuple_bag = this.MDL_Article(
             this.MDL_Attr_Name("Tuple_Bag"),
             this.MDL_Tuple(new Dictionary<String, MDL_Any>()
                 {{"heading", heading}, {"body", body}})
@@ -579,7 +573,7 @@ internal class Memory
         return tuple_bag;
     }
 
-    internal MDL_Any MDL_Article(MDL_Any label, MDL_Tuple attrs)
+    internal MDL_Article MDL_Article(MDL_Any label, MDL_Tuple attrs)
     {
         if (Object.ReferenceEquals(label, MDL_0bFALSE)
             && Object.ReferenceEquals(attrs, MDL_Tuple_D0))
@@ -596,14 +590,7 @@ internal class Memory
         // known-is-wkt) because they're all tested to that level and
         // normalized at selection, therefore if we have a MDL_Article
         // extant whose label is say 'Text' we know it isn't a Text value, and so on.
-        return new MDL_Any {
-            memory = this,
-            WKBT = Well_Known_Base_Type.MDL_Article,
-            details = new MDL_Article_Struct {
-                label = label,
-                attrs = attrs,
-            },
-        };
+        return new MDL_Article(this, label, attrs);
     }
 
     // TODO: Here or in Executor also have Article_attrs() etc functions
@@ -611,22 +598,22 @@ internal class Memory
     // as if it were a MDL_Article_Struct; these have the opposite
     // transformations as MDL_Article() above does.
 
-    internal MDL_Any New_MDL_Variable(MDL_Any initial_current_value)
+    internal MDL_Variable New_MDL_Variable(MDL_Any initial_current_value)
     {
         return new MDL_Variable(this, initial_current_value);
     }
 
-    internal MDL_Any New_MDL_Process()
+    internal MDL_Process New_MDL_Process()
     {
         return new MDL_Process(this);
     }
 
-    internal MDL_Any New_MDL_Stream()
+    internal MDL_Stream New_MDL_Stream()
     {
         return new MDL_Stream(this);
     }
 
-    internal MDL_Any New_MDL_External(Object external_value)
+    internal MDL_External New_MDL_External(Object external_value)
     {
         return new MDL_External(this, external_value);
     }
@@ -930,13 +917,13 @@ internal class Memory
     internal MDL_Any Set__Pick_Arbitrary_Member(MDL_Any set)
     {
         return Bag__Pick_Arbitrary_Member(
-            set.MDL_Article().attrs.attrs.First().Value);
+            ((MDL_Article)set).attrs.attrs.First().Value);
     }
 
     internal Boolean Set__Is_Relational(MDL_Any set)
     {
         return Bag__Is_Relational(
-            set.MDL_Article().attrs.attrs.First().Value);
+            ((MDL_Article)set).attrs.attrs.First().Value);
     }
 
     internal MDL_Any Bag__Pick_Arbitrary_Member(MDL_Any bag)

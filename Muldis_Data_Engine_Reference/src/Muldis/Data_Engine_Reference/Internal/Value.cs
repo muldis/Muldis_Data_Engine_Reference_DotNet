@@ -261,17 +261,3 @@ internal class Cached_Members_Meta
     // not a Tuple or that any 2 members do not have the same heading.
     internal Nullable<Boolean> tree_relational;
 }
-
-// Muldis.Data_Engine_Reference.Internal.MDL_Article_Struct
-// When a Muldis.Data_Engine_Reference.Internal.MDL_Any is representing a MDL_Article,
-// a MDL_Article_Struct is used by it to hold the MDL_Article-specific details.
-// TODO: Change Article so represented as Nesting+Kit pair.
-
-internal class MDL_Article_Struct
-{
-    // The Muldis Data Language value that is the "label" of this MDL_Article value.
-    internal MDL_Any label;
-
-    // The Muldis Data Language value that is the "attributes" of this MDL_Article value.
-    internal MDL_Tuple attrs;
-}

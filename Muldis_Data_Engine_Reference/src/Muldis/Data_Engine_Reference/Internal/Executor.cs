@@ -675,19 +675,30 @@ internal class Executor
                 }
                 // We should never get here.
                 throw new NotImplementedException();
+            case Well_Known_Base_Type.MDL_Heading:
+                HashSet<String> atnms0 = ((MDL_Heading)a0).attr_names;
+                HashSet<String> atnms1 = ((MDL_Heading)a1).attr_names;
+                return (atnms0.Count == atnms1.Count)
+                    && Enumerable.All(atnms0, atnm => atnms1.Contains(atnm));
             case Well_Known_Base_Type.MDL_Tuple:
-            case Well_Known_Base_Type.MDL_Excuse:
-                // MDL_Tuple and MDL_Excuse have the same internal representation.
-                Dictionary<String, MDL_Any> attrs0 = a0.MDL_Excuse();
-                Dictionary<String, MDL_Any> attrs1 = a1.MDL_Excuse();
+                Dictionary<String, MDL_Any> attrs0 = ((MDL_Tuple)a0).attrs;
+                Dictionary<String, MDL_Any> attrs1 = ((MDL_Tuple)a1).attrs;
                 // First test just that the Tuple headings are the same,
                 // and only if they are, compare the attribute values.
                 return (attrs0.Count == attrs1.Count)
                     && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
                     && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
+            case Well_Known_Base_Type.MDL_Excuse:
+                Dictionary<String, MDL_Any> eattrs0 = a0.MDL_Excuse();
+                Dictionary<String, MDL_Any> eattrs1 = a1.MDL_Excuse();
+                // First test just that the Tuple headings are the same,
+                // and only if they are, compare the attribute values.
+                return (eattrs0.Count == eattrs1.Count)
+                    && Enumerable.All(eattrs0, attr => eattrs1.ContainsKey(attr.Key))
+                    && Enumerable.All(eattrs0, attr => Any__same(attr.Value, eattrs1[attr.Key]));
             case Well_Known_Base_Type.MDL_Article:
-                result = Any__same(a0.MDL_Article().label, a1.MDL_Article().label)
-                      && Any__same(a0.MDL_Article().attrs, a1.MDL_Article().attrs);
+                result = Any__same(((MDL_Article)a0).label, ((MDL_Article)a1).label)
+                      && Any__same(((MDL_Article)a0).attrs, ((MDL_Article)a1).attrs);
                 break;
             case Well_Known_Base_Type.MDL_Variable:
             case Well_Known_Base_Type.MDL_Process:
