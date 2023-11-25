@@ -4,8 +4,8 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_V_Any
 {
-    internal MDER_Machine machine;
-    internal MDL_Any memory_value;
+    private readonly MDER_Machine machine;
+    internal readonly MDL_Any memory_value;
 
     internal MDER_V_Any(MDER_Machine machine, MDL_Any memory_value)
     {

@@ -10,7 +10,7 @@ namespace Muldis.Data_Engine_Reference.Internal;
 
 internal abstract class MUON_Generator
 {
-    protected abstract String Any_Selector(MDL_Any value, String indent);
+    protected abstract String as_Any_artifact(MDL_Any value, String indent);
 
     protected String Any_Selector_Foundation_Dispatch(MDL_Any value, String indent)
     {
@@ -23,68 +23,67 @@ internal abstract class MUON_Generator
             case Well_Known_Base_Type.MDL_True:
                 return "0bTRUE";
             case Well_Known_Base_Type.MDL_Integer:
-                return Integer_Literal((MDL_Integer)value);
+                return this.as_Integer_artifact((MDL_Integer)value);
             case Well_Known_Base_Type.MDL_Fraction:
-                return Fraction_Literal((MDL_Fraction)value);
+                return this.as_Fraction_artifact((MDL_Fraction)value);
             case Well_Known_Base_Type.MDL_Bits:
-                return Bits_Literal((MDL_Bits)value);
+                return this.as_Bits_artifact((MDL_Bits)value);
             case Well_Known_Base_Type.MDL_Blob:
-                return Blob_Literal((MDL_Blob)value);
+                return this.as_Blob_artifact((MDL_Blob)value);
             case Well_Known_Base_Type.MDL_Text:
-                return Text_Literal((MDL_Text)value);
+                return this.as_Text_artifact((MDL_Text)value);
             case Well_Known_Base_Type.MDL_Array:
-                return Array_Selector((MDL_Array)value, indent);
+                return this.as_Array_artifact((MDL_Array)value, indent);
             case Well_Known_Base_Type.MDL_Set:
-                return Set_Selector((MDL_Set)value, indent);
+                return this.as_Set_artifact((MDL_Set)value, indent);
             case Well_Known_Base_Type.MDL_Bag:
-                return Bag_Selector((MDL_Bag)value, indent);
+                return this.as_Bag_artifact((MDL_Bag)value, indent);
             case Well_Known_Base_Type.MDL_Heading:
-                return Heading_Literal((MDL_Heading)value);
+                return this.as_Heading_artifact((MDL_Heading)value);
             case Well_Known_Base_Type.MDL_Tuple:
-                return Tuple_Selector((MDL_Tuple)value, indent);
+                return this.as_Tuple_artifact((MDL_Tuple)value, indent);
             case Well_Known_Base_Type.MDL_Tuple_Array:
-                return Tuple_Array_Selector((MDL_Tuple_Array)value, indent);
+                return this.as_Tuple_Array_artifact((MDL_Tuple_Array)value, indent);
             case Well_Known_Base_Type.MDL_Relation:
-                return Relation_Selector((MDL_Relation)value, indent);
+                return this.as_Relation_artifact((MDL_Relation)value, indent);
             case Well_Known_Base_Type.MDL_Tuple_Bag:
-                return Tuple_Bag_Selector((MDL_Tuple_Bag)value, indent);
+                return this.as_Tuple_Bag_artifact((MDL_Tuple_Bag)value, indent);
             case Well_Known_Base_Type.MDL_Article:
-                return Article_Selector((MDL_Article)value, indent);
+                return this.as_Article_artifact((MDL_Article)value, indent);
             case Well_Known_Base_Type.MDL_Excuse:
-                return Excuse_Selector((MDL_Excuse)value, indent);
+                return this.as_Excuse_artifact((MDL_Excuse)value, indent);
             case Well_Known_Base_Type.MDL_Variable:
                 // We display something useful for debugging purposes, but no
-                // (transient) MDL_Variable can actually be rendered as Muldis Data Language Plain Text.
+                // (transient) MDL_Variable can actually be rendered as MUON.
                 return "`Some MDL_Variable value is here.`";
             case Well_Known_Base_Type.MDL_Process:
                 // We display something useful for debugging purposes, but no
-                // (transient) MDL_Process can actually be rendered as Muldis Data Language Plain Text.
+                // (transient) MDL_Process can actually be rendered as MUON.
                 return "`Some MDL_Process value is here.`";
             case Well_Known_Base_Type.MDL_Stream:
                 // We display something useful for debugging purposes, but no
-                // (transient) MDL_Stream can actually be rendered as Muldis Data Language Plain Text.
+                // (transient) MDL_Stream can actually be rendered as MUON.
                 return "`Some MDL_Stream value is here.`";
             case Well_Known_Base_Type.MDL_External:
                 // We display something useful for debugging purposes, but no
-                // (transient) MDL_External can actually be rendered as Muldis Data Language Plain Text.
+                // (transient) MDL_External can actually be rendered as MUON.
                 return "`Some MDL_External value is here.`";
             default:
-                return "DIE UN-HANDLED FOUNDATION TYPE"
-                    + " [" + value.WKBT.ToString() + "]";
+                return "\\TODO_FIX_UN_HANDLED_TYPE\\\"" + value.WKBT.ToString() + "\"";
         }
     }
 
-    private String Integer_Literal(MDL_Integer value)
+    private String as_Integer_artifact(MDL_Integer value)
     {
         return value.as_BigInteger.ToString();
     }
 
-    private String Integer_Literal(Int64 value)
+    private String as_Integer_artifact(Int64 value)
     {
         return value.ToString();
     }
 
-    private String Fraction_Literal(MDL_Fraction fa)
+    private String as_Fraction_artifact(MDL_Fraction fa)
     {
         // Iff the Fraction value can be exactly expressed as a
         // non-terminating decimal (includes all Fraction that can be
@@ -125,7 +124,7 @@ internal abstract class MUON_Generator
         return fa.numerator().ToString() + "/" + fa.denominator().ToString();
     }
 
-    private String Bits_Literal(MDL_Bits value)
+    private String as_Bits_artifact(MDL_Bits value)
     {
         if (Object.ReferenceEquals(value, value.memory.MDL_Bits_C0))
         {
@@ -142,7 +141,7 @@ internal abstract class MUON_Generator
             );
     }
 
-    private String Blob_Literal(MDL_Blob value)
+    private String as_Blob_artifact(MDL_Blob value)
     {
         if (Object.ReferenceEquals(value, value.memory.MDL_Blob_C0))
         {
@@ -153,7 +152,7 @@ internal abstract class MUON_Generator
             );
     }
 
-    private String Text_Literal(MDL_Text value)
+    private String as_Text_artifact(MDL_Text value)
     {
         return Text_Literal_from_String(value.code_point_members);
     }
@@ -164,32 +163,32 @@ internal abstract class MUON_Generator
         {
             return "\"\"";
         }
-        if (value.Length == 1 && ((Char)value[0]) <= 0x1F)
+        if (value.Length == 1 && ((Int32)(Char)value[0]) <= 0x1F)
         {
             // Format as a code-point-text.
             return "0t" + ((Int32)(Char)value[0]);
         }
-        // Else, format as a nonquoted-alphanumeric-text.
         if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
         {
+            // Format as a nonquoted-alphanumeric-text.
             return value;
         }
         // Else, format as a quoted text.
-        return "\"" + Quoted_Text_Segment_Content(value) + "\"";
+        return "\"" + quoted_text_segment_content(value) + "\"";
     }
 
-    private String Quoted_Text_Segment_Content(String value)
+    private String quoted_text_segment_content(String value)
     {
         if (String.Equals(value, "") || !Regex.IsMatch(value,
-            "[\u0000-\u001F\"\\`\u0080-\u009F]"))
+            "[\u0000-\u001F\"\\`\u007F-\u009F]"))
         {
             return value;
         }
         StringBuilder sb = new StringBuilder(value.Length);
         for (Int32 i = 0; i < value.Length; i++)
         {
-            Char c = value[i];
-            switch ((Int32)c)
+            Int32 c = (Int32)(Char)value[i];
+            switch (c)
             {
                 case 0x7:
                     sb.Append(@"\a");
@@ -225,13 +224,13 @@ internal abstract class MUON_Generator
                     sb.Append(@"\g");
                     break;
                 default:
-                    if (c <= 0x1F || (c >= 0x80 && c <= 0x9F))
+                    if (c <= 0x1F || (c >= 0x7F && c <= 0x9F))
                     {
                         sb.Append(@"\(0t" + c.ToString() + ")");
                     }
                     else
                     {
-                        sb.Append(c);
+                        sb.Append((Char)c);
                     }
                     break;
             }
@@ -239,7 +238,7 @@ internal abstract class MUON_Generator
         return sb.ToString();
     }
 
-    private String Heading_Literal(MDL_Heading value)
+    private String as_Heading_artifact(MDL_Heading value)
     {
         Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDL_Tuple_D0) ? "(Heading:{})"
@@ -250,16 +249,16 @@ internal abstract class MUON_Generator
                 + "})";
     }
 
-    private String Array_Selector(MDL_Array value, String indent)
+    private String as_Array_artifact(MDL_Array value, String indent)
     {
         String mei = indent + "\u0009";
         Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDL_Array_C0) ? "(Array:[])"
-            : "(Array:[\u000A" + Array_Selector__node__tree(
+            : "(Array:[\u000A" + Array_artifact__node__tree(
                 value.tree_root_node, mei) + indent + "])";
     }
 
-    private String Array_Selector__node__tree(MDL_Array_Struct node, String indent)
+    private String Array_artifact__node__tree(MDL_Array_Struct node, String indent)
     {
         // Note: We always display consecutive duplicates in repeating
         // value format rather than value-count format in order to keep
@@ -275,21 +274,21 @@ internal abstract class MUON_Generator
                 return "";
             case Symbolic_Array_Type.Singular:
                 return String.Concat(Enumerable.Repeat(
-                    indent + Any_Selector(node.Local_Singular_Members().member, indent) + ",\u000A",
+                    indent + as_Any_artifact(node.Local_Singular_Members().member, indent) + ",\u000A",
                     (Int32)node.Local_Singular_Members().multiplicity));
             case Symbolic_Array_Type.Arrayed:
                 return String.Concat(Enumerable.Select(
                     node.Local_Arrayed_Members(),
-                    m => indent + Any_Selector(m, indent) + ",\u000A"));
+                    m => indent + as_Any_artifact(m, indent) + ",\u000A"));
             case Symbolic_Array_Type.Catenated:
-                return Array_Selector__node__tree(node.Tree_Catenated_Members().a0, indent)
-                    + Array_Selector__node__tree(node.Tree_Catenated_Members().a1, indent);
+                return Array_artifact__node__tree(node.Tree_Catenated_Members().a0, indent)
+                    + Array_artifact__node__tree(node.Tree_Catenated_Members().a1, indent);
             default:
                 throw new NotImplementedException();
         }
     }
 
-    private String Set_Selector(MDL_Set value, String indent)
+    private String as_Set_artifact(MDL_Set value, String indent)
     {
         String mei = indent + "\u0009";
         value.memory.Set__Collapse(set: value, want_indexed: true);
@@ -301,14 +300,14 @@ internal abstract class MUON_Generator
             case Symbolic_Bag_Type.Indexed:
                 return "(Set:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
-                    m => mei + Any_Selector(m.Key, mei) + ",\u000A"
+                    m => mei + as_Any_artifact(m.Key, mei) + ",\u000A"
                 )) + indent + "])";
             default:
                 throw new NotImplementedException();
         }
     }
 
-    private String Bag_Selector(MDL_Bag value, String indent)
+    private String as_Bag_artifact(MDL_Bag value, String indent)
     {
         String mei = indent + "\u0009";
         value.memory.Bag__Collapse(bag: value, want_indexed: true);
@@ -320,15 +319,15 @@ internal abstract class MUON_Generator
             case Symbolic_Bag_Type.Indexed:
                 return "(Bag:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
-                    m => mei + Any_Selector(m.Key, mei) + " : "
-                        + Integer_Literal(m.Value.multiplicity) + ",\u000A"
+                    m => mei + as_Any_artifact(m.Key, mei) + " : "
+                        + as_Integer_artifact(m.Value.multiplicity) + ",\u000A"
                 )) + indent + "])";
             default:
                 throw new NotImplementedException();
         }
     }
 
-    private String Tuple_Selector(MDL_Tuple value, String indent)
+    private String as_Tuple_artifact(MDL_Tuple value, String indent)
     {
         String ati = indent + "\u0009";
         Memory m = value.memory;
@@ -337,54 +336,54 @@ internal abstract class MUON_Generator
                 + String.Concat(Enumerable.Select(
                         Enumerable.OrderBy(value.attrs, a => a.Key),
                         a => ati + Text_Literal_from_String(a.Key) + " : "
-                            + Any_Selector(a.Value, ati) + ",\u000A"))
+                            + as_Any_artifact(a.Value, ati) + ",\u000A"))
                 + indent + "})";
     }
 
-    private String Tuple_Array_Selector(MDL_Tuple_Array value, String indent)
+    private String as_Tuple_Array_artifact(MDL_Tuple_Array value, String indent)
     {
         return "(Tuple_Array:("
-            + Heading_Literal(value.heading)
+            + as_Heading_artifact(value.heading)
             + " : "
-            + Any_Selector(value.body, indent)
+            + as_Any_artifact(value.body, indent)
             + "))";
     }
 
-    private String Relation_Selector(MDL_Relation value, String indent)
+    private String as_Relation_artifact(MDL_Relation value, String indent)
     {
         return "(Relation:("
-            + Heading_Literal(value.heading)
+            + as_Heading_artifact(value.heading)
             + " : "
-            + Any_Selector(value.body, indent)
+            + as_Any_artifact(value.body, indent)
             + "))";
     }
 
-    private String Tuple_Bag_Selector(MDL_Tuple_Bag value, String indent)
+    private String as_Tuple_Bag_artifact(MDL_Tuple_Bag value, String indent)
     {
         return "(Tuple_Bag:("
-            + Heading_Literal(value.heading)
+            + as_Heading_artifact(value.heading)
             + " : "
-            + Any_Selector(value.body, indent)
+            + as_Any_artifact(value.body, indent)
             + "))";
     }
 
-    private String Article_Selector(MDL_Article value, String indent)
+    private String as_Article_artifact(MDL_Article value, String indent)
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
         return "(Article:("
-            + Any_Selector(value.label, indent)
+            + as_Any_artifact(value.label, indent)
             + " : "
-            + Any_Selector(value.attrs, indent)
+            + as_Any_artifact(value.attrs, indent)
             + "))";
     }
 
-    private String Excuse_Selector(MDL_Excuse value, String indent)
+    private String as_Excuse_artifact(MDL_Excuse value, String indent)
     {
         // TODO: Change Excuse so represented as Nesting+Kit pair.
         return "(Excuse:("
-            + Any_Selector(value.label, indent)
+            + as_Any_artifact(value.label, indent)
             + " : "
-            + Any_Selector(value.attrs, indent)
+            + as_Any_artifact(value.attrs, indent)
             + "))";
     }
 }

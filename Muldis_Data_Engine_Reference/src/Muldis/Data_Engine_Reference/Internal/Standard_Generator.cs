@@ -32,19 +32,19 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // does not include any preceeding "shebang line", which is up to the
 // caller where such is desired.
 
-internal class Standard_Generator : MUON_Generator
+internal sealed class Standard_Generator : MUON_Generator
 {
     internal MDL_Text MDL_Any_to_MDL_Text_MDPT_Parsing_Unit(MDL_Any value)
     {
         return value.memory.MDL_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
-            + Any_Selector(value, "") + "))\u000A",
+            + as_Any_artifact(value, "") + "))\u000A",
             false
         );
     }
 
-    protected override String Any_Selector(MDL_Any value, String indent)
+    protected override String as_Any_artifact(MDL_Any value, String indent)
     {
         return Any_Selector_Foundation_Dispatch(value, indent);
     }

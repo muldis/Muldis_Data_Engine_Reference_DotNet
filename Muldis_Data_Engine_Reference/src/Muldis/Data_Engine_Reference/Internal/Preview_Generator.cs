@@ -17,14 +17,14 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // class will NOT populate any calculation caching fields in MDL_Any/etc
 // objects, to help avoid heisenbugs.
 
-internal class Preview_Generator : MUON_Generator
+internal sealed class Preview_Generator : MUON_Generator
 {
     internal String MDL_Any_as_preview_String(MDL_Any value)
     {
-        return Any_Selector(value, "");
+        return this.as_Any_artifact(value, "");
     }
 
-    protected override String Any_Selector(MDL_Any value, String indent)
+    protected override String as_Any_artifact(MDL_Any value, String indent)
     {
         return Any_Selector_Foundation_Dispatch(value, indent);
     }

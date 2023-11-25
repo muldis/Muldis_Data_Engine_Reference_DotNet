@@ -23,14 +23,14 @@ namespace Muldis.Data_Engine_Reference.Internal;
 // A normal side effect of using Identity_Generator on a MDL_Any/etc
 // value is to update a cache therein to hold the serialization result.
 
-internal class Identity_Generator : MUON_Generator
+internal sealed class Identity_Generator : MUON_Generator
 {
     internal String MDL_Any_as_identity_String(MDL_Any value)
     {
-        return Any_Selector(value, "");
+        return this.as_Any_artifact(value, "");
     }
 
-    protected override String Any_Selector(MDL_Any value, String indent)
+    protected override String as_Any_artifact(MDL_Any value, String indent)
     {
         if (value.cached_MDL_Any_identity is null)
         {
