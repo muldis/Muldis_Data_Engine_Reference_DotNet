@@ -291,7 +291,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Set_artifact(MDER_Set value, String indent)
     {
         String mei = indent + "\u0009";
-        value.machine()._memory().Set__Collapse(set: value, want_indexed: true);
+        value.machine()._executor().Set__Collapse(set: value, want_indexed: true);
         Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
@@ -310,7 +310,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Bag_artifact(MDER_Bag value, String indent)
     {
         String mei = indent + "\u0009";
-        value.machine()._memory().Bag__Collapse(bag: value, want_indexed: true);
+        value.machine()._executor().Bag__Collapse(bag: value, want_indexed: true);
         Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {

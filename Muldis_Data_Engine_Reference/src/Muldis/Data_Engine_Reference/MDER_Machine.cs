@@ -233,7 +233,7 @@ public class MDER_Machine
             case "Text":
                 if (String.Equals(type_name, "System.String"))
                 {
-                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.__memory.Test_Dot_Net_String((String)v);
+                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)v);
                     if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
@@ -296,7 +296,7 @@ public class MDER_Machine
                     HashSet<String> attr_names = (HashSet<String>)v;
                     foreach (String atnm in attr_names)
                     {
-                        if (this.__memory.Test_Dot_Net_String(atnm)
+                        if (this.__executor.Test_Dot_Net_String(atnm)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -328,7 +328,7 @@ public class MDER_Machine
                     Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
                     {
-                        if (this.__memory.Test_Dot_Net_String(atnm)
+                        if (this.__executor.Test_Dot_Net_String(atnm)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -357,7 +357,7 @@ public class MDER_Machine
                     && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_Any)v);
-                    if (!this.__memory.Array__Is_Relational(bv))
+                    if (!this.__executor.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -366,7 +366,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Array__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Array__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -390,7 +390,7 @@ public class MDER_Machine
                     && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_Any)v);
-                    if (!this.__memory.Set__Is_Relational(bv))
+                    if (!this.__executor.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -399,7 +399,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Set__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Set__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -423,7 +423,7 @@ public class MDER_Machine
                     && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_Any)v);
-                    if (!this.__memory.Bag__Is_Relational(bv))
+                    if (!this.__executor.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -432,7 +432,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Bag__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Bag__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -471,7 +471,7 @@ public class MDER_Machine
                     MDER_Tuple attrs_cv_as_MDER_Tuple = (MDER_Tuple)attrs_cv;
                     if (String.Equals(label.GetType().FullName, "System.String"))
                     {
-                        if (this.__memory.Test_Dot_Net_String((String)label)
+                        if (this.__executor.Test_Dot_Net_String((String)label)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -490,7 +490,7 @@ public class MDER_Machine
                     {
                         foreach (String s in ((String[])label))
                         {
-                            if (this.__memory.Test_Dot_Net_String(s)
+                            if (this.__executor.Test_Dot_Net_String(s)
                                 == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                             {
                                 throw new ArgumentException
@@ -517,7 +517,7 @@ public class MDER_Machine
             case "Excuse":
                 if (String.Equals(type_name, "System.String"))
                 {
-                    if (this.__memory.Test_Dot_Net_String((String)v)
+                    if (this.__executor.Test_Dot_Net_String((String)v)
                         == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
@@ -556,7 +556,7 @@ public class MDER_Machine
                 {
                     foreach (String s in ((String[])v))
                     {
-                        if (this.__memory.Test_Dot_Net_String(s)
+                        if (this.__executor.Test_Dot_Net_String(s)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -616,7 +616,7 @@ public class MDER_Machine
         }
         if (String.Equals(type_name, "System.String"))
         {
-            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__memory.Test_Dot_Net_String((String)value);
+            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)value);
             if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
