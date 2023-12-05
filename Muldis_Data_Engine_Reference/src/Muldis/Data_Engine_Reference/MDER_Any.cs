@@ -22,7 +22,7 @@ namespace Muldis.Data_Engine_Reference;
 
 public abstract class MDER_Any
 {
-    // Internal_Memory pool this Muldis Data Language "value" lives in.
+    // MDER_Machine this Muldis Data Language "value" lives in.
     private readonly MDER_Machine __machine;
 
     // Muldis Data Language most specific well known base data type (WKBT) this

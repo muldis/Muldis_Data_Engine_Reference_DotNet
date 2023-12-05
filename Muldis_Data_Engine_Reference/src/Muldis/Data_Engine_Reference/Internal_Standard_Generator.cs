@@ -36,7 +36,7 @@ internal sealed class Internal_Standard_Generator : Internal_MUON_Generator
 {
     internal MDER_Text MDER_Any_to_MDER_Text_MDPT_Parsing_Unit(MDER_Any value)
     {
-        return value.machine()._memory().MDER_Text(
+        return value.machine().MDER_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + as_Any_artifact(value, "") + "))\u000A",

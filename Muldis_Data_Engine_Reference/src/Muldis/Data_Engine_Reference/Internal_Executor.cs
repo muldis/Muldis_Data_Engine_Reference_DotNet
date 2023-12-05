@@ -20,21 +20,20 @@ internal class Internal_Executor
 
     internal MDER_Any Evaluates(MDER_Any function, MDER_Any args = null)
     {
-        Internal_Memory m = this.__machine._memory();
         if (args is null)
         {
-            args = m.MDER_Tuple_D0;
+            args = this.__machine.MDER_Tuple_D0;
         }
         if (args.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
         {
-            throw new ArgumentException(m.Simple_MDER_Excuse(
+            throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                 "X_Args_Not_Tuple").ToString());
         }
         MDER_Tuple args_as_Tuple = (MDER_Tuple)args;
         if (Is_Absolute_Name(function))
         {
             if (Object.ReferenceEquals(
-                Array__maybe_at((MDER_Array)function, 0), m.MDER_Attr_Name("foundation")))
+                Array__maybe_at((MDER_Array)function, 0), this.__machine.MDER_Attr_Name("foundation")))
             {
                 return evaluate_foundation_function(
                     (MDER_Text)Array__maybe_at((MDER_Array)function, 1), args_as_Tuple);
@@ -53,20 +52,19 @@ internal class Internal_Executor
         {
             throw new NotImplementedException();
         }
-        throw new ArgumentException(m.Simple_MDER_Excuse(
+        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
             "X_Malformed_Function_Call").ToString());
     }
 
     internal void Performs(MDER_Any procedure, MDER_Any args = null)
     {
-        Internal_Memory m = this.__machine._memory();
         if (args is null)
         {
-            args = m.MDER_Tuple_D0;
+            args = this.__machine.MDER_Tuple_D0;
         }
         if (args.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
         {
-            throw new ArgumentException(m.Simple_MDER_Excuse("X_Args_Not_Tuple").ToString());
+            throw new ArgumentException(this.__machine.Simple_MDER_Excuse("X_Args_Not_Tuple").ToString());
         }
         MDER_Tuple args_as_Tuple = (MDER_Tuple)args;
         if (Is_Absolute_Name(procedure))
@@ -85,7 +83,7 @@ internal class Internal_Executor
         {
             throw new NotImplementedException();
         }
-        throw new ArgumentException(m.Simple_MDER_Excuse(
+        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
             "X_Malformed_Procedure_Call").ToString());
     }
 
@@ -176,7 +174,6 @@ internal class Internal_Executor
 
     internal Boolean Is_Attr_Name_List(MDER_Any value)
     {
-        Internal_Memory m = this.__machine._memory();
         if (value.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
         {
             return false;
@@ -205,12 +202,12 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
-        if ((Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("foundation")) && count == 2)
-            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("used")) && count >= 2)
-            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("package")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("folder")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("material")) && count == 1)
-            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("floating")) && count >= 2))
+        if ((Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation")) && count == 2)
+            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used")) && count >= 2)
+            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("folder")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("material")) && count == 1)
+            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("floating")) && count >= 2))
         {
             return true;
         }
@@ -224,9 +221,9 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
-        if (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("foundation"))
-            || Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("used"))
-            || Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("package")))
+        if (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation"))
+            || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used"))
+            || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")))
         {
             return true;
         }
@@ -235,59 +232,58 @@ internal class Internal_Executor
 
     internal MDER_Any evaluate_foundation_function(MDER_Text func_name, MDER_Tuple args)
     {
-        Internal_Memory m = this.__machine._memory();
         String func_name_s = func_name.code_point_members;
 
         // TYPE DEFINERS
 
         if (Internal_Constants.Strings__Foundation_Type_Definer_Function_Names().Contains(func_name_s))
         {
-            if (!this.Tuple__Has_Heading(args, m.MDER_Heading_0))
+            if (!this.Tuple__Has_Heading(args, this.__machine.MDER_Heading_0))
             {
-                throw new ArgumentException(m.Simple_MDER_Excuse(
+                throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                     "X_Type_Definer_Function_Args_Not_MDER_Heading_0").ToString());
             }
             MDER_Any v = args.attrs["\u0000"];
             switch (func_name_s)
             {
                 case "Any":
-                    return m.MDER_True();
+                    return this.__machine.MDER_True();
                 case "None":
-                    return m.MDER_False();
+                    return this.__machine.MDER_False();
 
                 // FOUNDATION BASE TYPE DEFINERS
 
                 case "Ignorance":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Ignorance
                     );
                 case "Boolean":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_False
                             || v.WKBT == Internal_Well_Known_Base_Type.MDER_True
                     );
                 case "Integer":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Integer
                     );
                 case "Array":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Array
                     );
                 case "Bag":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Bag
                     );
                 case "Tuple":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                     );
                 case "Article":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Article
                     );
                 case "Handle":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Variable
                             || v.WKBT == Internal_Well_Known_Base_Type.MDER_Process
                             || v.WKBT == Internal_Well_Known_Base_Type.MDER_Stream
@@ -297,19 +293,19 @@ internal class Internal_Executor
                 // HANDLE SUBTYPE DEFINERS
 
                 case "Variable":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Variable
                     );
                 case "Process":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Process
                     );
                 case "Stream":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Stream
                     );
                 case "External":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_External
                     );
 
@@ -320,17 +316,17 @@ internal class Internal_Executor
                 // ARTICLE SUBTYPE DEFINERS
 
                 case "Blob":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Blob
                     );
 
                 case "Text":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Text
                     );
 
                 case "Excuse":
-                    return m.MDER_Boolean(
+                    return this.__machine.MDER_Boolean(
                         v.WKBT == Internal_Well_Known_Base_Type.MDER_Excuse
                     );
 
@@ -343,9 +339,9 @@ internal class Internal_Executor
 
         if (Internal_Constants.Strings__Foundation_NTD_Unary_Function_Names().Contains(func_name_s))
         {
-            if (!this.Tuple__Has_Heading(args, m.MDER_Heading_0))
+            if (!this.Tuple__Has_Heading(args, this.__machine.MDER_Heading_0))
             {
-                throw new ArgumentException(m.Simple_MDER_Excuse(
+                throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                     "X_Non_Type_Definer_Unary_Function_Args_Not_MDER_Heading_0").ToString());
             }
             MDER_Any v = args.attrs["\u0000"];
@@ -354,38 +350,38 @@ internal class Internal_Executor
                 case "Integer_opposite":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MDER_Integer(-((MDER_Integer)v).as_BigInteger);
+                    return this.__machine.MDER_Integer(-((MDER_Integer)v).as_BigInteger);
                 case "Integer_modulus":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
-                    return m.MDER_Integer(BigInteger.Abs(((MDER_Integer)v).as_BigInteger));
+                    return this.__machine.MDER_Integer(BigInteger.Abs(((MDER_Integer)v).as_BigInteger));
                 case "Integer_factorial":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer
                         || ((MDER_Integer)v).as_BigInteger < 0)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                     }
                     // Note that System.Numerics.BigInteger doesn't come
                     // with a Factorial(n) so we have to do it ourselves.
-                    return m.MDER_Integer(Integer__factorial(((MDER_Integer)v).as_BigInteger));
+                    return this.__machine.MDER_Integer(Integer__factorial(((MDER_Integer)v).as_BigInteger));
                 case "Array_count":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
-                    return m.MDER_Integer(Array__count((MDER_Array)v));
+                    return this.__machine.MDER_Integer(Array__count((MDER_Array)v));
                 case "Bag_unique":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Bag)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MDER_Bag(this.__machine,
@@ -400,32 +396,32 @@ internal class Internal_Executor
                 case "Tuple_degree":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
-                    return m.MDER_Integer(((MDER_Tuple)v).attrs.Count);
+                    return this.__machine.MDER_Integer(((MDER_Tuple)v).attrs.Count);
                 case "Tuple_heading":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
                     return this.Tuple__Heading((MDER_Tuple)v);
                 case "Text_from_UTF_8_Blob":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Blob)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
                     return this.MDER_Text_from_UTF_8_MDER_Blob((MDER_Blob)v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
                     if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Text)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
                     }
                     // TODO: Everything.
-                    return m.MDER_Ignorance();
+                    return this.__machine.MDER_Ignorance();
                 default:
                     throw new NotImplementedException();
             }
@@ -435,9 +431,9 @@ internal class Internal_Executor
 
         if (Internal_Constants.Strings__Foundation_Binary_Function_Names().Contains(func_name_s))
         {
-            if (!this.Tuple__Has_Heading(args, m.MDER_Heading_0_1))
+            if (!this.Tuple__Has_Heading(args, this.__machine.MDER_Heading_0_1))
             {
-                throw new ArgumentException(m.Simple_MDER_Excuse(
+                throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                     "X_Binary_Function_Args_Not_MDER_Heading_0_1").ToString());
             }
             MDER_Any a0 = args.attrs["\u0000"];
@@ -445,36 +441,36 @@ internal class Internal_Executor
             switch (func_name_s)
             {
                 case "same":
-                    return m.MDER_Boolean(Any__same(a0, a1));
+                    return this.__machine.MDER_Boolean(Any__same(a0, a1));
                 case "Integer_plus":
                     if (a0.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_plus_Arg_0_Not_Integer").ToString());
                     }
                     if (a1.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
-                    return m.MDER_Integer(((MDER_Integer)a0).as_BigInteger + ((MDER_Integer)a1).as_BigInteger);
+                    return this.__machine.MDER_Integer(((MDER_Integer)a0).as_BigInteger + ((MDER_Integer)a1).as_BigInteger);
                 case "Array_at":
                     if (a0.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
                     if (a1.WKBT != Internal_Well_Known_Base_Type.MDER_Integer
                         || ((MDER_Integer)a1).as_BigInteger < 0)
                     {
-                        throw new ArgumentException(m.Simple_MDER_Excuse(
+                        throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
                     MDER_Any maybe_member = Array__maybe_at((MDER_Array)a0, (Int64)((MDER_Integer)a1).as_BigInteger);
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
-                            m.well_known_excuses["No_Such_Ord_Pos"].ToString());
+                            this.__machine.well_known_excuses["No_Such_Ord_Pos"].ToString());
                     }
                     return maybe_member;
                 default:
@@ -486,9 +482,9 @@ internal class Internal_Executor
 
         if (Internal_Constants.Strings__Foundation_Ternary_Function_Names().Contains(func_name_s))
         {
-            if (!this.Tuple__Has_Heading(args, m.MDER_Heading_0_1_2))
+            if (!this.Tuple__Has_Heading(args, this.__machine.MDER_Heading_0_1_2))
             {
-                throw new ArgumentException(m.Simple_MDER_Excuse(
+                throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                     "X_Ternary_Function_Args_Not_MDER_Heading_0_1_2").ToString());
             }
             MDER_Any v = args.attrs["\u0000"];
@@ -829,12 +825,12 @@ internal class Internal_Executor
 
     private MDER_Integer Bits__maybe_at(MDER_Bits bits, Int64 ord_pos)
     {
-        return this.__machine._memory().MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
+        return this.__machine.MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
     }
 
     private MDER_Integer Blob__maybe_at(MDER_Blob blob, Int64 ord_pos)
     {
-        return this.__machine._memory().MDER_Integer(blob.octet_members[(Int32)ord_pos]);
+        return this.__machine.MDER_Integer(blob.octet_members[(Int32)ord_pos]);
     }
 
     private MDER_Integer Text__maybe_at(MDER_Text node, Int64 ord_pos)
@@ -850,10 +846,10 @@ internal class Internal_Executor
                     if ((i+1) < s.Length
                         && Char.IsSurrogatePair(s[i], s[i+1]))
                     {
-                        return this.__machine._memory().MDER_Integer(
+                        return this.__machine.MDER_Integer(
                             Char.ConvertToUtf32(s[i], s[i+1]));
                     }
-                    return this.__machine._memory().MDER_Integer(s[i]);
+                    return this.__machine.MDER_Integer(s[i]);
                 }
                 logical_i++;
                 if ((i+1) < s.Length
@@ -863,7 +859,7 @@ internal class Internal_Executor
                 }
             }
         }
-        return this.__machine._memory().MDER_Integer(
+        return this.__machine.MDER_Integer(
             node.code_point_members[(Int32)ord_pos]);
     }
 
@@ -952,7 +948,7 @@ internal class Internal_Executor
                 // In theory we should never get here assuming that any
                 // operations which would knowingly result in the empty
                 // Array are optimized to return MDER_Array_C0 directly.
-                return this.__machine._memory().MDER_Array_C0.tree_root_node;
+                return this.__machine.MDER_Array_C0.tree_root_node;
             case Internal_Symbolic_Array_Type.Singular:
             case Internal_Symbolic_Array_Type.Arrayed:
                 // Node is already collapsed.
@@ -1015,7 +1011,7 @@ internal class Internal_Executor
                 // In theory we should never get here assuming that any
                 // operations which would knowingly result in the empty
                 // Bag are optimized to return MDER_Bag_C0 directly.
-                return this.__machine._memory().MDER_Bag_C0.tree_root_node;
+                return this.__machine.MDER_Bag_C0.tree_root_node;
             case Internal_Symbolic_Bag_Type.Singular:
                 if (!want_indexed)
                 {
@@ -1295,7 +1291,7 @@ internal class Internal_Executor
 
     internal MDER_Heading Tuple__Heading(MDER_Tuple tuple)
     {
-        return this.__machine._memory().MDER_Heading(new HashSet<String>(tuple.attrs.Keys));
+        return this.__machine.MDER_Heading(new HashSet<String>(tuple.attrs.Keys));
     }
 
     internal Boolean Tuple__Same_Heading(MDER_Tuple t1, MDER_Tuple t2)
@@ -1332,16 +1328,16 @@ internal class Internal_Executor
             Internal_Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
             if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
-                return this.__machine._memory().Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
+                return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
             }
-            return this.__machine._memory().MDER_Text(
+            return this.__machine.MDER_Text(
                 s,
                 (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         catch
         {
-            return this.__machine._memory().Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
+            return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
         }
     }
 }
