@@ -1,9 +1,9 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Ignorance : MDL_Any
+internal class MDER_Ignorance : MDER_Any
 {
-    internal MDL_Ignorance(Memory memory)
-        : base(memory, Well_Known_Base_Type.MDL_Ignorance)
+    internal MDER_Ignorance(Memory memory)
+        : base(memory, Well_Known_Base_Type.MDER_Ignorance)
     {
     }
 }

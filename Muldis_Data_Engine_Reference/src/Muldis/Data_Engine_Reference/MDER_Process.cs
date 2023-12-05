@@ -1,9 +1,9 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Process : MDL_Any
+internal class MDER_Process : MDER_Any
 {
-    internal MDL_Process(Memory memory)
-        : base(memory, Well_Known_Base_Type.MDL_Process)
+    internal MDER_Process(Memory memory)
+        : base(memory, Well_Known_Base_Type.MDER_Process)
     {
     }
 }

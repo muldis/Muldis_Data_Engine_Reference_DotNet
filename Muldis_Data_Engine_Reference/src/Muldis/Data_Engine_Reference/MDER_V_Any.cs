@@ -3,9 +3,9 @@ namespace Muldis.Data_Engine_Reference;
 public class MDER_V_Any
 {
     private readonly MDER_Machine machine;
-    internal readonly MDL_Any memory_value;
+    internal readonly MDER_Any memory_value;
 
-    internal MDER_V_Any(MDER_Machine machine, MDL_Any memory_value)
+    internal MDER_V_Any(MDER_Machine machine, MDER_Any memory_value)
     {
         this.machine = machine;
         this.memory_value = memory_value;

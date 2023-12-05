@@ -1,16 +1,16 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Article : MDL_Any
+internal class MDER_Article : MDER_Any
 {
-    // The Muldis Data Language value that is the "label" of this MDL_Article value.
-    // TODO: Change this to a MDL_Nesting.
-    internal readonly MDL_Any label;
+    // The Muldis Data Language value that is the "label" of this MDER_Article value.
+    // TODO: Change this to a MDER_Nesting.
+    internal readonly MDER_Any label;
 
-    // The Muldis Data Language value that is the "attributes" of this MDL_Article value.
-    internal readonly MDL_Tuple attrs;
+    // The Muldis Data Language value that is the "attributes" of this MDER_Article value.
+    internal readonly MDER_Tuple attrs;
 
-    internal MDL_Article(Memory memory, MDL_Any label, MDL_Tuple attrs)
-        : base(memory, Well_Known_Base_Type.MDL_Article)
+    internal MDER_Article(Memory memory, MDER_Any label, MDER_Tuple attrs)
+        : base(memory, Well_Known_Base_Type.MDER_Article)
     {
         this.label = label;
         this.attrs = attrs;

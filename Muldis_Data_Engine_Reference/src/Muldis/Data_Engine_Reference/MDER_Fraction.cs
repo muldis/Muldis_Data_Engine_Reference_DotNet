@@ -2,42 +2,42 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Fraction : MDL_Any
+internal class MDER_Fraction : MDER_Any
 {
-    // The _maybe_as_Decimal field is optionally valued if the MDL_Fraction
+    // The _maybe_as_Decimal field is optionally valued if the MDER_Fraction
     // value is known small enough to fit in the range it can represent
-    // and it is primarily used when the MDL_Fraction value was input to
+    // and it is primarily used when the MDER_Fraction value was input to
     // the system as a .NET Decimal in the first place or was output
-    // from the system as such; a MDL_Fraction input first as a Decimal
+    // from the system as such; a MDER_Fraction input first as a Decimal
     // is only copied to the as_pair field when needed;
     // if both said fields are valued at once, they are redundant.
     private Nullable<Decimal> _maybe_as_Decimal;
 
     // The as_pair field, comprising a numerator+denominator field
     // pair, can represent any
-    // MDL_Fraction value at all, such that the Fraction's value is
+    // MDER_Fraction value at all, such that the Fraction's value is
     // defined as the fractional division of numerator by denominator.
     // as_pair might not be defined if as_Decimal is defined.
     private Fraction_As_Pair maybe_as_pair;
 
-    internal MDL_Fraction(Memory memory, Decimal as_Decimal,
+    internal MDER_Fraction(Memory memory, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
-        : base(memory, Well_Known_Base_Type.MDL_Fraction)
+        : base(memory, Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = as_Decimal;
         this.maybe_as_pair = new Fraction_As_Pair(numerator, denominator);
     }
 
-    internal MDL_Fraction(Memory memory, Decimal as_Decimal)
-        : base(memory, Well_Known_Base_Type.MDL_Fraction)
+    internal MDER_Fraction(Memory memory, Decimal as_Decimal)
+        : base(memory, Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = as_Decimal;
         this.maybe_as_pair = null;
     }
 
-    internal MDL_Fraction(Memory memory,
+    internal MDER_Fraction(Memory memory,
         BigInteger numerator, BigInteger denominator)
-        : base(memory, Well_Known_Base_Type.MDL_Fraction)
+        : base(memory, Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = null;
         this.maybe_as_pair = new Fraction_As_Pair(numerator, denominator);

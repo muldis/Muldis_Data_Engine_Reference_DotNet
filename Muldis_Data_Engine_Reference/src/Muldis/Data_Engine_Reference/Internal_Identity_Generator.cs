@@ -3,10 +3,10 @@ namespace Muldis.Data_Engine_Reference;
 // Muldis.Data_Engine_Reference.Internal_Identity_Generator
 // Provides utility pure functions that accept any Muldis Data Language "value"
 // and derive a .NET String that uniquely identifies it.
-// This class is deterministic and guarantees that iff 2 MDL_Any are
+// This class is deterministic and guarantees that iff 2 MDER_Any are
 // logically considered to be the "same" Muldis Data Language value then they will
 // map to exactly the same .NET String value, and moreover, that iff 2
-// MDL_Any are logically considered to NOT be the "same" Muldis Data Language value,
+// MDER_Any are logically considered to NOT be the "same" Muldis Data Language value,
 // they are guaranteed to map to distinct .NET String values.
 // The outputs of this generator are intended for internal use only,
 // where the outputs are transient and only intended to be used within
@@ -20,23 +20,23 @@ namespace Muldis.Data_Engine_Reference;
 // original input values, but that is not guaranteed; even if that is
 // the case, the outputs might be considerably less "pretty" as a
 // trade-off to make the generating faster and less error-prone.
-// A normal side effect of using Identity_Generator on a MDL_Any/etc
+// A normal side effect of using Identity_Generator on a MDER_Any/etc
 // value is to update a cache therein to hold the serialization result.
 
 internal sealed class Identity_Generator : MUON_Generator
 {
-    internal String MDL_Any_as_identity_String(MDL_Any value)
+    internal String MDER_Any_as_identity_String(MDER_Any value)
     {
         return this.as_Any_artifact(value, "");
     }
 
-    protected override String as_Any_artifact(MDL_Any value, String indent)
+    protected override String as_Any_artifact(MDER_Any value, String indent)
     {
-        if (value.cached_MDL_Any_identity is null)
+        if (value.cached_MDER_Any_identity is null)
         {
-            value.cached_MDL_Any_identity
+            value.cached_MDER_Any_identity
                 = Any_Selector_Foundation_Dispatch(value, indent);
         }
-        return value.cached_MDL_Any_identity;
+        return value.cached_MDER_Any_identity;
     }
 }

@@ -1,9 +1,9 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_False : MDL_Boolean
+internal class MDER_False : MDER_Boolean
 {
-    internal MDL_False(Memory memory)
-        : base(memory, Well_Known_Base_Type.MDL_False)
+    internal MDER_False(Memory memory)
+        : base(memory, Well_Known_Base_Type.MDER_False)
     {
     }
 }

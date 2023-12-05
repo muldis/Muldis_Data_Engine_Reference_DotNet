@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Text : MDL_Any
+internal class MDER_Text : MDER_Any
 {
     // Represents a Muldis Data Language Text value where each member value is
     // a Muldis Data Language Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.
@@ -42,9 +42,9 @@ internal class MDL_Text : MDL_Any
     // Cached count of code point members of the Muldis Data Language Text.
     internal Nullable<Int64> cached_member_count;
 
-    internal MDL_Text(Memory memory, String code_point_members,
+    internal MDER_Text(Memory memory, String code_point_members,
         Boolean has_any_non_BMP)
-        : base(memory, Well_Known_Base_Type.MDL_Text)
+        : base(memory, Well_Known_Base_Type.MDER_Text)
     {
         this.code_point_members = code_point_members;
         this.has_any_non_BMP = has_any_non_BMP;

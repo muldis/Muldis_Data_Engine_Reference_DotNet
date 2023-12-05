@@ -1,11 +1,11 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Blob : MDL_Any
+internal class MDER_Blob : MDER_Any
 {
     internal readonly Byte[] octet_members;
 
-    internal MDL_Blob(Memory memory, Byte[] octet_members)
-        : base(memory, Well_Known_Base_Type.MDL_Blob)
+    internal MDER_Blob(Memory memory, Byte[] octet_members)
+        : base(memory, Well_Known_Base_Type.MDER_Blob)
     {
         this.octet_members = octet_members;
     }

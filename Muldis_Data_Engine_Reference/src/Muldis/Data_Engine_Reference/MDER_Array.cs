@@ -1,11 +1,11 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDL_Array : MDL_Any
+internal class MDER_Array : MDER_Any
 {
-    internal MDL_Array_Struct tree_root_node;
+    internal MDER_Array_Struct tree_root_node;
 
-    internal MDL_Array(Memory memory, MDL_Array_Struct tree_root_node)
-        : base(memory, Well_Known_Base_Type.MDL_Array)
+    internal MDER_Array(Memory memory, MDER_Array_Struct tree_root_node)
+        : base(memory, Well_Known_Base_Type.MDER_Array)
     {
         this.tree_root_node = tree_root_node;
     }

@@ -39,7 +39,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("variable");
         }
-        return new MDER_V_Any(this, ((MDL_Variable)variable.memory_value).current_value);
+        return new MDER_V_Any(this, ((MDER_Variable)variable.memory_value).current_value);
     }
 
     public void MDER_assign(MDER_V_Any variable, MDER_V_Any new_current)
@@ -52,7 +52,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("new_current");
         }
-        ((MDL_Variable)variable.memory_value).current_value = new_current.memory_value;
+        ((MDER_Variable)variable.memory_value).current_value = new_current.memory_value;
     }
 
     public MDER_V_Any MDER_import(Object value)
@@ -69,7 +69,7 @@ public class MDER_Machine
         return new MDER_V_Any(this, import__tree_qualified(value));
     }
 
-    private MDL_Any import__tree(Object value)
+    private MDER_Any import__tree(Object value)
     {
         if (value is not null)
         {
@@ -86,7 +86,7 @@ public class MDER_Machine
         return import__tree_unqualified(value);
     }
 
-    private MDL_Any import__tree_qualified(KeyValuePair<String, Object> value)
+    private MDER_Any import__tree_qualified(KeyValuePair<String, Object> value)
     {
         Object v = value.Value;
         // Note that .NET guarantees the .Key is never null.
@@ -94,12 +94,12 @@ public class MDER_Machine
         {
             if (String.Equals(value.Key, "Ignorance"))
             {
-                return this.memory.MDL_Ignorance();
+                return this.memory.MDER_Ignorance();
             }
             throw new ArgumentNullException
             (
                 paramName: "value",
-                message: "Can't select MDL_Any with a KeyValuePair operand"
+                message: "Can't select MDER_Any with a KeyValuePair operand"
                     + " with a null Value property (except with [Ignorance] Key)."
             );
         }
@@ -109,23 +109,23 @@ public class MDER_Machine
             case "Boolean":
                 if (String.Equals(type_name, "System.Boolean"))
                 {
-                    return this.memory.MDL_Boolean((Boolean)v);
+                    return this.memory.MDER_Boolean((Boolean)v);
                 }
                 break;
             case "Integer":
                 if (String.Equals(type_name, "System.Int32"))
                 {
-                    return this.memory.MDL_Integer((Int32)v);
+                    return this.memory.MDER_Integer((Int32)v);
                 }
                 if (String.Equals(type_name, "System.Numerics.BigInteger"))
                 {
-                    return this.memory.MDL_Integer((BigInteger)v);
+                    return this.memory.MDER_Integer((BigInteger)v);
                 }
                 break;
             case "Fraction":
                 if (String.Equals(type_name, "System.Decimal"))
                 {
-                    return this.memory.MDL_Fraction((Decimal)v);
+                    return this.memory.MDER_Fraction((Decimal)v);
                 }
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
@@ -137,7 +137,7 @@ public class MDER_Machine
                         throw new ArgumentNullException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Fraction with a null denominator."
+                            message: "Can't select MDER_Fraction with a null denominator."
                         );
                     }
                     if (String.Equals(numerator.GetType().FullName, "System.Int32")
@@ -148,10 +148,10 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDL_Fraction((Int32)numerator, (Int32)denominator);
+                        return this.memory.MDER_Fraction((Int32)numerator, (Int32)denominator);
                     }
                     if (String.Equals(numerator.GetType().FullName, "System.Numerics.BigInteger")
                         && String.Equals(denominator.GetType().FullName, "System.Numerics.BigInteger"))
@@ -161,27 +161,27 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDL_Fraction((BigInteger)numerator, (BigInteger)denominator);
+                        return this.memory.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer
+                        && ((MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDER_Integer
                         && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDL_Integer)
+                        && ((MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDER_Integer)
                     {
-                        if (((MDL_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
+                        if (((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
                         {
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDL_Fraction(
-                            ((MDL_Integer)((MDER_V_Any)numerator  ).memory_value).as_BigInteger,
-                            ((MDL_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger
+                        return this.memory.MDER_Fraction(
+                            ((MDER_Integer)((MDER_V_Any)numerator  ).memory_value).as_BigInteger,
+                            ((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger
                         );
                     }
                 }
@@ -190,14 +190,14 @@ public class MDER_Machine
                 if (String.Equals(type_name, "System.Collections.BitArray"))
                 {
                     // BitArrays are mutable so clone argument to protect our internals.
-                    return this.memory.MDL_Bits(new BitArray((BitArray)v));
+                    return this.memory.MDER_Bits(new BitArray((BitArray)v));
                 }
                 break;
             case "Blob":
                 if (String.Equals(type_name, "System.Byte[]"))
                 {
                     // Arrays are mutable so clone argument to protect our internals.
-                    return this.memory.MDL_Blob(((Byte[])v).ToArray());
+                    return this.memory.MDER_Blob(((Byte[])v).ToArray());
                 }
                 break;
             case "Text":
@@ -209,10 +209,10 @@ public class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Text with a malformed .NET String."
+                            message: "Can't select MDER_Text with a malformed .NET String."
                         );
                     }
-                    return this.memory.MDL_Text(
+                    return this.memory.MDER_Text(
                         (String)v,
                         (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
                     );
@@ -221,8 +221,8 @@ public class MDER_Machine
             case "Array":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDL_Array(
-                        new List<MDL_Any>(((List<Object>)v).Select(
+                    return this.memory.MDER_Array(
+                        new List<MDER_Any>(((List<Object>)v).Select(
                             m => import__tree(m)
                         ))
                     );
@@ -231,7 +231,7 @@ public class MDER_Machine
             case "Set":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDL_Set(
+                    return this.memory.MDER_Set(
                         new List<Multiplied_Member>(((List<Object>)v).Select(
                             m => new Multiplied_Member(import__tree(m))
                         ))
@@ -241,7 +241,7 @@ public class MDER_Machine
             case "Bag":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDL_Bag(
+                    return this.memory.MDER_Bag(
                         new List<Multiplied_Member>(((List<Object>)v).Select(
                             m => new Multiplied_Member(import__tree(m))
                         ))
@@ -259,7 +259,7 @@ public class MDER_Machine
                             attr_names.Add(Char.ConvertFromUtf32(i));
                         }
                     }
-                    return this.memory.MDL_Heading(attr_names);
+                    return this.memory.MDER_Heading(attr_names);
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                 {
@@ -272,12 +272,12 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Heading with attribute"
+                                message: "Can't select MDER_Heading with attribute"
                                     + " name that is a malformed .NET String."
                             );
                         }
                     }
-                    return this.memory.MDL_Heading(new HashSet<String>(attr_names));
+                    return this.memory.MDER_Heading(new HashSet<String>(attr_names));
                 }
                 break;
             case "Tuple":
@@ -288,8 +288,8 @@ public class MDER_Machine
                     {
                         attrs.Add(Char.ConvertFromUtf32(i), ((Object[])v)[i]);
                     }
-                    return this.memory.MDL_Tuple(
-                        new Dictionary<String, MDL_Any>(attrs.ToDictionary(
+                    return this.memory.MDER_Tuple(
+                        new Dictionary<String, MDER_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
@@ -304,114 +304,114 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Tuple with attribute"
+                                message: "Can't select MDER_Tuple with attribute"
                                     + " name that is a malformed .NET String."
                             );
                         }
                     }
-                    return this.memory.MDL_Tuple(
-                        new Dictionary<String, MDL_Any>(attrs.ToDictionary(
+                    return this.memory.MDER_Tuple(
+                        new Dictionary<String, MDER_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
                 break;
             case "Tuple_Array":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Array bv = this.memory.MDL_Array_C0;
-                    return this.memory.MDL_Tuple_Array(hv, bv);
+                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Array bv = this.memory.MDER_Array_C0;
+                    return this.memory.MDER_Tuple_Array(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Array)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Array)
                 {
-                    MDL_Array bv = (MDL_Array)((MDER_V_Any)v).memory_value;
+                    MDER_Array bv = (MDER_Array)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Tuple_Array from a MDL_Array whose"
-                                + " members aren't all MDL_Tuple with a common heading."
+                            message: "Can't select MDER_Tuple_Array from a MDER_Array whose"
+                                + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Array__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Array__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Tuple_Array from empty MDL_Array."
+                            message: "Can't select MDER_Tuple_Array from empty MDER_Array."
                         );
                     }
-                    return this.memory.MDL_Tuple_Array(hv, bv);
+                    return this.memory.MDER_Tuple_Array(hv, bv);
                 }
                 break;
             case "Relation":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Set bv = this.memory.MDL_Set_C0;
-                    return this.memory.MDL_Relation(hv, bv);
+                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Set bv = this.memory.MDER_Set_C0;
+                    return this.memory.MDER_Relation(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Set)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Set)
                 {
-                    MDL_Set bv = (MDL_Set)((MDER_V_Any)v).memory_value;
+                    MDER_Set bv = (MDER_Set)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Relation from a MDL_Set whose"
-                                + " members aren't all MDL_Tuple with a common heading."
+                            message: "Can't select MDER_Relation from a MDER_Set whose"
+                                + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Set__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Set__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Relation from empty MDL_Set."
+                            message: "Can't select MDER_Relation from empty MDER_Set."
                         );
                     }
-                    return this.memory.MDL_Relation(hv, bv);
+                    return this.memory.MDER_Relation(hv, bv);
                 }
                 break;
             case "Tuple_Bag":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDL_Heading hv = (MDL_Heading)((MDER_V_Any)v).memory_value;
-                    MDL_Bag bv = this.memory.MDL_Bag_C0;
-                    return this.memory.MDL_Tuple_Bag(hv, bv);
+                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Bag bv = this.memory.MDER_Bag_C0;
+                    return this.memory.MDER_Tuple_Bag(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDL_Bag)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Bag)
                 {
-                    MDL_Bag bv = (MDL_Bag)((MDER_V_Any)v).memory_value;
+                    MDER_Bag bv = (MDER_Bag)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Tuple_Bag from a MDL_Bag whose"
-                                + " members aren't all MDL_Tuple with a common heading."
+                            message: "Can't select MDER_Tuple_Bag from a MDER_Bag whose"
+                                + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDL_Heading hv = this.memory.Tuple__Heading((MDL_Tuple)this.memory.Bag__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Bag__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Tuple_Bag from empty MDL_Bag."
+                            message: "Can't select MDER_Tuple_Bag from empty MDER_Bag."
                         );
                     }
-                    return this.memory.MDL_Tuple_Bag(hv, bv);
+                    return this.memory.MDER_Tuple_Bag(hv, bv);
                 }
                 break;
             case "Article":
@@ -425,20 +425,20 @@ public class MDER_Machine
                         throw new ArgumentNullException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Article with a null Article attrs."
+                            message: "Can't select MDER_Article with a null Article attrs."
                         );
                     }
-                    MDL_Any attrs_cv = import__tree(attrs);
-                    if (attrs_cv.WKBT != Well_Known_Base_Type.MDL_Tuple)
+                    MDER_Any attrs_cv = import__tree(attrs);
+                    if (attrs_cv.WKBT != Well_Known_Base_Type.MDER_Tuple)
                     {
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Article with an Article attrs"
-                                + " that doesn't evaluate as a MDL_Tuple."
+                            message: "Can't select MDER_Article with an Article attrs"
+                                + " that doesn't evaluate as a MDER_Tuple."
                         );
                     }
-                    MDL_Tuple attrs_cv_as_MDL_Tuple = (MDL_Tuple)attrs_cv;
+                    MDER_Tuple attrs_cv_as_MDER_Tuple = (MDER_Tuple)attrs_cv;
                     if (String.Equals(label.GetType().FullName, "System.String"))
                     {
                         if (this.memory.Test_Dot_Net_String((String)label)
@@ -447,13 +447,13 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Article with label"
+                                message: "Can't select MDER_Article with label"
                                     + " that is a malformed .NET String."
                             );
                         }
-                        return this.memory.MDL_Article(
-                            this.memory.MDL_Attr_Name((String)label),
-                            attrs_cv_as_MDL_Tuple
+                        return this.memory.MDER_Article(
+                            this.memory.MDER_Attr_Name((String)label),
+                            attrs_cv_as_MDER_Tuple
                         );
                     }
                     if (String.Equals(label.GetType().FullName, "System.String[]"))
@@ -466,21 +466,21 @@ public class MDER_Machine
                                 throw new ArgumentException
                                 (
                                     paramName: "value",
-                                    message: "Can't select MDL_Article with label"
+                                    message: "Can't select MDER_Article with label"
                                         + " that includes a malformed .NET String."
                                 );
                             }
                         }
-                        return this.memory.MDL_Article(
-                            this.memory.MDL_Array(new List<MDL_Any>(((String[])label).Select(
-                                m => this.memory.MDL_Attr_Name(m)
+                        return this.memory.MDER_Article(
+                            this.memory.MDER_Array(new List<MDER_Any>(((String[])label).Select(
+                                m => this.memory.MDER_Attr_Name(m)
                             ))),
-                            attrs_cv_as_MDL_Tuple
+                            attrs_cv_as_MDER_Tuple
                         );
                     }
                     if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                     {
-                        return this.memory.MDL_Article(import__tree(label), attrs_cv_as_MDL_Tuple);
+                        return this.memory.MDER_Article(import__tree(label), attrs_cv_as_MDER_Tuple);
                     }
                 }
                 break;
@@ -493,34 +493,34 @@ public class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "value",
-                            message: "Can't select MDL_Excuse with label"
+                            message: "Can't select MDER_Excuse with label"
                                 + " that is a malformed .NET String."
                         );
                     }
-                    return this.memory.Simple_MDL_Excuse((String)v);
+                    return this.memory.Simple_MDER_Excuse((String)v);
                 }
                 throw new NotImplementedException();
             case "New_Variable":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                 {
-                    return this.memory.New_MDL_Variable(
+                    return this.memory.New_MDER_Variable(
                         ((MDER_V_Any)v).memory_value);
                 }
                 break;
             case "New_Process":
                 if (v is null)
                 {
-                    return this.memory.New_MDL_Process();
+                    return this.memory.New_MDER_Process();
                 }
                 break;
             case "New_Stream":
                 if (v is null)
                 {
-                    return this.memory.New_MDL_Stream();
+                    return this.memory.New_MDER_Stream();
                 }
                 break;
             case "New_External":
-                return this.memory.New_MDL_External(v);
+                return this.memory.New_MDER_External(v);
             case "Attr_Name_List":
                 if (String.Equals(type_name, "System.String[]"))
                 {
@@ -532,13 +532,13 @@ public class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "value",
-                                message: "Can't select MDL_Attr_Name_List with"
+                                message: "Can't select MDER_Attr_Name_List with"
                                     + " member that is a malformed .NET String."
                             );
                         }
                     }
-                    return this.memory.MDL_Array(new List<MDL_Any>(((String[])v).Select(
-                        m => this.memory.MDL_Attr_Name(m)
+                    return this.memory.MDER_Array(new List<MDER_Any>(((String[])v).Select(
+                        m => this.memory.MDER_Attr_Name(m)
                     )));
                 }
                 break;
@@ -551,38 +551,38 @@ public class MDER_Machine
             "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
     }
 
-    private MDL_Any import__tree_unqualified(Object value)
+    private MDER_Any import__tree_unqualified(Object value)
     {
         if (value is null)
         {
-            return this.memory.MDL_Ignorance();
+            return this.memory.MDER_Ignorance();
         }
         String type_name = value.GetType().FullName;
         if (String.Equals(type_name, "System.Boolean"))
         {
-            return this.memory.MDL_Boolean((Boolean)value);
+            return this.memory.MDER_Boolean((Boolean)value);
         }
         if (String.Equals(type_name, "System.Int32"))
         {
-            return this.memory.MDL_Integer((Int32)value);
+            return this.memory.MDER_Integer((Int32)value);
         }
         if (String.Equals(type_name, "System.Numerics.BigInteger"))
         {
-            return this.memory.MDL_Integer((BigInteger)value);
+            return this.memory.MDER_Integer((BigInteger)value);
         }
         if (String.Equals(type_name, "System.Decimal"))
         {
-            return this.memory.MDL_Fraction((Decimal)value);
+            return this.memory.MDER_Fraction((Decimal)value);
         }
         if (String.Equals(type_name, "System.Collections.BitArray"))
         {
             // BitArrays are mutable so clone argument to protect our internals.
-            return this.memory.MDL_Bits(new BitArray((BitArray)value));
+            return this.memory.MDER_Bits(new BitArray((BitArray)value));
         }
         if (String.Equals(type_name, "System.Byte[]"))
         {
             // Arrays are mutable so clone argument to protect our internals.
-            return this.memory.MDL_Blob(((Byte[])value).ToArray());
+            return this.memory.MDER_Blob(((Byte[])value).ToArray());
         }
         if (String.Equals(type_name, "System.String"))
         {
@@ -592,10 +592,10 @@ public class MDER_Machine
                 throw new ArgumentException
                 (
                     paramName: "value",
-                    message: "Can't select MDL_Text with a malformed .NET String."
+                    message: "Can't select MDER_Text with a malformed .NET String."
                 );
             }
-            return this.memory.MDL_Text(
+            return this.memory.MDER_Text(
                 (String)value,
                 (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
@@ -609,19 +609,19 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        MDL_Any v = value.memory_value;
+        MDER_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Ignorance:
+            case Well_Known_Base_Type.MDER_Ignorance:
                 return null;
-            case Well_Known_Base_Type.MDL_False:
+            case Well_Known_Base_Type.MDER_False:
                 return false;
-            case Well_Known_Base_Type.MDL_True:
+            case Well_Known_Base_Type.MDER_True:
                 return true;
-            case Well_Known_Base_Type.MDL_Integer:
-                return ((MDL_Integer)v).as_BigInteger;
-            case Well_Known_Base_Type.MDL_External:
-                return ((MDL_External)v).external_value;
+            case Well_Known_Base_Type.MDER_Integer:
+                return ((MDER_Integer)v).as_BigInteger;
+            case Well_Known_Base_Type.MDER_External:
+                return ((MDER_External)v).external_value;
             default:
                 return MDER_export_qualified(value);
         }
@@ -633,49 +633,49 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        MDL_Any v = value.memory_value;
+        MDER_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDL_Ignorance:
+            case Well_Known_Base_Type.MDER_Ignorance:
                 return new KeyValuePair<String, Object>("Ignorance",null);
-            case Well_Known_Base_Type.MDL_False:
+            case Well_Known_Base_Type.MDER_False:
                 return new KeyValuePair<String, Object>("Boolean",false);
-            case Well_Known_Base_Type.MDL_True:
+            case Well_Known_Base_Type.MDER_True:
                 return new KeyValuePair<String, Object>("Boolean",true);
-            case Well_Known_Base_Type.MDL_Integer:
+            case Well_Known_Base_Type.MDER_Integer:
                 return new KeyValuePair<String, Object>("Integer",
-                    ((MDL_Integer)v).as_BigInteger);
-            case Well_Known_Base_Type.MDL_Fraction:
+                    ((MDER_Integer)v).as_BigInteger);
+            case Well_Known_Base_Type.MDER_Fraction:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Bits:
+            case Well_Known_Base_Type.MDER_Bits:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Blob:
+            case Well_Known_Base_Type.MDER_Blob:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Text:
+            case Well_Known_Base_Type.MDER_Text:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Array:
+            case Well_Known_Base_Type.MDER_Array:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Set:
+            case Well_Known_Base_Type.MDER_Set:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Bag:
+            case Well_Known_Base_Type.MDER_Bag:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Heading:
+            case Well_Known_Base_Type.MDER_Heading:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Tuple:
+            case Well_Known_Base_Type.MDER_Tuple:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Article:
+            case Well_Known_Base_Type.MDER_Article:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Excuse:
+            case Well_Known_Base_Type.MDER_Excuse:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Variable:
+            case Well_Known_Base_Type.MDER_Variable:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Process:
+            case Well_Known_Base_Type.MDER_Process:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_Stream:
+            case Well_Known_Base_Type.MDER_Stream:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDL_External:
+            case Well_Known_Base_Type.MDER_External:
                 return new KeyValuePair<String, Object>("New_External",
-                    ((MDL_External)v).external_value);
+                    ((MDER_External)v).external_value);
             default:
                 throw new NotImplementedException();
         }
