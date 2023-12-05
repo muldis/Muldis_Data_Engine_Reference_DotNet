@@ -258,7 +258,7 @@ internal abstract class Internal_MUON_Generator
                 value.tree_root_node, mei) + indent + "])";
     }
 
-    private String Array_artifact__node__tree(MDER_Array_Struct node, String indent)
+    private String Array_artifact__node__tree(Internal_MDER_Array_Struct node, String indent)
     {
         // Note: We always display consecutive duplicates in repeating
         // value format rather than value-count format in order to keep
@@ -270,17 +270,17 @@ internal abstract class Internal_MUON_Generator
         // deal with that later if an actual use case runs afowl of it.
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Array_Type.None:
+            case Internal_Symbolic_Array_Type.None:
                 return "";
-            case Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Array_Type.Singular:
                 return String.Concat(Enumerable.Repeat(
                     indent + as_Any_artifact(node.Local_Singular_Members().member, indent) + ",\u000A",
                     (Int32)node.Local_Singular_Members().multiplicity));
-            case Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Array_Type.Arrayed:
                 return String.Concat(Enumerable.Select(
                     node.Local_Arrayed_Members(),
                     m => indent + as_Any_artifact(m, indent) + ",\u000A"));
-            case Symbolic_Array_Type.Catenated:
+            case Internal_Symbolic_Array_Type.Catenated:
                 return Array_artifact__node__tree(node.Tree_Catenated_Members().a0, indent)
                     + Array_artifact__node__tree(node.Tree_Catenated_Members().a1, indent);
             default:
@@ -292,12 +292,12 @@ internal abstract class Internal_MUON_Generator
     {
         String mei = indent + "\u0009";
         value.memory.Set__Collapse(set: value, want_indexed: true);
-        MDER_Bag_Struct node = value.tree_root_node;
+        Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Bag_Type.None:
+            case Internal_Symbolic_Bag_Type.None:
                 return "(Set:[])";
-            case Symbolic_Bag_Type.Indexed:
+            case Internal_Symbolic_Bag_Type.Indexed:
                 return "(Set:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
                     m => mei + as_Any_artifact(m.Key, mei) + ",\u000A"
@@ -311,12 +311,12 @@ internal abstract class Internal_MUON_Generator
     {
         String mei = indent + "\u0009";
         value.memory.Bag__Collapse(bag: value, want_indexed: true);
-        MDER_Bag_Struct node = value.tree_root_node;
+        Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Bag_Type.None:
+            case Internal_Symbolic_Bag_Type.None:
                 return "(Bag:[])";
-            case Symbolic_Bag_Type.Indexed:
+            case Internal_Symbolic_Bag_Type.Indexed:
                 return "(Bag:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
                     m => mei + as_Any_artifact(m.Key, mei) + " : "

@@ -203,8 +203,8 @@ public class MDER_Machine
             case "Text":
                 if (String.Equals(type_name, "System.String"))
                 {
-                    Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)v);
-                    if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)v);
+                    if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -214,7 +214,7 @@ public class MDER_Machine
                     }
                     return this.memory.MDER_Text(
                         (String)v,
-                        (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                        (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
                     );
                 }
                 break;
@@ -232,8 +232,8 @@ public class MDER_Machine
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.memory.MDER_Set(
-                        new List<Multiplied_Member>(((List<Object>)v).Select(
-                            m => new Multiplied_Member(import__tree(m))
+                        new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
+                            m => new Internal_Multiplied_Member(import__tree(m))
                         ))
                     );
                 }
@@ -242,8 +242,8 @@ public class MDER_Machine
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.memory.MDER_Bag(
-                        new List<Multiplied_Member>(((List<Object>)v).Select(
-                            m => new Multiplied_Member(import__tree(m))
+                        new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
+                            m => new Internal_Multiplied_Member(import__tree(m))
                         ))
                     );
                 }
@@ -267,7 +267,7 @@ public class MDER_Machine
                     foreach (String atnm in attr_names)
                     {
                         if (this.memory.Test_Dot_Net_String(atnm)
-                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -299,7 +299,7 @@ public class MDER_Machine
                     foreach (String atnm in attrs.Keys)
                     {
                         if (this.memory.Test_Dot_Net_String(atnm)
-                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -442,7 +442,7 @@ public class MDER_Machine
                     if (String.Equals(label.GetType().FullName, "System.String"))
                     {
                         if (this.memory.Test_Dot_Net_String((String)label)
-                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -461,7 +461,7 @@ public class MDER_Machine
                         foreach (String s in ((String[])label))
                         {
                             if (this.memory.Test_Dot_Net_String(s)
-                                == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                                == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                             {
                                 throw new ArgumentException
                                 (
@@ -488,7 +488,7 @@ public class MDER_Machine
                 if (String.Equals(type_name, "System.String"))
                 {
                     if (this.memory.Test_Dot_Net_String((String)v)
-                        == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -527,7 +527,7 @@ public class MDER_Machine
                     foreach (String s in ((String[])v))
                     {
                         if (this.memory.Test_Dot_Net_String(s)
-                            == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -586,8 +586,8 @@ public class MDER_Machine
         }
         if (String.Equals(type_name, "System.String"))
         {
-            Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)value);
-            if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            Internal_Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)value);
+            if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
                 (
@@ -597,7 +597,7 @@ public class MDER_Machine
             }
             return this.memory.MDER_Text(
                 (String)value,
-                (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         throw new NotImplementedException("Unhandled MDER value type ["+type_name+"].");

@@ -139,9 +139,9 @@ internal class Internal_Memory
         }
 
         this.MDER_Array_C0 = new MDER_Array(this,
-            new MDER_Array_Struct {
-                local_symbolic_type = Symbolic_Array_Type.None,
-                cached_members_meta = new Cached_Members_Meta {
+            new Internal_MDER_Array_Struct {
+                local_symbolic_type = Internal_Symbolic_Array_Type.None,
+                cached_members_meta = new Internal_Cached_Members_Meta {
                     tree_member_count = 0,
                     tree_all_unique = true,
                     tree_relational = true,
@@ -150,9 +150,9 @@ internal class Internal_Memory
         );
 
         this.MDER_Set_C0 = new MDER_Set(this,
-            new MDER_Bag_Struct {
-                local_symbolic_type = Symbolic_Bag_Type.None,
-                cached_members_meta = new Cached_Members_Meta {
+            new Internal_MDER_Bag_Struct {
+                local_symbolic_type = Internal_Symbolic_Bag_Type.None,
+                cached_members_meta = new Internal_Cached_Members_Meta {
                     tree_member_count = 0,
                     tree_all_unique = true,
                     tree_relational = true,
@@ -161,9 +161,9 @@ internal class Internal_Memory
         );
 
         this.MDER_Bag_C0 = new MDER_Bag(this,
-            new MDER_Bag_Struct {
-                local_symbolic_type = Symbolic_Bag_Type.None,
-                cached_members_meta = new Cached_Members_Meta {
+            new Internal_MDER_Bag_Struct {
+                local_symbolic_type = Internal_Symbolic_Bag_Type.None,
+                cached_members_meta = new Internal_Cached_Members_Meta {
                     tree_member_count = 0,
                     tree_all_unique = true,
                     tree_relational = true,
@@ -199,10 +199,10 @@ internal class Internal_Memory
         this.MDER_Tuple_Array_D0C1 = new MDER_Tuple_Array(this,
             MDER_Heading_D0,
             new MDER_Array(this,
-                new MDER_Array_Struct {
-                    local_symbolic_type = Symbolic_Array_Type.Singular,
-                    members = new Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Cached_Members_Meta {
+                new Internal_MDER_Array_Struct {
+                    local_symbolic_type = Internal_Symbolic_Array_Type.Singular,
+                    members = new Internal_Multiplied_Member(MDER_Tuple_D0),
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = 1,
                         tree_all_unique = true,
                         tree_relational = true,
@@ -217,10 +217,10 @@ internal class Internal_Memory
         this.MDER_Relation_D0C1 = new MDER_Relation(this,
             MDER_Heading_D0,
             new MDER_Set(this,
-                new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Singular,
-                    members = new Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Cached_Members_Meta {
+                new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Singular,
+                    members = new Internal_Multiplied_Member(MDER_Tuple_D0),
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = 1,
                         tree_all_unique = true,
                         tree_relational = true,
@@ -235,10 +235,10 @@ internal class Internal_Memory
         this.MDER_Tuple_Bag_D0C1 = new MDER_Tuple_Bag(this,
             MDER_Heading_D0,
             new MDER_Bag(this,
-                new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Singular,
-                    members = new Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Cached_Members_Meta {
+                new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Singular,
+                    members = new Internal_Multiplied_Member(MDER_Tuple_D0),
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = 1,
                         tree_all_unique = true,
                         tree_relational = true,
@@ -363,10 +363,10 @@ internal class Internal_Memory
         if (members.Count == 1)
         {
             return new MDER_Array(this,
-                new MDER_Array_Struct {
-                    local_symbolic_type = Symbolic_Array_Type.Singular,
-                    members = new Multiplied_Member(members[0]),
-                    cached_members_meta = new Cached_Members_Meta {
+                new Internal_MDER_Array_Struct {
+                    local_symbolic_type = Internal_Symbolic_Array_Type.Singular,
+                    members = new Internal_Multiplied_Member(members[0]),
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = 1,
                         tree_all_unique = true,
                         tree_relational = (members[0].WKBT
@@ -376,46 +376,46 @@ internal class Internal_Memory
             );
         }
         return new MDER_Array(this,
-            new MDER_Array_Struct {
-                local_symbolic_type = Symbolic_Array_Type.Arrayed,
+            new Internal_MDER_Array_Struct {
+                local_symbolic_type = Internal_Symbolic_Array_Type.Arrayed,
                 members = members,
-                cached_members_meta = new Cached_Members_Meta(),
+                cached_members_meta = new Internal_Cached_Members_Meta(),
             }
         );
     }
 
-    internal MDER_Set MDER_Set(List<Multiplied_Member> members)
+    internal MDER_Set MDER_Set(List<Internal_Multiplied_Member> members)
     {
         if (members.Count == 0)
         {
             return MDER_Set_C0;
         }
         return new MDER_Set(this,
-            new MDER_Bag_Struct {
-                local_symbolic_type = Symbolic_Bag_Type.Unique,
-                members = new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Arrayed,
+            new Internal_MDER_Bag_Struct {
+                local_symbolic_type = Internal_Symbolic_Bag_Type.Unique,
+                members = new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Arrayed,
                     members = members,
-                    cached_members_meta = new Cached_Members_Meta(),
+                    cached_members_meta = new Internal_Cached_Members_Meta(),
                 },
-                cached_members_meta = new Cached_Members_Meta {
+                cached_members_meta = new Internal_Cached_Members_Meta {
                     tree_all_unique = true,
                 },
             }
         );
     }
 
-    internal MDER_Bag MDER_Bag(List<Multiplied_Member> members)
+    internal MDER_Bag MDER_Bag(List<Internal_Multiplied_Member> members)
     {
         if (members.Count == 0)
         {
             return MDER_Bag_C0;
         }
         return new MDER_Bag(this,
-            new MDER_Bag_Struct {
-                local_symbolic_type = Symbolic_Bag_Type.Arrayed,
+            new Internal_MDER_Bag_Struct {
+                local_symbolic_type = Internal_Symbolic_Bag_Type.Arrayed,
                 members = members,
-                cached_members_meta = new Cached_Members_Meta(),
+                cached_members_meta = new Internal_Cached_Members_Meta(),
             }
         );
     }
@@ -553,10 +553,10 @@ internal class Internal_Memory
         return new MDER_External(this, external_value);
     }
 
-    internal Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)
+    internal Internal_Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)
     {
-        Dot_Net_String_Unicode_Test_Result ok_result
-            = Dot_Net_String_Unicode_Test_Result.Valid_Is_All_BMP;
+        Internal_Dot_Net_String_Unicode_Test_Result ok_result
+            = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Is_All_BMP;
         for (Int32 i = 0; i < value.Length; i++)
         {
             if (Char.IsSurrogate(value[i]))
@@ -564,12 +564,12 @@ internal class Internal_Memory
                 if ((i+1) < value.Length
                     && Char.IsSurrogatePair(value[i], value[i+1]))
                 {
-                    ok_result = Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP;
+                    ok_result = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP;
                     i++;
                 }
                 else
                 {
-                    return Dot_Net_String_Unicode_Test_Result.Is_Malformed;
+                    return Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed;
                 }
             }
         }
@@ -581,28 +581,28 @@ internal class Internal_Memory
         array.tree_root_node = Array__Collapsed_Struct(array.tree_root_node);
     }
 
-    private MDER_Array_Struct Array__Collapsed_Struct(MDER_Array_Struct node)
+    private Internal_MDER_Array_Struct Array__Collapsed_Struct(Internal_MDER_Array_Struct node)
     {
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Array_Type.None:
+            case Internal_Symbolic_Array_Type.None:
                 // Node is already collapsed.
                 // In theory we should never get here assuming that any
                 // operations which would knowingly result in the empty
                 // Array are optimized to return MDER_Array_C0 directly.
                 return MDER_Array_C0.tree_root_node;
-            case Symbolic_Array_Type.Singular:
-            case Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Array_Type.Arrayed:
                 // Node is already collapsed.
                 return node;
-            case Symbolic_Array_Type.Catenated:
-                MDER_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a0);
-                MDER_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a1);
-                if (n0.local_symbolic_type == Symbolic_Array_Type.None)
+            case Internal_Symbolic_Array_Type.Catenated:
+                Internal_MDER_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a0);
+                Internal_MDER_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a1);
+                if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.None)
                 {
                     return n1;
                 }
-                if (n1.local_symbolic_type == Symbolic_Array_Type.None)
+                if (n1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
                 {
                     return n0;
                 }
@@ -610,19 +610,19 @@ internal class Internal_Memory
                 // use Arrayed format for merger even if the input
                 // members are the same value.
                 // This will die if multiplicity greater than an Int32.
-                return new MDER_Array_Struct {
-                    local_symbolic_type = Symbolic_Array_Type.Arrayed,
+                return new Internal_MDER_Array_Struct {
+                    local_symbolic_type = Internal_Symbolic_Array_Type.Arrayed,
                     members = Enumerable.Concat(
-                        (n0.local_symbolic_type == Symbolic_Array_Type.Singular
+                        (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
                             ? Enumerable.Repeat(n0.Local_Singular_Members().member,
                                 (Int32)n0.Local_Singular_Members().multiplicity)
                             : n0.Local_Arrayed_Members()),
-                        (n1.local_symbolic_type == Symbolic_Array_Type.Singular
+                        (n1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
                             ? Enumerable.Repeat(n1.Local_Singular_Members().member,
                                 (Int32)n1.Local_Singular_Members().multiplicity)
                             : n1.Local_Arrayed_Members())
                     ),
-                    cached_members_meta = new Cached_Members_Meta(),
+                    cached_members_meta = new Internal_Cached_Members_Meta(),
                         // TODO: Merge existing source meta where efficient,
                         // tree_member_count and tree_relational in particular.
                 };
@@ -641,47 +641,47 @@ internal class Internal_Memory
         bag.tree_root_node = Bag__Collapsed_Struct(bag.tree_root_node, want_indexed);
     }
 
-    private MDER_Bag_Struct Bag__Collapsed_Struct(MDER_Bag_Struct node,
+    private Internal_MDER_Bag_Struct Bag__Collapsed_Struct(Internal_MDER_Bag_Struct node,
         Boolean want_indexed = false)
     {
         // Note: want_indexed only causes Indexed result when Singular
         // or Arrayed otherwise would be used; None still also used.
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Bag_Type.None:
+            case Internal_Symbolic_Bag_Type.None:
                 // Node is already collapsed.
                 // In theory we should never get here assuming that any
                 // operations which would knowingly result in the empty
                 // Bag are optimized to return MDER_Bag_C0 directly.
                 return MDER_Bag_C0.tree_root_node;
-            case Symbolic_Bag_Type.Singular:
+            case Internal_Symbolic_Bag_Type.Singular:
                 if (!want_indexed)
                 {
                     // Node is already collapsed.
                     return node;
                 }
-                Multiplied_Member lsm = node.Local_Singular_Members();
-                return new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
-                    members = new Dictionary<MDER_Any, Multiplied_Member>()
+                Internal_Multiplied_Member lsm = node.Local_Singular_Members();
+                return new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Indexed,
+                    members = new Dictionary<MDER_Any, Internal_Multiplied_Member>()
                         {{lsm.member, lsm}},
-                    cached_members_meta = new Cached_Members_Meta {
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = lsm.multiplicity,
                         tree_all_unique = (lsm.multiplicity == 1),
                         tree_relational = (lsm.member.WKBT
                             == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 };
-            case Symbolic_Bag_Type.Arrayed:
+            case Internal_Symbolic_Bag_Type.Arrayed:
                 if (!want_indexed)
                 {
                     // Node is already collapsed.
                     return node;
                 }
-                List<Multiplied_Member> ary_src_list = node.Local_Arrayed_Members();
-                Dictionary<MDER_Any, Multiplied_Member> ary_res_dict
-                    = new Dictionary<MDER_Any, Multiplied_Member>();
-                foreach (Multiplied_Member m in ary_src_list)
+                List<Internal_Multiplied_Member> ary_src_list = node.Local_Arrayed_Members();
+                Dictionary<MDER_Any, Internal_Multiplied_Member> ary_res_dict
+                    = new Dictionary<MDER_Any, Internal_Multiplied_Member>();
+                foreach (Internal_Multiplied_Member m in ary_src_list)
                 {
                     if (!ary_res_dict.ContainsKey(m.member))
                     {
@@ -692,57 +692,57 @@ internal class Internal_Memory
                         ary_res_dict[m.member].multiplicity ++;
                     }
                 }
-                return new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                return new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Indexed,
                     members = ary_res_dict,
-                    cached_members_meta = new Cached_Members_Meta {
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = ary_src_list.Count,
                         tree_all_unique = node.cached_members_meta.tree_all_unique,
                         tree_relational = node.cached_members_meta.tree_relational,
                     },
                 };
-            case Symbolic_Bag_Type.Indexed:
+            case Internal_Symbolic_Bag_Type.Indexed:
                 // Node is already collapsed.
                 return node;
-            case Symbolic_Bag_Type.Unique:
-                MDER_Bag_Struct uni_pa = Bag__Collapsed_Struct(
+            case Internal_Symbolic_Bag_Type.Unique:
+                Internal_MDER_Bag_Struct uni_pa = Bag__Collapsed_Struct(
                     node: node.Tree_Unique_Members(), want_indexed: true);
-                if (uni_pa.local_symbolic_type == Symbolic_Bag_Type.None)
+                if (uni_pa.local_symbolic_type == Internal_Symbolic_Bag_Type.None)
                 {
                     return uni_pa;
                 }
-                Dictionary<MDER_Any, Multiplied_Member> uni_src_dict
+                Dictionary<MDER_Any, Internal_Multiplied_Member> uni_src_dict
                     = uni_pa.Local_Indexed_Members();
-                return new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                return new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Indexed,
                     members = uni_src_dict.ToDictionary(
-                        m => m.Key, m => new Multiplied_Member(m.Key, 1)),
-                    cached_members_meta = new Cached_Members_Meta {
+                        m => m.Key, m => new Internal_Multiplied_Member(m.Key, 1)),
+                    cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = uni_src_dict.Count,
                         tree_all_unique = true,
                         tree_relational = uni_pa.cached_members_meta.tree_relational,
                     },
                 };
-            case Symbolic_Bag_Type.Summed:
-                MDER_Bag_Struct n0 = Bag__Collapsed_Struct(
+            case Internal_Symbolic_Bag_Type.Summed:
+                Internal_MDER_Bag_Struct n0 = Bag__Collapsed_Struct(
                     node: node.Tree_Summed_Members().a0, want_indexed: true);
-                MDER_Bag_Struct n1 = Bag__Collapsed_Struct(
+                Internal_MDER_Bag_Struct n1 = Bag__Collapsed_Struct(
                     node: node.Tree_Summed_Members().a1, want_indexed: true);
-                if (n0.local_symbolic_type == Symbolic_Bag_Type.None)
+                if (n0.local_symbolic_type == Internal_Symbolic_Bag_Type.None)
                 {
                     return n1;
                 }
-                if (n1.local_symbolic_type == Symbolic_Bag_Type.None)
+                if (n1.local_symbolic_type == Internal_Symbolic_Bag_Type.None)
                 {
                     return n0;
                 }
-                Dictionary<MDER_Any, Multiplied_Member> n0_src_dict
+                Dictionary<MDER_Any, Internal_Multiplied_Member> n0_src_dict
                     = n0.Local_Indexed_Members();
-                Dictionary<MDER_Any, Multiplied_Member> n1_src_dict
+                Dictionary<MDER_Any, Internal_Multiplied_Member> n1_src_dict
                     = n1.Local_Indexed_Members();
-                Dictionary<MDER_Any, Multiplied_Member> res_dict
-                    = new Dictionary<MDER_Any, Multiplied_Member>(n0_src_dict);
-                foreach (Multiplied_Member m in n1_src_dict.Values)
+                Dictionary<MDER_Any, Internal_Multiplied_Member> res_dict
+                    = new Dictionary<MDER_Any, Internal_Multiplied_Member>(n0_src_dict);
+                foreach (Internal_Multiplied_Member m in n1_src_dict.Values)
                 {
                     if (!res_dict.ContainsKey(m.member))
                     {
@@ -750,14 +750,14 @@ internal class Internal_Memory
                     }
                     else
                     {
-                        res_dict[m.member] = new Multiplied_Member(m.member,
+                        res_dict[m.member] = new Internal_Multiplied_Member(m.member,
                             res_dict[m.member].multiplicity + m.multiplicity);
                     }
                 }
-                return new MDER_Bag_Struct {
-                    local_symbolic_type = Symbolic_Bag_Type.Indexed,
+                return new Internal_MDER_Bag_Struct {
+                    local_symbolic_type = Internal_Symbolic_Bag_Type.Indexed,
                     members = res_dict,
-                    cached_members_meta = new Cached_Members_Meta(),
+                    cached_members_meta = new Internal_Cached_Members_Meta(),
                         // TODO: Merge existing source meta where efficient,
                         // tree_member_count and tree_relational in particular.
                 };
@@ -771,17 +771,17 @@ internal class Internal_Memory
         return Array__Pick_Arbitrary_Node_Member(array.tree_root_node);
     }
 
-    private MDER_Any Array__Pick_Arbitrary_Node_Member(MDER_Array_Struct node)
+    private MDER_Any Array__Pick_Arbitrary_Node_Member(Internal_MDER_Array_Struct node)
     {
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Array_Type.None:
+            case Internal_Symbolic_Array_Type.None:
                 return null;
-            case Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Array_Type.Singular:
                 return node.Local_Singular_Members().member;
-            case Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Array_Type.Arrayed:
                 return node.Local_Arrayed_Members()[0];
-            case Symbolic_Array_Type.Catenated:
+            case Internal_Symbolic_Array_Type.Catenated:
                 return Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
                     ?? Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
             default:
@@ -794,21 +794,21 @@ internal class Internal_Memory
         return Array__Tree_Relational(array.tree_root_node);
     }
 
-    private Boolean Array__Tree_Relational(MDER_Array_Struct node)
+    private Boolean Array__Tree_Relational(Internal_MDER_Array_Struct node)
     {
         if (node.cached_members_meta.tree_relational is null)
         {
             Boolean tr = true;
             switch (node.local_symbolic_type)
             {
-                case Symbolic_Array_Type.None:
+                case Internal_Symbolic_Array_Type.None:
                     tr = true;
                     break;
-                case Symbolic_Array_Type.Singular:
+                case Internal_Symbolic_Array_Type.Singular:
                     tr = node.Local_Singular_Members().member.WKBT
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
-                case Symbolic_Array_Type.Arrayed:
+                case Internal_Symbolic_Array_Type.Arrayed:
                     MDER_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
                     tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
@@ -817,7 +817,7 @@ internal class Internal_Memory
                                 && Tuple__Same_Heading((MDER_Tuple)m, (MDER_Tuple)m0)
                         );
                     break;
-                case Symbolic_Array_Type.Catenated:
+                case Internal_Symbolic_Array_Type.Catenated:
                     MDER_Any pm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0);
                     MDER_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
                     tr = Array__Tree_Relational(node.Tree_Catenated_Members().a0)
@@ -847,7 +847,7 @@ internal class Internal_Memory
         return Bag__Pick_Arbitrary_Node_Member(bag.tree_root_node);
     }
 
-    private MDER_Any Bag__Pick_Arbitrary_Node_Member(MDER_Bag_Struct node)
+    private MDER_Any Bag__Pick_Arbitrary_Node_Member(Internal_MDER_Bag_Struct node)
     {
         if (node.cached_members_meta.tree_member_count == 0)
         {
@@ -855,17 +855,17 @@ internal class Internal_Memory
         }
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Bag_Type.None:
+            case Internal_Symbolic_Bag_Type.None:
                 return null;
-            case Symbolic_Bag_Type.Singular:
+            case Internal_Symbolic_Bag_Type.Singular:
                 return node.Local_Singular_Members().member;
-            case Symbolic_Bag_Type.Arrayed:
+            case Internal_Symbolic_Bag_Type.Arrayed:
                 return node.Local_Arrayed_Members()[0].member;
-            case Symbolic_Bag_Type.Indexed:
+            case Internal_Symbolic_Bag_Type.Indexed:
                 return node.Local_Indexed_Members().First().Value.member;
-            case Symbolic_Bag_Type.Unique:
+            case Internal_Symbolic_Bag_Type.Unique:
                 return Bag__Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
-            case Symbolic_Bag_Type.Summed:
+            case Internal_Symbolic_Bag_Type.Summed:
                 return Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
                     ?? Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
             default:
@@ -878,21 +878,21 @@ internal class Internal_Memory
         return Bag__Tree_Relational(bag.tree_root_node);
     }
 
-    private Boolean Bag__Tree_Relational(MDER_Bag_Struct node)
+    private Boolean Bag__Tree_Relational(Internal_MDER_Bag_Struct node)
     {
         if (node.cached_members_meta.tree_relational is null)
         {
             Boolean tr = true;
             switch (node.local_symbolic_type)
             {
-                case Symbolic_Bag_Type.None:
+                case Internal_Symbolic_Bag_Type.None:
                     tr = true;
                     break;
-                case Symbolic_Bag_Type.Singular:
+                case Internal_Symbolic_Bag_Type.Singular:
                     tr = node.Local_Singular_Members().member.WKBT
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
-                case Symbolic_Bag_Type.Arrayed:
+                case Internal_Symbolic_Bag_Type.Arrayed:
                     MDER_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
                     tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
@@ -901,7 +901,7 @@ internal class Internal_Memory
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)m0)
                         );
                     break;
-                case Symbolic_Bag_Type.Indexed:
+                case Internal_Symbolic_Bag_Type.Indexed:
                     MDER_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
                     tr = im0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
@@ -910,10 +910,10 @@ internal class Internal_Memory
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)im0)
                         );
                     break;
-                case Symbolic_Bag_Type.Unique:
+                case Internal_Symbolic_Bag_Type.Unique:
                     tr = Bag__Tree_Relational(node.Tree_Unique_Members());
                     break;
-                case Symbolic_Bag_Type.Summed:
+                case Internal_Symbolic_Bag_Type.Summed:
                     tr = Bag__Tree_Relational(node.Tree_Summed_Members().a0)
                         && Bag__Tree_Relational(node.Tree_Summed_Members().a1);
                     MDER_Tuple pam0 = (MDER_Tuple)Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0);
@@ -967,14 +967,14 @@ internal class Internal_Memory
         try
         {
             String s = enc.GetString(octets);
-            Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
-            if (tr == Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            Internal_Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
+            if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 return Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
             }
             return this.MDER_Text(
                 s,
-                (tr == Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         catch

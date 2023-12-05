@@ -387,10 +387,10 @@ internal class Internal_Executor
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MDER_Bag(m,
-                        new MDER_Bag_Struct {
-                            local_symbolic_type = Symbolic_Bag_Type.Unique,
+                        new Internal_MDER_Bag_Struct {
+                            local_symbolic_type = Internal_Symbolic_Bag_Type.Unique,
                             members = ((MDER_Bag)v).tree_root_node,
-                            cached_members_meta = new Cached_Members_Meta {
+                            cached_members_meta = new Internal_Cached_Members_Meta {
                                 tree_all_unique = true,
                             },
                         }
@@ -646,48 +646,48 @@ internal class Internal_Executor
     }
 
     private Boolean collapsed_Array_Struct_same(
-        MDER_Array_Struct n0, MDER_Array_Struct n1)
+        Internal_MDER_Array_Struct n0, Internal_MDER_Array_Struct n1)
     {
         if (Object.ReferenceEquals(n0, n1))
         {
             return true;
         }
-        if (n0.local_symbolic_type == Symbolic_Array_Type.None
-            && n1.local_symbolic_type == Symbolic_Array_Type.None)
+        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.None
+            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
         {
             // In theory we should never get here assuming that
             // the empty Array is optimized to return a constant
             // at selection time, but we will check anyway.
             return true;
         }
-        if (n0.local_symbolic_type == Symbolic_Array_Type.Singular
-            && n1.local_symbolic_type == Symbolic_Array_Type.Singular)
+        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
         {
             return ((n0.Local_Singular_Members().multiplicity
                     == n1.Local_Singular_Members().multiplicity)
                 && Any__same(n0.Local_Singular_Members().member,
                     n1.Local_Singular_Members().member));
         }
-        if (n0.local_symbolic_type == Symbolic_Array_Type.Arrayed
-            && n1.local_symbolic_type == Symbolic_Array_Type.Arrayed)
+        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
+            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
         {
             // This works because MDER_Any Equals() calls Any__Same().
             return Enumerable.SequenceEqual(
                 n0.Local_Arrayed_Members(),
                 n1.Local_Arrayed_Members());
         }
-        MDER_Array_Struct n0_ = n0;
-        MDER_Array_Struct n1_ = n1;
-        if (n0_.local_symbolic_type == Symbolic_Array_Type.Arrayed
-            && n1_.local_symbolic_type == Symbolic_Array_Type.Singular)
+        Internal_MDER_Array_Struct n0_ = n0;
+        Internal_MDER_Array_Struct n1_ = n1;
+        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
+            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
         {
              n1_ = n0;
              n0_ = n1;
         }
-        if (n0_.local_symbolic_type == Symbolic_Array_Type.Singular
-            && n1_.local_symbolic_type == Symbolic_Array_Type.Arrayed)
+        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
         {
-            Multiplied_Member sm = n0_.Local_Singular_Members();
+            Internal_Multiplied_Member sm = n0_.Local_Singular_Members();
             List<MDER_Any> am = n1_.Local_Arrayed_Members();
             return sm.multiplicity == am.Count
                 && Enumerable.All(am, m => Any__same(m, sm.member));
@@ -697,26 +697,26 @@ internal class Internal_Executor
     }
 
     private Boolean collapsed_Bag_Struct_same(
-        MDER_Bag_Struct n0, MDER_Bag_Struct n1)
+        Internal_MDER_Bag_Struct n0, Internal_MDER_Bag_Struct n1)
     {
         if (Object.ReferenceEquals(n0, n1))
         {
             return true;
         }
-        if (n0.local_symbolic_type == Symbolic_Bag_Type.None
-            && n1.local_symbolic_type == Symbolic_Bag_Type.None)
+        if (n0.local_symbolic_type == Internal_Symbolic_Bag_Type.None
+            && n1.local_symbolic_type == Internal_Symbolic_Bag_Type.None)
         {
             // In theory we should never get here assuming that
             // the empty Array is optimized to return a constant
             // at selection time, but we will check anyway.
             return true;
         }
-        if (n0.local_symbolic_type == Symbolic_Bag_Type.Indexed
-            && n1.local_symbolic_type == Symbolic_Bag_Type.Indexed)
+        if (n0.local_symbolic_type == Internal_Symbolic_Bag_Type.Indexed
+            && n1.local_symbolic_type == Internal_Symbolic_Bag_Type.Indexed)
         {
-            Dictionary<MDER_Any, Multiplied_Member> im0
+            Dictionary<MDER_Any, Internal_Multiplied_Member> im0
                 = n0.Local_Indexed_Members();
-            Dictionary<MDER_Any, Multiplied_Member> im1
+            Dictionary<MDER_Any, Internal_Multiplied_Member> im1
                 = n1.Local_Indexed_Members();
             return im0.Count == im1.Count
                 && Enumerable.All(
@@ -796,24 +796,24 @@ internal class Internal_Executor
         return Array__node__tree_member_count(array.tree_root_node);
     }
 
-    private Int64 Array__node__tree_member_count(MDER_Array_Struct node)
+    private Int64 Array__node__tree_member_count(Internal_MDER_Array_Struct node)
     {
         if (node.cached_members_meta.tree_member_count is null)
         {
             switch (node.local_symbolic_type)
             {
-                case Symbolic_Array_Type.None:
+                case Internal_Symbolic_Array_Type.None:
                     node.cached_members_meta.tree_member_count = 0;
                     break;
-                case Symbolic_Array_Type.Singular:
+                case Internal_Symbolic_Array_Type.Singular:
                     node.cached_members_meta.tree_member_count
                         = node.Local_Singular_Members().multiplicity;
                     break;
-                case Symbolic_Array_Type.Arrayed:
+                case Internal_Symbolic_Array_Type.Arrayed:
                     node.cached_members_meta.tree_member_count
                         = node.Local_Arrayed_Members().Count;
                     break;
-                case Symbolic_Array_Type.Catenated:
+                case Internal_Symbolic_Array_Type.Catenated:
                     node.cached_members_meta.tree_member_count
                         = Array__node__tree_member_count(node.Tree_Catenated_Members().a0)
                         + Array__node__tree_member_count(node.Tree_Catenated_Members().a1);
@@ -870,7 +870,7 @@ internal class Internal_Executor
         return Array__node__maybe_at(array.tree_root_node, ord_pos);
     }
 
-    private MDER_Any Array__node__maybe_at(MDER_Array_Struct node, Int64 ord_pos)
+    private MDER_Any Array__node__maybe_at(Internal_MDER_Array_Struct node, Int64 ord_pos)
     {
         if (node.cached_members_meta.tree_member_count == 0)
         {
@@ -879,15 +879,15 @@ internal class Internal_Executor
         Int64 maybe_last_ord_pos_seen = -1;
         switch (node.local_symbolic_type)
         {
-            case Symbolic_Array_Type.None:
+            case Internal_Symbolic_Array_Type.None:
                 return null;
-            case Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Array_Type.Singular:
                 if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().multiplicity))
                 {
                     return node.Local_Singular_Members().member;
                 }
                 return null;
-            case Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Array_Type.Arrayed:
                 Int64 local_member_count = Array__node__tree_member_count(node);
                 if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
                 {
@@ -895,7 +895,7 @@ internal class Internal_Executor
                     return node.Local_Arrayed_Members()[(Int32)ord_pos_within_local];
                 }
                 return null;
-            case Symbolic_Array_Type.Catenated:
+            case Internal_Symbolic_Array_Type.Catenated:
                 MDER_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos);
                 if (maybe_member is not null)
                 {
