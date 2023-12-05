@@ -18,14 +18,14 @@ internal class MDER_Fraction : MDER_Any
     // MDER_Fraction value at all, such that the Fraction's value is
     // defined as the fractional division of numerator by denominator.
     // as_pair might not be defined if as_Decimal is defined.
-    private Fraction_As_Pair maybe_as_pair;
+    private Internal_Fraction_As_Pair maybe_as_pair;
 
     internal MDER_Fraction(Internal_Memory memory, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
         : base(memory, Internal_Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = as_Decimal;
-        this.maybe_as_pair = new Fraction_As_Pair(numerator, denominator);
+        this.maybe_as_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
     internal MDER_Fraction(Internal_Memory memory, Decimal as_Decimal)
@@ -40,7 +40,7 @@ internal class MDER_Fraction : MDER_Any
         : base(memory, Internal_Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = null;
-        this.maybe_as_pair = new Fraction_As_Pair(numerator, denominator);
+        this.maybe_as_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
     internal Nullable<Decimal> maybe_as_Decimal()
@@ -102,7 +102,7 @@ internal class MDER_Fraction : MDER_Any
             denominator_dec = denominator_dec * 10M;
         }
         Decimal numerator_dec = (Decimal)this._maybe_as_Decimal * denominator_dec;
-        this.maybe_as_pair = new Fraction_As_Pair(
+        this.maybe_as_pair = new Internal_Fraction_As_Pair(
             new BigInteger(numerator_dec), new BigInteger(denominator_dec));
         this.maybe_as_pair.cached_is_terminating_decimal = true;
     }

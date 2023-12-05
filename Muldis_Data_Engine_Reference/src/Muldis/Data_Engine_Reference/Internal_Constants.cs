@@ -7,7 +7,7 @@ internal enum Dot_Net_String_Unicode_Test_Result
     Is_Malformed,
 }
 
-internal static class Constants
+internal static class Internal_Constants
 {
     internal static String[] Strings__Well_Known_Excuses()
     {

@@ -6,7 +6,7 @@ namespace Muldis.Data_Engine_Reference;
 public class MDER_Machine
 {
     private readonly Internal_Memory memory;
-    private readonly Executor executor;
+    private readonly Internal_Executor executor;
 
     public MDER_Machine()
     {

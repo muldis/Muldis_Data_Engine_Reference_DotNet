@@ -17,7 +17,7 @@ namespace Muldis.Data_Engine_Reference;
 // class will NOT populate any calculation caching fields in MDER_Any/etc
 // objects, to help avoid heisenbugs.
 
-internal sealed class Preview_Generator : MUON_Generator
+internal sealed class Internal_Preview_Generator : Internal_MUON_Generator
 {
     internal String MDER_Any_as_preview_String(MDER_Any value)
     {

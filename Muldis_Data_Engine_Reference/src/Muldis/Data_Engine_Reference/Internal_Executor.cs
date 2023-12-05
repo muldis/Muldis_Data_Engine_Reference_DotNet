@@ -3,17 +3,17 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-internal class Executor
+internal class Internal_Executor
 {
     internal readonly Internal_Memory memory;
 
-    internal readonly Standard_Generator standard_generator;
+    internal readonly Internal_Standard_Generator standard_generator;
 
-    internal Executor(Internal_Memory memory)
+    internal Internal_Executor(Internal_Memory memory)
     {
         this.memory = memory;
 
-        this.standard_generator = new Standard_Generator();
+        this.standard_generator = new Internal_Standard_Generator();
     }
 
     internal MDER_Any Evaluates(MDER_Any function, MDER_Any args = null)
@@ -238,7 +238,7 @@ internal class Executor
 
         // TYPE DEFINERS
 
-        if (Constants.Strings__Foundation_Type_Definer_Function_Names().Contains(func_name_s))
+        if (Internal_Constants.Strings__Foundation_Type_Definer_Function_Names().Contains(func_name_s))
         {
             if (!m.Tuple__Has_Heading(args, m.MDER_Heading_0))
             {
@@ -339,7 +339,7 @@ internal class Executor
 
         // NON TYPE DEFINER UNARY FUNCTIONS
 
-        if (Constants.Strings__Foundation_NTD_Unary_Function_Names().Contains(func_name_s))
+        if (Internal_Constants.Strings__Foundation_NTD_Unary_Function_Names().Contains(func_name_s))
         {
             if (!m.Tuple__Has_Heading(args, m.MDER_Heading_0))
             {
@@ -431,7 +431,7 @@ internal class Executor
 
         // BINARY FUNCTIONS
 
-        if (Constants.Strings__Foundation_Binary_Function_Names().Contains(func_name_s))
+        if (Internal_Constants.Strings__Foundation_Binary_Function_Names().Contains(func_name_s))
         {
             if (!m.Tuple__Has_Heading(args, m.MDER_Heading_0_1))
             {
@@ -482,7 +482,7 @@ internal class Executor
 
         // TERNARY FUNCTIONS
 
-        if (Constants.Strings__Foundation_Ternary_Function_Names().Contains(func_name_s))
+        if (Internal_Constants.Strings__Foundation_Ternary_Function_Names().Contains(func_name_s))
         {
             if (!m.Tuple__Has_Heading(args, m.MDER_Heading_0_1_2))
             {

@@ -6,7 +6,7 @@ namespace Muldis.Data_Engine_Reference;
 // Represents a numerator/denominator pair.
 // Only used internally by Muldis.Data_Engine_Reference.MDER_Fraction.
 
-internal class Fraction_As_Pair
+internal class Internal_Fraction_As_Pair
 {
     // The numerator+denominator field pair can represent any
     // MDER_Fraction value at all, such that the Fraction's value is
@@ -34,7 +34,7 @@ internal class Fraction_As_Pair
     // The identity serialization of a MDER_Fraction uses a single decimal
     // number iff it would terminate and a coprime integer pair otherwise.
     // This field may be true even if cached_is_coprime isn't because
-    // this Fraction_As_Pair was derived from a Decimal.
+    // this Internal_Fraction_As_Pair was derived from a Decimal.
     internal Nullable<Boolean> cached_is_terminating_decimal;
 
     // Iff this field is defined, we ensure that both the current
@@ -50,7 +50,7 @@ internal class Fraction_As_Pair
     // so that the performance is then closer to integer math.
     // internal Nullable<BigInteger> denominator_affinity;
 
-    internal Fraction_As_Pair(BigInteger numerator, BigInteger denominator)
+    internal Internal_Fraction_As_Pair(BigInteger numerator, BigInteger denominator)
     {
         this.numerator = numerator;
         this.denominator = denominator;

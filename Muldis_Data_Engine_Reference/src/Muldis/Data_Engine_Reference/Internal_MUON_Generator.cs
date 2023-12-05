@@ -8,7 +8,7 @@ namespace Muldis.Data_Engine_Reference;
 // Provides common implementation code for all other *_Generator
 // classes where they don't have reason to differ.
 
-internal abstract class MUON_Generator
+internal abstract class Internal_MUON_Generator
 {
     protected abstract String as_Any_artifact(MDER_Any value, String indent);
 

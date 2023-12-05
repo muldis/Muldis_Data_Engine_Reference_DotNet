@@ -23,10 +23,10 @@ namespace Muldis.Data_Engine_Reference;
 
 internal class Internal_Memory
 {
-    internal readonly Identity_Generator identity_generator;
-    internal readonly Preview_Generator preview_generator;
+    internal readonly Internal_Identity_Generator identity_generator;
+    internal readonly Internal_Preview_Generator preview_generator;
 
-    internal readonly Executor executor;
+    internal readonly Internal_Executor executor;
 
     // MDER_Ignorance 0iIGNORANCE (type default value) value.
     private readonly MDER_Ignorance MDER_0iIGNORANCE;
@@ -105,10 +105,10 @@ internal class Internal_Memory
 
     internal Internal_Memory()
     {
-        this.identity_generator = new Identity_Generator();
-        this.preview_generator = new Preview_Generator();
+        this.identity_generator = new Internal_Identity_Generator();
+        this.preview_generator = new Internal_Preview_Generator();
 
-        this.executor = new Executor(this);
+        this.executor = new Internal_Executor(this);
 
         this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
 
@@ -133,7 +133,7 @@ internal class Internal_Memory
         {
             MDER_Text v = this.MDER_Text(s, false);
         }
-        foreach (String s in Constants.Strings__Seeded_Non_Positional_Attr_Names())
+        foreach (String s in Internal_Constants.Strings__Seeded_Non_Positional_Attr_Names())
         {
             MDER_Text v = this.MDER_Text(s, false);
         }
@@ -248,7 +248,7 @@ internal class Internal_Memory
         );
 
         well_known_excuses = new Dictionary<String, MDER_Excuse>();
-        foreach (String s in Constants.Strings__Well_Known_Excuses())
+        foreach (String s in Internal_Constants.Strings__Well_Known_Excuses())
         {
             well_known_excuses.Add(s,
                 new MDER_Excuse(this, this.MDER_Attr_Name(s), this.MDER_Tuple_D0));
@@ -528,7 +528,7 @@ internal class Internal_Memory
         return new MDER_Excuse(this, this.MDER_Attr_Name(value), this.MDER_Tuple_D0);
     }
 
-    // TODO: Here or in Executor also have Article_attrs() etc functions
+    // TODO: Here or in Internal_Executor also have Article_attrs() etc functions
     // that take anything conceptually a Article and let users use it
     // as if it were a MDER_Article_Struct; these have the opposite
     // transformations as MDER_Article() above does.

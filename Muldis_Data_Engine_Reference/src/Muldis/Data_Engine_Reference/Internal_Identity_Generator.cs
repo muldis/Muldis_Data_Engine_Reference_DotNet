@@ -20,10 +20,10 @@ namespace Muldis.Data_Engine_Reference;
 // original input values, but that is not guaranteed; even if that is
 // the case, the outputs might be considerably less "pretty" as a
 // trade-off to make the generating faster and less error-prone.
-// A normal side effect of using Identity_Generator on a MDER_Any/etc
+// A normal side effect of using Internal_Identity_Generator on a MDER_Any/etc
 // value is to update a cache therein to hold the serialization result.
 
-internal sealed class Identity_Generator : MUON_Generator
+internal sealed class Internal_Identity_Generator : Internal_MUON_Generator
 {
     internal String MDER_Any_as_identity_String(MDER_Any value)
     {

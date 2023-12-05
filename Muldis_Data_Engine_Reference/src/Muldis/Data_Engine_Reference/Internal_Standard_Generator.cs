@@ -32,7 +32,7 @@ namespace Muldis.Data_Engine_Reference;
 // does not include any preceeding "shebang line", which is up to the
 // caller where such is desired.
 
-internal sealed class Standard_Generator : MUON_Generator
+internal sealed class Internal_Standard_Generator : Internal_MUON_Generator
 {
     internal MDER_Text MDER_Any_to_MDER_Text_MDPT_Parsing_Unit(MDER_Any value)
     {
