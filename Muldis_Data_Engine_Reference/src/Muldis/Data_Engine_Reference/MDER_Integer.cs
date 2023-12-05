@@ -9,8 +9,8 @@ internal class MDER_Integer : MDER_Any
     // things simpler, and because BigInteger special-cases internally.
     internal readonly BigInteger as_BigInteger;
 
-    internal MDER_Integer(Internal_Memory memory, BigInteger as_BigInteger)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Integer)
+    internal MDER_Integer(MDER_Machine machine, BigInteger as_BigInteger)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Integer)
     {
         this.as_BigInteger = as_BigInteger;
     }

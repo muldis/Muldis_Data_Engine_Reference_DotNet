@@ -23,7 +23,7 @@ namespace Muldis.Data_Engine_Reference;
 internal abstract class MDER_Any
 {
     // Internal_Memory pool this Muldis Data Language "value" lives in.
-    internal readonly Internal_Memory memory;
+    private readonly MDER_Machine __machine;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
     // "value" is a member of.  Helps interpret which subtype of MDER_Any
@@ -40,22 +40,27 @@ internal abstract class MDER_Any
     // whose character code points are typically in the 0..127 range.
     internal String cached_MDER_Any_identity;
 
-    internal MDER_Any(Internal_Memory memory, Internal_Well_Known_Base_Type WKBT)
+    internal MDER_Any(MDER_Machine machine, Internal_Well_Known_Base_Type WKBT)
     {
-        this.memory = memory;
+        this.__machine = machine;
         this.WKBT = WKBT;
     }
 
     public override String ToString()
     {
-        return this.memory.preview_generator.MDER_Any_as_preview_String(this);
+        return this.__machine._preview_generator().MDER_Any_as_preview_String(this);
+    }
+
+    public MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String MDER_Any_identity()
     {
         // This called function will test if cached_MDER_Any_identity
         // is null and assign it a value if so and use its value if not.
-        return this.memory.identity_generator.MDER_Any_as_identity_String(this);
+        return this.__machine._identity_generator().MDER_Any_as_identity_String(this);
     }
 }
 
@@ -72,7 +77,7 @@ internal class MDER_Any_Comparer : EqualityComparer<MDER_Any>
         {
             return false;
         }
-        return v1.memory.executor.Any__same(v1, v2);
+        return v1.machine()._executor().Any__same(v1, v2);
     }
 
     public override Int32 GetHashCode(MDER_Any v)

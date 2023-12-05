@@ -5,20 +5,21 @@ namespace Muldis.Data_Engine_Reference;
 
 internal class Internal_Executor
 {
-    internal readonly Internal_Memory memory;
+    private readonly MDER_Machine __machine;
 
-    internal readonly Internal_Standard_Generator standard_generator;
-
-    internal Internal_Executor(Internal_Memory memory)
+    internal Internal_Executor(MDER_Machine machine)
     {
-        this.memory = memory;
+        this.__machine = machine;
+    }
 
-        this.standard_generator = new Internal_Standard_Generator();
+    internal MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal MDER_Any Evaluates(MDER_Any function, MDER_Any args = null)
     {
-        Internal_Memory m = this.memory;
+        Internal_Memory m = this.__machine._memory();
         if (args is null)
         {
             args = m.MDER_Tuple_D0;
@@ -57,7 +58,7 @@ internal class Internal_Executor
 
     internal void Performs(MDER_Any procedure, MDER_Any args = null)
     {
-        Internal_Memory m = this.memory;
+        Internal_Memory m = this.__machine._memory();
         if (args is null)
         {
             args = m.MDER_Tuple_D0;
@@ -174,7 +175,7 @@ internal class Internal_Executor
 
     internal Boolean Is_Attr_Name_List(MDER_Any value)
     {
-        Internal_Memory m = this.memory;
+        Internal_Memory m = this.__machine._memory();
         if (value.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
         {
             return false;
@@ -203,12 +204,12 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
-        if ((Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("foundation")) && count == 2)
-            || (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("used")) && count >= 2)
-            || (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("package")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("folder")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("material")) && count == 1)
-            || (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("floating")) && count >= 2))
+        if ((Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("foundation")) && count == 2)
+            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("used")) && count >= 2)
+            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("package")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("folder")) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("material")) && count == 1)
+            || (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("floating")) && count >= 2))
         {
             return true;
         }
@@ -222,9 +223,9 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
-        if (Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("foundation"))
-            || Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("used"))
-            || Object.ReferenceEquals(first, this.memory.MDER_Attr_Name("package")))
+        if (Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("foundation"))
+            || Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("used"))
+            || Object.ReferenceEquals(first, this.__machine._memory().MDER_Attr_Name("package")))
         {
             return true;
         }
@@ -233,7 +234,7 @@ internal class Internal_Executor
 
     internal MDER_Any evaluate_foundation_function(MDER_Text func_name, MDER_Tuple args)
     {
-        Internal_Memory m = this.memory;
+        Internal_Memory m = this.__machine._memory();
         String func_name_s = func_name.code_point_members;
 
         // TYPE DEFINERS
@@ -386,7 +387,7 @@ internal class Internal_Executor
                         throw new ArgumentException(m.Simple_MDER_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
-                    return new MDER_Bag(m,
+                    return new MDER_Bag(m.machine(),
                         new Internal_MDER_Bag_Struct {
                             local_symbolic_type = Internal_Symbolic_Bag_Type.Unique,
                             members = ((MDER_Bag)v).tree_root_node,
@@ -566,22 +567,22 @@ internal class Internal_Executor
                     ((MDER_Text)a1).code_point_members);
                 break;
             case Internal_Well_Known_Base_Type.MDER_Array:
-                this.memory.Array__Collapse((MDER_Array)a0);
-                this.memory.Array__Collapse((MDER_Array)a1);
+                this.__machine._memory().Array__Collapse((MDER_Array)a0);
+                this.__machine._memory().Array__Collapse((MDER_Array)a1);
                 result = this.collapsed_Array_Struct_same(
                     ((MDER_Array)a0).tree_root_node, ((MDER_Array)a0).tree_root_node);
                 break;
             case Internal_Well_Known_Base_Type.MDER_Set:
                 // MDER_Set and MDER_Bag have the same internal representation.
-                this.memory.Set__Collapse(set: ((MDER_Set)a0), want_indexed: true);
-                this.memory.Set__Collapse(set: ((MDER_Set)a1), want_indexed: true);
+                this.__machine._memory().Set__Collapse(set: ((MDER_Set)a0), want_indexed: true);
+                this.__machine._memory().Set__Collapse(set: ((MDER_Set)a1), want_indexed: true);
                 result = this.collapsed_Bag_Struct_same(
                     ((MDER_Set)a0).tree_root_node, ((MDER_Set)a0).tree_root_node);
                 break;
             case Internal_Well_Known_Base_Type.MDER_Bag:
                 // MDER_Set and MDER_Bag have the same internal representation.
-                this.memory.Bag__Collapse(bag: ((MDER_Bag)a0), want_indexed: true);
-                this.memory.Bag__Collapse(bag: ((MDER_Bag)a1), want_indexed: true);
+                this.__machine._memory().Bag__Collapse(bag: ((MDER_Bag)a0), want_indexed: true);
+                this.__machine._memory().Bag__Collapse(bag: ((MDER_Bag)a1), want_indexed: true);
                 result = this.collapsed_Bag_Struct_same(
                     ((MDER_Set)a0).tree_root_node, ((MDER_Set)a0).tree_root_node);
                 break;
@@ -827,12 +828,12 @@ internal class Internal_Executor
 
     private MDER_Integer Bits__maybe_at(MDER_Bits bits, Int64 ord_pos)
     {
-        return this.memory.MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
+        return this.__machine._memory().MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
     }
 
     private MDER_Integer Blob__maybe_at(MDER_Blob blob, Int64 ord_pos)
     {
-        return this.memory.MDER_Integer(blob.octet_members[(Int32)ord_pos]);
+        return this.__machine._memory().MDER_Integer(blob.octet_members[(Int32)ord_pos]);
     }
 
     private MDER_Integer Text__maybe_at(MDER_Text node, Int64 ord_pos)
@@ -848,10 +849,10 @@ internal class Internal_Executor
                     if ((i+1) < s.Length
                         && Char.IsSurrogatePair(s[i], s[i+1]))
                     {
-                        return this.memory.MDER_Integer(
+                        return this.__machine._memory().MDER_Integer(
                             Char.ConvertToUtf32(s[i], s[i+1]));
                     }
-                    return this.memory.MDER_Integer(s[i]);
+                    return this.__machine._memory().MDER_Integer(s[i]);
                 }
                 logical_i++;
                 if ((i+1) < s.Length
@@ -861,7 +862,7 @@ internal class Internal_Executor
                 }
             }
         }
-        return this.memory.MDER_Integer(
+        return this.__machine._memory().MDER_Integer(
             node.code_point_members[(Int32)ord_pos]);
     }
 

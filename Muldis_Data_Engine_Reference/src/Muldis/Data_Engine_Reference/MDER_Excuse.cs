@@ -9,8 +9,8 @@ internal class MDER_Excuse : MDER_Any
     // The Muldis Data Language value that is the "attributes" of this MDER_Excuse value.
     internal readonly MDER_Tuple attrs;
 
-    internal MDER_Excuse(Internal_Memory memory, MDER_Any label, MDER_Tuple attrs)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Excuse)
+    internal MDER_Excuse(MDER_Machine machine, MDER_Any label, MDER_Tuple attrs)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Excuse)
     {
         this.label = label;
         this.attrs = attrs;

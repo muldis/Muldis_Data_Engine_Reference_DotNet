@@ -20,24 +20,24 @@ internal class MDER_Fraction : MDER_Any
     // as_pair might not be defined if as_Decimal is defined.
     private Internal_Fraction_As_Pair maybe_as_pair;
 
-    internal MDER_Fraction(Internal_Memory memory, Decimal as_Decimal,
+    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Fraction)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = as_Decimal;
         this.maybe_as_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
-    internal MDER_Fraction(Internal_Memory memory, Decimal as_Decimal)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Fraction)
+    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = as_Decimal;
         this.maybe_as_pair = null;
     }
 
-    internal MDER_Fraction(Internal_Memory memory,
+    internal MDER_Fraction(MDER_Machine machine,
         BigInteger numerator, BigInteger denominator)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Fraction)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
     {
         this._maybe_as_Decimal = null;
         this.maybe_as_pair = new Internal_Fraction_As_Pair(numerator, denominator);

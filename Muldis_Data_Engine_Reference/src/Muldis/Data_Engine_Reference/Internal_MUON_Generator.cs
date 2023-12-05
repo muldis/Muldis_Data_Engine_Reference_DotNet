@@ -126,7 +126,7 @@ internal abstract class Internal_MUON_Generator
 
     private String as_Bits_artifact(MDER_Bits value)
     {
-        if (Object.ReferenceEquals(value, value.memory.MDER_Bits_C0))
+        if (Object.ReferenceEquals(value, value.machine()._memory().MDER_Bits_C0))
         {
             return "0bb";
         }
@@ -143,7 +143,7 @@ internal abstract class Internal_MUON_Generator
 
     private String as_Blob_artifact(MDER_Blob value)
     {
-        if (Object.ReferenceEquals(value, value.memory.MDER_Blob_C0))
+        if (Object.ReferenceEquals(value, value.machine()._memory().MDER_Blob_C0))
         {
             return "0xx";
         }
@@ -240,7 +240,7 @@ internal abstract class Internal_MUON_Generator
 
     private String as_Heading_artifact(MDER_Heading value)
     {
-        Internal_Memory m = value.memory;
+        Internal_Memory m = value.machine()._memory();
         return Object.ReferenceEquals(value, m.MDER_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
@@ -252,7 +252,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Array_artifact(MDER_Array value, String indent)
     {
         String mei = indent + "\u0009";
-        Internal_Memory m = value.memory;
+        Internal_Memory m = value.machine()._memory();
         return Object.ReferenceEquals(value, m.MDER_Array_C0) ? "(Array:[])"
             : "(Array:[\u000A" + Array_artifact__node__tree(
                 value.tree_root_node, mei) + indent + "])";
@@ -291,7 +291,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Set_artifact(MDER_Set value, String indent)
     {
         String mei = indent + "\u0009";
-        value.memory.Set__Collapse(set: value, want_indexed: true);
+        value.machine()._memory().Set__Collapse(set: value, want_indexed: true);
         Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
@@ -310,7 +310,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Bag_artifact(MDER_Bag value, String indent)
     {
         String mei = indent + "\u0009";
-        value.memory.Bag__Collapse(bag: value, want_indexed: true);
+        value.machine()._memory().Bag__Collapse(bag: value, want_indexed: true);
         Internal_MDER_Bag_Struct node = value.tree_root_node;
         switch (node.local_symbolic_type)
         {
@@ -330,7 +330,7 @@ internal abstract class Internal_MUON_Generator
     private String as_Tuple_artifact(MDER_Tuple value, String indent)
     {
         String ati = indent + "\u0009";
-        Internal_Memory m = value.memory;
+        Internal_Memory m = value.machine()._memory();
         return Object.ReferenceEquals(value, m.MDER_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(

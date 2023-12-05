@@ -5,13 +5,44 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Machine
 {
-    private readonly Internal_Memory memory;
-    private readonly Internal_Executor executor;
+    private readonly Internal_Memory __memory;
+    private readonly Internal_Executor __executor;
+    private readonly Internal_Identity_Generator __identity_generator;
+    private readonly Internal_Preview_Generator __preview_generator;
+    private readonly Internal_Standard_Generator __standard_generator;
 
     public MDER_Machine()
     {
-        this.memory = new Internal_Memory();
-        this.executor = this.memory.executor;
+        this.__memory = new Internal_Memory(this);
+        this.__executor = new Internal_Executor(this);
+        this.__identity_generator = new Internal_Identity_Generator();
+        this.__preview_generator = new Internal_Preview_Generator();
+        this.__standard_generator = new Internal_Standard_Generator();
+    }
+
+    internal Internal_Memory _memory()
+    {
+        return this.__memory;
+    }
+
+    internal Internal_Executor _executor()
+    {
+        return this.__executor;
+    }
+
+    internal Internal_Identity_Generator _identity_generator()
+    {
+        return this.__identity_generator;
+    }
+
+    internal Internal_Preview_Generator _preview_generator()
+    {
+        return this.__preview_generator;
+    }
+
+    internal Internal_Standard_Generator _standard_generator()
+    {
+        return this.__standard_generator;
     }
 
     public MDER_V_Any MDER_evaluate(MDER_V_Any function, MDER_V_Any args = null)
@@ -21,7 +52,7 @@ public class MDER_Machine
             throw new ArgumentNullException("function");
         }
         return new MDER_V_Any(this,
-            this.executor.Evaluates(function.memory_value, args is null ? null : args.memory_value));
+            this.__executor.Evaluates(function.memory_value, args is null ? null : args.memory_value));
     }
 
     public void MDER_perform(MDER_V_Any procedure, MDER_V_Any args = null)
@@ -30,7 +61,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("procedure");
         }
-        this.executor.Performs(procedure.memory_value, args is null ? null : args.memory_value);
+        this.__executor.Performs(procedure.memory_value, args is null ? null : args.memory_value);
     }
 
     public MDER_V_Any MDER_current(MDER_V_Any variable)
@@ -94,7 +125,7 @@ public class MDER_Machine
         {
             if (String.Equals(value.Key, "Ignorance"))
             {
-                return this.memory.MDER_Ignorance();
+                return this.__memory.MDER_Ignorance();
             }
             throw new ArgumentNullException
             (
@@ -109,23 +140,23 @@ public class MDER_Machine
             case "Boolean":
                 if (String.Equals(type_name, "System.Boolean"))
                 {
-                    return this.memory.MDER_Boolean((Boolean)v);
+                    return this.__memory.MDER_Boolean((Boolean)v);
                 }
                 break;
             case "Integer":
                 if (String.Equals(type_name, "System.Int32"))
                 {
-                    return this.memory.MDER_Integer((Int32)v);
+                    return this.__memory.MDER_Integer((Int32)v);
                 }
                 if (String.Equals(type_name, "System.Numerics.BigInteger"))
                 {
-                    return this.memory.MDER_Integer((BigInteger)v);
+                    return this.__memory.MDER_Integer((BigInteger)v);
                 }
                 break;
             case "Fraction":
                 if (String.Equals(type_name, "System.Decimal"))
                 {
-                    return this.memory.MDER_Fraction((Decimal)v);
+                    return this.__memory.MDER_Fraction((Decimal)v);
                 }
                 if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
@@ -151,7 +182,7 @@ public class MDER_Machine
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDER_Fraction((Int32)numerator, (Int32)denominator);
+                        return this.__memory.MDER_Fraction((Int32)numerator, (Int32)denominator);
                     }
                     if (String.Equals(numerator.GetType().FullName, "System.Numerics.BigInteger")
                         && String.Equals(denominator.GetType().FullName, "System.Numerics.BigInteger"))
@@ -164,7 +195,7 @@ public class MDER_Machine
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
+                        return this.__memory.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
                         && ((MDER_V_Any)numerator).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Integer
@@ -179,7 +210,7 @@ public class MDER_Machine
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
-                        return this.memory.MDER_Fraction(
+                        return this.__memory.MDER_Fraction(
                             ((MDER_Integer)((MDER_V_Any)numerator  ).memory_value).as_BigInteger,
                             ((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger
                         );
@@ -190,20 +221,20 @@ public class MDER_Machine
                 if (String.Equals(type_name, "System.Collections.BitArray"))
                 {
                     // BitArrays are mutable so clone argument to protect our internals.
-                    return this.memory.MDER_Bits(new BitArray((BitArray)v));
+                    return this.__memory.MDER_Bits(new BitArray((BitArray)v));
                 }
                 break;
             case "Blob":
                 if (String.Equals(type_name, "System.Byte[]"))
                 {
                     // Arrays are mutable so clone argument to protect our internals.
-                    return this.memory.MDER_Blob(((Byte[])v).ToArray());
+                    return this.__memory.MDER_Blob(((Byte[])v).ToArray());
                 }
                 break;
             case "Text":
                 if (String.Equals(type_name, "System.String"))
                 {
-                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)v);
+                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.__memory.Test_Dot_Net_String((String)v);
                     if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
@@ -212,7 +243,7 @@ public class MDER_Machine
                             message: "Can't select MDER_Text with a malformed .NET String."
                         );
                     }
-                    return this.memory.MDER_Text(
+                    return this.__memory.MDER_Text(
                         (String)v,
                         (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
                     );
@@ -221,7 +252,7 @@ public class MDER_Machine
             case "Array":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDER_Array(
+                    return this.__memory.MDER_Array(
                         new List<MDER_Any>(((List<Object>)v).Select(
                             m => import__tree(m)
                         ))
@@ -231,7 +262,7 @@ public class MDER_Machine
             case "Set":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDER_Set(
+                    return this.__memory.MDER_Set(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
                             m => new Internal_Multiplied_Member(import__tree(m))
                         ))
@@ -241,7 +272,7 @@ public class MDER_Machine
             case "Bag":
                 if (type_name.StartsWith("System.Collections.Generic.List`"))
                 {
-                    return this.memory.MDER_Bag(
+                    return this.__memory.MDER_Bag(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
                             m => new Internal_Multiplied_Member(import__tree(m))
                         ))
@@ -259,14 +290,14 @@ public class MDER_Machine
                             attr_names.Add(Char.ConvertFromUtf32(i));
                         }
                     }
-                    return this.memory.MDER_Heading(attr_names);
+                    return this.__memory.MDER_Heading(attr_names);
                 }
                 if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
                 {
                     HashSet<String> attr_names = (HashSet<String>)v;
                     foreach (String atnm in attr_names)
                     {
-                        if (this.memory.Test_Dot_Net_String(atnm)
+                        if (this.__memory.Test_Dot_Net_String(atnm)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -277,7 +308,7 @@ public class MDER_Machine
                             );
                         }
                     }
-                    return this.memory.MDER_Heading(new HashSet<String>(attr_names));
+                    return this.__memory.MDER_Heading(new HashSet<String>(attr_names));
                 }
                 break;
             case "Tuple":
@@ -288,7 +319,7 @@ public class MDER_Machine
                     {
                         attrs.Add(Char.ConvertFromUtf32(i), ((Object[])v)[i]);
                     }
-                    return this.memory.MDER_Tuple(
+                    return this.__memory.MDER_Tuple(
                         new Dictionary<String, MDER_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
@@ -298,7 +329,7 @@ public class MDER_Machine
                     Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
                     {
-                        if (this.memory.Test_Dot_Net_String(atnm)
+                        if (this.__memory.Test_Dot_Net_String(atnm)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -309,7 +340,7 @@ public class MDER_Machine
                             );
                         }
                     }
-                    return this.memory.MDER_Tuple(
+                    return this.__memory.MDER_Tuple(
                         new Dictionary<String, MDER_Any>(attrs.ToDictionary(
                             a => a.Key, a => import__tree(a.Value)))
                     );
@@ -320,14 +351,14 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
-                    MDER_Array bv = this.memory.MDER_Array_C0;
-                    return this.memory.MDER_Tuple_Array(hv, bv);
+                    MDER_Array bv = this.__memory.MDER_Array_C0;
+                    return this.__memory.MDER_Tuple_Array(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_V_Any)v).memory_value;
-                    if (!this.memory.Array__Is_Relational(bv))
+                    if (!this.__memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -336,7 +367,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Array__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Array__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -345,7 +376,7 @@ public class MDER_Machine
                             message: "Can't select MDER_Tuple_Array from empty MDER_Array."
                         );
                     }
-                    return this.memory.MDER_Tuple_Array(hv, bv);
+                    return this.__memory.MDER_Tuple_Array(hv, bv);
                 }
                 break;
             case "Relation":
@@ -353,14 +384,14 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
-                    MDER_Set bv = this.memory.MDER_Set_C0;
-                    return this.memory.MDER_Relation(hv, bv);
+                    MDER_Set bv = this.__memory.MDER_Set_C0;
+                    return this.__memory.MDER_Relation(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_V_Any)v).memory_value;
-                    if (!this.memory.Set__Is_Relational(bv))
+                    if (!this.__memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -369,7 +400,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Set__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Set__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -378,7 +409,7 @@ public class MDER_Machine
                             message: "Can't select MDER_Relation from empty MDER_Set."
                         );
                     }
-                    return this.memory.MDER_Relation(hv, bv);
+                    return this.__memory.MDER_Relation(hv, bv);
                 }
                 break;
             case "Tuple_Bag":
@@ -386,14 +417,14 @@ public class MDER_Machine
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
-                    MDER_Bag bv = this.memory.MDER_Bag_C0;
-                    return this.memory.MDER_Tuple_Bag(hv, bv);
+                    MDER_Bag bv = this.__memory.MDER_Bag_C0;
+                    return this.__memory.MDER_Tuple_Bag(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
                     && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_V_Any)v).memory_value;
-                    if (!this.memory.Bag__Is_Relational(bv))
+                    if (!this.__memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
                         (
@@ -402,7 +433,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.memory.Tuple__Heading((MDER_Tuple)this.memory.Bag__Pick_Arbitrary_Member(bv));
+                    MDER_Heading hv = this.__memory.Tuple__Heading((MDER_Tuple)this.__memory.Bag__Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -411,7 +442,7 @@ public class MDER_Machine
                             message: "Can't select MDER_Tuple_Bag from empty MDER_Bag."
                         );
                     }
-                    return this.memory.MDER_Tuple_Bag(hv, bv);
+                    return this.__memory.MDER_Tuple_Bag(hv, bv);
                 }
                 break;
             case "Article":
@@ -441,7 +472,7 @@ public class MDER_Machine
                     MDER_Tuple attrs_cv_as_MDER_Tuple = (MDER_Tuple)attrs_cv;
                     if (String.Equals(label.GetType().FullName, "System.String"))
                     {
-                        if (this.memory.Test_Dot_Net_String((String)label)
+                        if (this.__memory.Test_Dot_Net_String((String)label)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -451,8 +482,8 @@ public class MDER_Machine
                                     + " that is a malformed .NET String."
                             );
                         }
-                        return this.memory.MDER_Article(
-                            this.memory.MDER_Attr_Name((String)label),
+                        return this.__memory.MDER_Article(
+                            this.__memory.MDER_Attr_Name((String)label),
                             attrs_cv_as_MDER_Tuple
                         );
                     }
@@ -460,7 +491,7 @@ public class MDER_Machine
                     {
                         foreach (String s in ((String[])label))
                         {
-                            if (this.memory.Test_Dot_Net_String(s)
+                            if (this.__memory.Test_Dot_Net_String(s)
                                 == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                             {
                                 throw new ArgumentException
@@ -471,23 +502,23 @@ public class MDER_Machine
                                 );
                             }
                         }
-                        return this.memory.MDER_Article(
-                            this.memory.MDER_Array(new List<MDER_Any>(((String[])label).Select(
-                                m => this.memory.MDER_Attr_Name(m)
+                        return this.__memory.MDER_Article(
+                            this.__memory.MDER_Array(new List<MDER_Any>(((String[])label).Select(
+                                m => this.__memory.MDER_Attr_Name(m)
                             ))),
                             attrs_cv_as_MDER_Tuple
                         );
                     }
                     if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                     {
-                        return this.memory.MDER_Article(import__tree(label), attrs_cv_as_MDER_Tuple);
+                        return this.__memory.MDER_Article(import__tree(label), attrs_cv_as_MDER_Tuple);
                     }
                 }
                 break;
             case "Excuse":
                 if (String.Equals(type_name, "System.String"))
                 {
-                    if (this.memory.Test_Dot_Net_String((String)v)
+                    if (this.__memory.Test_Dot_Net_String((String)v)
                         == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
@@ -497,36 +528,36 @@ public class MDER_Machine
                                 + " that is a malformed .NET String."
                         );
                     }
-                    return this.memory.Simple_MDER_Excuse((String)v);
+                    return this.__memory.Simple_MDER_Excuse((String)v);
                 }
                 throw new NotImplementedException();
             case "New_Variable":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
                 {
-                    return this.memory.New_MDER_Variable(
+                    return this.__memory.New_MDER_Variable(
                         ((MDER_V_Any)v).memory_value);
                 }
                 break;
             case "New_Process":
                 if (v is null)
                 {
-                    return this.memory.New_MDER_Process();
+                    return this.__memory.New_MDER_Process();
                 }
                 break;
             case "New_Stream":
                 if (v is null)
                 {
-                    return this.memory.New_MDER_Stream();
+                    return this.__memory.New_MDER_Stream();
                 }
                 break;
             case "New_External":
-                return this.memory.New_MDER_External(v);
+                return this.__memory.New_MDER_External(v);
             case "Attr_Name_List":
                 if (String.Equals(type_name, "System.String[]"))
                 {
                     foreach (String s in ((String[])v))
                     {
-                        if (this.memory.Test_Dot_Net_String(s)
+                        if (this.__memory.Test_Dot_Net_String(s)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
@@ -537,8 +568,8 @@ public class MDER_Machine
                             );
                         }
                     }
-                    return this.memory.MDER_Array(new List<MDER_Any>(((String[])v).Select(
-                        m => this.memory.MDER_Attr_Name(m)
+                    return this.__memory.MDER_Array(new List<MDER_Any>(((String[])v).Select(
+                        m => this.__memory.MDER_Attr_Name(m)
                     )));
                 }
                 break;
@@ -555,38 +586,38 @@ public class MDER_Machine
     {
         if (value is null)
         {
-            return this.memory.MDER_Ignorance();
+            return this.__memory.MDER_Ignorance();
         }
         String type_name = value.GetType().FullName;
         if (String.Equals(type_name, "System.Boolean"))
         {
-            return this.memory.MDER_Boolean((Boolean)value);
+            return this.__memory.MDER_Boolean((Boolean)value);
         }
         if (String.Equals(type_name, "System.Int32"))
         {
-            return this.memory.MDER_Integer((Int32)value);
+            return this.__memory.MDER_Integer((Int32)value);
         }
         if (String.Equals(type_name, "System.Numerics.BigInteger"))
         {
-            return this.memory.MDER_Integer((BigInteger)value);
+            return this.__memory.MDER_Integer((BigInteger)value);
         }
         if (String.Equals(type_name, "System.Decimal"))
         {
-            return this.memory.MDER_Fraction((Decimal)value);
+            return this.__memory.MDER_Fraction((Decimal)value);
         }
         if (String.Equals(type_name, "System.Collections.BitArray"))
         {
             // BitArrays are mutable so clone argument to protect our internals.
-            return this.memory.MDER_Bits(new BitArray((BitArray)value));
+            return this.__memory.MDER_Bits(new BitArray((BitArray)value));
         }
         if (String.Equals(type_name, "System.Byte[]"))
         {
             // Arrays are mutable so clone argument to protect our internals.
-            return this.memory.MDER_Blob(((Byte[])value).ToArray());
+            return this.__memory.MDER_Blob(((Byte[])value).ToArray());
         }
         if (String.Equals(type_name, "System.String"))
         {
-            Internal_Dot_Net_String_Unicode_Test_Result tr = this.memory.Test_Dot_Net_String((String)value);
+            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__memory.Test_Dot_Net_String((String)value);
             if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
@@ -595,7 +626,7 @@ public class MDER_Machine
                     message: "Can't select MDER_Text with a malformed .NET String."
                 );
             }
-            return this.memory.MDER_Text(
+            return this.__memory.MDER_Text(
                 (String)value,
                 (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );

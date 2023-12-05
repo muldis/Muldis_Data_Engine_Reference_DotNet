@@ -23,10 +23,7 @@ namespace Muldis.Data_Engine_Reference;
 
 internal class Internal_Memory
 {
-    internal readonly Internal_Identity_Generator identity_generator;
-    internal readonly Internal_Preview_Generator preview_generator;
-
-    internal readonly Internal_Executor executor;
+    private readonly MDER_Machine __machine;
 
     // MDER_Ignorance 0iIGNORANCE (type default value) value.
     private readonly MDER_Ignorance MDER_0iIGNORANCE;
@@ -103,17 +100,14 @@ internal class Internal_Memory
     // All well known MDER_Excuse values.
     internal readonly Dictionary<String, MDER_Excuse> well_known_excuses;
 
-    internal Internal_Memory()
+    internal Internal_Memory(MDER_Machine machine)
     {
-        this.identity_generator = new Internal_Identity_Generator();
-        this.preview_generator = new Internal_Preview_Generator();
+        this.__machine = machine;
 
-        this.executor = new Internal_Executor(this);
+        this.MDER_0iIGNORANCE = new MDER_Ignorance(this.__machine);
 
-        this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
-
-        this.MDER_0bFALSE = new MDER_False(this);
-        this.MDER_0bTRUE = new MDER_True(this);
+        this.MDER_0bFALSE = new MDER_False(this.__machine);
+        this.MDER_0bTRUE = new MDER_True(this.__machine);
 
         this.integers = new Dictionary<Int32, MDER_Integer>();
         for (Int32 i = -1; i <= 1; i++)
@@ -121,12 +115,12 @@ internal class Internal_Memory
             MDER_Integer v = this.MDER_Integer(i);
         }
 
-        this.MDER_Fraction_0 = new MDER_Fraction(this, 0.0M,
+        this.MDER_Fraction_0 = new MDER_Fraction(this.__machine, 0.0M,
             this.integers[0].as_BigInteger, this.integers[1].as_BigInteger);
 
-        this.MDER_Bits_C0 = new MDER_Bits(this, new BitArray(0));
+        this.MDER_Bits_C0 = new MDER_Bits(this.__machine, new BitArray(0));
 
-        this.MDER_Blob_C0 = new MDER_Blob(this, new Byte[] {});
+        this.MDER_Blob_C0 = new MDER_Blob(this.__machine, new Byte[] {});
 
         this.texts = new Dictionary<String, MDER_Text>();
         foreach (String s in new String[] {"", "\u0000", "\u0001", "\u0002"})
@@ -138,7 +132,7 @@ internal class Internal_Memory
             MDER_Text v = this.MDER_Text(s, false);
         }
 
-        this.MDER_Array_C0 = new MDER_Array(this,
+        this.MDER_Array_C0 = new MDER_Array(this.__machine,
             new Internal_MDER_Array_Struct {
                 local_symbolic_type = Internal_Symbolic_Array_Type.None,
                 cached_members_meta = new Internal_Cached_Members_Meta {
@@ -149,7 +143,7 @@ internal class Internal_Memory
             }
         );
 
-        this.MDER_Set_C0 = new MDER_Set(this,
+        this.MDER_Set_C0 = new MDER_Set(this.__machine,
             new Internal_MDER_Bag_Struct {
                 local_symbolic_type = Internal_Symbolic_Bag_Type.None,
                 cached_members_meta = new Internal_Cached_Members_Meta {
@@ -160,7 +154,7 @@ internal class Internal_Memory
             }
         );
 
-        this.MDER_Bag_C0 = new MDER_Bag(this,
+        this.MDER_Bag_C0 = new MDER_Bag(this.__machine,
             new Internal_MDER_Bag_Struct {
                 local_symbolic_type = Internal_Symbolic_Bag_Type.None,
                 cached_members_meta = new Internal_Cached_Members_Meta {
@@ -172,33 +166,33 @@ internal class Internal_Memory
         );
 
         this.headings = new Dictionary<MDER_Heading, MDER_Heading>();
-        this.MDER_Heading_D0 = new MDER_Heading(this, new HashSet<String>());
-        this.MDER_Heading_0 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_D0 = new MDER_Heading(this.__machine, new HashSet<String>());
+        this.MDER_Heading_0 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0000"});
-        this.MDER_Heading_1 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_1 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0001"});
-        this.MDER_Heading_2 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_2 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0002"});
-        this.MDER_Heading_0_1 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_0_1 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0000", "\u0001"});
-        this.MDER_Heading_0_2 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_0_2 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0000", "\u0002"});
-        this.MDER_Heading_1_2 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_1_2 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0001", "\u0002"});
-        this.MDER_Heading_0_1_2 = new MDER_Heading(this, new HashSet<String>()
+        this.MDER_Heading_0_1_2 = new MDER_Heading(this.__machine, new HashSet<String>()
             {"\u0000", "\u0001", "\u0002"});
 
-        this.MDER_Tuple_D0 = new MDER_Tuple(this, new Dictionary<String, MDER_Any>());
+        this.MDER_Tuple_D0 = new MDER_Tuple(this.__machine, new Dictionary<String, MDER_Any>());
 
         this.false_nullary_article
-            = new MDER_Article(this, this.MDER_0bFALSE, this.MDER_Tuple_D0);
+            = new MDER_Article(this.__machine, this.MDER_0bFALSE, this.MDER_Tuple_D0);
 
-        this.MDER_Tuple_Array_D0C0 = new MDER_Tuple_Array(this,
+        this.MDER_Tuple_Array_D0C0 = new MDER_Tuple_Array(this.__machine,
             MDER_Heading_D0, MDER_Array_C0);
 
-        this.MDER_Tuple_Array_D0C1 = new MDER_Tuple_Array(this,
+        this.MDER_Tuple_Array_D0C1 = new MDER_Tuple_Array(this.__machine,
             MDER_Heading_D0,
-            new MDER_Array(this,
+            new MDER_Array(this.__machine,
                 new Internal_MDER_Array_Struct {
                     local_symbolic_type = Internal_Symbolic_Array_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
@@ -211,12 +205,12 @@ internal class Internal_Memory
             )
         );
 
-        this.MDER_Relation_D0C0 = new MDER_Relation(this,
+        this.MDER_Relation_D0C0 = new MDER_Relation(this.__machine,
             MDER_Heading_D0, MDER_Set_C0);
 
-        this.MDER_Relation_D0C1 = new MDER_Relation(this,
+        this.MDER_Relation_D0C1 = new MDER_Relation(this.__machine,
             MDER_Heading_D0,
-            new MDER_Set(this,
+            new MDER_Set(this.__machine,
                 new Internal_MDER_Bag_Struct {
                     local_symbolic_type = Internal_Symbolic_Bag_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
@@ -229,12 +223,12 @@ internal class Internal_Memory
             )
         );
 
-        this.MDER_Tuple_Bag_D0C0 = new MDER_Tuple_Bag(this,
+        this.MDER_Tuple_Bag_D0C0 = new MDER_Tuple_Bag(this.__machine,
             MDER_Heading_D0, MDER_Bag_C0);
 
-        this.MDER_Tuple_Bag_D0C1 = new MDER_Tuple_Bag(this,
+        this.MDER_Tuple_Bag_D0C1 = new MDER_Tuple_Bag(this.__machine,
             MDER_Heading_D0,
-            new MDER_Bag(this,
+            new MDER_Bag(this.__machine,
                 new Internal_MDER_Bag_Struct {
                     local_symbolic_type = Internal_Symbolic_Bag_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
@@ -251,8 +245,13 @@ internal class Internal_Memory
         foreach (String s in Internal_Constants.Strings__Well_Known_Excuses())
         {
             well_known_excuses.Add(s,
-                new MDER_Excuse(this, this.MDER_Attr_Name(s), this.MDER_Tuple_D0));
+                new MDER_Excuse(this.__machine, this.MDER_Attr_Name(s), this.MDER_Tuple_D0));
         }
+    }
+
+    internal MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal MDER_Ignorance MDER_Ignorance()
@@ -282,7 +281,7 @@ internal class Internal_Memory
         {
             return this.integers[(Int32)as_BigInteger];
         }
-        MDER_Integer integer = new MDER_Integer(this, as_BigInteger);
+        MDER_Integer integer = new MDER_Integer(this.__machine, as_BigInteger);
         if (may_cache && this.integers.Count < 10000)
         {
             this.integers.Add((Int32)as_BigInteger, integer);
@@ -296,7 +295,7 @@ internal class Internal_Memory
         {
             return MDER_Fraction_0;
         }
-        return new MDER_Fraction(this, as_Decimal);
+        return new MDER_Fraction(this.__machine, as_Decimal);
     }
 
     internal MDER_Fraction MDER_Fraction(BigInteger numerator, BigInteger denominator)
@@ -312,7 +311,7 @@ internal class Internal_Memory
             denominator = -denominator;
             numerator   = -numerator  ;
         }
-        return new MDER_Fraction(this, numerator, denominator);
+        return new MDER_Fraction(this.__machine, numerator, denominator);
     }
 
     internal MDER_Bits MDER_Bits(BitArray bit_members)
@@ -321,7 +320,7 @@ internal class Internal_Memory
         {
             return MDER_Bits_C0;
         }
-        return new MDER_Bits(this, bit_members);
+        return new MDER_Bits(this.__machine, bit_members);
     }
 
     internal MDER_Blob MDER_Blob(Byte[] octet_members)
@@ -330,7 +329,7 @@ internal class Internal_Memory
         {
             return MDER_Blob_C0;
         }
-        return new MDER_Blob(this, octet_members);
+        return new MDER_Blob(this.__machine, octet_members);
     }
 
     internal MDER_Text MDER_Text(String code_point_members, Boolean has_any_non_BMP)
@@ -340,7 +339,7 @@ internal class Internal_Memory
         {
             return this.texts[code_point_members];
         }
-        MDER_Text text = new MDER_Text(this, code_point_members, has_any_non_BMP);
+        MDER_Text text = new MDER_Text(this.__machine, code_point_members, has_any_non_BMP);
         if (may_cache && this.texts.Count < 10000)
         {
             this.texts.Add(code_point_members, text);
@@ -362,7 +361,7 @@ internal class Internal_Memory
         }
         if (members.Count == 1)
         {
-            return new MDER_Array(this,
+            return new MDER_Array(this.__machine,
                 new Internal_MDER_Array_Struct {
                     local_symbolic_type = Internal_Symbolic_Array_Type.Singular,
                     members = new Internal_Multiplied_Member(members[0]),
@@ -375,7 +374,7 @@ internal class Internal_Memory
                 }
             );
         }
-        return new MDER_Array(this,
+        return new MDER_Array(this.__machine,
             new Internal_MDER_Array_Struct {
                 local_symbolic_type = Internal_Symbolic_Array_Type.Arrayed,
                 members = members,
@@ -390,7 +389,7 @@ internal class Internal_Memory
         {
             return MDER_Set_C0;
         }
-        return new MDER_Set(this,
+        return new MDER_Set(this.__machine,
             new Internal_MDER_Bag_Struct {
                 local_symbolic_type = Internal_Symbolic_Bag_Type.Unique,
                 members = new Internal_MDER_Bag_Struct {
@@ -411,7 +410,7 @@ internal class Internal_Memory
         {
             return MDER_Bag_C0;
         }
-        return new MDER_Bag(this,
+        return new MDER_Bag(this.__machine,
             new Internal_MDER_Bag_Struct {
                 local_symbolic_type = Internal_Symbolic_Bag_Type.Arrayed,
                 members = members,
@@ -424,7 +423,7 @@ internal class Internal_Memory
     {
         Boolean may_cache = attr_names.Count <= 30
             && Enumerable.All(attr_names, attr_name => attr_name.Length <= 200);
-        MDER_Heading heading = new MDER_Heading(this, attr_names);
+        MDER_Heading heading = new MDER_Heading(this.__machine, attr_names);
         if (may_cache && this.headings.ContainsKey(heading))
         {
             return this.headings[heading];
@@ -442,7 +441,7 @@ internal class Internal_Memory
         {
             return MDER_Tuple_D0;
         }
-        return new MDER_Tuple(this, attrs);
+        return new MDER_Tuple(this.__machine, attrs);
     }
 
     internal MDER_Tuple_Array MDER_Tuple_Array(MDER_Heading heading, MDER_Array body)
@@ -453,12 +452,12 @@ internal class Internal_Memory
             {
                 return MDER_Tuple_Array_D0C0;
             }
-            if (this.executor.Array__count(body) == 1)
+            if (this.__machine._executor().Array__count(body) == 1)
             {
                 return MDER_Tuple_Array_D0C1;
             }
         }
-        return new MDER_Tuple_Array(this, heading, body);
+        return new MDER_Tuple_Array(this.__machine, heading, body);
     }
 
     internal MDER_Relation MDER_Relation(MDER_Heading heading, MDER_Set body)
@@ -474,7 +473,7 @@ internal class Internal_Memory
                 return MDER_Relation_D0C1;
             }
         }
-        return new MDER_Relation(this, heading, body);
+        return new MDER_Relation(this.__machine, heading, body);
     }
 
     internal MDER_Tuple_Bag MDER_Tuple_Bag(MDER_Heading heading, MDER_Bag body)
@@ -491,7 +490,7 @@ internal class Internal_Memory
             //    return MDER_Tuple_Bag_D0C1;
             //}
         }
-        return new MDER_Tuple_Bag(this, heading, body);
+        return new MDER_Tuple_Bag(this.__machine, heading, body);
     }
 
     internal MDER_Article MDER_Article(MDER_Any label, MDER_Tuple attrs)
@@ -511,12 +510,12 @@ internal class Internal_Memory
         // known-is-wkt) because they're all tested to that level and
         // normalized at selection, therefore if we have a MDER_Article
         // extant whose label is say 'Text' we know it isn't a Text value, and so on.
-        return new MDER_Article(this, label, attrs);
+        return new MDER_Article(this.__machine, label, attrs);
     }
 
     internal MDER_Excuse MDER_Excuse(MDER_Any label, MDER_Tuple attrs)
     {
-        return new MDER_Excuse(this, label, attrs);
+        return new MDER_Excuse(this.__machine, label, attrs);
     }
 
     internal MDER_Excuse Simple_MDER_Excuse(String value)
@@ -525,7 +524,7 @@ internal class Internal_Memory
         {
             return well_known_excuses[value];
         }
-        return new MDER_Excuse(this, this.MDER_Attr_Name(value), this.MDER_Tuple_D0);
+        return new MDER_Excuse(this.__machine, this.MDER_Attr_Name(value), this.MDER_Tuple_D0);
     }
 
     // TODO: Here or in Internal_Executor also have Article_attrs() etc functions
@@ -535,22 +534,22 @@ internal class Internal_Memory
 
     internal MDER_Variable New_MDER_Variable(MDER_Any initial_current_value)
     {
-        return new MDER_Variable(this, initial_current_value);
+        return new MDER_Variable(this.__machine, initial_current_value);
     }
 
     internal MDER_Process New_MDER_Process()
     {
-        return new MDER_Process(this);
+        return new MDER_Process(this.__machine);
     }
 
     internal MDER_Stream New_MDER_Stream()
     {
-        return new MDER_Stream(this);
+        return new MDER_Stream(this.__machine);
     }
 
     internal MDER_External New_MDER_External(Object external_value)
     {
-        return new MDER_External(this, external_value);
+        return new MDER_External(this.__machine, external_value);
     }
 
     internal Internal_Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)

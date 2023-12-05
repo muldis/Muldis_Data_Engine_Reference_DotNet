@@ -42,9 +42,9 @@ internal class MDER_Text : MDER_Any
     // Cached count of code point members of the Muldis Data Language Text.
     internal Nullable<Int64> cached_member_count;
 
-    internal MDER_Text(Internal_Memory memory, String code_point_members,
+    internal MDER_Text(MDER_Machine machine, String code_point_members,
         Boolean has_any_non_BMP)
-        : base(memory, Internal_Well_Known_Base_Type.MDER_Text)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Text)
     {
         this.code_point_members = code_point_members;
         this.has_any_non_BMP = has_any_non_BMP;
