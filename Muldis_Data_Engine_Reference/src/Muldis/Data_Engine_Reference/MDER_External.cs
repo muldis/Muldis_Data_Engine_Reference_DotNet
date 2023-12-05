@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_External : MDER_Any
+public class MDER_External : MDER_Any
 {
     internal readonly Object external_value;
 

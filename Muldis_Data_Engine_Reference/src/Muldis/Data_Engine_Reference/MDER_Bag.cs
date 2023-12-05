@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Bag : MDER_Any
+public class MDER_Bag : MDER_Any
 {
     internal Internal_MDER_Bag_Struct tree_root_node;
 

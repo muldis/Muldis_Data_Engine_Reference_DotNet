@@ -56,11 +56,11 @@ public class App
 
         // Import the user-specified source code file's raw content into
         // the Muldis Data Language implementing virtual machine where it would be used.
-        MDER_V_Any source_code_blob = machine.MDER_import(sourceCodeFileContent);
+        MDER_Any source_code_blob = machine.MDER_import(sourceCodeFileContent);
         System.Console.WriteLine("Debug: source_code_blob = [" + source_code_blob + "]");
 
         // Try to parse the file content into canonical format VM source code.
-        MDER_V_Any maybe_source_code_text = machine.MDER_evaluate(
+        MDER_Any maybe_source_code_text = machine.MDER_evaluate(
             machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
         );
@@ -74,45 +74,45 @@ public class App
             return;
         }
         System.Console.WriteLine("Debug: maybe_source_code_text = [" + maybe_source_code_text + "]");
-        MDER_V_Any maybe_source_code = machine.MDER_evaluate(
+        MDER_Any maybe_source_code = machine.MDER_evaluate(
             machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text }))
         );
         System.Console.WriteLine("Debug: maybe_source_code = [" + maybe_source_code + "]");
 
         // Temporary Executor test.
-        MDER_V_Any sum = machine.MDER_evaluate(
+        MDER_Any sum = machine.MDER_evaluate(
             machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
         );
         System.Console.WriteLine("Test data: sum = [" + sum + "]");
-        MDER_V_Any that = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+        MDER_Any that = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
         System.Console.WriteLine("Test data: that = [" + that + "]");
-        MDER_V_Any that_too = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Dictionary<String, Object>()
+        MDER_Any that_too = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Dictionary<String, Object>()
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
         System.Console.WriteLine("Test data: that_too = [" + that_too + "]");
-        MDER_V_Any the_other = machine.MDER_import("Fr ⊂ ac 💩 ti ÷ on");
+        MDER_Any the_other = machine.MDER_import("Fr ⊂ ac 💩 ti ÷ on");
         System.Console.WriteLine("Test data: the_other = [" + the_other + "]");
-        MDER_V_Any f0 = machine.MDER_import(014.0M);
+        MDER_Any f0 = machine.MDER_import(014.0M);
         System.Console.WriteLine("Test data: f0 = [" + f0 + "]");
-        MDER_V_Any f1 = machine.MDER_import(2.3M);
+        MDER_Any f1 = machine.MDER_import(2.3M);
         System.Console.WriteLine("Test data: f1 = [" + f1 + "]");
-        MDER_V_Any f2 = machine.MDER_import(02340233.23402532000M);
+        MDER_Any f2 = machine.MDER_import(02340233.23402532000M);
         System.Console.WriteLine("Test data: f2 = [" + f2 + "]");
-        MDER_V_Any f3 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
+        MDER_Any f3 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
         System.Console.WriteLine("Test data: f3 = [" + f3 + "]");
-        MDER_V_Any f4 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
+        MDER_Any f4 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
         System.Console.WriteLine("Test data: f4 = [" + f4 + "]");
-        MDER_V_Any f5 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
+        MDER_Any f5 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
         System.Console.WriteLine("Test data: f5 = [" + f5 + "]");
-        MDER_V_Any f6 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
+        MDER_Any f6 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
         System.Console.WriteLine("Test data: f6 = [" + f6 + "]");
-        MDER_V_Any f7 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
+        MDER_Any f7 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
         System.Console.WriteLine("Test data: f7 = [" + f7 + "]");
-        MDER_V_Any f8 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
+        MDER_Any f8 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
         System.Console.WriteLine("Test data: f8 = [" + f8 + "]");
-        MDER_V_Any f9 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
+        MDER_Any f9 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
         System.Console.WriteLine("Test data: f9 = [" + f9 + "]");
     }
 }

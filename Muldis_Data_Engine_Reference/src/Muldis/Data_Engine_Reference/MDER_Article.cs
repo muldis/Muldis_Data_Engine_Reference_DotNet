@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Article : MDER_Any
+public class MDER_Article : MDER_Any
 {
     // The Muldis Data Language value that is the "label" of this MDER_Article value.
     // TODO: Change this to a MDER_Nesting.

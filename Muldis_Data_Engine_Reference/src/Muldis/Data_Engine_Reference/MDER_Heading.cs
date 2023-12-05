@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Heading : MDER_Any
+public class MDER_Heading : MDER_Any
 {
     internal readonly HashSet<String> attr_names;
 

@@ -20,7 +20,7 @@ namespace Muldis.Data_Engine_Reference;
 // Iff a Muldis Data Language "value" is a "Handle" then it references something
 // that possibly can mutate, such as a Muldis Data Language "variable".
 
-internal abstract class MDER_Any
+public abstract class MDER_Any
 {
     // Internal_Memory pool this Muldis Data Language "value" lives in.
     private readonly MDER_Machine __machine;
@@ -64,7 +64,7 @@ internal abstract class MDER_Any
     }
 }
 
-internal class MDER_Any_Comparer : EqualityComparer<MDER_Any>
+public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
 {
     public override Boolean Equals(MDER_Any v1, MDER_Any v2)
     {

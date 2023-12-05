@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Tuple_Bag : MDER_Any
+public class MDER_Tuple_Bag : MDER_Any
 {
     internal readonly MDER_Heading heading;
     internal readonly MDER_Bag body;

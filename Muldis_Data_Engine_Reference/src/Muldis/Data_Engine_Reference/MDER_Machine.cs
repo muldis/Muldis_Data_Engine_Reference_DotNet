@@ -45,35 +45,34 @@ public class MDER_Machine
         return this.__standard_generator;
     }
 
-    public MDER_V_Any MDER_evaluate(MDER_V_Any function, MDER_V_Any args = null)
+    public MDER_Any MDER_evaluate(MDER_Any function, MDER_Any args = null)
     {
         if (function is null)
         {
             throw new ArgumentNullException("function");
         }
-        return new MDER_V_Any(this,
-            this.__executor.Evaluates(function.memory_value, args is null ? null : args.memory_value));
+        return this.__executor.Evaluates(function, args is null ? null : args);
     }
 
-    public void MDER_perform(MDER_V_Any procedure, MDER_V_Any args = null)
+    public void MDER_perform(MDER_Any procedure, MDER_Any args = null)
     {
         if (procedure is null)
         {
             throw new ArgumentNullException("procedure");
         }
-        this.__executor.Performs(procedure.memory_value, args is null ? null : args.memory_value);
+        this.__executor.Performs(procedure, args is null ? null : args);
     }
 
-    public MDER_V_Any MDER_current(MDER_V_Any variable)
+    public MDER_Any MDER_current(MDER_Variable variable)
     {
         if (variable is null)
         {
             throw new ArgumentNullException("variable");
         }
-        return new MDER_V_Any(this, ((MDER_Variable)variable.memory_value).current_value);
+        return variable.current_value;
     }
 
-    public void MDER_assign(MDER_V_Any variable, MDER_V_Any new_current)
+    public void MDER_assign(MDER_Variable variable, MDER_Any new_current)
     {
         if (variable is null)
         {
@@ -83,21 +82,21 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("new_current");
         }
-        ((MDER_Variable)variable.memory_value).current_value = new_current.memory_value;
+        variable.current_value = new_current;
     }
 
-    public MDER_V_Any MDER_import(Object value)
+    public MDER_Any MDER_import(Object value)
     {
-        if (value is not null && String.Equals(value.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
+        if (value is not null && String.Equals(value.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any"))
         {
-            return (MDER_V_Any)value;
+            return (MDER_Any)value;
         }
-        return new MDER_V_Any(this, import__tree(value));
+        return import__tree(value);
     }
 
-    public MDER_V_Any MDER_import_qualified(KeyValuePair<String, Object> value)
+    public MDER_Any MDER_import_qualified(KeyValuePair<String, Object> value)
     {
-        return new MDER_V_Any(this, import__tree_qualified(value));
+        return import__tree_qualified(value);
     }
 
     private MDER_Any import__tree(Object value)
@@ -105,9 +104,9 @@ public class MDER_Machine
         if (value is not null)
         {
             String type_name = value.GetType().FullName;
-            if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
+            if (value is MDER_Any)
             {
-                return ((MDER_V_Any)value).memory_value;
+                return (MDER_Any)value;
             }
             if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
             {
@@ -197,12 +196,12 @@ public class MDER_Machine
                         }
                         return this.__memory.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
-                    if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)numerator).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Integer
-                        && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)denominator).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Integer)
+                    if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any")
+                        && ((MDER_Any)numerator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer
+                        && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any")
+                        && ((MDER_Any)denominator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        if (((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
+                        if (((MDER_Integer)((MDER_Any)denominator)).as_BigInteger == 0)
                         {
                             throw new ArgumentException
                             (
@@ -211,8 +210,8 @@ public class MDER_Machine
                             );
                         }
                         return this.__memory.MDER_Fraction(
-                            ((MDER_Integer)((MDER_V_Any)numerator  ).memory_value).as_BigInteger,
-                            ((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger
+                            ((MDER_Integer)((MDER_Any)numerator  )).as_BigInteger,
+                            ((MDER_Integer)((MDER_Any)denominator)).as_BigInteger
                         );
                     }
                 }
@@ -347,17 +346,17 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Array":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Array bv = this.__memory.MDER_Array_C0;
                     return this.__memory.MDER_Tuple_Array(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Array)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Array)
                 {
-                    MDER_Array bv = (MDER_Array)((MDER_V_Any)v).memory_value;
+                    MDER_Array bv = (MDER_Array)((MDER_Any)v);
                     if (!this.__memory.Array__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -380,17 +379,17 @@ public class MDER_Machine
                 }
                 break;
             case "Relation":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Set bv = this.__memory.MDER_Set_C0;
                     return this.__memory.MDER_Relation(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Set)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Set)
                 {
-                    MDER_Set bv = (MDER_Set)((MDER_V_Any)v).memory_value;
+                    MDER_Set bv = (MDER_Set)((MDER_Any)v);
                     if (!this.__memory.Set__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -413,17 +412,17 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Bag":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
-                    MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
+                    MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Bag bv = this.__memory.MDER_Bag_C0;
                     return this.__memory.MDER_Tuple_Bag(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
+                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
-                    MDER_Bag bv = (MDER_Bag)((MDER_V_Any)v).memory_value;
+                    MDER_Bag bv = (MDER_Bag)((MDER_Any)v);
                     if (!this.__memory.Bag__Is_Relational(bv))
                     {
                         throw new ArgumentException
@@ -509,7 +508,7 @@ public class MDER_Machine
                             attrs_cv_as_MDER_Tuple
                         );
                     }
-                    if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any"))
+                    if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any"))
                     {
                         return this.__memory.MDER_Article(import__tree(label), attrs_cv_as_MDER_Tuple);
                     }
@@ -532,10 +531,10 @@ public class MDER_Machine
                 }
                 throw new NotImplementedException();
             case "New_Variable":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any"))
+                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any"))
                 {
                     return this.__memory.New_MDER_Variable(
-                        ((MDER_V_Any)v).memory_value);
+                        ((MDER_Any)v));
                 }
                 break;
             case "New_Process":
@@ -634,13 +633,13 @@ public class MDER_Machine
         throw new NotImplementedException("Unhandled MDER value type ["+type_name+"].");
     }
 
-    public Object MDER_export(MDER_V_Any value)
+    public Object MDER_export(MDER_Any value)
     {
         if (value is null)
         {
             throw new ArgumentNullException("value");
         }
-        MDER_Any v = value.memory_value;
+        MDER_Any v = value;
         switch (v.WKBT)
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
@@ -658,13 +657,13 @@ public class MDER_Machine
         }
     }
 
-    public KeyValuePair<String, Object> MDER_export_qualified(MDER_V_Any value)
+    public KeyValuePair<String, Object> MDER_export_qualified(MDER_Any value)
     {
         if (value is null)
         {
             throw new ArgumentNullException("value");
         }
-        MDER_Any v = value.memory_value;
+        MDER_Any v = value;
         switch (v.WKBT)
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:

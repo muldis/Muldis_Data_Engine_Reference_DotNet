@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Text : MDER_Any
+public class MDER_Text : MDER_Any
 {
     // Represents a Muldis Data Language Text value where each member value is
     // a Muldis Data Language Integer in the range {0..0xD7FF,0xE000..0x10FFFF}.

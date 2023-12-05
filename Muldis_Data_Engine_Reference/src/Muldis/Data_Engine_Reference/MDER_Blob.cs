@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Blob : MDER_Any
+public class MDER_Blob : MDER_Any
 {
     internal readonly Byte[] octet_members;
 

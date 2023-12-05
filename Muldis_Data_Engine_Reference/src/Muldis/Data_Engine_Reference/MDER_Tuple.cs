@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-internal class MDER_Tuple : MDER_Any
+public class MDER_Tuple : MDER_Any
 {
     internal readonly Dictionary<String, MDER_Any> attrs;
 
