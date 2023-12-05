@@ -1,4 +1,4 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
 internal enum Dot_Net_String_Unicode_Test_Result
 {

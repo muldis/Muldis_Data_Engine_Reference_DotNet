@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Identity_Generator
+// Muldis.Data_Engine_Reference.Internal_Identity_Generator
 // Provides utility pure functions that accept any Muldis Data Language "value"
 // and derive a .NET String that uniquely identifies it.
 // This class is deterministic and guarantees that iff 2 MDL_Any are

@@ -1,7 +1,7 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
 // TODO: Some of this text has obsolete notions and it should be rewritten.
-// Muldis.Data_Engine_Reference.Internal.Standard_Generator
+// Muldis.Data_Engine_Reference.Internal_Standard_Generator
 // Provides utility pure functions that accept any Muldis Data Language "Package"
 // value, which is a native Muldis Data Language "standard compilation unit", and
 // derive a "Text" value that is this "Package" encoded in compliance

@@ -1,4 +1,4 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
 internal class MDL_Tuple_Array : MDL_Any
 {

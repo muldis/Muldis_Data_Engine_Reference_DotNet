@@ -1,4 +1,4 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
 internal abstract class MDL_Boolean : MDL_Any
 {

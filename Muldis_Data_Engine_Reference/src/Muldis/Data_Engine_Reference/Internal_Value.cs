@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Symbolic_Array_Type
+// Muldis.Data_Engine_Reference.Internal_Symbolic_Array_Type
 // Enumerates the various ways that a MDL_Array collection can be defined
 // symbolically in terms of other collections.
 // None means the collection simply has zero members.
@@ -13,8 +13,8 @@ internal enum Symbolic_Array_Type
     Catenated,
 }
 
-// Muldis.Data_Engine_Reference.Internal.MDL_Array_Struct
-// When a Muldis.Data_Engine_Reference.Internal.MDL_Any is representing a MDL_Array,
+// Muldis.Data_Engine_Reference.MDER_Array_Struct
+// When a Muldis.Data_Engine_Reference.MDER_Any is representing a MDL_Array,
 // a MDL_Array_Struct is used by it to hold the MDL_Array-specific details.
 // The "tree" is actually a uni-directional graph as multiple nodes can
 // cite the same other conceptually immutable nodes as their children.
@@ -71,7 +71,7 @@ internal class MDL_Array_Struct
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.MDL_Array_Pair
+// Muldis.Data_Engine_Reference.MDER_Array_Pair
 // Represents an ordered pair of MDL_Array, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -90,7 +90,7 @@ internal class MDL_Array_Pair
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.Symbolic_Bag_Type
+// Muldis.Data_Engine_Reference.Internal_Symbolic_Bag_Type
 // Enumerates the various ways that a MDL_Bag collection can be defined
 // symbolically in terms of other collections.
 // None means the collection simply has zero members.
@@ -105,7 +105,7 @@ internal enum Symbolic_Bag_Type
     Summed,
 }
 
-// Muldis.Data_Engine_Reference.Internal.Multiplied_Member
+// Muldis.Data_Engine_Reference.Internal_Multiplied_Member
 // Represents a multiset of 1..N members of a collection where every
 // member is the same Muldis Data Language value.
 
@@ -129,8 +129,8 @@ internal class Multiplied_Member
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.MDL_Bag_Struct
-// When a Muldis.Data_Engine_Reference.Internal.MDL_Any is representing a MDL_Bag,
+// Muldis.Data_Engine_Reference.MDER_Bag_Struct
+// When a Muldis.Data_Engine_Reference.MDER_Any is representing a MDL_Bag,
 // a MDL_Bag_Struct is used by it to hold the MDL_Bag-specific details.
 // Also used for MDL_Set, so any MDL_Bag reference generally should be
 // read as either MDL_Set or MDL_Bag.
@@ -214,7 +214,7 @@ internal class MDL_Bag_Struct
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.MDL_Bag_Pair
+// Muldis.Data_Engine_Reference.MDER_Bag_Pair
 // Represents an ordered pair of MDL_Bag, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
@@ -233,7 +233,7 @@ internal class MDL_Bag_Pair
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal.cached_members_meta
+// Muldis.Data_Engine_Reference.Internal_cached_members_meta
 // Represents cached metadata for the members of a Muldis Data Language "discrete
 // homogeneous" collection such as an Array or Bag, particularly a
 // collection implemented as a tree of nodes, where each node may

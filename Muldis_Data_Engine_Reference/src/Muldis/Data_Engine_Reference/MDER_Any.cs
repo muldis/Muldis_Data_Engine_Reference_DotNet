@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.MDL_Any
+// Muldis.Data_Engine_Reference.MDER_Any
 // Represents a Muldis Data Language "value", which is an individual constant that
 // is not fixed in time or space.  Every Muldis Data Language value is unique,
 // eternal, and immutable; it has no address and can not be updated.

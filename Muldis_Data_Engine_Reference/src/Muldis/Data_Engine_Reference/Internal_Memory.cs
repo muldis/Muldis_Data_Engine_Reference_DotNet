@@ -2,9 +2,9 @@ using System.Collections;
 using System.Numerics;
 using System.Text;
 
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Memory
+// Muldis.Data_Engine_Reference.Internal_Memory
 // Provides a virtual machine memory pool where Muldis Data Language values
 // and variables live, which exploits the "flyweight pattern" for
 // efficiency in both performance and memory usage.

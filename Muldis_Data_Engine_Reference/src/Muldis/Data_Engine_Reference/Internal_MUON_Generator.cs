@@ -2,9 +2,9 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.MUON_Generator
+// Muldis.Data_Engine_Reference.Internal_MUON_Generator
 // Provides common implementation code for all other *_Generator
 // classes where they don't have reason to differ.
 

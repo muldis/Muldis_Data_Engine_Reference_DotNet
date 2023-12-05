@@ -1,10 +1,10 @@
 using System.Numerics;
 
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Fraction_As_Pair
+// Muldis.Data_Engine_Reference.Internal_Fraction_As_Pair
 // Represents a numerator/denominator pair.
-// Only used internally by Muldis.Data_Engine_Reference.Internal.MDL_Fraction.
+// Only used internally by Muldis.Data_Engine_Reference.MDER_Fraction.
 
 internal class Fraction_As_Pair
 {

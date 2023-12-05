@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Well_Known_Base_Type
+// Muldis.Data_Engine_Reference.Internal_Well_Known_Base_Type
 // Enumerates Muldis Data Language base types that are considered well-known to
 // this Muldis Data Language implementation, and that in particular have
 // their own dedicated handling code or formats in the implementation.

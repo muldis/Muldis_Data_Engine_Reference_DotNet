@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Preview_Generator
+// Muldis.Data_Engine_Reference.Internal_Preview_Generator
 // Provides utility pure functions that accept any Muldis Data Language "value"
 // and derive a .NET String that provides a "preview quick look"
 // serialization of that value.  The intended use of this class is to

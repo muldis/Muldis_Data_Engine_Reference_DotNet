@@ -1,6 +1,6 @@
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal.Storage
+// Muldis.Data_Engine_Reference.Internal_Storage
 // For fetching data from and storing data to the host file system.
 // All data is interpreted here simply in terms of plain octet arrays;
 // it is up to callers to map this as character data where appropriate.

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Muldis.Data_Engine_Reference.Internal;
+namespace Muldis.Data_Engine_Reference;
 
 internal class MDL_Bits : MDL_Any
 {
