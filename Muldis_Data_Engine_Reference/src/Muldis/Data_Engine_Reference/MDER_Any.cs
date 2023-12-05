@@ -22,15 +22,15 @@ namespace Muldis.Data_Engine_Reference;
 
 internal abstract class MDER_Any
 {
-    // Memory pool this Muldis Data Language "value" lives in.
-    internal readonly Memory memory;
+    // Internal_Memory pool this Muldis Data Language "value" lives in.
+    internal readonly Internal_Memory memory;
 
     // Muldis Data Language most specific well known base data type (WKBT) this
     // "value" is a member of.  Helps interpret which subtype of MDER_Any
     // we have without having to use the language's type reflection system.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    internal readonly Well_Known_Base_Type WKBT;
+    internal readonly Internal_Well_Known_Base_Type WKBT;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDER_Any represents.  This is calculated lazily if needed,
@@ -40,7 +40,7 @@ internal abstract class MDER_Any
     // whose character code points are typically in the 0..127 range.
     internal String cached_MDER_Any_identity;
 
-    internal MDER_Any(Memory memory, Well_Known_Base_Type WKBT)
+    internal MDER_Any(Internal_Memory memory, Internal_Well_Known_Base_Type WKBT)
     {
         this.memory = memory;
         this.WKBT = WKBT;

@@ -11,7 +11,7 @@ namespace Muldis.Data_Engine_Reference;
 // one of these types and that value is expected to be normalized
 // towards its best fit storage format.
 
-internal enum Well_Known_Base_Type
+internal enum Internal_Well_Known_Base_Type
 {
     MDER_Ignorance,
     MDER_False,

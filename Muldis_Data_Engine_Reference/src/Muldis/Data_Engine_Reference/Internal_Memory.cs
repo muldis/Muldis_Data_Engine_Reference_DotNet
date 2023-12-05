@@ -8,10 +8,10 @@ namespace Muldis.Data_Engine_Reference;
 // Provides a virtual machine memory pool where Muldis Data Language values
 // and variables live, which exploits the "flyweight pattern" for
 // efficiency in both performance and memory usage.
-// Conceptually, Memory is a singleton, in that typically only one
+// Conceptually, Internal_Memory is a singleton, in that typically only one
 // would be used per virtual machine; in practice, only the set of all
 // VM values/vars/processes/etc that would interact must share one.
-// Memory might have multiple pools, say, for separate handling of
+// Internal_Memory might have multiple pools, say, for separate handling of
 // entities that are short-lived versus longer-lived.
 // ? Note that .NET Core lacks System.Runtime.Caching or similar built-in
 // so for any situations we might have used such, we roll our own.
@@ -21,7 +21,7 @@ namespace Muldis.Data_Engine_Reference;
 // Note this is called "interning" in a variety of programming languages;
 // see https://en.wikipedia.org/wiki/String_interning for more on that.
 
-internal class Memory
+internal class Internal_Memory
 {
     internal readonly Identity_Generator identity_generator;
     internal readonly Preview_Generator preview_generator;
@@ -103,7 +103,7 @@ internal class Memory
     // All well known MDER_Excuse values.
     internal readonly Dictionary<String, MDER_Excuse> well_known_excuses;
 
-    internal Memory()
+    internal Internal_Memory()
     {
         this.identity_generator = new Identity_Generator();
         this.preview_generator = new Preview_Generator();
@@ -370,7 +370,7 @@ internal class Memory
                         tree_member_count = 1,
                         tree_all_unique = true,
                         tree_relational = (members[0].WKBT
-                            == Well_Known_Base_Type.MDER_Tuple),
+                            == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 }
             );
@@ -501,7 +501,7 @@ internal class Memory
         {
             return this.false_nullary_article;
         }
-        // TODO: If label corresponds to a Well_Known_Base_Type then
+        // TODO: If label corresponds to a Internal_Well_Known_Base_Type then
         // validate whether the label+attrs is actually a member of its
         // Muldis Data Language type, and if it is, return a MDER_Any using the most
         // specific well known base type for that MD value rather than
@@ -669,7 +669,7 @@ internal class Memory
                         tree_member_count = lsm.multiplicity,
                         tree_all_unique = (lsm.multiplicity == 1),
                         tree_relational = (lsm.member.WKBT
-                            == Well_Known_Base_Type.MDER_Tuple),
+                            == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 };
             case Symbolic_Bag_Type.Arrayed:
@@ -806,14 +806,14 @@ internal class Memory
                     break;
                 case Symbolic_Array_Type.Singular:
                     tr = node.Local_Singular_Members().member.WKBT
-                        == Well_Known_Base_Type.MDER_Tuple;
+                        == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Symbolic_Array_Type.Arrayed:
                     MDER_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
-                    tr = m0.WKBT == Well_Known_Base_Type.MDER_Tuple
+                    tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.WKBT == Well_Known_Base_Type.MDER_Tuple
+                            m => m.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m, (MDER_Tuple)m0)
                         );
                     break;
@@ -890,23 +890,23 @@ internal class Memory
                     break;
                 case Symbolic_Bag_Type.Singular:
                     tr = node.Local_Singular_Members().member.WKBT
-                        == Well_Known_Base_Type.MDER_Tuple;
+                        == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Symbolic_Bag_Type.Arrayed:
                     MDER_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
-                    tr = m0.WKBT == Well_Known_Base_Type.MDER_Tuple
+                    tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.member.WKBT == Well_Known_Base_Type.MDER_Tuple
+                            m => m.member.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)m0)
                         );
                     break;
                 case Symbolic_Bag_Type.Indexed:
                     MDER_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
-                    tr = im0.WKBT == Well_Known_Base_Type.MDER_Tuple
+                    tr = im0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
-                            m => m.member.WKBT == Well_Known_Base_Type.MDER_Tuple
+                            m => m.member.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)im0)
                         );
                     break;

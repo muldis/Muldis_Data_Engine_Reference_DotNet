@@ -16,55 +16,55 @@ internal abstract class MUON_Generator
     {
         switch (value.WKBT)
         {
-            case Well_Known_Base_Type.MDER_Ignorance:
+            case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return "0iIGNORANCE";
-            case Well_Known_Base_Type.MDER_False:
+            case Internal_Well_Known_Base_Type.MDER_False:
                 return "0bFALSE";
-            case Well_Known_Base_Type.MDER_True:
+            case Internal_Well_Known_Base_Type.MDER_True:
                 return "0bTRUE";
-            case Well_Known_Base_Type.MDER_Integer:
+            case Internal_Well_Known_Base_Type.MDER_Integer:
                 return this.as_Integer_artifact((MDER_Integer)value);
-            case Well_Known_Base_Type.MDER_Fraction:
+            case Internal_Well_Known_Base_Type.MDER_Fraction:
                 return this.as_Fraction_artifact((MDER_Fraction)value);
-            case Well_Known_Base_Type.MDER_Bits:
+            case Internal_Well_Known_Base_Type.MDER_Bits:
                 return this.as_Bits_artifact((MDER_Bits)value);
-            case Well_Known_Base_Type.MDER_Blob:
+            case Internal_Well_Known_Base_Type.MDER_Blob:
                 return this.as_Blob_artifact((MDER_Blob)value);
-            case Well_Known_Base_Type.MDER_Text:
+            case Internal_Well_Known_Base_Type.MDER_Text:
                 return this.as_Text_artifact((MDER_Text)value);
-            case Well_Known_Base_Type.MDER_Array:
+            case Internal_Well_Known_Base_Type.MDER_Array:
                 return this.as_Array_artifact((MDER_Array)value, indent);
-            case Well_Known_Base_Type.MDER_Set:
+            case Internal_Well_Known_Base_Type.MDER_Set:
                 return this.as_Set_artifact((MDER_Set)value, indent);
-            case Well_Known_Base_Type.MDER_Bag:
+            case Internal_Well_Known_Base_Type.MDER_Bag:
                 return this.as_Bag_artifact((MDER_Bag)value, indent);
-            case Well_Known_Base_Type.MDER_Heading:
+            case Internal_Well_Known_Base_Type.MDER_Heading:
                 return this.as_Heading_artifact((MDER_Heading)value);
-            case Well_Known_Base_Type.MDER_Tuple:
+            case Internal_Well_Known_Base_Type.MDER_Tuple:
                 return this.as_Tuple_artifact((MDER_Tuple)value, indent);
-            case Well_Known_Base_Type.MDER_Tuple_Array:
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
                 return this.as_Tuple_Array_artifact((MDER_Tuple_Array)value, indent);
-            case Well_Known_Base_Type.MDER_Relation:
+            case Internal_Well_Known_Base_Type.MDER_Relation:
                 return this.as_Relation_artifact((MDER_Relation)value, indent);
-            case Well_Known_Base_Type.MDER_Tuple_Bag:
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
                 return this.as_Tuple_Bag_artifact((MDER_Tuple_Bag)value, indent);
-            case Well_Known_Base_Type.MDER_Article:
+            case Internal_Well_Known_Base_Type.MDER_Article:
                 return this.as_Article_artifact((MDER_Article)value, indent);
-            case Well_Known_Base_Type.MDER_Excuse:
+            case Internal_Well_Known_Base_Type.MDER_Excuse:
                 return this.as_Excuse_artifact((MDER_Excuse)value, indent);
-            case Well_Known_Base_Type.MDER_Variable:
+            case Internal_Well_Known_Base_Type.MDER_Variable:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Variable can actually be rendered as MUON.
                 return "`Some MDER_Variable value is here.`";
-            case Well_Known_Base_Type.MDER_Process:
+            case Internal_Well_Known_Base_Type.MDER_Process:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Process can actually be rendered as MUON.
                 return "`Some MDER_Process value is here.`";
-            case Well_Known_Base_Type.MDER_Stream:
+            case Internal_Well_Known_Base_Type.MDER_Stream:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Stream can actually be rendered as MUON.
                 return "`Some MDER_Stream value is here.`";
-            case Well_Known_Base_Type.MDER_External:
+            case Internal_Well_Known_Base_Type.MDER_External:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_External can actually be rendered as MUON.
                 return "`Some MDER_External value is here.`";
@@ -240,7 +240,7 @@ internal abstract class MUON_Generator
 
     private String as_Heading_artifact(MDER_Heading value)
     {
-        Memory m = value.memory;
+        Internal_Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDER_Tuple_D0) ? "(Heading:{})"
             : "(Heading:{"
                 + String.Concat(Enumerable.Select(
@@ -252,7 +252,7 @@ internal abstract class MUON_Generator
     private String as_Array_artifact(MDER_Array value, String indent)
     {
         String mei = indent + "\u0009";
-        Memory m = value.memory;
+        Internal_Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDER_Array_C0) ? "(Array:[])"
             : "(Array:[\u000A" + Array_artifact__node__tree(
                 value.tree_root_node, mei) + indent + "])";
@@ -330,7 +330,7 @@ internal abstract class MUON_Generator
     private String as_Tuple_artifact(MDER_Tuple value, String indent)
     {
         String ati = indent + "\u0009";
-        Memory m = value.memory;
+        Internal_Memory m = value.memory;
         return Object.ReferenceEquals(value, m.MDER_Tuple_D0) ? "(Tuple:{})"
             : "(Tuple:{\u000A"
                 + String.Concat(Enumerable.Select(

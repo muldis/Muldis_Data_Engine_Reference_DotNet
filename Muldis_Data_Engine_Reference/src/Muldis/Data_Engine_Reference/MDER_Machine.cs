@@ -5,12 +5,12 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Machine
 {
-    private readonly Memory memory;
+    private readonly Internal_Memory memory;
     private readonly Executor executor;
 
     public MDER_Machine()
     {
-        this.memory = new Memory();
+        this.memory = new Internal_Memory();
         this.executor = this.memory.executor;
     }
 
@@ -167,9 +167,9 @@ public class MDER_Machine
                         return this.memory.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)numerator).memory_value.WKBT == Well_Known_Base_Type.MDER_Integer
+                        && ((MDER_V_Any)numerator).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Integer
                         && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                        && ((MDER_V_Any)denominator).memory_value.WKBT == Well_Known_Base_Type.MDER_Integer)
+                        && ((MDER_V_Any)denominator).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         if (((MDER_Integer)((MDER_V_Any)denominator).memory_value).as_BigInteger == 0)
                         {
@@ -317,14 +317,14 @@ public class MDER_Machine
                 break;
             case "Tuple_Array":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
                     MDER_Array bv = this.memory.MDER_Array_C0;
                     return this.memory.MDER_Tuple_Array(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Array)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Array__Is_Relational(bv))
@@ -350,14 +350,14 @@ public class MDER_Machine
                 break;
             case "Relation":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
                     MDER_Set bv = this.memory.MDER_Set_C0;
                     return this.memory.MDER_Relation(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Set)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Set__Is_Relational(bv))
@@ -383,14 +383,14 @@ public class MDER_Machine
                 break;
             case "Tuple_Bag":
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Heading)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_V_Any)v).memory_value;
                     MDER_Bag bv = this.memory.MDER_Bag_C0;
                     return this.memory.MDER_Tuple_Bag(hv, bv);
                 }
                 if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_V_Any")
-                    && ((MDER_V_Any)v).memory_value.WKBT == Well_Known_Base_Type.MDER_Bag)
+                    && ((MDER_V_Any)v).memory_value.WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_V_Any)v).memory_value;
                     if (!this.memory.Bag__Is_Relational(bv))
@@ -429,7 +429,7 @@ public class MDER_Machine
                         );
                     }
                     MDER_Any attrs_cv = import__tree(attrs);
-                    if (attrs_cv.WKBT != Well_Known_Base_Type.MDER_Tuple)
+                    if (attrs_cv.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
                         throw new ArgumentException
                         (
@@ -612,15 +612,15 @@ public class MDER_Machine
         MDER_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDER_Ignorance:
+            case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return null;
-            case Well_Known_Base_Type.MDER_False:
+            case Internal_Well_Known_Base_Type.MDER_False:
                 return false;
-            case Well_Known_Base_Type.MDER_True:
+            case Internal_Well_Known_Base_Type.MDER_True:
                 return true;
-            case Well_Known_Base_Type.MDER_Integer:
+            case Internal_Well_Known_Base_Type.MDER_Integer:
                 return ((MDER_Integer)v).as_BigInteger;
-            case Well_Known_Base_Type.MDER_External:
+            case Internal_Well_Known_Base_Type.MDER_External:
                 return ((MDER_External)v).external_value;
             default:
                 return MDER_export_qualified(value);
@@ -636,44 +636,44 @@ public class MDER_Machine
         MDER_Any v = value.memory_value;
         switch (v.WKBT)
         {
-            case Well_Known_Base_Type.MDER_Ignorance:
+            case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return new KeyValuePair<String, Object>("Ignorance",null);
-            case Well_Known_Base_Type.MDER_False:
+            case Internal_Well_Known_Base_Type.MDER_False:
                 return new KeyValuePair<String, Object>("Boolean",false);
-            case Well_Known_Base_Type.MDER_True:
+            case Internal_Well_Known_Base_Type.MDER_True:
                 return new KeyValuePair<String, Object>("Boolean",true);
-            case Well_Known_Base_Type.MDER_Integer:
+            case Internal_Well_Known_Base_Type.MDER_Integer:
                 return new KeyValuePair<String, Object>("Integer",
                     ((MDER_Integer)v).as_BigInteger);
-            case Well_Known_Base_Type.MDER_Fraction:
+            case Internal_Well_Known_Base_Type.MDER_Fraction:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Bits:
+            case Internal_Well_Known_Base_Type.MDER_Bits:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Blob:
+            case Internal_Well_Known_Base_Type.MDER_Blob:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Text:
+            case Internal_Well_Known_Base_Type.MDER_Text:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Array:
+            case Internal_Well_Known_Base_Type.MDER_Array:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Set:
+            case Internal_Well_Known_Base_Type.MDER_Set:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Bag:
+            case Internal_Well_Known_Base_Type.MDER_Bag:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Heading:
+            case Internal_Well_Known_Base_Type.MDER_Heading:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Tuple:
+            case Internal_Well_Known_Base_Type.MDER_Tuple:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Article:
+            case Internal_Well_Known_Base_Type.MDER_Article:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Excuse:
+            case Internal_Well_Known_Base_Type.MDER_Excuse:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Variable:
+            case Internal_Well_Known_Base_Type.MDER_Variable:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Process:
+            case Internal_Well_Known_Base_Type.MDER_Process:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_Stream:
+            case Internal_Well_Known_Base_Type.MDER_Stream:
                 throw new NotImplementedException();
-            case Well_Known_Base_Type.MDER_External:
+            case Internal_Well_Known_Base_Type.MDER_External:
                 return new KeyValuePair<String, Object>("New_External",
                     ((MDER_External)v).external_value);
             default:
