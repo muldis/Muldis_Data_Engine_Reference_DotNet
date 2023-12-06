@@ -25,12 +25,12 @@ public abstract class MDER_Any
     // MDER_Machine this Muldis Data Language "value" lives in.
     private readonly MDER_Machine __machine;
 
-    // Muldis Data Language most specific well known base data type (WKBT) this
+    // Muldis Data Language most specific well known base data type (__WKBT) this
     // "value" is a member of.  Helps interpret which subtype of MDER_Any
     // we have without having to use the language's type reflection system.
     // Some of these types have their own subset of specialized
     // representation formats for the sake of optimization.
-    internal readonly Internal_Well_Known_Base_Type WKBT;
+    private readonly Internal_Well_Known_Base_Type __WKBT;
 
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDER_Any represents.  This is calculated lazily if needed,
@@ -38,12 +38,12 @@ public abstract class MDER_Any
     // The serialization format either is or resembles a Muldis Object Notation Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
-    internal String? cached_MDER_Any_identity;
+    private String? __cached_MDER_Any_identity;
 
     internal MDER_Any(MDER_Machine machine, Internal_Well_Known_Base_Type WKBT)
     {
         this.__machine = machine;
-        this.WKBT = WKBT;
+        this.__WKBT = WKBT;
     }
 
     public override String ToString()
@@ -56,9 +56,24 @@ public abstract class MDER_Any
         return this.__machine;
     }
 
-    internal String MDER_Any_identity()
+    internal Internal_Well_Known_Base_Type _WKBT()
     {
-        // This called function will test if cached_MDER_Any_identity
+        return this.__WKBT;
+    }
+
+    internal Boolean _has_cached_MDER_Any_identity()
+    {
+        return this.__cached_MDER_Any_identity is not null;
+    }
+
+    internal void _assign_to_MDER_Any_identity(String MDER_Any_identity)
+    {
+        this.__cached_MDER_Any_identity = MDER_Any_identity;
+    }
+
+    internal String _MDER_Any_identity()
+    {
+        // This called function will test if __cached_MDER_Any_identity
         // is null and assign it a value if so and use its value if not.
         return this.__machine._identity_generator().MDER_Any_as_identity_String(this);
     }
@@ -87,6 +102,6 @@ public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
             // Would we ever get here?
             return 0;
         }
-        return v.MDER_Any_identity().GetHashCode();
+        return v._MDER_Any_identity().GetHashCode();
     }
 }

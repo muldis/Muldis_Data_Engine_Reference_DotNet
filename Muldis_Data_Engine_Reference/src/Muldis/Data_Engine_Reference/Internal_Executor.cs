@@ -24,7 +24,7 @@ internal class Internal_Executor
         {
             args = this.__machine.MDER_Tuple_D0;
         }
-        if (args.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
+        if (args._WKBT() != Internal_Well_Known_Base_Type.MDER_Tuple)
         {
             throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                 "X_Args_Not_Tuple").ToString());
@@ -62,7 +62,7 @@ internal class Internal_Executor
         {
             args = this.__machine.MDER_Tuple_D0;
         }
-        if (args.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
+        if (args._WKBT() != Internal_Well_Known_Base_Type.MDER_Tuple)
         {
             throw new ArgumentException(this.__machine.Simple_MDER_Excuse("X_Args_Not_Tuple").ToString());
         }
@@ -109,7 +109,7 @@ internal class Internal_Executor
 
     internal Boolean Is_Text(MDER_Any value)
     {
-        return value.WKBT == Internal_Well_Known_Base_Type.MDER_Text;
+        return value._WKBT() == Internal_Well_Known_Base_Type.MDER_Text;
     }
 
     internal Boolean Is_String(MDER_Any value)
@@ -169,12 +169,12 @@ internal class Internal_Executor
 
     internal Boolean Is_Heading(MDER_Any value)
     {
-        return value.WKBT == Internal_Well_Known_Base_Type.MDER_Heading;
+        return value._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading;
     }
 
     internal Boolean Is_Attr_Name_List(MDER_Any value)
     {
-        if (value.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
+        if (value._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
         {
             return false;
         }
@@ -255,58 +255,58 @@ internal class Internal_Executor
 
                 case "Ignorance":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Ignorance
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Ignorance
                     );
                 case "Boolean":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_False
-                            || v.WKBT == Internal_Well_Known_Base_Type.MDER_True
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_False
+                            || v._WKBT() == Internal_Well_Known_Base_Type.MDER_True
                     );
                 case "Integer":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Integer
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Integer
                     );
                 case "Array":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Array
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Array
                     );
                 case "Bag":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Bag
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Bag
                     );
                 case "Tuple":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                     );
                 case "Article":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Article
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Article
                     );
                 case "Handle":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Variable
-                            || v.WKBT == Internal_Well_Known_Base_Type.MDER_Process
-                            || v.WKBT == Internal_Well_Known_Base_Type.MDER_Stream
-                            || v.WKBT == Internal_Well_Known_Base_Type.MDER_External
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Variable
+                            || v._WKBT() == Internal_Well_Known_Base_Type.MDER_Process
+                            || v._WKBT() == Internal_Well_Known_Base_Type.MDER_Stream
+                            || v._WKBT() == Internal_Well_Known_Base_Type.MDER_External
                     );
 
                 // HANDLE SUBTYPE DEFINERS
 
                 case "Variable":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Variable
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Variable
                     );
                 case "Process":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Process
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Process
                     );
                 case "Stream":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Stream
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Stream
                     );
                 case "External":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_External
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_External
                     );
 
                 // ARRAY SUBTYPE DEFINERS
@@ -317,17 +317,17 @@ internal class Internal_Executor
 
                 case "Blob":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Blob
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Blob
                     );
 
                 case "Text":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Text
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Text
                     );
 
                 case "Excuse":
                     return this.__machine.MDER_Boolean(
-                        v.WKBT == Internal_Well_Known_Base_Type.MDER_Excuse
+                        v._WKBT() == Internal_Well_Known_Base_Type.MDER_Excuse
                     );
 
                 default:
@@ -348,21 +348,21 @@ internal class Internal_Executor
             switch (func_name_s)
             {
                 case "Integer_opposite":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
                     return this.__machine.MDER_Integer(-((MDER_Integer)v).as_BigInteger);
                 case "Integer_modulus":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
                     return this.__machine.MDER_Integer(BigInteger.Abs(((MDER_Integer)v).as_BigInteger));
                 case "Integer_factorial":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Integer
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer
                         || ((MDER_Integer)v).as_BigInteger < 0)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
@@ -372,14 +372,14 @@ internal class Internal_Executor
                     // with a Factorial(n) so we have to do it ourselves.
                     return this.__machine.MDER_Integer(Integer__factorial(((MDER_Integer)v).as_BigInteger));
                 case "Array_count":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_count_Arg_0_Not_Array").ToString());
                     }
                     return this.__machine.MDER_Integer(Array__count((MDER_Array)v));
                 case "Bag_unique":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Bag)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Bag)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
@@ -394,28 +394,28 @@ internal class Internal_Executor
                         }
                     );
                 case "Tuple_degree":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Tuple_degree_Arg_0_Not_Tuple").ToString());
                     }
                     return this.__machine.MDER_Integer(((MDER_Tuple)v).attrs.Count);
                 case "Tuple_heading":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Tuple_heading_Arg_0_Not_Tuple").ToString());
                     }
                     return this.Tuple__Heading((MDER_Tuple)v);
                 case "Text_from_UTF_8_Blob":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Blob)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Blob)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Text_from_UTF_8_Blob_Arg_0_Not_Blob").ToString());
                     }
                     return this.MDER_Text_from_UTF_8_MDER_Blob((MDER_Blob)v);
                 case "MDPT_Parsing_Unit_Text_to_Any":
-                    if (v.WKBT != Internal_Well_Known_Base_Type.MDER_Text)
+                    if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Text)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_MDPT_Parsing_Unit_Text_to_Any_Arg_0_Not_Text").ToString());
@@ -443,24 +443,24 @@ internal class Internal_Executor
                 case "same":
                     return this.__machine.MDER_Boolean(Any__same(a0, a1));
                 case "Integer_plus":
-                    if (a0.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
+                    if (a0._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_plus_Arg_0_Not_Integer").ToString());
                     }
-                    if (a1.WKBT != Internal_Well_Known_Base_Type.MDER_Integer)
+                    if (a1._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
                     return this.__machine.MDER_Integer(((MDER_Integer)a0).as_BigInteger + ((MDER_Integer)a1).as_BigInteger);
                 case "Array_at":
-                    if (a0.WKBT != Internal_Well_Known_Base_Type.MDER_Array)
+                    if (a0._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
-                    if (a1.WKBT != Internal_Well_Known_Base_Type.MDER_Integer
+                    if (a1._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer
                         || ((MDER_Integer)a1).as_BigInteger < 0)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
@@ -506,14 +506,14 @@ internal class Internal_Executor
             // MDER_Ignorance, MDER_False, MDER_True.
             return true;
         }
-        if (a0.WKBT != a1.WKBT)
+        if (a0._WKBT() != a1._WKBT())
         {
             return false;
         }
-        if (a0.cached_MDER_Any_identity is not null
-            && a1.cached_MDER_Any_identity is not null)
+        if (a0._has_cached_MDER_Any_identity()
+            && a1._has_cached_MDER_Any_identity())
         {
-            if (String.Equals(a0.cached_MDER_Any_identity, a1.cached_MDER_Any_identity))
+            if (String.Equals(a0._MDER_Any_identity(), a1._MDER_Any_identity()))
             {
                 merge_two_same(a0, a1);
                 return true;
@@ -521,7 +521,7 @@ internal class Internal_Executor
             return false;
         }
         Boolean result;
-        switch (a0.WKBT)
+        switch (a0._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
             case Internal_Well_Known_Base_Type.MDER_False:
@@ -1026,7 +1026,7 @@ internal class Internal_Executor
                     cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = lsm.multiplicity,
                         tree_all_unique = (lsm.multiplicity == 1),
-                        tree_relational = (lsm.member.WKBT
+                        tree_relational = (lsm.member._WKBT()
                             == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 };
@@ -1163,15 +1163,15 @@ internal class Internal_Executor
                     tr = true;
                     break;
                 case Internal_Symbolic_Array_Type.Singular:
-                    tr = node.Local_Singular_Members().member.WKBT
+                    tr = node.Local_Singular_Members().member._WKBT()
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Internal_Symbolic_Array_Type.Arrayed:
                     MDER_Any m0 = Array__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = m0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m, (MDER_Tuple)m0)
                         );
                     break;
@@ -1247,24 +1247,24 @@ internal class Internal_Executor
                     tr = true;
                     break;
                 case Internal_Symbolic_Bag_Type.Singular:
-                    tr = node.Local_Singular_Members().member.WKBT
+                    tr = node.Local_Singular_Members().member._WKBT()
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Internal_Symbolic_Bag_Type.Arrayed:
                     MDER_Any m0 = Bag__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = m0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m.member.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m.member._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)m0)
                         );
                     break;
                 case Internal_Symbolic_Bag_Type.Indexed:
                     MDER_Any im0 = Bag__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = im0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = im0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
-                            m => m.member.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m.member._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)im0)
                         );
                     break;

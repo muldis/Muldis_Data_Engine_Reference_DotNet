@@ -390,7 +390,7 @@ public class MDER_Machine
                     cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = 1,
                         tree_all_unique = true,
-                        tree_relational = (members[0].WKBT
+                        tree_relational = (members[0]._WKBT()
                             == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 }
@@ -715,9 +715,9 @@ public class MDER_Machine
                         return this.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (numerator is MDER_Any
-                        && ((MDER_Any)numerator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer
+                        && ((MDER_Any)numerator)._WKBT() == Internal_Well_Known_Base_Type.MDER_Integer
                         && denominator is MDER_Any
-                        && ((MDER_Any)denominator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer)
+                        && ((MDER_Any)denominator)._WKBT() == Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         if (((MDER_Integer)((MDER_Any)denominator)).as_BigInteger == 0)
                         {
@@ -864,13 +864,13 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Array":
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Array bv = this.MDER_Array_C0;
                     return this.MDER_Tuple_Array(hv, bv);
                 }
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Array)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_Any)v);
                     if (!this.__executor.Array__Is_Relational(bv))
@@ -895,13 +895,13 @@ public class MDER_Machine
                 }
                 break;
             case "Relation":
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Set bv = this.MDER_Set_C0;
                     return this.MDER_Relation(hv, bv);
                 }
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Set)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_Any)v);
                     if (!this.__executor.Set__Is_Relational(bv))
@@ -926,13 +926,13 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Bag":
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Bag bv = this.MDER_Bag_C0;
                     return this.MDER_Tuple_Bag(hv, bv);
                 }
-                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
+                if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_Any)v);
                     if (!this.__executor.Bag__Is_Relational(bv))
@@ -971,7 +971,7 @@ public class MDER_Machine
                         );
                     }
                     MDER_Any attrs_cv = import__tree(attrs);
-                    if (attrs_cv.WKBT != Internal_Well_Known_Base_Type.MDER_Tuple)
+                    if (attrs_cv._WKBT() != Internal_Well_Known_Base_Type.MDER_Tuple)
                     {
                         throw new ArgumentException
                         (
@@ -1150,7 +1150,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        switch (value.WKBT)
+        switch (value._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return null;
@@ -1173,7 +1173,7 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("value");
         }
-        switch (value.WKBT)
+        switch (value._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return new KeyValuePair<String, Object?>("Ignorance",null);

@@ -14,7 +14,7 @@ internal abstract class Internal_MUON_Generator
 
     protected String Any_Selector_Foundation_Dispatch(MDER_Any value, String indent)
     {
-        switch (value.WKBT)
+        switch (value._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return "0iIGNORANCE";
@@ -69,7 +69,7 @@ internal abstract class Internal_MUON_Generator
                 // (transient) MDER_External can actually be rendered as MUON.
                 return "`Some MDER_External value is here.`";
             default:
-                return "\\TODO_FIX_UN_HANDLED_TYPE\\\"" + value.WKBT.ToString() + "\"";
+                return "\\TODO_FIX_UN_HANDLED_TYPE\\\"" + value._WKBT().ToString() + "\"";
         }
     }
 

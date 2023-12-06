@@ -172,7 +172,7 @@ internal class Internal_MDER_Bag_Struct
         // can be of any type; this is the most common format for a Bag
         // that has had some searches or operations performed on it.
         // The Dictionary has one key-asset pair for each distinct Muldis Data Language
-        // "value", all of which are indexed by cached_MDER_Any_identity.
+        // "value", all of which are indexed by __cached_MDER_Any_identity.
         // Guarantees the Bag has at least 1 member.
     // Iff LST is Unique, this field holds a Internal_MDER_Bag_Struct.
         // This is a non-leaf node with 1 direct child Bag node;

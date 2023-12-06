@@ -32,11 +32,11 @@ internal sealed class Internal_Identity_Generator : Internal_MUON_Generator
 
     protected override String as_Any_artifact(MDER_Any value, String indent)
     {
-        if (value.cached_MDER_Any_identity is null)
+        if (!value._has_cached_MDER_Any_identity())
         {
-            value.cached_MDER_Any_identity
-                = Any_Selector_Foundation_Dispatch(value, indent);
+            value._assign_to_MDER_Any_identity(
+                Any_Selector_Foundation_Dispatch(value, indent));
         }
-        return value.cached_MDER_Any_identity;
+        return value._MDER_Any_identity();
     }
 }
