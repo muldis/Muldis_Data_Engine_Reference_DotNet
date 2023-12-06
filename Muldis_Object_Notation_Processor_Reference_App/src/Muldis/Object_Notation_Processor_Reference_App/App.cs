@@ -35,7 +35,7 @@ public class App
     public static void Main(String[] raw_app_args)
     {
         task_version();
-        Dictionary<App_Arg_Name, String> app_args = normalized_app_args(raw_app_args);
+        Dictionary<App_Arg_Name, String?> app_args = normalized_app_args(raw_app_args);
         if (app_args.Count == 0)
         {
             System.Console.WriteLine("Fatal: Task-naming primary app argument is missing.");
@@ -73,11 +73,11 @@ public class App
         }
     }
 
-    private static Dictionary<App_Arg_Name, String> normalized_app_args(String[] raw_app_args)
+    private static Dictionary<App_Arg_Name, String?> normalized_app_args(String[] raw_app_args)
     {
         // The "task" arg is expected to be positional, and the others named.
         // A positional arg does NOT start with "--", a named looks like "--foo=bar" or "--foo".
-        Dictionary<App_Arg_Name, String> app_args = new Dictionary<App_Arg_Name, String>();
+        Dictionary<App_Arg_Name, String?> app_args = new Dictionary<App_Arg_Name, String?>();
         if (raw_app_args.Length > 0 && !raw_app_args[0].StartsWith("--"))
         {
             for (Int32 i = 1; i < raw_app_args.Length; i++)
@@ -86,7 +86,7 @@ public class App
                 if (raw_app_arg.StartsWith("--"))
                 {
                     String arg_name;
-                    String arg_value;
+                    String? arg_value;
                     if (raw_app_arg.Contains("="))
                     {
                         // Named arg format "--foo=bar", the most generic format.
@@ -143,7 +143,7 @@ public class App
     }
 
     private static void generic_task_process(
-        App_Task task, Dictionary<App_Arg_Name, String> app_args)
+        App_Task task, Dictionary<App_Arg_Name, String?> app_args)
     {
         System.Console.WriteLine("This is task " + task + ".");
         IProcessor processor = task switch
@@ -160,7 +160,21 @@ public class App
                 "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@in);
             return;
         }
+        String? raw_arg_path_in = app_args[App_Arg_Name.@in];
+        if (raw_arg_path_in is null || String.Equals(raw_arg_path_in, ""))
+        {
+            System.Console.WriteLine(
+                "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@in);
+            return;
+        }
         if (!app_args.ContainsKey(App_Arg_Name.@out))
+        {
+            System.Console.WriteLine(
+                "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@out);
+            return;
+        }
+        String? raw_arg_path_out = app_args[App_Arg_Name.@out];
+        if (raw_arg_path_out is null || String.Equals(raw_arg_path_out, ""))
         {
             System.Console.WriteLine(
                 "Fatal: Task " + task + ": Missing argument: " + App_Arg_Name.@out);
@@ -170,11 +184,11 @@ public class App
         // and path_out will be given the kind of FileSystemInfo subclass
         // object that is appropriate for the kind of thing that "in" points to.
         FileSystemInfo path_in = File.Exists(app_args[App_Arg_Name.@in])
-            ? new FileInfo(app_args[App_Arg_Name.@in])
-            : new DirectoryInfo(app_args[App_Arg_Name.@in]);
+            ? new FileInfo(raw_arg_path_in)
+            : new DirectoryInfo(raw_arg_path_in);
         FileSystemInfo path_out = File.Exists(app_args[App_Arg_Name.@in])
-            ? new FileInfo(app_args[App_Arg_Name.@out])
-            : new DirectoryInfo(app_args[App_Arg_Name.@out]);
+            ? new FileInfo(raw_arg_path_out)
+            : new DirectoryInfo(raw_arg_path_out);
         Logger logger = new Logger(Console.Out, verbose ? Console.Out : null);
         Repository repository = new Repository(logger);
         repository.process_file_or_dir_recursive(processor, path_in, path_out, resume_when_failure);

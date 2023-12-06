@@ -48,7 +48,7 @@ public class Repeatable_Octet_Input_Stream
     // This part is empty / has zero octets when no holds exist.
     // For performance reasons an "empty" list is represented by
     // a .NET/C# "null" rather than as an "empty" List object.
-    private List<Int32> part_1_memory;
+    private List<Int32>? part_1_memory;
 
     // This is the second of 2 consecutive parts of the
     // Repeatable_Octet_Input_Stream that a user can still pull octets from.
@@ -60,7 +60,7 @@ public class Repeatable_Octet_Input_Stream
     // For performance reasons an "empty" list is represented by
     // a .NET/C# "null" rather than as a drained Stream object;
     // this will be set to null when Stream.ReadByte() returns -1.
-    private Stream part_2_source;
+    private Stream? part_2_source;
 
     // Count of octets we pulled from part_2_source since this
     // Repeatable_Octet_Input_Stream was created.
@@ -73,7 +73,7 @@ public class Repeatable_Octet_Input_Stream
     // part_2_source_position integer value that each one represents.
     // Note that each of part_1_memory and stream_position_holds
     // only is valued when the other is, only is null when the other is.
-    private Dictionary<Repeatable_Octet_Input_Stream_Position_Hold, Int32>
+    private Dictionary<Repeatable_Octet_Input_Stream_Position_Hold, Int32>?
         stream_position_holds;
 
     // Count in 0..part_1_memory.size of how many of the latest octets
@@ -119,7 +119,7 @@ public class Repeatable_Octet_Input_Stream
             // The user is currently performing a repeated-read, so return
             // an octet from their current position in part_1_memory.
             Int32 p1_octet_as_int
-                = this.part_1_memory[this.part_1_memory.Count
+                = this.part_1_memory![this.part_1_memory.Count
                     - this.count_of_part_1_memory_octets_to_return_first];
             this.count_of_part_1_memory_octets_to_return_first--;
             return p1_octet_as_int;
@@ -184,7 +184,7 @@ public class Repeatable_Octet_Input_Stream
             throw new ArgumentException(
                 "Arg hold doesn't belong to this Repeatable_Octet_Input_Stream.");
         }
-        if (!this.stream_position_holds.ContainsKey(hold))
+        if (this.stream_position_holds is null || !this.stream_position_holds.ContainsKey(hold))
         {
             throw new ArgumentException(
                 "Arg hold was previously released.");
@@ -208,7 +208,7 @@ public class Repeatable_Octet_Input_Stream
             throw new ArgumentException(
                 "Arg hold doesn't belong to this Repeatable_Octet_Input_Stream.");
         }
-        if (!this.stream_position_holds.ContainsKey(hold))
+        if (this.stream_position_holds is null || !this.stream_position_holds.ContainsKey(hold))
         {
             // Position was already released before, so nothing to do now.
             return;
@@ -234,7 +234,7 @@ public class Repeatable_Octet_Input_Stream
         // If we get here, there was at least 1 other hold left.
         // TODO: ITS STILL UNCLEAR THAT THIS JUST COLLECTS THE HASHMAP
         // VALUES AND NOT THE PAIRS.
-        Int32 earliest_other_held_position = part_1_memory.Min();
+        Int32 earliest_other_held_position = part_1_memory!.Min();
         if (our_held_position >= earliest_other_held_position)
         {
             // This hold isn't uniquely earliest outstanding one in stream,
@@ -248,7 +248,7 @@ public class Repeatable_Octet_Input_Stream
         // TODO: VERIFY THAT ALL THIS MATH IS RIGHT, THERE AREN'T OFF BY ONE ERRORS.
         Int32 position_adjusted_by
             = earliest_other_held_position - our_held_position;
-        this.part_1_memory = this.part_1_memory.GetRange(
+        this.part_1_memory = this.part_1_memory!.GetRange(
             position_adjusted_by,
             this.part_1_memory.Count()
         );

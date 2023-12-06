@@ -74,9 +74,15 @@ public class Repository
         }
         // For simplicity we require that the immediate parent dir of the named output path
         // already exists, and we will not be creating any nonexisting ancestor dirs.
-        DirectoryInfo path_out_parent = path_out is FileInfo
+        DirectoryInfo? path_out_parent = path_out is FileInfo
             ? ((FileInfo)path_out).Directory
             : ((DirectoryInfo)path_out).Parent;
+        if (path_out_parent is null)
+        {
+            this.logger.failure("Fatal: Can't output to new file/dir at path " + path_out.FullName
+                + " because its parent dir doesn't exist.");
+            return false;
+        }
         if (!path_out_parent.Exists)
         {
             this.logger.failure("Fatal: Can't output to new file/dir at path " + path_out.FullName
