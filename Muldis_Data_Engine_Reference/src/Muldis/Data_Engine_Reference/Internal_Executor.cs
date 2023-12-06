@@ -18,7 +18,7 @@ internal class Internal_Executor
         return this.__machine;
     }
 
-    internal MDER_Any Evaluates(MDER_Any function, MDER_Any args = null)
+    internal MDER_Any Evaluates(MDER_Any function, MDER_Any? args = null)
     {
         if (args is null)
         {
@@ -36,7 +36,7 @@ internal class Internal_Executor
                 Array__maybe_at((MDER_Array)function, 0), this.__machine.MDER_Attr_Name("foundation")))
             {
                 return evaluate_foundation_function(
-                    (MDER_Text)Array__maybe_at((MDER_Array)function, 1), args_as_Tuple);
+                    (MDER_Text)Array__maybe_at((MDER_Array)function, 1)!, args_as_Tuple);
             }
             throw new NotImplementedException();
         }
@@ -56,7 +56,7 @@ internal class Internal_Executor
             "X_Malformed_Function_Call").ToString());
     }
 
-    internal void Performs(MDER_Any procedure, MDER_Any args = null)
+    internal void Performs(MDER_Any procedure, MDER_Any? args = null)
     {
         if (args is null)
         {
@@ -182,7 +182,7 @@ internal class Internal_Executor
         Int64 count = Array__count((MDER_Array)value);
         for (Int64 i = 0; i < count; i++)
         {
-            if (!Is_Text(Array__maybe_at((MDER_Array)value, i)))
+            if (!Is_Text(Array__maybe_at((MDER_Array)value, i)!))
             {
                 return false;
             }
@@ -201,7 +201,7 @@ internal class Internal_Executor
         {
             return false;
         }
-        MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
+        MDER_Any first = Array__maybe_at((MDER_Array)value, 0)!;
         if ((Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation")) && count == 2)
             || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used")) && count >= 2)
             || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")) && count >= 1)
@@ -220,7 +220,7 @@ internal class Internal_Executor
         {
             return false;
         }
-        MDER_Any first = Array__maybe_at((MDER_Array)value, 0);
+        MDER_Any first = Array__maybe_at((MDER_Array)value, 0)!;
         if (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation"))
             || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used"))
             || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")))
@@ -466,7 +466,7 @@ internal class Internal_Executor
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
-                    MDER_Any maybe_member = Array__maybe_at((MDER_Array)a0, (Int64)((MDER_Integer)a1).as_BigInteger);
+                    MDER_Any maybe_member = Array__maybe_at((MDER_Array)a0, (Int64)((MDER_Integer)a1).as_BigInteger)!;
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
@@ -796,7 +796,7 @@ internal class Internal_Executor
 
     private Int64 Array__node__tree_member_count(Internal_MDER_Array_Struct node)
     {
-        if (node.cached_members_meta.tree_member_count is null)
+        if (node.cached_members_meta!.tree_member_count is null)
         {
             switch (node.local_symbolic_type)
             {
@@ -823,17 +823,17 @@ internal class Internal_Executor
         return (Int64)node.cached_members_meta.tree_member_count;
     }
 
-    private MDER_Integer Bits__maybe_at(MDER_Bits bits, Int64 ord_pos)
+    private MDER_Integer? Bits__maybe_at(MDER_Bits bits, Int64 ord_pos)
     {
         return this.__machine.MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
     }
 
-    private MDER_Integer Blob__maybe_at(MDER_Blob blob, Int64 ord_pos)
+    private MDER_Integer? Blob__maybe_at(MDER_Blob blob, Int64 ord_pos)
     {
         return this.__machine.MDER_Integer(blob.octet_members[(Int32)ord_pos]);
     }
 
-    private MDER_Integer Text__maybe_at(MDER_Text node, Int64 ord_pos)
+    private MDER_Integer? Text__maybe_at(MDER_Text node, Int64 ord_pos)
     {
         if (node.has_any_non_BMP)
         {
@@ -863,14 +863,14 @@ internal class Internal_Executor
             node.code_point_members[(Int32)ord_pos]);
     }
 
-    private MDER_Any Array__maybe_at(MDER_Array array, Int64 ord_pos)
+    private MDER_Any? Array__maybe_at(MDER_Array array, Int64 ord_pos)
     {
         return Array__node__maybe_at(array.tree_root_node, ord_pos);
     }
 
-    private MDER_Any Array__node__maybe_at(Internal_MDER_Array_Struct node, Int64 ord_pos)
+    private MDER_Any? Array__node__maybe_at(Internal_MDER_Array_Struct node, Int64 ord_pos)
     {
-        if (node.cached_members_meta.tree_member_count == 0)
+        if (node.cached_members_meta!.tree_member_count == 0)
         {
             return null;
         }
@@ -894,7 +894,7 @@ internal class Internal_Executor
                 }
                 return null;
             case Internal_Symbolic_Array_Type.Catenated:
-                MDER_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos);
+                MDER_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos)!;
                 if (maybe_member is not null)
                 {
                     return maybe_member;
@@ -1055,7 +1055,7 @@ internal class Internal_Executor
                     members = ary_res_dict,
                     cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = ary_src_list.Count,
-                        tree_all_unique = node.cached_members_meta.tree_all_unique,
+                        tree_all_unique = node.cached_members_meta!.tree_all_unique,
                         tree_relational = node.cached_members_meta.tree_relational,
                     },
                 };
@@ -1078,7 +1078,7 @@ internal class Internal_Executor
                     cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = uni_src_dict.Count,
                         tree_all_unique = true,
-                        tree_relational = uni_pa.cached_members_meta.tree_relational,
+                        tree_relational = uni_pa.cached_members_meta!.tree_relational,
                     },
                 };
             case Internal_Symbolic_Bag_Type.Summed:
@@ -1124,12 +1124,12 @@ internal class Internal_Executor
         }
     }
 
-    internal MDER_Any Array__Pick_Arbitrary_Member(MDER_Array array)
+    internal MDER_Any? Array__maybe_Pick_Arbitrary_Member(MDER_Array array)
     {
-        return Array__Pick_Arbitrary_Node_Member(array.tree_root_node);
+        return Array__maybe_Pick_Arbitrary_Node_Member(array.tree_root_node);
     }
 
-    private MDER_Any Array__Pick_Arbitrary_Node_Member(Internal_MDER_Array_Struct node)
+    private MDER_Any? Array__maybe_Pick_Arbitrary_Node_Member(Internal_MDER_Array_Struct node)
     {
         switch (node.local_symbolic_type)
         {
@@ -1140,8 +1140,8 @@ internal class Internal_Executor
             case Internal_Symbolic_Array_Type.Arrayed:
                 return node.Local_Arrayed_Members()[0];
             case Internal_Symbolic_Array_Type.Catenated:
-                return Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
-                    ?? Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
+                return Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
+                    ?? Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
             default:
                 throw new NotImplementedException();
         }
@@ -1154,7 +1154,7 @@ internal class Internal_Executor
 
     private Boolean Array__Tree_Relational(Internal_MDER_Array_Struct node)
     {
-        if (node.cached_members_meta.tree_relational is null)
+        if (node.cached_members_meta!.tree_relational is null)
         {
             Boolean tr = true;
             switch (node.local_symbolic_type)
@@ -1167,7 +1167,7 @@ internal class Internal_Executor
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Internal_Symbolic_Array_Type.Arrayed:
-                    MDER_Any m0 = Array__Pick_Arbitrary_Node_Member(node);
+                    MDER_Any m0 = Array__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
@@ -1176,8 +1176,8 @@ internal class Internal_Executor
                         );
                     break;
                 case Internal_Symbolic_Array_Type.Catenated:
-                    MDER_Any pm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0);
-                    MDER_Any sm0 = Array__Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
+                    MDER_Any pm0 = Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)!;
+                    MDER_Any sm0 = Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1)!;
                     tr = Array__Tree_Relational(node.Tree_Catenated_Members().a0)
                         && Array__Tree_Relational(node.Tree_Catenated_Members().a1)
                         && (pm0 is null || sm0 is null || Tuple__Same_Heading((MDER_Tuple)pm0, (MDER_Tuple)sm0));
@@ -1190,9 +1190,9 @@ internal class Internal_Executor
         return (Boolean)node.cached_members_meta.tree_relational;
     }
 
-    internal MDER_Any Set__Pick_Arbitrary_Member(MDER_Set set)
+    internal MDER_Any? Set__maybe_Pick_Arbitrary_Member(MDER_Set set)
     {
-        return Bag__Pick_Arbitrary_Node_Member(set.tree_root_node);
+        return Bag__maybe_Pick_Arbitrary_Node_Member(set.tree_root_node);
     }
 
     internal Boolean Set__Is_Relational(MDER_Set set)
@@ -1200,14 +1200,14 @@ internal class Internal_Executor
         return Bag__Tree_Relational(set.tree_root_node);
     }
 
-    internal MDER_Any Bag__Pick_Arbitrary_Member(MDER_Bag bag)
+    internal MDER_Any? Bag__maybe_Pick_Arbitrary_Member(MDER_Bag bag)
     {
-        return Bag__Pick_Arbitrary_Node_Member(bag.tree_root_node);
+        return Bag__maybe_Pick_Arbitrary_Node_Member(bag.tree_root_node);
     }
 
-    private MDER_Any Bag__Pick_Arbitrary_Node_Member(Internal_MDER_Bag_Struct node)
+    private MDER_Any? Bag__maybe_Pick_Arbitrary_Node_Member(Internal_MDER_Bag_Struct node)
     {
-        if (node.cached_members_meta.tree_member_count == 0)
+        if (node.cached_members_meta!.tree_member_count == 0)
         {
             return null;
         }
@@ -1222,10 +1222,10 @@ internal class Internal_Executor
             case Internal_Symbolic_Bag_Type.Indexed:
                 return node.Local_Indexed_Members().First().Value.member;
             case Internal_Symbolic_Bag_Type.Unique:
-                return Bag__Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
+                return Bag__maybe_Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
             case Internal_Symbolic_Bag_Type.Summed:
-                return Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
-                    ?? Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
+                return Bag__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
+                    ?? Bag__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
             default:
                 throw new NotImplementedException();
         }
@@ -1238,7 +1238,7 @@ internal class Internal_Executor
 
     private Boolean Bag__Tree_Relational(Internal_MDER_Bag_Struct node)
     {
-        if (node.cached_members_meta.tree_relational is null)
+        if (node.cached_members_meta!.tree_relational is null)
         {
             Boolean tr = true;
             switch (node.local_symbolic_type)
@@ -1251,7 +1251,7 @@ internal class Internal_Executor
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
                 case Internal_Symbolic_Bag_Type.Arrayed:
-                    MDER_Any m0 = Bag__Pick_Arbitrary_Node_Member(node);
+                    MDER_Any m0 = Bag__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = m0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
@@ -1260,7 +1260,7 @@ internal class Internal_Executor
                         );
                     break;
                 case Internal_Symbolic_Bag_Type.Indexed:
-                    MDER_Any im0 = Bag__Pick_Arbitrary_Node_Member(node);
+                    MDER_Any im0 = Bag__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = im0.WKBT == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
@@ -1274,8 +1274,8 @@ internal class Internal_Executor
                 case Internal_Symbolic_Bag_Type.Summed:
                     tr = Bag__Tree_Relational(node.Tree_Summed_Members().a0)
                         && Bag__Tree_Relational(node.Tree_Summed_Members().a1);
-                    MDER_Tuple pam0 = (MDER_Tuple)Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0);
-                    MDER_Tuple eam0 = (MDER_Tuple)Bag__Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
+                    MDER_Tuple pam0 = (MDER_Tuple)Bag__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)!;
+                    MDER_Tuple eam0 = (MDER_Tuple)Bag__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1)!;
                     if (pam0 is not null && eam0 is not null)
                     {
                         tr = tr && Tuple__Same_Heading(pam0, eam0);
@@ -1291,6 +1291,15 @@ internal class Internal_Executor
 
     internal MDER_Heading Tuple__Heading(MDER_Tuple tuple)
     {
+        return this.__machine.MDER_Heading(new HashSet<String>(tuple.attrs.Keys));
+    }
+
+    internal MDER_Heading? Tuple__maybe_Heading(MDER_Tuple? tuple)
+    {
+        if (tuple is null)
+        {
+            return null;
+        }
         return this.__machine.MDER_Heading(new HashSet<String>(tuple.attrs.Keys));
     }
 

@@ -14,7 +14,7 @@ public class App
             // main program invocation syntax or not, and accounts for
             // the varied host operating systems or compiled vs debugged.
             String hostExecutablePath
-                = System.Reflection.Assembly.GetEntryAssembly().Location;
+                = System.Reflection.Assembly.GetEntryAssembly()!.Location;
             System.Console.WriteLine("Usage: " + hostExecutablePath
                 + " <source code file path>");
             return;
@@ -66,7 +66,7 @@ public class App
         );
         if ((Boolean)machine.MDER_export_qualified(machine.MDER_evaluate(
             machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
-            machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text })))).Value)
+            machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text })))).Value!)
         {
             System.Console.WriteLine("The requested source code providing file"
                 + " [" + sourceCodeFilePath + "] is not well-formed UTF-8 text:"

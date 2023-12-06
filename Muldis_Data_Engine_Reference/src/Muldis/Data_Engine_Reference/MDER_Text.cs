@@ -40,7 +40,7 @@ public class MDER_Text : MDER_Any
     internal readonly Boolean has_any_non_BMP;
 
     // Cached count of code point members of the Muldis Data Language Text.
-    internal Nullable<Int64> cached_member_count;
+    internal Int64? cached_member_count;
 
     internal MDER_Text(MDER_Machine machine, String code_point_members,
         Boolean has_any_non_BMP)

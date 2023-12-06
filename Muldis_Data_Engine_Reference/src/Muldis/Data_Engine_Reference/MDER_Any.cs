@@ -38,7 +38,7 @@ public abstract class MDER_Any
     // The serialization format either is or resembles a Muldis Object Notation Plain Text
     // literal for selecting the value, in the form of character strings
     // whose character code points are typically in the 0..127 range.
-    internal String cached_MDER_Any_identity;
+    internal String? cached_MDER_Any_identity;
 
     internal MDER_Any(MDER_Machine machine, Internal_Well_Known_Base_Type WKBT)
     {
@@ -66,11 +66,11 @@ public abstract class MDER_Any
 
 public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
 {
-    public override Boolean Equals(MDER_Any v1, MDER_Any v2)
+    public override Boolean Equals(MDER_Any? v1, MDER_Any? v2)
     {
-        if (v1 is null && v2 is null)
+        if (Object.ReferenceEquals(v1,v2))
         {
-            // Would we ever get here?
+            // We get here if both args are null, if that is possible.
             return true;
         }
         if (v1 is null || v2 is null)

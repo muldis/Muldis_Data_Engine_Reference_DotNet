@@ -11,14 +11,14 @@ public class MDER_Fraction : MDER_Any
     // from the system as such; a MDER_Fraction input first as a Decimal
     // is only copied to the as_pair field when needed;
     // if both said fields are valued at once, they are redundant.
-    private Nullable<Decimal> _maybe_as_Decimal;
+    private Decimal? _maybe_as_Decimal;
 
     // The as_pair field, comprising a numerator+denominator field
     // pair, can represent any
     // MDER_Fraction value at all, such that the Fraction's value is
     // defined as the fractional division of numerator by denominator.
     // as_pair might not be defined if as_Decimal is defined.
-    private Internal_Fraction_As_Pair maybe_as_pair;
+    private Internal_Fraction_As_Pair? maybe_as_pair;
 
     internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
@@ -43,7 +43,7 @@ public class MDER_Fraction : MDER_Any
         this.maybe_as_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
-    internal Nullable<Decimal> maybe_as_Decimal()
+    internal Decimal? maybe_as_Decimal()
     {
         return this._maybe_as_Decimal;
     }
@@ -51,19 +51,19 @@ public class MDER_Fraction : MDER_Any
     internal BigInteger numerator()
     {
         this.ensure_pair();
-        return this.maybe_as_pair.numerator;
+        return this.maybe_as_pair!.numerator;
     }
 
     internal BigInteger denominator()
     {
         this.ensure_pair();
-        return this.maybe_as_pair.denominator;
+        return this.maybe_as_pair!.denominator;
     }
 
     internal void ensure_coprime()
     {
         this.ensure_pair();
-        if (this.maybe_as_pair.cached_is_coprime == true)
+        if (this.maybe_as_pair!.cached_is_coprime == true)
         {
             return;
         }
@@ -86,7 +86,7 @@ public class MDER_Fraction : MDER_Any
             return;
         }
         // If numerator+denominator are null, _maybe_as_Decimal must not be.
-        Int32[] dec_bits = Decimal.GetBits((Decimal)this._maybe_as_Decimal);
+        Int32[] dec_bits = Decimal.GetBits((Decimal)this._maybe_as_Decimal!);
         // https://msdn.microsoft.com/en-us/library/system.decimal.getbits(v=vs.110).aspx
         // The GetBits spec says that it returns 4 32-bit integers
         // representing the 128 bits of the Decimal itself; of these,
@@ -113,7 +113,7 @@ public class MDER_Fraction : MDER_Any
         {
             return true;
         }
-        if (this.maybe_as_pair.cached_is_terminating_decimal is null)
+        if (this.maybe_as_pair!.cached_is_terminating_decimal is null)
         {
             this.ensure_coprime();
             Boolean found_all_2_factors = false;

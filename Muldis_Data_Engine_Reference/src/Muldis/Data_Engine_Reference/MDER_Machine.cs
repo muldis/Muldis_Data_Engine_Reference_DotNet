@@ -490,7 +490,7 @@ public class MDER_Machine
             {
                 return MDER_Relation_D0C0;
             }
-            if (this._executor().Set__Pick_Arbitrary_Member(body) is not null)
+            if (this._executor().Set__maybe_Pick_Arbitrary_Member(body) is not null)
             {
                 return MDER_Relation_D0C1;
             }
@@ -574,22 +574,22 @@ public class MDER_Machine
         return new MDER_External(this, external_value);
     }
 
-    public MDER_Any MDER_evaluate(MDER_Any function, MDER_Any args = null)
+    public MDER_Any MDER_evaluate(MDER_Any function, MDER_Any? args = null)
     {
         if (function is null)
         {
             throw new ArgumentNullException("function");
         }
-        return this.__executor.Evaluates(function, args is null ? null : args);
+        return this.__executor.Evaluates(function, args);
     }
 
-    public void MDER_perform(MDER_Any procedure, MDER_Any args = null)
+    public void MDER_perform(MDER_Any procedure, MDER_Any? args = null)
     {
         if (procedure is null)
         {
             throw new ArgumentNullException("procedure");
         }
-        this.__executor.Performs(procedure, args is null ? null : args);
+        this.__executor.Performs(procedure, args);
     }
 
     public MDER_Any MDER_current(MDER_Variable variable)
@@ -619,27 +619,27 @@ public class MDER_Machine
         return import__tree(value);
     }
 
-    public MDER_Any MDER_import_qualified(KeyValuePair<String, Object> value)
+    public MDER_Any MDER_import_qualified(KeyValuePair<String, Object?> value)
     {
         return import__tree_qualified(value);
     }
 
-    private MDER_Any import__tree(Object value)
+    private MDER_Any import__tree(Object? value)
     {
         if (value is MDER_Any)
         {
             return (MDER_Any)value;
         }
-        if (value is not null && value.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
+        if (value is not null && (value.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
         {
-            return import__tree_qualified((KeyValuePair<String, Object>)value);
+            return import__tree_qualified((KeyValuePair<String, Object?>)value);
         }
         return import__tree_unqualified(value);
     }
 
-    private MDER_Any import__tree_qualified(KeyValuePair<String, Object> value)
+    private MDER_Any import__tree_qualified(KeyValuePair<String, Object?> value)
     {
-        Object v = value.Value;
+        Object? v = value.Value;
         // Note that .NET guarantees the .Key is never null.
         if (v is null)
         {
@@ -677,7 +677,7 @@ public class MDER_Machine
                 {
                     return this.MDER_Fraction((Decimal)v);
                 }
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
                     Object numerator   = ((KeyValuePair<Object, Object>)v).Key;
                     Object denominator = ((KeyValuePair<Object, Object>)v).Value;
@@ -767,7 +767,7 @@ public class MDER_Machine
                 }
                 break;
             case "Array":
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Array(
                         new List<MDER_Any>(((List<Object>)v).Select(
@@ -777,7 +777,7 @@ public class MDER_Machine
                 }
                 break;
             case "Set":
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Set(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
@@ -787,7 +787,7 @@ public class MDER_Machine
                 }
                 break;
             case "Bag":
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Bag(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
@@ -809,7 +809,7 @@ public class MDER_Machine
                     }
                     return this.MDER_Heading(attr_names);
                 }
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.HashSet`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.HashSet`"))
                 {
                     HashSet<String> attr_names = (HashSet<String>)v;
                     foreach (String atnm in attr_names)
@@ -841,7 +841,7 @@ public class MDER_Machine
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.Dictionary`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.Dictionary`"))
                 {
                     Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
@@ -882,7 +882,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Array__Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Array__maybe_Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -913,7 +913,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Set__Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Set__maybe_Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -944,7 +944,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading hv = this.__executor.Tuple__Heading((MDER_Tuple)this.__executor.Bag__Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Bag__maybe_Pick_Arbitrary_Member(bv));
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -957,7 +957,7 @@ public class MDER_Machine
                 }
                 break;
             case "Article":
-                if (v.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
                     Object label = ((KeyValuePair<Object, Object>)v).Key;
                     Object attrs = ((KeyValuePair<Object, Object>)v).Value;
@@ -1086,14 +1086,14 @@ public class MDER_Machine
                 break;
             default:
                 throw new NotImplementedException(
-                    "Unhandled MDER value type ["+value.Key+"]+[" + v.GetType().FullName + "].");
+                    "Unhandled MDER value type ["+value.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
         }
         // Duplicated as Visual Studio says otherwise not all code paths return a value.
         throw new NotImplementedException(
-            "Unhandled MDER value type ["+value.Key+"]+[" + v.GetType().FullName + "].");
+            "Unhandled MDER value type ["+value.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
     }
 
-    private MDER_Any import__tree_unqualified(Object value)
+    private MDER_Any import__tree_unqualified(Object? value)
     {
         if (value is null)
         {
@@ -1141,17 +1141,16 @@ public class MDER_Machine
                 (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
-        throw new NotImplementedException("Unhandled MDER value type [" + value.GetType().FullName + "].");
+        throw new NotImplementedException("Unhandled MDER value type [" + (value.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
     }
 
-    public Object MDER_export(MDER_Any value)
+    public Object? MDER_export(MDER_Any value)
     {
         if (value is null)
         {
             throw new ArgumentNullException("value");
         }
-        MDER_Any v = value;
-        switch (v.WKBT)
+        switch (value.WKBT)
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return null;
@@ -1160,32 +1159,31 @@ public class MDER_Machine
             case Internal_Well_Known_Base_Type.MDER_True:
                 return true;
             case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)v).as_BigInteger;
+                return ((MDER_Integer)value).as_BigInteger;
             case Internal_Well_Known_Base_Type.MDER_External:
-                return ((MDER_External)v).external_value;
+                return ((MDER_External)value).external_value;
             default:
                 return MDER_export_qualified(value);
         }
     }
 
-    public KeyValuePair<String, Object> MDER_export_qualified(MDER_Any value)
+    public KeyValuePair<String, Object?> MDER_export_qualified(MDER_Any value)
     {
         if (value is null)
         {
             throw new ArgumentNullException("value");
         }
-        MDER_Any v = value;
-        switch (v.WKBT)
+        switch (value.WKBT)
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
-                return new KeyValuePair<String, Object>("Ignorance",null);
+                return new KeyValuePair<String, Object?>("Ignorance",null);
             case Internal_Well_Known_Base_Type.MDER_False:
-                return new KeyValuePair<String, Object>("Boolean",false);
+                return new KeyValuePair<String, Object?>("Boolean",false);
             case Internal_Well_Known_Base_Type.MDER_True:
-                return new KeyValuePair<String, Object>("Boolean",true);
+                return new KeyValuePair<String, Object?>("Boolean",true);
             case Internal_Well_Known_Base_Type.MDER_Integer:
-                return new KeyValuePair<String, Object>("Integer",
-                    ((MDER_Integer)v).as_BigInteger);
+                return new KeyValuePair<String, Object?>("Integer",
+                    ((MDER_Integer)value).as_BigInteger);
             case Internal_Well_Known_Base_Type.MDER_Fraction:
                 throw new NotImplementedException();
             case Internal_Well_Known_Base_Type.MDER_Bits:
@@ -1215,8 +1213,8 @@ public class MDER_Machine
             case Internal_Well_Known_Base_Type.MDER_Stream:
                 throw new NotImplementedException();
             case Internal_Well_Known_Base_Type.MDER_External:
-                return new KeyValuePair<String, Object>("New_External",
-                    ((MDER_External)v).external_value);
+                return new KeyValuePair<String, Object?>("New_External",
+                    ((MDER_External)value).external_value);
             default:
                 throw new NotImplementedException();
         }

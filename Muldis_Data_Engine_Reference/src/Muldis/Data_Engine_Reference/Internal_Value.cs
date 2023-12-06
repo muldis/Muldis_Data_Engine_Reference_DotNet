@@ -50,24 +50,24 @@ internal class Internal_MDER_Array_Struct
         // this Array's members are defined as the catenation of
         // the pair's a0 and a1 nodes in that order.
         // Makes no guarantees that the Array is none/singular/otherwise.
-    internal Object members;
+    internal Object? members;
 
     // A cache of calculations about this Array's members.
-    internal Internal_Cached_Members_Meta cached_members_meta;
+    internal Internal_Cached_Members_Meta? cached_members_meta;
 
     internal Internal_Multiplied_Member Local_Singular_Members()
     {
-        return (Internal_Multiplied_Member)this.members;
+        return (Internal_Multiplied_Member)this.members!;
     }
 
     internal List<MDER_Any> Local_Arrayed_Members()
     {
-        return (List<MDER_Any>)this.members;
+        return (List<MDER_Any>)this.members!;
     }
 
     internal Internal_MDER_Array_Pair Tree_Catenated_Members()
     {
-        return (Internal_MDER_Array_Pair)this.members;
+        return (Internal_MDER_Array_Pair)this.members!;
     }
 }
 
@@ -183,34 +183,34 @@ internal class Internal_MDER_Bag_Struct
         // this Bag's members are defined as the catenation of
         // the pair's a0 and a1 nodes in that order.
         // Makes no guarantees that the Bag is none/singular/otherwise.
-    internal Object members;
+    internal Object? members;
 
     // A cache of calculations about this Bag's members.
-    internal Internal_Cached_Members_Meta cached_members_meta;
+    internal Internal_Cached_Members_Meta? cached_members_meta;
 
     internal Internal_Multiplied_Member Local_Singular_Members()
     {
-        return (Internal_Multiplied_Member)this.members;
+        return (Internal_Multiplied_Member)this.members!;
     }
 
     internal List<Internal_Multiplied_Member> Local_Arrayed_Members()
     {
-        return (List<Internal_Multiplied_Member>)this.members;
+        return (List<Internal_Multiplied_Member>)this.members!;
     }
 
     internal Dictionary<MDER_Any, Internal_Multiplied_Member> Local_Indexed_Members()
     {
-        return (Dictionary<MDER_Any, Internal_Multiplied_Member>)this.members;
+        return (Dictionary<MDER_Any, Internal_Multiplied_Member>)this.members!;
     }
 
     internal Internal_MDER_Bag_Struct Tree_Unique_Members()
     {
-        return (Internal_MDER_Bag_Struct)this.members;
+        return (Internal_MDER_Bag_Struct)this.members!;
     }
 
     internal Internal_MDER_Bag_Pair Tree_Summed_Members()
     {
-        return (Internal_MDER_Bag_Pair)this.members;
+        return (Internal_MDER_Bag_Pair)this.members!;
     }
 }
 
@@ -244,14 +244,14 @@ internal class Internal_Cached_Members_Meta
     // Nullable Integer
     // Cached count of members of the Muldis Data Language Array/Bag represented by
     // this tree node including those defined by it and child nodes.
-    internal Nullable<Int64> tree_member_count;
+    internal Int64? tree_member_count;
 
     // Nullable Boolean
     // This is true iff we know that no 2 members of the Muldis Data Language
     // Array/Bag represented by this tree node (including child nodes)
     // are the same value, and false iff we know that at least 2
     // members are the same value.
-    internal Nullable<Boolean> tree_all_unique;
+    internal Boolean? tree_all_unique;
 
     // Nullable Boolean
     // This is true iff we know that the Muldis Data Language Array/Bag represented
@@ -259,5 +259,5 @@ internal class Internal_Cached_Members_Meta
     // is not a Muldis Data Language Tuple and has no 2 members that do not have
     // the same heading; this is false iff we know that any member is
     // not a Tuple or that any 2 members do not have the same heading.
-    internal Nullable<Boolean> tree_relational;
+    internal Boolean? tree_relational;
 }

@@ -22,7 +22,7 @@ internal class Internal_Fraction_As_Pair
     // While the pair typically need to be coprime in order to reliably
     // determine if 2 MDER_Fraction represent the same Muldis Data Language value,
     // we don't necessarily store them that way for efficiency sake.
-    internal Nullable<Boolean> cached_is_coprime;
+    internal Boolean? cached_is_coprime;
 
     // This is true iff we know that the MDER_Fraction value can be
     // represented as a terminating decimal number, meaning that the
@@ -35,7 +35,7 @@ internal class Internal_Fraction_As_Pair
     // number iff it would terminate and a coprime integer pair otherwise.
     // This field may be true even if cached_is_coprime isn't because
     // this Internal_Fraction_As_Pair was derived from a Decimal.
-    internal Nullable<Boolean> cached_is_terminating_decimal;
+    internal Boolean? cached_is_terminating_decimal;
 
     // Iff this field is defined, we ensure that both the current
     // MDER_Fraction_Struct has a denominator equal to it, and also that
@@ -48,7 +48,7 @@ internal class Internal_Fraction_As_Pair
     // when a lot of math, particularly addition and subtraction, is
     // done with rationals having a common conceptual fixed precision,
     // so that the performance is then closer to integer math.
-    // internal Nullable<BigInteger> denominator_affinity;
+    // internal BigInteger? denominator_affinity;
 
     internal Internal_Fraction_As_Pair(BigInteger numerator, BigInteger denominator)
     {

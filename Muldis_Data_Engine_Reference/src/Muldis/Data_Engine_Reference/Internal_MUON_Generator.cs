@@ -95,7 +95,7 @@ internal abstract class Internal_MUON_Generator
         {
             if (fa.maybe_as_Decimal() is not null)
             {
-                String dec_digits = fa.maybe_as_Decimal().ToString();
+                String dec_digits = fa.maybe_as_Decimal().ToString()!;
                 // When a .NET Decimal is selected using a .NET Decimal
                 // literal having trailing zeroes, those trailing
                 // zeroes will persist in the .ToString() result
