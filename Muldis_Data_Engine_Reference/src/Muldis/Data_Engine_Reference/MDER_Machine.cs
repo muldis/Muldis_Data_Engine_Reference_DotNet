@@ -6,9 +6,7 @@ namespace Muldis.Data_Engine_Reference;
 public class MDER_Machine
 {
     private readonly Internal_Executor __executor;
-    private readonly Internal_Identity_Generator __identity_generator;
-    private readonly Internal_Preview_Generator __preview_generator;
-    private readonly Internal_Standard_Generator __standard_generator;
+    private readonly Internal_MUON_Generator __MUON_generator;
 
     // About this virtual machine memory pool where Muldis Data Language values
     // and variables live, which exploits the "flyweight pattern" for
@@ -101,16 +99,11 @@ public class MDER_Machine
     // All well known MDER_Excuse values.
     internal readonly Dictionary<String, MDER_Excuse> well_known_excuses;
 
-
-
-
     public MDER_Machine()
     {
         this.__executor = new Internal_Executor(this);
-        this.__identity_generator = new Internal_Identity_Generator();
-        this.__preview_generator = new Internal_Preview_Generator();
-        this.__standard_generator = new Internal_Standard_Generator();
-
+        this.__MUON_generator = new Internal_MUON_Generator();
+ 
         this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
 
         this.MDER_0bFALSE = new MDER_False(this);
@@ -261,19 +254,9 @@ public class MDER_Machine
         return this.__executor;
     }
 
-    internal Internal_Identity_Generator _identity_generator()
+    internal Internal_MUON_Generator _MUON_generator()
     {
-        return this.__identity_generator;
-    }
-
-    internal Internal_Preview_Generator _preview_generator()
-    {
-        return this.__preview_generator;
-    }
-
-    internal Internal_Standard_Generator _standard_generator()
-    {
-        return this.__standard_generator;
+        return this.__MUON_generator;
     }
 
     internal MDER_Ignorance MDER_Ignorance()

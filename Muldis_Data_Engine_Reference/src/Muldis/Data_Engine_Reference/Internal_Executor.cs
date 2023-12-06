@@ -513,7 +513,7 @@ internal class Internal_Executor
         if (a0._has_cached_MDER_Any_identity()
             && a1._has_cached_MDER_Any_identity())
         {
-            if (String.Equals(a0._MDER_Any_identity(), a1._MDER_Any_identity()))
+            if (String.Equals(a0._identity_as_String(), a1._identity_as_String()))
             {
                 merge_two_same(a0, a1);
                 return true;
