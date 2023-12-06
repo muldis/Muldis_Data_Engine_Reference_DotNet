@@ -616,10 +616,6 @@ public class MDER_Machine
 
     public MDER_Any MDER_import(Object value)
     {
-        if (value is not null && String.Equals(value.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any"))
-        {
-            return (MDER_Any)value;
-        }
         return import__tree(value);
     }
 
@@ -630,17 +626,13 @@ public class MDER_Machine
 
     private MDER_Any import__tree(Object value)
     {
-        if (value is not null)
+        if (value is MDER_Any)
         {
-            String type_name = value.GetType().FullName;
-            if (value is MDER_Any)
-            {
-                return (MDER_Any)value;
-            }
-            if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
-            {
-                return import__tree_qualified((KeyValuePair<String, Object>)value);
-            }
+            return (MDER_Any)value;
+        }
+        if (value is not null && value.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
+        {
+            return import__tree_qualified((KeyValuePair<String, Object>)value);
         }
         return import__tree_unqualified(value);
     }
@@ -662,31 +654,30 @@ public class MDER_Machine
                     + " with a null Value property (except with [Ignorance] Key)."
             );
         }
-        String type_name = v is null ? null : v.GetType().FullName;
         switch (value.Key)
         {
             case "Boolean":
-                if (String.Equals(type_name, "System.Boolean"))
+                if (v is Boolean)
                 {
                     return this.MDER_Boolean((Boolean)v);
                 }
                 break;
             case "Integer":
-                if (String.Equals(type_name, "System.Int32"))
+                if (v is Int32)
                 {
                     return this.MDER_Integer((Int32)v);
                 }
-                if (String.Equals(type_name, "System.Numerics.BigInteger"))
+                if (v is BigInteger)
                 {
                     return this.MDER_Integer((BigInteger)v);
                 }
                 break;
             case "Fraction":
-                if (String.Equals(type_name, "System.Decimal"))
+                if (v is Decimal)
                 {
                     return this.MDER_Fraction((Decimal)v);
                 }
-                if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
                     Object numerator   = ((KeyValuePair<Object, Object>)v).Key;
                     Object denominator = ((KeyValuePair<Object, Object>)v).Value;
@@ -699,8 +690,7 @@ public class MDER_Machine
                             message: "Can't select MDER_Fraction with a null denominator."
                         );
                     }
-                    if (String.Equals(numerator.GetType().FullName, "System.Int32")
-                        && String.Equals(denominator.GetType().FullName, "System.Int32"))
+                    if (numerator is Int32 && denominator is Int32)
                     {
                         if (((Int32)denominator) == 0)
                         {
@@ -712,8 +702,7 @@ public class MDER_Machine
                         }
                         return this.MDER_Fraction((Int32)numerator, (Int32)denominator);
                     }
-                    if (String.Equals(numerator.GetType().FullName, "System.Numerics.BigInteger")
-                        && String.Equals(denominator.GetType().FullName, "System.Numerics.BigInteger"))
+                    if (numerator is BigInteger && denominator is BigInteger)
                     {
                         if (((BigInteger)denominator) == 0)
                         {
@@ -725,9 +714,9 @@ public class MDER_Machine
                         }
                         return this.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
                     }
-                    if (String.Equals(numerator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any")
+                    if (numerator is MDER_Any
                         && ((MDER_Any)numerator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer
-                        && String.Equals(denominator.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any")
+                        && denominator is MDER_Any
                         && ((MDER_Any)denominator).WKBT == Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         if (((MDER_Integer)((MDER_Any)denominator)).as_BigInteger == 0)
@@ -746,21 +735,21 @@ public class MDER_Machine
                 }
                 break;
             case "Bits":
-                if (String.Equals(type_name, "System.Collections.BitArray"))
+                if (v is BitArray)
                 {
                     // BitArrays are mutable so clone argument to protect our internals.
                     return this.MDER_Bits(new BitArray((BitArray)v));
                 }
                 break;
             case "Blob":
-                if (String.Equals(type_name, "System.Byte[]"))
+                if (v is Byte[])
                 {
                     // Arrays are mutable so clone argument to protect our internals.
                     return this.MDER_Blob(((Byte[])v).ToArray());
                 }
                 break;
             case "Text":
-                if (String.Equals(type_name, "System.String"))
+                if (v is String)
                 {
                     Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)v);
                     if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -778,7 +767,7 @@ public class MDER_Machine
                 }
                 break;
             case "Array":
-                if (type_name.StartsWith("System.Collections.Generic.List`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Array(
                         new List<MDER_Any>(((List<Object>)v).Select(
@@ -788,7 +777,7 @@ public class MDER_Machine
                 }
                 break;
             case "Set":
-                if (type_name.StartsWith("System.Collections.Generic.List`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Set(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
@@ -798,7 +787,7 @@ public class MDER_Machine
                 }
                 break;
             case "Bag":
-                if (type_name.StartsWith("System.Collections.Generic.List`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.List`"))
                 {
                     return this.MDER_Bag(
                         new List<Internal_Multiplied_Member>(((List<Object>)v).Select(
@@ -808,7 +797,7 @@ public class MDER_Machine
                 }
                 break;
             case "Heading":
-                if (String.Equals(type_name, "System.Object[]"))
+                if (v is Object[])
                 {
                     HashSet<String> attr_names = new HashSet<String>();
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
@@ -820,7 +809,7 @@ public class MDER_Machine
                     }
                     return this.MDER_Heading(attr_names);
                 }
-                if (type_name.StartsWith("System.Collections.Generic.HashSet`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.HashSet`"))
                 {
                     HashSet<String> attr_names = (HashSet<String>)v;
                     foreach (String atnm in attr_names)
@@ -840,7 +829,7 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple":
-                if (String.Equals(type_name, "System.Object[]"))
+                if (v is Object[])
                 {
                     Dictionary<String, Object> attrs = new Dictionary<String, Object>();
                     for (Int32 i = 0; i < ((Object[])v).Length; i++)
@@ -852,7 +841,7 @@ public class MDER_Machine
                             a => a.Key, a => import__tree(a.Value)))
                     );
                 }
-                if (type_name.StartsWith("System.Collections.Generic.Dictionary`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.Dictionary`"))
                 {
                     Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
@@ -875,15 +864,13 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Array":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Array bv = this.MDER_Array_C0;
                     return this.MDER_Tuple_Array(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Array)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_Any)v);
                     if (!this.__executor.Array__Is_Relational(bv))
@@ -908,15 +895,13 @@ public class MDER_Machine
                 }
                 break;
             case "Relation":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Set bv = this.MDER_Set_C0;
                     return this.MDER_Relation(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Set)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_Any)v);
                     if (!this.__executor.Set__Is_Relational(bv))
@@ -941,15 +926,13 @@ public class MDER_Machine
                 }
                 break;
             case "Tuple_Bag":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Bag bv = this.MDER_Bag_C0;
                     return this.MDER_Tuple_Bag(hv, bv);
                 }
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any")
-                    && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
+                if (v is MDER_Any && ((MDER_Any)v).WKBT == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_Any)v);
                     if (!this.__executor.Bag__Is_Relational(bv))
@@ -974,7 +957,7 @@ public class MDER_Machine
                 }
                 break;
             case "Article":
-                if (type_name.StartsWith("System.Collections.Generic.KeyValuePair`"))
+                if (v.GetType().FullName.StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
                     Object label = ((KeyValuePair<Object, Object>)v).Key;
                     Object attrs = ((KeyValuePair<Object, Object>)v).Value;
@@ -998,7 +981,7 @@ public class MDER_Machine
                         );
                     }
                     MDER_Tuple attrs_cv_as_MDER_Tuple = (MDER_Tuple)attrs_cv;
-                    if (String.Equals(label.GetType().FullName, "System.String"))
+                    if (label is String)
                     {
                         if (this.__executor.Test_Dot_Net_String((String)label)
                             == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -1015,7 +998,7 @@ public class MDER_Machine
                             attrs_cv_as_MDER_Tuple
                         );
                     }
-                    if (String.Equals(label.GetType().FullName, "System.String[]"))
+                    if (label is String[])
                     {
                         foreach (String s in ((String[])label))
                         {
@@ -1037,14 +1020,14 @@ public class MDER_Machine
                             attrs_cv_as_MDER_Tuple
                         );
                     }
-                    if (String.Equals(label.GetType().FullName, "Muldis.Data_Engine_Reference.MDER_Any"))
+                    if (label is MDER_Any)
                     {
                         return this.MDER_Article(import__tree(label), attrs_cv_as_MDER_Tuple);
                     }
                 }
                 break;
             case "Excuse":
-                if (String.Equals(type_name, "System.String"))
+                if (v is String)
                 {
                     if (this.__executor.Test_Dot_Net_String((String)v)
                         == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -1060,7 +1043,7 @@ public class MDER_Machine
                 }
                 throw new NotImplementedException();
             case "New_Variable":
-                if (String.Equals(type_name, "Muldis.Data_Engine_Reference.MDER_Any"))
+                if (v is MDER_Any)
                 {
                     return this.New_MDER_Variable(
                         ((MDER_Any)v));
@@ -1081,7 +1064,7 @@ public class MDER_Machine
             case "New_External":
                 return this.New_MDER_External(v);
             case "Attr_Name_List":
-                if (String.Equals(type_name, "System.String[]"))
+                if (v is String[])
                 {
                     foreach (String s in ((String[])v))
                     {
@@ -1103,11 +1086,11 @@ public class MDER_Machine
                 break;
             default:
                 throw new NotImplementedException(
-                    "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
+                    "Unhandled MDER value type ["+value.Key+"]+[" + v.GetType().FullName + "].");
         }
         // Duplicated as Visual Studio says otherwise not all code paths return a value.
         throw new NotImplementedException(
-            "Unhandled MDER value type ["+value.Key+"]+["+type_name+"].");
+            "Unhandled MDER value type ["+value.Key+"]+[" + v.GetType().FullName + "].");
     }
 
     private MDER_Any import__tree_unqualified(Object value)
@@ -1116,34 +1099,33 @@ public class MDER_Machine
         {
             return this.MDER_Ignorance();
         }
-        String type_name = value.GetType().FullName;
-        if (String.Equals(type_name, "System.Boolean"))
+        if (value is Boolean)
         {
             return this.MDER_Boolean((Boolean)value);
         }
-        if (String.Equals(type_name, "System.Int32"))
+        if (value is Int32)
         {
             return this.MDER_Integer((Int32)value);
         }
-        if (String.Equals(type_name, "System.Numerics.BigInteger"))
+        if (value is BigInteger)
         {
             return this.MDER_Integer((BigInteger)value);
         }
-        if (String.Equals(type_name, "System.Decimal"))
+        if (value is Decimal)
         {
             return this.MDER_Fraction((Decimal)value);
         }
-        if (String.Equals(type_name, "System.Collections.BitArray"))
+        if (value is BitArray)
         {
             // BitArrays are mutable so clone argument to protect our internals.
             return this.MDER_Bits(new BitArray((BitArray)value));
         }
-        if (String.Equals(type_name, "System.Byte[]"))
+        if (value is Byte[])
         {
             // Arrays are mutable so clone argument to protect our internals.
             return this.MDER_Blob(((Byte[])value).ToArray());
         }
-        if (String.Equals(type_name, "System.String"))
+        if (value is String)
         {
             Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)value);
             if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
@@ -1159,7 +1141,7 @@ public class MDER_Machine
                 (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
-        throw new NotImplementedException("Unhandled MDER value type ["+type_name+"].");
+        throw new NotImplementedException("Unhandled MDER value type [" + value.GetType().FullName + "].");
     }
 
     public Object MDER_export(MDER_Any value)
