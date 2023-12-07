@@ -20,4 +20,11 @@ public class MDER_Tuple_Bag : MDER_Any
             + this.body._as_MUON_Any_artifact(indent)
             + "))";
     }
+
+    internal Boolean _MDER_Tuple_Bag__same(MDER_Tuple_Bag value_1)
+    {
+        MDER_Tuple_Bag value_0 = this;
+        return value_0.heading._MDER_Any__same(value_1.heading)
+            && value_0.body._MDER_Any__same(value_1.body);
+    }
 }

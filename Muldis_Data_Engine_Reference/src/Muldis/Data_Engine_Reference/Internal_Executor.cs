@@ -232,7 +232,7 @@ internal class Internal_Executor
 
     internal MDER_Any evaluate_foundation_function(MDER_Text func_name, MDER_Tuple args)
     {
-        String func_name_s = func_name.code_point_members;
+        String func_name_s = func_name._code_point_members();
 
         // TYPE DEFINERS
 
@@ -353,24 +353,24 @@ internal class Internal_Executor
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_opposite_Arg_0_Not_Integer").ToString());
                     }
-                    return this.__machine.MDER_Integer(-((MDER_Integer)v).as_BigInteger);
+                    return this.__machine.MDER_Integer(-((MDER_Integer)v).as_BigInteger());
                 case "Integer_modulus":
                     if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_modulus_Arg_0_Not_Integer").ToString());
                     }
-                    return this.__machine.MDER_Integer(BigInteger.Abs(((MDER_Integer)v).as_BigInteger));
+                    return this.__machine.MDER_Integer(BigInteger.Abs(((MDER_Integer)v).as_BigInteger()));
                 case "Integer_factorial":
                     if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer
-                        || ((MDER_Integer)v).as_BigInteger < 0)
+                        || ((MDER_Integer)v).as_BigInteger() < 0)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_factorial_Arg_0_Not_Integer_NN").ToString());
                     }
                     // Note that System.Numerics.BigInteger doesn't come
                     // with a Factorial(n) so we have to do it ourselves.
-                    return this.__machine.MDER_Integer(Integer__factorial(((MDER_Integer)v).as_BigInteger));
+                    return this.__machine.MDER_Integer(Integer__factorial(((MDER_Integer)v).as_BigInteger()));
                 case "Array_count":
                     if (v._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
                     {
@@ -441,7 +441,7 @@ internal class Internal_Executor
             switch (func_name_s)
             {
                 case "same":
-                    return this.__machine.MDER_Boolean(Any__same(a0, a1));
+                    return this.__machine.MDER_Boolean(a0._MDER_Any__same(a1));
                 case "Integer_plus":
                     if (a0._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer)
                     {
@@ -453,7 +453,7 @@ internal class Internal_Executor
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Integer_plus_Arg_1_Not_Integer").ToString());
                     }
-                    return this.__machine.MDER_Integer(((MDER_Integer)a0).as_BigInteger + ((MDER_Integer)a1).as_BigInteger);
+                    return this.__machine.MDER_Integer(((MDER_Integer)a0).as_BigInteger() + ((MDER_Integer)a1).as_BigInteger());
                 case "Array_at":
                     if (a0._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
                     {
@@ -461,12 +461,12 @@ internal class Internal_Executor
                             "X_Array_at_Arg_0_Not_Array").ToString());
                     }
                     if (a1._WKBT() != Internal_Well_Known_Base_Type.MDER_Integer
-                        || ((MDER_Integer)a1).as_BigInteger < 0)
+                        || ((MDER_Integer)a1).as_BigInteger() < 0)
                     {
                         throw new ArgumentException(this.__machine.Simple_MDER_Excuse(
                             "X_Array_at_Arg_1_Not_Integer_NN").ToString());
                     }
-                    MDER_Any maybe_member = Array__maybe_at((MDER_Array)a0, (Int64)((MDER_Integer)a1).as_BigInteger)!;
+                    MDER_Any maybe_member = Array__maybe_at((MDER_Array)a0, (Int64)((MDER_Integer)a1).as_BigInteger())!;
                     if (maybe_member is null)
                     {
                         throw new ArgumentException(
@@ -498,245 +498,6 @@ internal class Internal_Executor
         throw new NotImplementedException();
     }
 
-    internal Boolean Any__same(MDER_Any a0, MDER_Any a1)
-    {
-        if (Object.ReferenceEquals(a0, a1))
-        {
-            // We should always get here for any singleton well known base types:
-            // MDER_Ignorance, MDER_False, MDER_True.
-            return true;
-        }
-        if (a0._WKBT() != a1._WKBT())
-        {
-            return false;
-        }
-        if (a0._has_cached_MDER_Any_identity()
-            && a1._has_cached_MDER_Any_identity())
-        {
-            if (String.Equals(a0._identity_as_String(), a1._identity_as_String()))
-            {
-                merge_two_same(a0, a1);
-                return true;
-            }
-            return false;
-        }
-        Boolean result;
-        switch (a0._WKBT())
-        {
-            case Internal_Well_Known_Base_Type.MDER_Ignorance:
-            case Internal_Well_Known_Base_Type.MDER_False:
-            case Internal_Well_Known_Base_Type.MDER_True:
-                // We should never get here.
-                throw new InvalidOperationException();
-            case Internal_Well_Known_Base_Type.MDER_Integer:
-                result = (((MDER_Integer)a0).as_BigInteger == ((MDER_Integer)a1).as_BigInteger);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Fraction:
-                MDER_Fraction fa0 = (MDER_Fraction)a0;
-                MDER_Fraction fa1 = (MDER_Fraction)a1;
-                if (fa0.maybe_as_Decimal() is not null && fa1.maybe_as_Decimal() is not null)
-                {
-                    result = (fa0.maybe_as_Decimal() == fa1.maybe_as_Decimal());
-                    break;
-                }
-                if (fa0.denominator() == fa1.denominator())
-                {
-                    result = (fa0.numerator() == fa1.numerator());
-                    break;
-                }
-                fa0.ensure_coprime();
-                fa1.ensure_coprime();
-                result = (fa0.denominator() == fa1.denominator()
-                    && fa0.numerator() == fa1.numerator());
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Bits:
-                result = Enumerable.SequenceEqual(
-                    BitArray_to_List(((MDER_Bits)a0).bit_members),
-                    BitArray_to_List(((MDER_Bits)a1).bit_members));
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Blob:
-                result = Enumerable.SequenceEqual(
-                    ((MDER_Blob)a0).octet_members,
-                    ((MDER_Blob)a1).octet_members);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Text:
-                result = String.Equals(((MDER_Text)a0).code_point_members,
-                    ((MDER_Text)a1).code_point_members);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Array:
-                this.Array__Collapse((MDER_Array)a0);
-                this.Array__Collapse((MDER_Array)a1);
-                result = this.collapsed_Array_Struct_same(
-                    ((MDER_Array)a0).tree_root_node, ((MDER_Array)a0).tree_root_node);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Set:
-                // MDER_Set and MDER_Bag have the same internal representation.
-                this.Set__Collapse(set: ((MDER_Set)a0), want_indexed: true);
-                this.Set__Collapse(set: ((MDER_Set)a1), want_indexed: true);
-                result = this.collapsed_Bag_Struct_same(
-                    ((MDER_Set)a0).tree_root_node, ((MDER_Set)a0).tree_root_node);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Bag:
-                // MDER_Set and MDER_Bag have the same internal representation.
-                this.Bag__Collapse(bag: ((MDER_Bag)a0), want_indexed: true);
-                this.Bag__Collapse(bag: ((MDER_Bag)a1), want_indexed: true);
-                result = this.collapsed_Bag_Struct_same(
-                    ((MDER_Set)a0).tree_root_node, ((MDER_Set)a0).tree_root_node);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Heading:
-                HashSet<String> atnms0 = ((MDER_Heading)a0).attr_names;
-                HashSet<String> atnms1 = ((MDER_Heading)a1).attr_names;
-                return (atnms0.Count == atnms1.Count)
-                    && Enumerable.All(atnms0, atnm => atnms1.Contains(atnm));
-            case Internal_Well_Known_Base_Type.MDER_Tuple:
-                Dictionary<String, MDER_Any> attrs0 = ((MDER_Tuple)a0).attrs;
-                Dictionary<String, MDER_Any> attrs1 = ((MDER_Tuple)a1).attrs;
-                // First test just that the Tuple headings are the same,
-                // and only if they are, compare the attribute values.
-                return (attrs0.Count == attrs1.Count)
-                    && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
-                    && Enumerable.All(attrs0, attr => Any__same(attr.Value, attrs1[attr.Key]));
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
-                result = Any__same(((MDER_Tuple_Array)a0).heading, ((MDER_Tuple_Array)a1).heading)
-                      && Any__same(((MDER_Tuple_Array)a0).body, ((MDER_Tuple_Array)a1).body);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Relation:
-                result = Any__same(((MDER_Relation)a0).heading, ((MDER_Relation)a1).heading)
-                      && Any__same(((MDER_Relation)a0).body, ((MDER_Relation)a1).body);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
-                result = Any__same(((MDER_Tuple_Bag)a0).heading, ((MDER_Tuple_Bag)a1).heading)
-                      && Any__same(((MDER_Tuple_Bag)a0).body, ((MDER_Tuple_Bag)a1).body);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Article:
-                result = Any__same(((MDER_Article)a0).label, ((MDER_Article)a1).label)
-                      && Any__same(((MDER_Article)a0).attrs, ((MDER_Article)a1).attrs);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Excuse:
-                result = Any__same(((MDER_Excuse)a0).label, ((MDER_Excuse)a1).label)
-                      && Any__same(((MDER_Excuse)a0).attrs, ((MDER_Excuse)a1).attrs);
-                break;
-            case Internal_Well_Known_Base_Type.MDER_Variable:
-            case Internal_Well_Known_Base_Type.MDER_Process:
-            case Internal_Well_Known_Base_Type.MDER_Stream:
-            case Internal_Well_Known_Base_Type.MDER_External:
-                // Every Muldis Data Language Handle object is always distinct from every other one.
-                return false;
-            default:
-                throw new NotImplementedException();
-        }
-        if (result)
-        {
-            merge_two_same(a0, a1);
-        }
-        return result;
-    }
-
-    private List<Boolean> BitArray_to_List(BitArray value)
-    {
-        System.Collections.IEnumerator e = value.GetEnumerator();
-        List<Boolean> list = new List<Boolean>();
-        while (e.MoveNext())
-        {
-            list.Add((Boolean)e.Current);
-        }
-        return list;
-    }
-
-    private Boolean collapsed_Array_Struct_same(
-        Internal_MDER_Array_Struct n0, Internal_MDER_Array_Struct n1)
-    {
-        if (Object.ReferenceEquals(n0, n1))
-        {
-            return true;
-        }
-        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.None
-            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
-        {
-            // In theory we should never get here assuming that
-            // the empty Array is optimized to return a constant
-            // at selection time, but we will check anyway.
-            return true;
-        }
-        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
-            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
-        {
-            return ((n0.Local_Singular_Members().multiplicity
-                    == n1.Local_Singular_Members().multiplicity)
-                && Any__same(n0.Local_Singular_Members().member,
-                    n1.Local_Singular_Members().member));
-        }
-        if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
-            && n1.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
-        {
-            // This works because MDER_Any Equals() calls Any__Same().
-            return Enumerable.SequenceEqual(
-                n0.Local_Arrayed_Members(),
-                n1.Local_Arrayed_Members());
-        }
-        Internal_MDER_Array_Struct n0_ = n0;
-        Internal_MDER_Array_Struct n1_ = n1;
-        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
-            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
-        {
-             n1_ = n0;
-             n0_ = n1;
-        }
-        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
-            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
-        {
-            Internal_Multiplied_Member sm = n0_.Local_Singular_Members();
-            List<MDER_Any> am = n1_.Local_Arrayed_Members();
-            return sm.multiplicity == am.Count
-                && Enumerable.All(am, m => Any__same(m, sm.member));
-        }
-        // We should never get here.
-        throw new NotImplementedException();
-    }
-
-    private Boolean collapsed_Bag_Struct_same(
-        Internal_MDER_Bag_Struct n0, Internal_MDER_Bag_Struct n1)
-    {
-        if (Object.ReferenceEquals(n0, n1))
-        {
-            return true;
-        }
-        if (n0.local_symbolic_type == Internal_Symbolic_Bag_Type.None
-            && n1.local_symbolic_type == Internal_Symbolic_Bag_Type.None)
-        {
-            // In theory we should never get here assuming that
-            // the empty Array is optimized to return a constant
-            // at selection time, but we will check anyway.
-            return true;
-        }
-        if (n0.local_symbolic_type == Internal_Symbolic_Bag_Type.Indexed
-            && n1.local_symbolic_type == Internal_Symbolic_Bag_Type.Indexed)
-        {
-            Dictionary<MDER_Any, Internal_Multiplied_Member> im0
-                = n0.Local_Indexed_Members();
-            Dictionary<MDER_Any, Internal_Multiplied_Member> im1
-                = n1.Local_Indexed_Members();
-            return im0.Count == im1.Count
-                && Enumerable.All(
-                    im0.Values,
-                    m => im1.ContainsKey(m.member)
-                        && im1[m.member].multiplicity == m.multiplicity
-                );
-        }
-        // We should never get here.
-        throw new NotImplementedException();
-    }
-
-    internal void merge_two_same(MDER_Any a0, MDER_Any a1)
-    {
-        // This may be run on 2 MDER_Any only if it was already
-        // determined they represent the same Muldis Data Language value; typically
-        // it is invoked by Any__same() when it would result in true.
-            // TODO: Make a more educated decision on which one to keep.
-            // It should also have logic dispatching on WKBT and
-            // do struct mergers as applicable eg copying identity info.
-    }
-
     private BigInteger Integer__factorial(BigInteger value)
     {
         // Note that System.Numerics.BigInteger doesn't come
@@ -754,12 +515,12 @@ internal class Internal_Executor
 
     internal Int64 Bits__count(MDER_Bits bits)
     {
-        return bits.bit_members.Length;
+        return bits._bit_members().Length;
     }
 
     internal Int64 Blob__count(MDER_Blob blob)
     {
-        return blob.octet_members.Length;
+        return blob._octet_members().Length;
     }
 
     internal Int64 Text__count(MDER_Text node)
@@ -768,7 +529,7 @@ internal class Internal_Executor
         {
             if (node.has_any_non_BMP)
             {
-                String s = node.code_point_members;
+                String s = node._code_point_members();
                 Int32 count = 0;
                 for (Int32 i = 0; i < s.Length; i++)
                 {
@@ -783,7 +544,7 @@ internal class Internal_Executor
             }
             else
             {
-                node.cached_member_count = node.code_point_members.Length;
+                node.cached_member_count = node._code_point_members().Length;
             }
         }
         return (Int64)node.cached_member_count;
@@ -825,19 +586,19 @@ internal class Internal_Executor
 
     private MDER_Integer? Bits__maybe_at(MDER_Bits bits, Int64 ord_pos)
     {
-        return this.__machine.MDER_Integer(bits.bit_members[(Int32)ord_pos] ? 1 : 0);
+        return this.__machine.MDER_Integer(bits._bit_members()[(Int32)ord_pos] ? 1 : 0);
     }
 
     private MDER_Integer? Blob__maybe_at(MDER_Blob blob, Int64 ord_pos)
     {
-        return this.__machine.MDER_Integer(blob.octet_members[(Int32)ord_pos]);
+        return this.__machine.MDER_Integer(blob._octet_members()[(Int32)ord_pos]);
     }
 
     private MDER_Integer? Text__maybe_at(MDER_Text node, Int64 ord_pos)
     {
         if (node.has_any_non_BMP)
         {
-            String s = node.code_point_members;
+            String s = node._code_point_members();
             Int64 logical_i = 0;
             for (Int32 i = 0; i < s.Length; i++)
             {
@@ -860,7 +621,7 @@ internal class Internal_Executor
             }
         }
         return this.__machine.MDER_Integer(
-            node.code_point_members[(Int32)ord_pos]);
+            node._code_point_members()[(Int32)ord_pos]);
     }
 
     private MDER_Any? Array__maybe_at(MDER_Array array, Int64 ord_pos)
@@ -1305,7 +1066,7 @@ internal class Internal_Executor
 
     internal Boolean Tuple__Same_Heading(MDER_Tuple t1, MDER_Tuple t2)
     {
-        if (Object.ReferenceEquals(t1,t2))
+        if (Object.ReferenceEquals(t1, t2))
         {
             return true;
         }
@@ -1325,7 +1086,7 @@ internal class Internal_Executor
 
     internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob value)
     {
-        Byte[] octets = value.octet_members;
+        Byte[] octets = value._octet_members();
         UTF8Encoding enc = new UTF8Encoding
         (
             encoderShouldEmitUTF8Identifier: false,

@@ -25,4 +25,11 @@ public class MDER_Excuse : MDER_Any
             + this.attrs._as_MUON_Any_artifact(indent)
             + "))";
     }
+
+    internal Boolean _MDER_Excuse__same(MDER_Excuse value_1)
+    {
+        MDER_Excuse value_0 = this;
+        return value_0.label._MDER_Any__same(value_1.label)
+            && value_0.attrs._MDER_Any__same(value_1.attrs);
+    }
 }

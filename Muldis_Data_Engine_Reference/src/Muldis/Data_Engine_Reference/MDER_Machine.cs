@@ -101,7 +101,7 @@ public class MDER_Machine
     public MDER_Machine()
     {
         this.__executor = new Internal_Executor(this);
- 
+
         this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
 
         this.MDER_0bFALSE = new MDER_False(this);
@@ -114,7 +114,7 @@ public class MDER_Machine
         }
 
         this.MDER_Fraction_0 = new MDER_Fraction(this, 0.0M,
-            this.integers[0].as_BigInteger, this.integers[1].as_BigInteger);
+            this.integers[0].as_BigInteger(), this.integers[1].as_BigInteger());
 
         this.MDER_Bits_C0 = new MDER_Bits(this, new BitArray(0));
 
@@ -696,7 +696,7 @@ public class MDER_Machine
                         && denominator is MDER_Any
                         && ((MDER_Any)denominator)._WKBT() == Internal_Well_Known_Base_Type.MDER_Integer)
                     {
-                        if (((MDER_Integer)((MDER_Any)denominator)).as_BigInteger == 0)
+                        if (((MDER_Integer)((MDER_Any)denominator)).as_BigInteger() == 0)
                         {
                             throw new ArgumentException
                             (
@@ -705,8 +705,8 @@ public class MDER_Machine
                             );
                         }
                         return this.MDER_Fraction(
-                            ((MDER_Integer)((MDER_Any)numerator  )).as_BigInteger,
-                            ((MDER_Integer)((MDER_Any)denominator)).as_BigInteger
+                            ((MDER_Integer)((MDER_Any)numerator  )).as_BigInteger(),
+                            ((MDER_Integer)((MDER_Any)denominator)).as_BigInteger()
                         );
                     }
                 }
@@ -1136,7 +1136,7 @@ public class MDER_Machine
             case Internal_Well_Known_Base_Type.MDER_True:
                 return true;
             case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)value).as_BigInteger;
+                return ((MDER_Integer)value).as_BigInteger();
             case Internal_Well_Known_Base_Type.MDER_External:
                 return ((MDER_External)value).external_value;
             default:
@@ -1153,14 +1153,14 @@ public class MDER_Machine
         switch (value._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
-                return new KeyValuePair<String, Object?>("Ignorance",null);
+                return new KeyValuePair<String, Object?>("Ignorance", null);
             case Internal_Well_Known_Base_Type.MDER_False:
-                return new KeyValuePair<String, Object?>("Boolean",false);
+                return new KeyValuePair<String, Object?>("Boolean", false);
             case Internal_Well_Known_Base_Type.MDER_True:
-                return new KeyValuePair<String, Object?>("Boolean",true);
+                return new KeyValuePair<String, Object?>("Boolean", true);
             case Internal_Well_Known_Base_Type.MDER_Integer:
                 return new KeyValuePair<String, Object?>("Integer",
-                    ((MDER_Integer)value).as_BigInteger);
+                    ((MDER_Integer)value).as_BigInteger());
             case Internal_Well_Known_Base_Type.MDER_Fraction:
                 throw new NotImplementedException();
             case Internal_Well_Known_Base_Type.MDER_Bits:

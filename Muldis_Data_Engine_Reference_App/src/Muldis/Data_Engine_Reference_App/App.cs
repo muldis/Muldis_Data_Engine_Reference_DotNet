@@ -83,10 +83,10 @@ public class App
         // Temporary Executor test.
         MDER_Any sum = machine.MDER_evaluate(
             machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
-            machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}))
+            machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27, 39}))
         );
         System.Console.WriteLine("Test data: sum = [" + sum + "]");
-        MDER_Any that = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27,39}));
+        MDER_Any that = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27, 39}));
         System.Console.WriteLine("Test data: that = [" + that + "]");
         MDER_Any that_too = machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Dictionary<String, Object>()
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
@@ -100,19 +100,19 @@ public class App
         System.Console.WriteLine("Test data: f1 = [" + f1 + "]");
         MDER_Any f2 = machine.MDER_import(02340233.23402532000M);
         System.Console.WriteLine("Test data: f2 = [" + f2 + "]");
-        MDER_Any f3 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13,5)));
+        MDER_Any f3 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13, 5)));
         System.Console.WriteLine("Test data: f3 = [" + f3 + "]");
-        MDER_Any f4 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27,6)));
+        MDER_Any f4 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27, 6)));
         System.Console.WriteLine("Test data: f4 = [" + f4 + "]");
-        MDER_Any f5 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35,-41)));
+        MDER_Any f5 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35, -41)));
         System.Console.WriteLine("Test data: f5 = [" + f5 + "]");
-        MDER_Any f6 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432),new BigInteger(32543252))));
+        MDER_Any f6 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432), new BigInteger(32543252))));
         System.Console.WriteLine("Test data: f6 = [" + f6 + "]");
-        MDER_Any f7 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26,13)));
+        MDER_Any f7 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26, 13)));
         System.Console.WriteLine("Test data: f7 = [" + f7 + "]");
-        MDER_Any f8 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,1)));
+        MDER_Any f8 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, 1)));
         System.Console.WriteLine("Test data: f8 = [" + f8 + "]");
-        MDER_Any f9 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5,-1)));
+        MDER_Any f9 = machine.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, -1)));
         System.Console.WriteLine("Test data: f9 = [" + f9 + "]");
     }
 }

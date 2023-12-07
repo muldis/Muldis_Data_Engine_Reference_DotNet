@@ -25,4 +25,11 @@ public class MDER_Article : MDER_Any
             + this.attrs._as_MUON_Any_artifact(indent)
             + "))";
     }
+
+    internal Boolean _MDER_Article__same(MDER_Article value_1)
+    {
+        MDER_Article value_0 = this;
+        return value_0.label._MDER_Any__same(value_1.label)
+            && value_0.attrs._MDER_Any__same(value_1.attrs);
+    }
 }

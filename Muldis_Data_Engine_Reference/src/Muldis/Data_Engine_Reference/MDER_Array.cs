@@ -47,4 +47,64 @@ public class MDER_Array : MDER_Any
                 throw new NotImplementedException();
         }
     }
+
+    internal Boolean _MDER_Array__same(MDER_Array value_1)
+    {
+        MDER_Array value_0 = this;
+        this.machine()._executor().Array__Collapse(value_0);
+        this.machine()._executor().Array__Collapse(value_1);
+        return this.collapsed_Array_Struct__same(
+            value_0.tree_root_node, value_0.tree_root_node);
+    }
+
+    private Boolean collapsed_Array_Struct__same(
+        Internal_MDER_Array_Struct node_0, Internal_MDER_Array_Struct node_1)
+    {
+        if (Object.ReferenceEquals(node_0, node_1))
+        {
+            return true;
+        }
+        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.None
+            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+        {
+            // In theory we should never get here assuming that
+            // the empty Array is optimized to return a constant
+            // at selection time, but we will check anyway.
+            return true;
+        }
+        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
+        {
+            return ((node_0.Local_Singular_Members().multiplicity
+                    == node_1.Local_Singular_Members().multiplicity)
+                && node_0.Local_Singular_Members().member._MDER_Any__same(
+                    node_1.Local_Singular_Members().member));
+        }
+        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
+            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
+        {
+            // This works because MDER_Any Equals() calls Any__Same().
+            return Enumerable.SequenceEqual(
+                node_0.Local_Arrayed_Members(),
+                node_1.Local_Arrayed_Members());
+        }
+        Internal_MDER_Array_Struct n0_ = node_0;
+        Internal_MDER_Array_Struct n1_ = node_1;
+        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
+            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
+        {
+             n1_ = node_0;
+             n0_ = node_1;
+        }
+        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
+        {
+            Internal_Multiplied_Member sm = n0_.Local_Singular_Members();
+            List<MDER_Any> am = n1_.Local_Arrayed_Members();
+            return sm.multiplicity == am.Count
+                && Enumerable.All(am, m => m._MDER_Any__same(sm.member));
+        }
+        // We should never get here.
+        throw new NotImplementedException();
+    }
 }

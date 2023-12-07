@@ -7,16 +7,27 @@ public class MDER_Integer : MDER_Any
     // While we conceptually could special case smaller integers with
     // additional fields for performance, we won't, mainly to keep
     // things simpler, and because BigInteger special-cases internally.
-    internal readonly BigInteger as_BigInteger;
+    private readonly BigInteger __as_BigInteger;
 
     internal MDER_Integer(MDER_Machine machine, BigInteger as_BigInteger)
         : base(machine, Internal_Well_Known_Base_Type.MDER_Integer)
     {
-        this.as_BigInteger = as_BigInteger;
+        this.__as_BigInteger = as_BigInteger;
+    }
+
+    public BigInteger as_BigInteger()
+    {
+        return this.__as_BigInteger;
     }
 
     internal String _as_MUON_Integer_artifact()
     {
-        return this.as_BigInteger.ToString();
+        return this.__as_BigInteger.ToString();
+    }
+
+    internal Boolean _MDER_Integer__same(MDER_Integer value_1)
+    {
+        MDER_Integer value_0 = this;
+        return value_0.__as_BigInteger == value_1.__as_BigInteger;
     }
 }

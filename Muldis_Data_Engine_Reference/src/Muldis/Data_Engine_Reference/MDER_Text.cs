@@ -24,7 +24,7 @@ public class MDER_Text : MDER_Any
     // "surrogate" Char outside of a proper "surrogate pair", both
     // Muldis.Data_Engine_Reference forbids such a malformed String
     // from either being used internally or being passed in by the API.
-    internal readonly String code_point_members;
+    private readonly String __code_point_members;
 
     // Nullable Boolean
     // This is true iff we know that at least 1 code point member is NOT
@@ -46,12 +46,24 @@ public class MDER_Text : MDER_Any
         Boolean has_any_non_BMP)
         : base(machine, Internal_Well_Known_Base_Type.MDER_Text)
     {
-        this.code_point_members = code_point_members;
+        this.__code_point_members = code_point_members;
         this.has_any_non_BMP = has_any_non_BMP;
+    }
+
+    internal String _code_point_members()
+    {
+        return __code_point_members;
     }
 
     internal String _as_MUON_Text_artifact()
     {
-        return this._from_String_as_MUON_Text_artifact(this.code_point_members);
+        return this._from_String_as_MUON_Text_artifact(this.__code_point_members);
+    }
+
+    internal Boolean _MDER_Text__same(MDER_Text value_1)
+    {
+        MDER_Text value_0 = this;
+        return String.Equals(value_0.__code_point_members,
+            value_1.__code_point_members);
     }
 }

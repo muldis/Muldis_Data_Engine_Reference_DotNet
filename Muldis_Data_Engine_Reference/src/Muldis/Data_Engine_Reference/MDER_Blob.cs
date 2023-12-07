@@ -2,12 +2,17 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Blob : MDER_Any
 {
-    internal readonly Byte[] octet_members;
+    private readonly Byte[] __octet_members;
 
     internal MDER_Blob(MDER_Machine machine, Byte[] octet_members)
         : base(machine, Internal_Well_Known_Base_Type.MDER_Blob)
     {
-        this.octet_members = octet_members;
+        this.__octet_members = octet_members;
+    }
+
+    internal Byte[] _octet_members()
+    {
+        return this.__octet_members;
     }
 
     internal String _as_MUON_Blob_artifact()
@@ -17,7 +22,14 @@ public class MDER_Blob : MDER_Any
             return "0xx";
         }
         return "0xx" + String.Concat(
-                Enumerable.Select(this.octet_members, m => m.ToString("X2"))
+                Enumerable.Select(this.__octet_members, m => m.ToString("X2"))
             );
+    }
+
+    internal Boolean _MDER_Blob__same(MDER_Blob value_1)
+    {
+        MDER_Blob value_0 = this;
+        return Enumerable.SequenceEqual(value_0.__octet_members,
+            value_1.__octet_members);
     }
 }

@@ -21,4 +21,16 @@ public class MDER_Tuple : MDER_Any
                             + a.Value._as_MUON_Any_artifact(ati) + ",\u000A"))
                 + indent + "})";
     }
+
+    internal Boolean _MDER_Tuple__same(MDER_Tuple value_1)
+    {
+        MDER_Tuple value_0 = this;
+        Dictionary<String, MDER_Any> attrs0 = value_0.attrs;
+        Dictionary<String, MDER_Any> attrs1 = value_1.attrs;
+        // First test just that the Tuple headings are the same,
+        // and only if they are, compare the attribute values.
+        return (attrs0.Count == attrs1.Count)
+            && Enumerable.All(attrs0, attr => attrs1.ContainsKey(attr.Key))
+            && Enumerable.All(attrs0, attr => attr.Value._MDER_Any__same(attrs1[attr.Key]));
+    }
 }

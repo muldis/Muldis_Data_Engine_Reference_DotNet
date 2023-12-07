@@ -64,11 +64,6 @@ public abstract class MDER_Any
         return this.__WKBT;
     }
 
-    internal Boolean _has_cached_MDER_Any_identity()
-    {
-        return this.__cached_MDER_Any_identity is not null;
-    }
-
     // Provides utility pure functions that accept any Muldis Data Language "value"
     // and derive a .NET String that uniquely identifies it.
     // This class is deterministic and guarantees that iff 2 MDER_Any are
@@ -309,31 +304,102 @@ public abstract class MDER_Any
         }
         return "\"" + sb.ToString() + "\"";
     }
+
+    internal Boolean _MDER_Any__same(MDER_Any value_1)
+    {
+        MDER_Any value_0 = this;
+        if (Object.ReferenceEquals(value_0, value_1))
+        {
+            // We should always get here for any singleton well known base types:
+            // MDER_Ignorance, MDER_False, MDER_True.
+            return true;
+        }
+        if (value_0.__WKBT != value_1.__WKBT)
+        {
+            return false;
+        }
+        if (value_0.__cached_MDER_Any_identity is not null
+            && value_1.__cached_MDER_Any_identity is not null)
+        {
+            if (String.Equals(value_0.__cached_MDER_Any_identity,
+                value_1.__cached_MDER_Any_identity))
+            {
+                return true;
+            }
+            return false;
+        }
+        switch (value_0.__WKBT)
+        {
+            case Internal_Well_Known_Base_Type.MDER_Ignorance:
+            case Internal_Well_Known_Base_Type.MDER_False:
+            case Internal_Well_Known_Base_Type.MDER_True:
+                // We should never get here.
+                throw new InvalidOperationException();
+            case Internal_Well_Known_Base_Type.MDER_Integer:
+                return ((MDER_Integer)value_0)._MDER_Integer__same((MDER_Integer)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Fraction:
+                return ((MDER_Fraction)value_0)._MDER_Fraction__same((MDER_Fraction)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Bits:
+                return ((MDER_Bits)value_0)._MDER_Bits__same((MDER_Bits)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Blob:
+                return ((MDER_Blob)value_0)._MDER_Blob__same((MDER_Blob)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Text:
+                return ((MDER_Text)value_0)._MDER_Text__same((MDER_Text)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Array:
+                return ((MDER_Array)value_0)._MDER_Array__same((MDER_Array)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Set:
+                return ((MDER_Set)value_0)._MDER_Set__same((MDER_Set)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Bag:
+                return ((MDER_Bag)value_0)._MDER_Bag__same((MDER_Bag)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Heading:
+                return ((MDER_Heading)value_0)._MDER_Heading__same((MDER_Heading)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Tuple:
+                return ((MDER_Tuple)value_0)._MDER_Tuple__same((MDER_Tuple)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
+                return ((MDER_Tuple_Array)value_0)._MDER_Tuple_Array__same((MDER_Tuple_Array)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Relation:
+                return ((MDER_Relation)value_0)._MDER_Relation__same((MDER_Relation)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
+                return ((MDER_Tuple_Bag)value_0)._MDER_Tuple_Bag__same((MDER_Tuple_Bag)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Article:
+                return ((MDER_Article)value_0)._MDER_Article__same((MDER_Article)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Excuse:
+                return ((MDER_Excuse)value_0)._MDER_Excuse__same((MDER_Excuse)value_1);
+            case Internal_Well_Known_Base_Type.MDER_Variable:
+            case Internal_Well_Known_Base_Type.MDER_Process:
+            case Internal_Well_Known_Base_Type.MDER_Stream:
+            case Internal_Well_Known_Base_Type.MDER_External:
+                // Every Muldis Data Language Handle object is always distinct from every other one.
+                return false;
+            default:
+                throw new NotImplementedException();
+        }
+    }
 }
 
 public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
 {
-    public override Boolean Equals(MDER_Any? v1, MDER_Any? v2)
+    public override Boolean Equals(MDER_Any? value_0, MDER_Any? value_1)
     {
-        if (Object.ReferenceEquals(v1,v2))
+        if (Object.ReferenceEquals(value_0, value_1))
         {
             // We get here if both args are null, if that is possible.
             return true;
         }
-        if (v1 is null || v2 is null)
+        if (value_0 is null || value_1 is null)
         {
             return false;
         }
-        return v1.machine()._executor().Any__same(v1, v2);
+        return value_0._MDER_Any__same(value_1);
     }
 
-    public override Int32 GetHashCode(MDER_Any v)
+    public override Int32 GetHashCode(MDER_Any value)
     {
-        if (v is null)
+        if (value is null)
         {
             // Would we ever get here?
             return 0;
         }
-        return v._identity_as_String().GetHashCode();
+        return value._identity_as_String().GetHashCode();
     }
 }
