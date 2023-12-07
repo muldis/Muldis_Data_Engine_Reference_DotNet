@@ -49,4 +49,9 @@ public class MDER_Text : MDER_Any
         this.code_point_members = code_point_members;
         this.has_any_non_BMP = has_any_non_BMP;
     }
+
+    internal String _as_MUON_Text_artifact()
+    {
+        return this._from_String_as_MUON_Text_artifact(this.code_point_members);
+    }
 }

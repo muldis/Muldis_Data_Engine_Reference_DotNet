@@ -6,7 +6,6 @@ namespace Muldis.Data_Engine_Reference;
 public class MDER_Machine
 {
     private readonly Internal_Executor __executor;
-    private readonly Internal_MUON_Generator __MUON_generator;
 
     // About this virtual machine memory pool where Muldis Data Language values
     // and variables live, which exploits the "flyweight pattern" for
@@ -102,7 +101,6 @@ public class MDER_Machine
     public MDER_Machine()
     {
         this.__executor = new Internal_Executor(this);
-        this.__MUON_generator = new Internal_MUON_Generator();
  
         this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
 
@@ -254,10 +252,6 @@ public class MDER_Machine
         return this.__executor;
     }
 
-    internal Internal_MUON_Generator _MUON_generator()
-    {
-        return this.__MUON_generator;
-    }
 
     internal MDER_Ignorance MDER_Ignorance()
     {

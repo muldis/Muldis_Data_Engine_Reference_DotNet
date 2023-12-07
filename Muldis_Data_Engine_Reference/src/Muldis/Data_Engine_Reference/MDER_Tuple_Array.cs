@@ -11,4 +11,13 @@ public class MDER_Tuple_Array : MDER_Any
         this.heading = heading;
         this.body = body;
     }
+
+    internal String _as_MUON_Tuple_Array_artifact(String indent)
+    {
+        return "(Tuple_Array:("
+            + ((MDER_Heading)this.heading)._as_MUON_Heading_artifact()
+            + " : "
+            + this.body._as_MUON_Any_artifact(indent)
+            + "))";
+    }
 }

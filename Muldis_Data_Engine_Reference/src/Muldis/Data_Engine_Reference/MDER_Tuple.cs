@@ -9,4 +9,16 @@ public class MDER_Tuple : MDER_Any
     {
         this.attrs = attrs;
     }
+
+    internal String _as_MUON_Tuple_artifact(String indent)
+    {
+        String ati = indent + "\u0009";
+        return Object.ReferenceEquals(this, this.machine().MDER_Tuple_D0) ? "(Tuple:{})"
+            : "(Tuple:{\u000A"
+                + String.Concat(Enumerable.Select(
+                        Enumerable.OrderBy(this.attrs, a => a.Key),
+                        a => ati + this._from_String_as_MUON_Text_artifact(a.Key) + " : "
+                            + a.Value._as_MUON_Any_artifact(ati) + ",\u000A"))
+                + indent + "})";
+    }
 }

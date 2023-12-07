@@ -9,4 +9,15 @@ public class MDER_Blob : MDER_Any
     {
         this.octet_members = octet_members;
     }
+
+    internal String _as_MUON_Blob_artifact()
+    {
+        if (Object.ReferenceEquals(this, this.machine().MDER_Blob_C0))
+        {
+            return "0xx";
+        }
+        return "0xx" + String.Concat(
+                Enumerable.Select(this.octet_members, m => m.ToString("X2"))
+            );
+    }
 }

@@ -9,4 +9,14 @@ public class MDER_Heading : MDER_Any
     {
         this.attr_names = attr_names;
     }
+
+    internal String _as_MUON_Heading_artifact()
+    {
+        return Object.ReferenceEquals(this, this.machine().MDER_Tuple_D0) ? "(Heading:{})"
+            : "(Heading:{"
+                + String.Concat(Enumerable.Select(
+                        Enumerable.OrderBy(this.attr_names, a => a),
+                        a => this._from_String_as_MUON_Text_artifact(a) + ","))
+                + "})";
+    }
 }

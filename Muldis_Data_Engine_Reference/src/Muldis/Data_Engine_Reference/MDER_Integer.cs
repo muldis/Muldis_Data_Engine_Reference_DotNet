@@ -14,4 +14,9 @@ public class MDER_Integer : MDER_Any
     {
         this.as_BigInteger = as_BigInteger;
     }
+
+    internal String _as_MUON_Integer_artifact()
+    {
+        return this.as_BigInteger.ToString();
+    }
 }

@@ -15,4 +15,14 @@ public class MDER_Article : MDER_Any
         this.label = label;
         this.attrs = attrs;
     }
+
+    internal String _as_MUON_Article_artifact(String indent)
+    {
+        // TODO: Change Article so represented as Nesting+Kit pair.
+        return "(Article:("
+            + this.label._as_MUON_Any_artifact(indent)
+            + " : "
+            + this.attrs._as_MUON_Any_artifact(indent)
+            + "))";
+    }
 }

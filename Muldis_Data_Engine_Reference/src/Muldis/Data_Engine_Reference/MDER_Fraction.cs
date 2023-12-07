@@ -170,4 +170,45 @@ public class MDER_Fraction : MDER_Any
         // If somehow the denominator can be big enough that we'd actually get here.
         throw new NotImplementedException();
     }
+
+    internal String _as_MUON_Fraction_artifact()
+    {
+        // Iff the Fraction value can be exactly expressed as a
+        // non-terminating decimal (includes all Fraction that can be
+        // non-terminating binary/octal/hex), express in that format;
+        // otherwise, express as a coprime numerator/denominator pair.
+        // Note, is_terminating_decimal() will ensure as_pair is
+        // coprime iff as_Decimal is null.
+        if (this.is_terminating_decimal())
+        {
+            if (this.maybe_as_Decimal() is not null)
+            {
+                String dec_digits = this.maybe_as_Decimal().ToString()!;
+                // When a .NET Decimal is selected using a .NET Decimal
+                // literal having trailing zeroes, those trailing
+                // zeroes will persist in the .ToString() result
+                // (but any leading zeroes do not persist);
+                // we need to detect and eliminate any of those,
+                // except for a single trailing zero after the radix
+                // point when the value is an integer.
+                dec_digits = dec_digits.TrimEnd(new Char[] {'0'});
+                return String.Equals(dec_digits.Substring(dec_digits.Length-1,1), ".")
+                    ? dec_digits + "0" : dec_digits;
+            }
+            Int32 dec_scale = this.pair_decimal_denominator_scale();
+            if (dec_scale == 0)
+            {
+                // We have an integer expressed as a Fraction.
+                return this.numerator().ToString() + ".0";
+            }
+            BigInteger dec_denominator = BigInteger.Pow(10,dec_scale);
+            BigInteger dec_numerator = this.numerator()
+                * BigInteger.Divide(dec_denominator, this.denominator());
+            String numerator_digits = dec_numerator.ToString();
+            Int32 left_size = numerator_digits.Length - dec_scale;
+            return numerator_digits.Substring(0, left_size)
+                + "." + numerator_digits.Substring(left_size);
+        }
+        return this.numerator().ToString() + "/" + this.denominator().ToString();
+    }
 }

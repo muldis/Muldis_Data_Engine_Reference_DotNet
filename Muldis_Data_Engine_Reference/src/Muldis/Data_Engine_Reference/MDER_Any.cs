@@ -1,3 +1,6 @@
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace Muldis.Data_Engine_Reference;
 
 // Muldis.Data_Engine_Reference.MDER_Any
@@ -92,9 +95,7 @@ public abstract class MDER_Any
     {
         if (this.__cached_MDER_Any_identity is null)
         {
-            this.__cached_MDER_Any_identity
-                = this._as_MUON_Plain_Text_artifact(
-                    Internal_MUON_Generator_Type.Identity, "");
+            this.__cached_MDER_Any_identity = this._as_MUON_Any_artifact("");
         }
         return this.__cached_MDER_Any_identity;
     }
@@ -117,8 +118,7 @@ public abstract class MDER_Any
 
     internal String _preview_as_String()
     {
-        return this._as_MUON_Plain_Text_artifact(
-            Internal_MUON_Generator_Type.Preview, "");
+        return this._as_MUON_Any_artifact("");
     }
 
     // TODO: Some of this text has obsolete notions and it should be rewritten.
@@ -154,8 +154,7 @@ public abstract class MDER_Any
 
     public MDER_Text as_MUON_Plain_Text_artifact_as_MDER_Text()
     {
-        String artifact_as_String = this._as_MUON_Plain_Text_artifact(
-            Internal_MUON_Generator_Type.Standard, "");
+        String artifact_as_String = this._as_MUON_Any_artifact("");
         Internal_Dot_Net_String_Unicode_Test_Result test_result
             = this.__machine._executor().Test_Dot_Net_String(artifact_as_String);
         return this.__machine.MDER_Text(
@@ -171,13 +170,144 @@ public abstract class MDER_Any
         throw new NotImplementedException();
     }
 
-    // internal abstract String _as_MUON_Plain_Text_artifact(
-    //     Internal_MUON_Generator_Type MGT, String indent);
-
-    internal String _as_MUON_Plain_Text_artifact(
-        Internal_MUON_Generator_Type MGT, String indent)
+    internal String _as_MUON_Any_artifact(String indent)
     {
-        return this.__machine._MUON_generator().as_Any_artifact(this, indent);
+        switch (this.__WKBT)
+        {
+            case Internal_Well_Known_Base_Type.MDER_Ignorance:
+                return "0iIGNORANCE";
+            case Internal_Well_Known_Base_Type.MDER_False:
+                return "0bFALSE";
+            case Internal_Well_Known_Base_Type.MDER_True:
+                return "0bTRUE";
+            case Internal_Well_Known_Base_Type.MDER_Integer:
+                return ((MDER_Integer)this)._as_MUON_Integer_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Fraction:
+                return ((MDER_Fraction)this)._as_MUON_Fraction_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Bits:
+                return ((MDER_Bits)this)._as_MUON_Bits_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Blob:
+                return ((MDER_Blob)this)._as_MUON_Blob_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Text:
+                return ((MDER_Text)this)._as_MUON_Text_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Array:
+                return ((MDER_Array)this)._as_MUON_Array_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Set:
+                return ((MDER_Set)this)._as_MUON_Set_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Bag:
+                return ((MDER_Bag)this)._as_MUON_Bag_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Heading:
+                return ((MDER_Heading)this)._as_MUON_Heading_artifact();
+            case Internal_Well_Known_Base_Type.MDER_Tuple:
+                return ((MDER_Tuple)this)._as_MUON_Tuple_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
+                return ((MDER_Tuple_Array)this)._as_MUON_Tuple_Array_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Relation:
+                return ((MDER_Relation)this)._as_MUON_Relation_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
+                return ((MDER_Tuple_Bag)this)._as_MUON_Tuple_Bag_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Article:
+                return ((MDER_Article)this)._as_MUON_Article_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Excuse:
+                return ((MDER_Excuse)this)._as_MUON_Excuse_artifact(indent);
+            case Internal_Well_Known_Base_Type.MDER_Variable:
+                // We display something useful for debugging purposes, but no
+                // (transient) MDER_Variable can actually be rendered as MUON.
+                return "`Some MDER_Variable value is here.`";
+            case Internal_Well_Known_Base_Type.MDER_Process:
+                // We display something useful for debugging purposes, but no
+                // (transient) MDER_Process can actually be rendered as MUON.
+                return "`Some MDER_Process value is here.`";
+            case Internal_Well_Known_Base_Type.MDER_Stream:
+                // We display something useful for debugging purposes, but no
+                // (transient) MDER_Stream can actually be rendered as MUON.
+                return "`Some MDER_Stream value is here.`";
+            case Internal_Well_Known_Base_Type.MDER_External:
+                // We display something useful for debugging purposes, but no
+                // (transient) MDER_External can actually be rendered as MUON.
+                return "`Some MDER_External value is here.`";
+            default:
+                return "\\TODO_FIX_UN_HANDLED_TYPE\\\"" + this._WKBT().ToString() + "\"";
+        }
+    }
+
+    // The following 2 methods might have been in MDER_Text but are in
+    // MDER_Any instead temporarily because other value classes use them too.
+
+    internal String _from_String_as_MUON_Text_artifact(String value)
+    {
+        if (String.Equals(value, ""))
+        {
+            return "\"\"";
+        }
+        if (value.Length == 1 && ((Int32)(Char)value[0]) <= 0x1F)
+        {
+            // Format as a code-point-text.
+            return "0t" + ((Int32)(Char)value[0]);
+        }
+        if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
+        {
+            // Format as a nonquoted-alphanumeric-text.
+            return value;
+        }
+        // Else, format as a quoted text.
+        if (String.Equals(value, "") || !Regex.IsMatch(value,
+            "[\u0000-\u001F\"\\`\u007F-\u009F]"))
+        {
+            return "\"" + value + "\"";
+        }
+        StringBuilder sb = new StringBuilder(value.Length);
+        for (Int32 i = 0; i < value.Length; i++)
+        {
+            Int32 c = (Int32)(Char)value[i];
+            switch (c)
+            {
+                case 0x7:
+                    sb.Append(@"\a");
+                    break;
+                case 0x8:
+                    sb.Append(@"\b");
+                    break;
+                case 0x9:
+                    sb.Append(@"\t");
+                    break;
+                case 0xA:
+                    sb.Append(@"\n");
+                    break;
+                case 0xB:
+                    sb.Append(@"\v");
+                    break;
+                case 0xC:
+                    sb.Append(@"\f");
+                    break;
+                case 0xD:
+                    sb.Append(@"\r");
+                    break;
+                case 0x1B:
+                    sb.Append(@"\e");
+                    break;
+                case 0x22:
+                    sb.Append(@"\q");
+                    break;
+                case 0x5C:
+                    sb.Append(@"\k");
+                    break;
+                case 0x60:
+                    sb.Append(@"\g");
+                    break;
+                default:
+                    if (c <= 0x1F || (c >= 0x7F && c <= 0x9F))
+                    {
+                        sb.Append(@"\(0t" + c.ToString() + ")");
+                    }
+                    else
+                    {
+                        sb.Append((Char)c);
+                    }
+                    break;
+            }
+        }
+        return "\"" + sb.ToString() + "\"";
     }
 }
 

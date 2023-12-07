@@ -11,4 +11,13 @@ public class MDER_Relation : MDER_Any
         this.heading = heading;
         this.body = body;
     }
+
+    internal String _as_MUON_Relation_artifact(String indent)
+    {
+        return "(Relation:("
+            + ((MDER_Heading)this.heading)._as_MUON_Heading_artifact()
+            + " : "
+            + this.body._as_MUON_Any_artifact(indent)
+            + "))";
+    }
 }
