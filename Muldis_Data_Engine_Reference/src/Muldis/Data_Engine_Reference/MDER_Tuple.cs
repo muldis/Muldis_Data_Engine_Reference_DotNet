@@ -22,11 +22,11 @@ public class MDER_Tuple : MDER_Any
                 + indent + "})";
     }
 
-    internal Boolean _MDER_Tuple__same(MDER_Tuple value_1)
+    internal Boolean _MDER_Tuple__same(MDER_Tuple topic_1)
     {
-        MDER_Tuple value_0 = this;
-        Dictionary<String, MDER_Any> attrs0 = value_0.attrs;
-        Dictionary<String, MDER_Any> attrs1 = value_1.attrs;
+        MDER_Tuple topic_0 = this;
+        Dictionary<String, MDER_Any> attrs0 = topic_0.attrs;
+        Dictionary<String, MDER_Any> attrs1 = topic_1.attrs;
         // First test just that the Tuple headings are the same,
         // and only if they are, compare the attribute values.
         return (attrs0.Count == attrs1.Count)

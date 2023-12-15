@@ -60,10 +60,10 @@ public class MDER_Text : MDER_Any
         return this._from_String_as_MUON_Text_artifact(this.__code_point_members);
     }
 
-    internal Boolean _MDER_Text__same(MDER_Text value_1)
+    internal Boolean _MDER_Text__same(MDER_Text topic_1)
     {
-        MDER_Text value_0 = this;
-        return String.Equals(value_0.__code_point_members,
-            value_1.__code_point_members);
+        MDER_Text topic_0 = this;
+        return String.Equals(topic_0.__code_point_members,
+            topic_1.__code_point_members);
     }
 }

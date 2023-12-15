@@ -34,17 +34,17 @@ public class MDER_Bits : MDER_Any
             );
     }
 
-    internal Boolean _MDER_Bits__same(MDER_Bits value_1)
+    internal Boolean _MDER_Bits__same(MDER_Bits topic_1)
     {
-        MDER_Bits value_0 = this;
+        MDER_Bits topic_0 = this;
         return Enumerable.SequenceEqual(
-            _BitArray_to_List(value_0.__bit_members),
-            _BitArray_to_List(value_1.__bit_members));
+            _BitArray_to_List(topic_0.__bit_members),
+            _BitArray_to_List(topic_1.__bit_members));
     }
 
-    private List<Boolean> _BitArray_to_List(BitArray value)
+    private List<Boolean> _BitArray_to_List(BitArray topic)
     {
-        System.Collections.IEnumerator e = value.GetEnumerator();
+        System.Collections.IEnumerator e = topic.GetEnumerator();
         List<Boolean> list = new List<Boolean>();
         while (e.MoveNext())
         {

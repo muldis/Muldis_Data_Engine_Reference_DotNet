@@ -27,13 +27,13 @@ public class MDER_Bag : MDER_Discrete
         }
     }
 
-    internal Boolean _MDER_Bag__same(MDER_Bag value_1)
+    internal Boolean _MDER_Bag__same(MDER_Bag topic_1)
     {
-        MDER_Bag value_0 = this;
-        value_0.Discrete__Collapse(want_indexed: true);
-        value_1.Discrete__Collapse(want_indexed: true);
+        MDER_Bag topic_0 = this;
+        topic_0.Discrete__Collapse(want_indexed: true);
+        topic_1.Discrete__Collapse(want_indexed: true);
         return this.collapsed_Discrete_Struct__same(
-            value_0.tree_root_node, value_0.tree_root_node);
+            topic_0.tree_root_node, topic_0.tree_root_node);
     }
 
     private Boolean collapsed_Discrete_Struct__same(

@@ -21,10 +21,10 @@ public class MDER_Relation : MDER_Any
             + "))";
     }
 
-    internal Boolean _MDER_Relation__same(MDER_Relation value_1)
+    internal Boolean _MDER_Relation__same(MDER_Relation topic_1)
     {
-        MDER_Relation value_0 = this;
-        return value_0.heading._MDER_Any__same(value_1.heading)
-            && value_0.body._MDER_Any__same(value_1.body);
+        MDER_Relation topic_0 = this;
+        return topic_0.heading._MDER_Any__same(topic_1.heading)
+            && topic_0.body._MDER_Any__same(topic_1.body);
     }
 }

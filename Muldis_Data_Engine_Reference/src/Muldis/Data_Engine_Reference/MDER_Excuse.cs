@@ -26,10 +26,10 @@ public class MDER_Excuse : MDER_Any
             + "))";
     }
 
-    internal Boolean _MDER_Excuse__same(MDER_Excuse value_1)
+    internal Boolean _MDER_Excuse__same(MDER_Excuse topic_1)
     {
-        MDER_Excuse value_0 = this;
-        return value_0.label._MDER_Any__same(value_1.label)
-            && value_0.attrs._MDER_Any__same(value_1.attrs);
+        MDER_Excuse topic_0 = this;
+        return topic_0.label._MDER_Any__same(topic_1.label)
+            && topic_0.attrs._MDER_Any__same(topic_1.attrs);
     }
 }

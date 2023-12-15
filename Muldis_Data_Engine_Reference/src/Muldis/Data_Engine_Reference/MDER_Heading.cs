@@ -20,11 +20,11 @@ public class MDER_Heading : MDER_Any
                 + "})";
     }
 
-    internal Boolean _MDER_Heading__same(MDER_Heading value_1)
+    internal Boolean _MDER_Heading__same(MDER_Heading topic_1)
     {
-        MDER_Heading value_0 = this;
-        HashSet<String> atnms0 = value_0.attr_names;
-        HashSet<String> atnms1 = value_1.attr_names;
+        MDER_Heading topic_0 = this;
+        HashSet<String> atnms0 = topic_0.attr_names;
+        HashSet<String> atnms1 = topic_1.attr_names;
         return (atnms0.Count == atnms1.Count)
             && Enumerable.All(atnms0, atnm => atnms1.Contains(atnm));
     }

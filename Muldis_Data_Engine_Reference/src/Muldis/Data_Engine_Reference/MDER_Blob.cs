@@ -26,10 +26,10 @@ public class MDER_Blob : MDER_Any
             );
     }
 
-    internal Boolean _MDER_Blob__same(MDER_Blob value_1)
+    internal Boolean _MDER_Blob__same(MDER_Blob topic_1)
     {
-        MDER_Blob value_0 = this;
-        return Enumerable.SequenceEqual(value_0.__octet_members,
-            value_1.__octet_members);
+        MDER_Blob topic_0 = this;
+        return Enumerable.SequenceEqual(topic_0.__octet_members,
+            topic_1.__octet_members);
     }
 }

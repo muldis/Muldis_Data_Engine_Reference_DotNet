@@ -207,20 +207,20 @@ public class MDER_Fraction : MDER_Any
         return this._numerator().ToString() + "/" + this._denominator().ToString();
     }
 
-    internal Boolean _MDER_Fraction__same(MDER_Fraction value_1)
+    internal Boolean _MDER_Fraction__same(MDER_Fraction topic_1)
     {
-        MDER_Fraction value_0 = this;
-        if (value_0.__maybe_as_Decimal is not null && value_1.__maybe_as_Decimal is not null)
+        MDER_Fraction topic_0 = this;
+        if (topic_0.__maybe_as_Decimal is not null && topic_1.__maybe_as_Decimal is not null)
         {
-            return (value_0.__maybe_as_Decimal == value_1.__maybe_as_Decimal);
+            return (topic_0.__maybe_as_Decimal == topic_1.__maybe_as_Decimal);
         }
-        if (value_0._denominator() == value_1._denominator())
+        if (topic_0._denominator() == topic_1._denominator())
         {
-            return (value_0._numerator() == value_1._numerator());
+            return (topic_0._numerator() == topic_1._numerator());
         }
-        value_0.ensure_coprime();
-        value_1.ensure_coprime();
-        return (value_0._denominator() == value_1._denominator()
-            && value_0._numerator() == value_1._numerator());
+        topic_0.ensure_coprime();
+        topic_1.ensure_coprime();
+        return (topic_0._denominator() == topic_1._denominator()
+            && topic_0._numerator() == topic_1._numerator());
     }
 }

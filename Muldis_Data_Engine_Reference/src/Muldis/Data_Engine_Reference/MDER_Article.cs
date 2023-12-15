@@ -26,10 +26,10 @@ public class MDER_Article : MDER_Any
             + "))";
     }
 
-    internal Boolean _MDER_Article__same(MDER_Article value_1)
+    internal Boolean _MDER_Article__same(MDER_Article topic_1)
     {
-        MDER_Article value_0 = this;
-        return value_0.label._MDER_Any__same(value_1.label)
-            && value_0.attrs._MDER_Any__same(value_1.attrs);
+        MDER_Article topic_0 = this;
+        return topic_0.label._MDER_Any__same(topic_1.label)
+            && topic_0.attrs._MDER_Any__same(topic_1.attrs);
     }
 }

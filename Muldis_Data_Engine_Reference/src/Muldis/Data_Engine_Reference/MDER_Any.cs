@@ -229,32 +229,32 @@ public abstract class MDER_Any
     // The following 2 methods might have been in MDER_Text but are in
     // MDER_Any instead temporarily because other value classes use them too.
 
-    internal String _from_String_as_MUON_Text_artifact(String value)
+    internal String _from_String_as_MUON_Text_artifact(String topic)
     {
-        if (String.Equals(value, ""))
+        if (String.Equals(topic, ""))
         {
             return "\"\"";
         }
-        if (value.Length == 1 && ((Int32)(Char)value[0]) <= 0x1F)
+        if (topic.Length == 1 && ((Int32)(Char)topic[0]) <= 0x1F)
         {
             // Format as a code-point-text.
-            return "0t" + ((Int32)(Char)value[0]);
+            return "0t" + ((Int32)(Char)topic[0]);
         }
-        if (Regex.IsMatch(value, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
+        if (Regex.IsMatch(topic, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
         {
             // Format as a nonquoted-alphanumeric-text.
-            return value;
+            return topic;
         }
         // Else, format as a quoted text.
-        if (String.Equals(value, "") || !Regex.IsMatch(value,
+        if (String.Equals(topic, "") || !Regex.IsMatch(topic,
             "[\u0000-\u001F\"\\`\u007F-\u009F]"))
         {
-            return "\"" + value + "\"";
+            return "\"" + topic + "\"";
         }
-        StringBuilder sb = new StringBuilder(value.Length);
-        for (Int32 i = 0; i < value.Length; i++)
+        StringBuilder sb = new StringBuilder(topic.Length);
+        for (Int32 i = 0; i < topic.Length; i++)
         {
-            Int32 c = (Int32)(Char)value[i];
+            Int32 c = (Int32)(Char)topic[i];
             switch (c)
             {
                 case 0x7:
@@ -305,30 +305,30 @@ public abstract class MDER_Any
         return "\"" + sb.ToString() + "\"";
     }
 
-    internal Boolean _MDER_Any__same(MDER_Any value_1)
+    internal Boolean _MDER_Any__same(MDER_Any topic_1)
     {
-        MDER_Any value_0 = this;
-        if (Object.ReferenceEquals(value_0, value_1))
+        MDER_Any topic_0 = this;
+        if (Object.ReferenceEquals(topic_0, topic_1))
         {
             // We should always get here for any singleton well known base types:
             // MDER_Ignorance, MDER_False, MDER_True.
             return true;
         }
-        if (value_0.__WKBT != value_1.__WKBT)
+        if (topic_0.__WKBT != topic_1.__WKBT)
         {
             return false;
         }
-        if (value_0.__cached_MDER_Any_identity is not null
-            && value_1.__cached_MDER_Any_identity is not null)
+        if (topic_0.__cached_MDER_Any_identity is not null
+            && topic_1.__cached_MDER_Any_identity is not null)
         {
-            if (String.Equals(value_0.__cached_MDER_Any_identity,
-                value_1.__cached_MDER_Any_identity))
+            if (String.Equals(topic_0.__cached_MDER_Any_identity,
+                topic_1.__cached_MDER_Any_identity))
             {
                 return true;
             }
             return false;
         }
-        switch (value_0.__WKBT)
+        switch (topic_0.__WKBT)
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
             case Internal_Well_Known_Base_Type.MDER_False:
@@ -336,35 +336,35 @@ public abstract class MDER_Any
                 // We should never get here.
                 throw new InvalidOperationException();
             case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)value_0)._MDER_Integer__same((MDER_Integer)value_1);
+                return ((MDER_Integer)topic_0)._MDER_Integer__same((MDER_Integer)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Fraction:
-                return ((MDER_Fraction)value_0)._MDER_Fraction__same((MDER_Fraction)value_1);
+                return ((MDER_Fraction)topic_0)._MDER_Fraction__same((MDER_Fraction)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Bits:
-                return ((MDER_Bits)value_0)._MDER_Bits__same((MDER_Bits)value_1);
+                return ((MDER_Bits)topic_0)._MDER_Bits__same((MDER_Bits)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Blob:
-                return ((MDER_Blob)value_0)._MDER_Blob__same((MDER_Blob)value_1);
+                return ((MDER_Blob)topic_0)._MDER_Blob__same((MDER_Blob)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Text:
-                return ((MDER_Text)value_0)._MDER_Text__same((MDER_Text)value_1);
+                return ((MDER_Text)topic_0)._MDER_Text__same((MDER_Text)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Array:
-                return ((MDER_Array)value_0)._MDER_Array__same((MDER_Array)value_1);
+                return ((MDER_Array)topic_0)._MDER_Array__same((MDER_Array)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Set:
-                return ((MDER_Set)value_0)._MDER_Set__same((MDER_Set)value_1);
+                return ((MDER_Set)topic_0)._MDER_Set__same((MDER_Set)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Bag:
-                return ((MDER_Bag)value_0)._MDER_Bag__same((MDER_Bag)value_1);
+                return ((MDER_Bag)topic_0)._MDER_Bag__same((MDER_Bag)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Heading:
-                return ((MDER_Heading)value_0)._MDER_Heading__same((MDER_Heading)value_1);
+                return ((MDER_Heading)topic_0)._MDER_Heading__same((MDER_Heading)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Tuple:
-                return ((MDER_Tuple)value_0)._MDER_Tuple__same((MDER_Tuple)value_1);
+                return ((MDER_Tuple)topic_0)._MDER_Tuple__same((MDER_Tuple)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
-                return ((MDER_Tuple_Array)value_0)._MDER_Tuple_Array__same((MDER_Tuple_Array)value_1);
+                return ((MDER_Tuple_Array)topic_0)._MDER_Tuple_Array__same((MDER_Tuple_Array)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Relation:
-                return ((MDER_Relation)value_0)._MDER_Relation__same((MDER_Relation)value_1);
+                return ((MDER_Relation)topic_0)._MDER_Relation__same((MDER_Relation)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
-                return ((MDER_Tuple_Bag)value_0)._MDER_Tuple_Bag__same((MDER_Tuple_Bag)value_1);
+                return ((MDER_Tuple_Bag)topic_0)._MDER_Tuple_Bag__same((MDER_Tuple_Bag)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Article:
-                return ((MDER_Article)value_0)._MDER_Article__same((MDER_Article)value_1);
+                return ((MDER_Article)topic_0)._MDER_Article__same((MDER_Article)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Excuse:
-                return ((MDER_Excuse)value_0)._MDER_Excuse__same((MDER_Excuse)value_1);
+                return ((MDER_Excuse)topic_0)._MDER_Excuse__same((MDER_Excuse)topic_1);
             case Internal_Well_Known_Base_Type.MDER_Variable:
             case Internal_Well_Known_Base_Type.MDER_Process:
             case Internal_Well_Known_Base_Type.MDER_Stream:
@@ -379,27 +379,27 @@ public abstract class MDER_Any
 
 public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
 {
-    public override Boolean Equals(MDER_Any? value_0, MDER_Any? value_1)
+    public override Boolean Equals(MDER_Any? topic_0, MDER_Any? topic_1)
     {
-        if (Object.ReferenceEquals(value_0, value_1))
+        if (Object.ReferenceEquals(topic_0, topic_1))
         {
             // We get here if both args are null, if that is possible.
             return true;
         }
-        if (value_0 is null || value_1 is null)
+        if (topic_0 is null || topic_1 is null)
         {
             return false;
         }
-        return value_0._MDER_Any__same(value_1);
+        return topic_0._MDER_Any__same(topic_1);
     }
 
-    public override Int32 GetHashCode(MDER_Any value)
+    public override Int32 GetHashCode(MDER_Any topic)
     {
-        if (value is null)
+        if (topic is null)
         {
             // Would we ever get here?
             return 0;
         }
-        return value._identity_as_String().GetHashCode();
+        return topic._identity_as_String().GetHashCode();
     }
 }

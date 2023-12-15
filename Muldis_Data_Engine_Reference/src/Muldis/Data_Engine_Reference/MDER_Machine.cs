@@ -258,9 +258,9 @@ public class MDER_Machine
         return this.MDER_0iIGNORANCE;
     }
 
-    internal MDER_Boolean MDER_Boolean(Boolean value)
+    internal MDER_Boolean MDER_Boolean(Boolean topic)
     {
-        return value ? MDER_0bTRUE : MDER_0bFALSE;
+        return topic ? MDER_0bTRUE : MDER_0bFALSE;
     }
 
     internal MDER_False MDER_False()
@@ -517,13 +517,13 @@ public class MDER_Machine
         return new MDER_Excuse(this, label, attrs);
     }
 
-    internal MDER_Excuse Simple_MDER_Excuse(String value)
+    internal MDER_Excuse Simple_MDER_Excuse(String topic)
     {
-        if (well_known_excuses.ContainsKey(value))
+        if (well_known_excuses.ContainsKey(topic))
         {
-            return well_known_excuses[value];
+            return well_known_excuses[topic];
         }
-        return new MDER_Excuse(this, this.MDER_Attr_Name(value), this.MDER_Tuple_D0);
+        return new MDER_Excuse(this, this.MDER_Attr_Name(topic), this.MDER_Tuple_D0);
     }
 
     // TODO: Here or in Internal_Executor also have Article_attrs() etc functions
@@ -591,47 +591,47 @@ public class MDER_Machine
         variable.current_value = new_current;
     }
 
-    public MDER_Any MDER_import(Object value)
+    public MDER_Any MDER_import(Object topic)
     {
-        return import__tree(value);
+        return import__tree(topic);
     }
 
-    public MDER_Any MDER_import_qualified(KeyValuePair<String, Object?> value)
+    public MDER_Any MDER_import_qualified(KeyValuePair<String, Object?> topic)
     {
-        return import__tree_qualified(value);
+        return import__tree_qualified(topic);
     }
 
-    private MDER_Any import__tree(Object? value)
+    private MDER_Any import__tree(Object? topic)
     {
-        if (value is MDER_Any)
+        if (topic is MDER_Any)
         {
-            return (MDER_Any)value;
+            return (MDER_Any)topic;
         }
-        if (value is not null && (value.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
+        if (topic is not null && (topic.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
         {
-            return import__tree_qualified((KeyValuePair<String, Object?>)value);
+            return import__tree_qualified((KeyValuePair<String, Object?>)topic);
         }
-        return import__tree_unqualified(value);
+        return import__tree_unqualified(topic);
     }
 
-    private MDER_Any import__tree_qualified(KeyValuePair<String, Object?> value)
+    private MDER_Any import__tree_qualified(KeyValuePair<String, Object?> topic)
     {
-        Object? v = value.Value;
+        Object? v = topic.Value;
         // Note that .NET guarantees the .Key is never null.
         if (v is null)
         {
-            if (String.Equals(value.Key, "Ignorance"))
+            if (String.Equals(topic.Key, "Ignorance"))
             {
                 return this.MDER_Ignorance();
             }
             throw new ArgumentNullException
             (
-                paramName: "value",
+                paramName: "topic",
                 message: "Can't select MDER_Any with a KeyValuePair operand"
                     + " with a null Value property (except with [Ignorance] Key)."
             );
         }
-        switch (value.Key)
+        switch (topic.Key)
         {
             case "Boolean":
                 if (v is Boolean)
@@ -663,7 +663,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentNullException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Fraction with a null denominator."
                         );
                     }
@@ -673,7 +673,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
@@ -685,7 +685,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
@@ -700,7 +700,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Fraction with a denominator of zero."
                             );
                         }
@@ -733,7 +733,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Text with a malformed .NET String."
                         );
                     }
@@ -796,7 +796,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Heading with attribute"
                                     + " name that is a malformed .NET String."
                             );
@@ -828,7 +828,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Tuple with attribute"
                                     + " name that is a malformed .NET String."
                             );
@@ -854,7 +854,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Tuple_Array from a MDER_Array whose"
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
@@ -864,7 +864,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Tuple_Array from empty MDER_Array."
                         );
                     }
@@ -885,7 +885,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Relation from a MDER_Set whose"
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
@@ -895,7 +895,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Relation from empty MDER_Set."
                         );
                     }
@@ -916,7 +916,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Tuple_Bag from a MDER_Bag whose"
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
@@ -926,7 +926,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Tuple_Bag from empty MDER_Bag."
                         );
                     }
@@ -943,7 +943,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentNullException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Article with a null Article attrs."
                         );
                     }
@@ -952,7 +952,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Article with an Article attrs"
                                 + " that doesn't evaluate as a MDER_Tuple."
                         );
@@ -965,7 +965,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Article with label"
                                     + " that is a malformed .NET String."
                             );
@@ -984,7 +984,7 @@ public class MDER_Machine
                             {
                                 throw new ArgumentException
                                 (
-                                    paramName: "value",
+                                    paramName: "topic",
                                     message: "Can't select MDER_Article with label"
                                         + " that includes a malformed .NET String."
                                 );
@@ -1011,7 +1011,7 @@ public class MDER_Machine
                     {
                         throw new ArgumentException
                         (
-                            paramName: "value",
+                            paramName: "topic",
                             message: "Can't select MDER_Excuse with label"
                                 + " that is a malformed .NET String."
                         );
@@ -1050,7 +1050,7 @@ public class MDER_Machine
                         {
                             throw new ArgumentException
                             (
-                                paramName: "value",
+                                paramName: "topic",
                                 message: "Can't select MDER_Attr_Name_List with"
                                     + " member that is a malformed .NET String."
                             );
@@ -1063,71 +1063,71 @@ public class MDER_Machine
                 break;
             default:
                 throw new NotImplementedException(
-                    "Unhandled MDER value type ["+value.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
+                    "Unhandled MDER value type ["+topic.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
         }
         // Duplicated as Visual Studio says otherwise not all code paths return a value.
         throw new NotImplementedException(
-            "Unhandled MDER value type ["+value.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
+            "Unhandled MDER value type ["+topic.Key+"]+[" + (v.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
     }
 
-    private MDER_Any import__tree_unqualified(Object? value)
+    private MDER_Any import__tree_unqualified(Object? topic)
     {
-        if (value is null)
+        if (topic is null)
         {
             return this.MDER_Ignorance();
         }
-        if (value is Boolean)
+        if (topic is Boolean)
         {
-            return this.MDER_Boolean((Boolean)value);
+            return this.MDER_Boolean((Boolean)topic);
         }
-        if (value is Int32)
+        if (topic is Int32)
         {
-            return this.MDER_Integer((Int32)value);
+            return this.MDER_Integer((Int32)topic);
         }
-        if (value is BigInteger)
+        if (topic is BigInteger)
         {
-            return this.MDER_Integer((BigInteger)value);
+            return this.MDER_Integer((BigInteger)topic);
         }
-        if (value is Decimal)
+        if (topic is Decimal)
         {
-            return this.MDER_Fraction((Decimal)value);
+            return this.MDER_Fraction((Decimal)topic);
         }
-        if (value is BitArray)
+        if (topic is BitArray)
         {
             // BitArrays are mutable so clone argument to protect our internals.
-            return this.MDER_Bits(new BitArray((BitArray)value));
+            return this.MDER_Bits(new BitArray((BitArray)topic));
         }
-        if (value is Byte[])
+        if (topic is Byte[])
         {
             // Arrays are mutable so clone argument to protect our internals.
-            return this.MDER_Blob(((Byte[])value).ToArray());
+            return this.MDER_Blob(((Byte[])topic).ToArray());
         }
-        if (value is String)
+        if (topic is String)
         {
-            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)value);
+            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)topic);
             if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
                 (
-                    paramName: "value",
+                    paramName: "topic",
                     message: "Can't select MDER_Text with a malformed .NET String."
                 );
             }
             return this.MDER_Text(
-                (String)value,
+                (String)topic,
                 (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
-        throw new NotImplementedException("Unhandled MDER value type [" + (value.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
+        throw new NotImplementedException("Unhandled MDER value type [" + (topic.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
     }
 
-    public Object? MDER_export(MDER_Any value)
+    public Object? MDER_export(MDER_Any topic)
     {
-        if (value is null)
+        if (topic is null)
         {
-            throw new ArgumentNullException("value");
+            throw new ArgumentNullException("topic");
         }
-        switch (value._WKBT())
+        switch (topic._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return null;
@@ -1136,21 +1136,21 @@ public class MDER_Machine
             case Internal_Well_Known_Base_Type.MDER_True:
                 return true;
             case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)value).as_BigInteger();
+                return ((MDER_Integer)topic).as_BigInteger();
             case Internal_Well_Known_Base_Type.MDER_External:
-                return ((MDER_External)value).external_value;
+                return ((MDER_External)topic).external_value;
             default:
-                return MDER_export_qualified(value);
+                return MDER_export_qualified(topic);
         }
     }
 
-    public KeyValuePair<String, Object?> MDER_export_qualified(MDER_Any value)
+    public KeyValuePair<String, Object?> MDER_export_qualified(MDER_Any topic)
     {
-        if (value is null)
+        if (topic is null)
         {
-            throw new ArgumentNullException("value");
+            throw new ArgumentNullException("topic");
         }
-        switch (value._WKBT())
+        switch (topic._WKBT())
         {
             case Internal_Well_Known_Base_Type.MDER_Ignorance:
                 return new KeyValuePair<String, Object?>("Ignorance", null);
@@ -1160,7 +1160,7 @@ public class MDER_Machine
                 return new KeyValuePair<String, Object?>("Boolean", true);
             case Internal_Well_Known_Base_Type.MDER_Integer:
                 return new KeyValuePair<String, Object?>("Integer",
-                    ((MDER_Integer)value).as_BigInteger());
+                    ((MDER_Integer)topic).as_BigInteger());
             case Internal_Well_Known_Base_Type.MDER_Fraction:
                 throw new NotImplementedException();
             case Internal_Well_Known_Base_Type.MDER_Bits:
@@ -1191,7 +1191,7 @@ public class MDER_Machine
                 throw new NotImplementedException();
             case Internal_Well_Known_Base_Type.MDER_External:
                 return new KeyValuePair<String, Object?>("New_External",
-                    ((MDER_External)value).external_value);
+                    ((MDER_External)topic).external_value);
             default:
                 throw new NotImplementedException();
         }

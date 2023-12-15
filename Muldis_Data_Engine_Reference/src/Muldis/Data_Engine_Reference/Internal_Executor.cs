@@ -86,102 +86,102 @@ internal class Internal_Executor
             "X_Malformed_Procedure_Call").ToString());
     }
 
-    internal Boolean Is_Excuse(MDER_Any value)
+    internal Boolean Is_Excuse(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Fraction(MDER_Any value)
+    internal Boolean Is_Fraction(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Bits(MDER_Any value)
+    internal Boolean Is_Bits(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Blob(MDER_Any value)
+    internal Boolean Is_Blob(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Text(MDER_Any value)
+    internal Boolean Is_Text(MDER_Any topic)
     {
-        return value._WKBT() == Internal_Well_Known_Base_Type.MDER_Text;
+        return topic._WKBT() == Internal_Well_Known_Base_Type.MDER_Text;
     }
 
-    internal Boolean Is_String(MDER_Any value)
+    internal Boolean Is_String(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Set(MDER_Any value)
+    internal Boolean Is_Set(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Array(MDER_Any value)
+    internal Boolean Is_Tuple_Array(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Relation(MDER_Any value)
+    internal Boolean Is_Relation(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Bag(MDER_Any value)
+    internal Boolean Is_Tuple_Bag(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Interval(MDER_Any value)
+    internal Boolean Is_Interval(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Package(MDER_Any value)
+    internal Boolean Is_Package(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Function(MDER_Any value)
+    internal Boolean Is_Function(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Procedure(MDER_Any value)
+    internal Boolean Is_Procedure(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Function_Call(MDER_Any value)
+    internal Boolean Is_Function_Call(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Procedure_Call(MDER_Any value)
+    internal Boolean Is_Procedure_Call(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Heading(MDER_Any value)
+    internal Boolean Is_Heading(MDER_Any topic)
     {
-        return value._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading;
+        return topic._WKBT() == Internal_Well_Known_Base_Type.MDER_Heading;
     }
 
-    internal Boolean Is_Attr_Name_List(MDER_Any value)
+    internal Boolean Is_Attr_Name_List(MDER_Any topic)
     {
-        if (value._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
+        if (topic._WKBT() != Internal_Well_Known_Base_Type.MDER_Array)
         {
             return false;
         }
         // TODO: Replace this loop with an "All" higher order function call.
-        Int64 count = ((MDER_Array)value).Discrete__count();
+        Int64 count = ((MDER_Array)topic).Discrete__count();
         for (Int64 i = 0; i < count; i++)
         {
-            if (!Is_Text(((MDER_Array)value).Array__maybe_at(i)!))
+            if (!Is_Text(((MDER_Array)topic).Array__maybe_at(i)!))
             {
                 return false;
             }
@@ -189,18 +189,18 @@ internal class Internal_Executor
         return true;
     }
 
-    internal Boolean Is_Local_Name(MDER_Any value)
+    internal Boolean Is_Local_Name(MDER_Any topic)
     {
-        if (!Is_Attr_Name_List(value))
+        if (!Is_Attr_Name_List(topic))
         {
             return false;
         }
-        Int64 count = ((MDER_Array)value).Discrete__count();
+        Int64 count = ((MDER_Array)topic).Discrete__count();
         if (count == 0)
         {
             return false;
         }
-        MDER_Any first = ((MDER_Array)value).Array__maybe_at(0)!;
+        MDER_Any first = ((MDER_Array)topic).Array__maybe_at(0)!;
         if ((Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation")) && count == 2)
             || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used")) && count >= 2)
             || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")) && count >= 1)
@@ -213,13 +213,13 @@ internal class Internal_Executor
         return false;
     }
 
-    internal Boolean Is_Absolute_Name(MDER_Any value)
+    internal Boolean Is_Absolute_Name(MDER_Any topic)
     {
-        if (!Is_Local_Name(value))
+        if (!Is_Local_Name(topic))
         {
             return false;
         }
-        MDER_Any first = ((MDER_Array)value).Array__maybe_at(0)!;
+        MDER_Any first = ((MDER_Array)topic).Array__maybe_at(0)!;
         if (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation"))
             || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used"))
             || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")))
@@ -497,7 +497,7 @@ internal class Internal_Executor
         throw new NotImplementedException();
     }
 
-    private BigInteger Integer__factorial(BigInteger value)
+    private BigInteger Integer__factorial(BigInteger topic)
     {
         // Note that System.Numerics.BigInteger doesn't come
         // with a Factorial(n) so we have to do it ourselves.
@@ -505,7 +505,7 @@ internal class Internal_Executor
         // order to scale better ... unless the C# compiler is smart
         // enough to optimize tail recursion anyway.
         BigInteger result = 1;
-        for (Int32 i = 2; i <= value; i++)
+        for (Int32 i = 2; i <= topic; i++)
         {
             result *= i;
         }
@@ -589,16 +589,16 @@ internal class Internal_Executor
             node._code_point_members()[(Int32)ord_pos]);
     }
 
-    internal Internal_Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String value)
+    internal Internal_Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String topic)
     {
         Internal_Dot_Net_String_Unicode_Test_Result ok_result
             = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Is_All_BMP;
-        for (Int32 i = 0; i < value.Length; i++)
+        for (Int32 i = 0; i < topic.Length; i++)
         {
-            if (Char.IsSurrogate(value[i]))
+            if (Char.IsSurrogate(topic[i]))
             {
-                if ((i+1) < value.Length
-                    && Char.IsSurrogatePair(value[i], value[i+1]))
+                if ((i+1) < topic.Length
+                    && Char.IsSurrogatePair(topic[i], topic[i+1]))
                 {
                     ok_result = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP;
                     i++;
@@ -634,9 +634,9 @@ internal class Internal_Executor
             && Enumerable.All(attr_names, attr_name => attrs.ContainsKey(attr_name));
     }
 
-    internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob value)
+    internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob topic)
     {
-        Byte[] octets = value._octet_members();
+        Byte[] octets = topic._octet_members();
         UTF8Encoding enc = new UTF8Encoding
         (
             encoderShouldEmitUTF8Identifier: false,

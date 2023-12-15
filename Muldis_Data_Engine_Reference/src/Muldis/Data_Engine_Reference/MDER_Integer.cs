@@ -25,9 +25,9 @@ public class MDER_Integer : MDER_Any
         return this.__as_BigInteger.ToString();
     }
 
-    internal Boolean _MDER_Integer__same(MDER_Integer value_1)
+    internal Boolean _MDER_Integer__same(MDER_Integer topic_1)
     {
-        MDER_Integer value_0 = this;
-        return value_0.__as_BigInteger == value_1.__as_BigInteger;
+        MDER_Integer topic_0 = this;
+        return topic_0.__as_BigInteger == topic_1.__as_BigInteger;
     }
 }
