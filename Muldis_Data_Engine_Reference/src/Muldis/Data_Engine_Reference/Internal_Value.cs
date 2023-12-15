@@ -1,11 +1,11 @@
 namespace Muldis.Data_Engine_Reference;
 
-// Muldis.Data_Engine_Reference.Internal_Symbolic_Array_Type
+// Muldis.Data_Engine_Reference.Internal_Symbolic_Discrete_Type
 // Enumerates the various ways that a MDER_Array collection can be defined
 // symbolically in terms of other collections.
 // None means the collection simply has zero members.
 
-internal enum Internal_Symbolic_Array_Type
+internal enum Internal_Symbolic_Discrete_Type
 {
     None,
     Singular,
@@ -17,9 +17,9 @@ internal enum Internal_Symbolic_Array_Type
     Summed,
 }
 
-// Muldis.Data_Engine_Reference.Internal_MDER_Array_Struct
+// Muldis.Data_Engine_Reference.Internal_MDER_Discrete_Struct
 // When a Muldis.Data_Engine_Reference.MDER_Any is representing a MDER_Array,
-// a Internal_MDER_Array_Struct is used by it to hold the MDER_Array-specific details.
+// a Internal_MDER_Discrete_Struct is used by it to hold the MDER_Array-specific details.
 // Also used for MDER_Set and MDER_Bag, so any MDER_Array reference generally should be
 // read as either MDER_Set or MDER_Bag or MDER_Array.
 // The "tree" is actually a uni-directional graph as multiple nodes can
@@ -31,11 +31,11 @@ internal enum Internal_Symbolic_Array_Type
 // implement while at the same time is the least critical to the
 // internals; it is mainly just used for user data.
 
-internal class Internal_MDER_Array_Struct
+internal class Internal_MDER_Discrete_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
     // the tree.  Determines interpreting "members" field.
-    internal Internal_Symbolic_Array_Type local_symbolic_type;
+    internal Internal_Symbolic_Discrete_Type local_symbolic_type;
 
     // Members of this Muldis Data Language Array, in one of several possible
     // specialized representation formats depending on the data type.
@@ -60,7 +60,7 @@ internal class Internal_MDER_Array_Struct
         // that is just storing members without any operations.
         // Guarantees the Array has at least 2 members but does not
         // guarantee that at least 2 members have distinct values.
-    // Iff LST is Catenated, this field holds a Internal_MDER_Array_Pair.
+    // Iff LST is Catenated, this field holds a Internal_MDER_Discrete_Pair.
         // This is a non-leaf node with 2 direct child Array nodes;
         // this Array's members are defined as the catenation of
         // the pair's a0 and a1 nodes in that order.
@@ -72,11 +72,11 @@ internal class Internal_MDER_Array_Struct
         // The Dictionary has one key-asset pair for each distinct Muldis Data Language
         // "value", all of which are indexed by __cached_MDER_Any_identity.
         // Guarantees the Array has at least 1 member.
-    // Iff LST is Unique, this field holds a Internal_MDER_Array_Struct.
+    // Iff LST is Unique, this field holds a Internal_MDER_Discrete_Struct.
         // This is a non-leaf node with 1 direct child Array node;
         // this Array's members are defined as the child's unique members.
         // Makes no guarantees that the Array is none/singular/otherwise.
-    // Iff LST is Summed, this field holds a Internal_MDER_Array_Pair.
+    // Iff LST is Summed, this field holds a Internal_MDER_Discrete_Pair.
         // This is a non-leaf node with 2 direct child Array nodes;
         // this Array's members are defined as the catenation of
         // the pair's a0 and a1 nodes in that order.
@@ -101,9 +101,9 @@ internal class Internal_MDER_Array_Struct
         return (List<Internal_Multiplied_Member>)this.members!;
     }
 
-    internal Internal_MDER_Array_Pair Tree_Catenated_Members()
+    internal Internal_MDER_Discrete_Pair Tree_Catenated_Members()
     {
-        return (Internal_MDER_Array_Pair)this.members!;
+        return (Internal_MDER_Discrete_Pair)this.members!;
     }
 
     internal Dictionary<MDER_Any, Internal_Multiplied_Member> Local_Indexed_Members()
@@ -111,30 +111,30 @@ internal class Internal_MDER_Array_Struct
         return (Dictionary<MDER_Any, Internal_Multiplied_Member>)this.members!;
     }
 
-    internal Internal_MDER_Array_Struct Tree_Unique_Members()
+    internal Internal_MDER_Discrete_Struct Tree_Unique_Members()
     {
-        return (Internal_MDER_Array_Struct)this.members!;
+        return (Internal_MDER_Discrete_Struct)this.members!;
     }
 
-    internal Internal_MDER_Array_Pair Tree_Summed_Members()
+    internal Internal_MDER_Discrete_Pair Tree_Summed_Members()
     {
-        return (Internal_MDER_Array_Pair)this.members!;
+        return (Internal_MDER_Discrete_Pair)this.members!;
     }
 }
 
-// Muldis.Data_Engine_Reference.Internal_MDER_Array_Pair
+// Muldis.Data_Engine_Reference.Internal_MDER_Discrete_Pair
 // Represents an ordered pair of MDER_Array, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
-internal class Internal_MDER_Array_Pair
+internal class Internal_MDER_Discrete_Pair
 {
     // This is the first conceptually-ordered arg/attr.
-    internal Internal_MDER_Array_Struct a0;
+    internal Internal_MDER_Discrete_Struct a0;
 
     // This is the second conceptually-ordered arg/attr.
-    internal Internal_MDER_Array_Struct a1;
+    internal Internal_MDER_Discrete_Struct a1;
 
-    internal Internal_MDER_Array_Pair(Internal_MDER_Array_Struct a0, Internal_MDER_Array_Struct a1)
+    internal Internal_MDER_Discrete_Pair(Internal_MDER_Discrete_Struct a0, Internal_MDER_Discrete_Struct a1)
     {
         this.a0 = a0;
         this.a1 = a1;

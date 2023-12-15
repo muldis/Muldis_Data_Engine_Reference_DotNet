@@ -1,13 +1,10 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Array : MDER_Any
+public class MDER_Array : MDER_Discrete
 {
-    internal Internal_MDER_Array_Struct tree_root_node;
-
-    internal MDER_Array(MDER_Machine machine, Internal_MDER_Array_Struct tree_root_node)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Array)
+    internal MDER_Array(MDER_Machine machine, Internal_MDER_Discrete_Struct tree_root_node)
+        : base(machine, Internal_Well_Known_Base_Type.MDER_Array, tree_root_node)
     {
-        this.tree_root_node = tree_root_node;
     }
 
     internal String _as_MUON_Array_artifact(String indent)
@@ -18,7 +15,7 @@ public class MDER_Array : MDER_Any
                 this.tree_root_node, mei) + indent + "])";
     }
 
-    private String _as_MUON_Array_artifact__node__tree(Internal_MDER_Array_Struct node, String indent)
+    private String _as_MUON_Array_artifact__node__tree(Internal_MDER_Discrete_Struct node, String indent)
     {
         // Note: We always display consecutive duplicates in repeating
         // value format rather than value-count format in order to keep
@@ -30,17 +27,17 @@ public class MDER_Array : MDER_Any
         // deal with that later if an actual use case runs afowl of it.
         switch (node.local_symbolic_type)
         {
-            case Internal_Symbolic_Array_Type.None:
+            case Internal_Symbolic_Discrete_Type.None:
                 return "";
-            case Internal_Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Discrete_Type.Singular:
                 return String.Concat(Enumerable.Repeat(
                     indent + node.Local_Singular_Members().member._as_MUON_Any_artifact(indent) + ",\u000A",
                     (Int32)node.Local_Singular_Members().multiplicity));
-            case Internal_Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Discrete_Type.Arrayed:
                 return String.Concat(Enumerable.Select(
                     node.Local_Arrayed_Members(),
                     m => indent + m._as_MUON_Any_artifact(indent) + ",\u000A"));
-            case Internal_Symbolic_Array_Type.Catenated:
+            case Internal_Symbolic_Discrete_Type.Catenated:
                 return this._as_MUON_Array_artifact__node__tree(node.Tree_Catenated_Members().a0, indent)
                     + this._as_MUON_Array_artifact__node__tree(node.Tree_Catenated_Members().a1, indent);
             default:
@@ -58,46 +55,46 @@ public class MDER_Array : MDER_Any
     }
 
     private Boolean collapsed_Array_Struct__same(
-        Internal_MDER_Array_Struct node_0, Internal_MDER_Array_Struct node_1)
+        Internal_MDER_Discrete_Struct node_0, Internal_MDER_Discrete_Struct node_1)
     {
         if (Object.ReferenceEquals(node_0, node_1))
         {
             return true;
         }
-        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.None
-            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+        if (node_0.local_symbolic_type == Internal_Symbolic_Discrete_Type.None
+            && node_1.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
         {
             // In theory we should never get here assuming that
             // the empty Array is optimized to return a constant
             // at selection time, but we will check anyway.
             return true;
         }
-        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
-            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
+        if (node_0.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular
+            && node_1.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular)
         {
             return ((node_0.Local_Singular_Members().multiplicity
                     == node_1.Local_Singular_Members().multiplicity)
                 && node_0.Local_Singular_Members().member._MDER_Any__same(
                     node_1.Local_Singular_Members().member));
         }
-        if (node_0.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
-            && node_1.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
+        if (node_0.local_symbolic_type == Internal_Symbolic_Discrete_Type.Arrayed
+            && node_1.local_symbolic_type == Internal_Symbolic_Discrete_Type.Arrayed)
         {
             // This works because MDER_Any Equals() calls Any__Same().
             return Enumerable.SequenceEqual(
                 node_0.Local_Arrayed_Members(),
                 node_1.Local_Arrayed_Members());
         }
-        Internal_MDER_Array_Struct n0_ = node_0;
-        Internal_MDER_Array_Struct n1_ = node_1;
-        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed
-            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular)
+        Internal_MDER_Discrete_Struct n0_ = node_0;
+        Internal_MDER_Discrete_Struct n1_ = node_1;
+        if (n0_.local_symbolic_type == Internal_Symbolic_Discrete_Type.Arrayed
+            && n1_.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular)
         {
              n1_ = node_0;
              n0_ = node_1;
         }
-        if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
-            && n1_.local_symbolic_type == Internal_Symbolic_Array_Type.Arrayed)
+        if (n0_.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular
+            && n1_.local_symbolic_type == Internal_Symbolic_Discrete_Type.Arrayed)
         {
             Internal_Multiplied_Member sm = n0_.Local_Singular_Members();
             List<MDER_Any> am = n1_.Local_Arrayed_Members();

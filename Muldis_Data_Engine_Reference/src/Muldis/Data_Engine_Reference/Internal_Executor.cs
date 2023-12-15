@@ -385,8 +385,8 @@ internal class Internal_Executor
                             "X_Bag_unique_Arg_0_Not_Bag").ToString());
                     }
                     return new MDER_Bag(this.__machine,
-                        new Internal_MDER_Array_Struct {
-                            local_symbolic_type = Internal_Symbolic_Array_Type.Unique,
+                        new Internal_MDER_Discrete_Struct {
+                            local_symbolic_type = Internal_Symbolic_Discrete_Type.Unique,
                             members = ((MDER_Bag)v).tree_root_node,
                             cached_members_meta = new Internal_Cached_Members_Meta {
                                 tree_all_unique = true,
@@ -552,30 +552,30 @@ internal class Internal_Executor
 
     internal Int64 Array__count(MDER_Array array)
     {
-        return Array__node__tree_member_count(array.tree_root_node);
+        return Discrete__node__tree_member_count(array.tree_root_node);
     }
 
-    private Int64 Array__node__tree_member_count(Internal_MDER_Array_Struct node)
+    private Int64 Discrete__node__tree_member_count(Internal_MDER_Discrete_Struct node)
     {
         if (node.cached_members_meta!.tree_member_count is null)
         {
             switch (node.local_symbolic_type)
             {
-                case Internal_Symbolic_Array_Type.None:
+                case Internal_Symbolic_Discrete_Type.None:
                     node.cached_members_meta.tree_member_count = 0;
                     break;
-                case Internal_Symbolic_Array_Type.Singular:
+                case Internal_Symbolic_Discrete_Type.Singular:
                     node.cached_members_meta.tree_member_count
                         = node.Local_Singular_Members().multiplicity;
                     break;
-                case Internal_Symbolic_Array_Type.Arrayed:
+                case Internal_Symbolic_Discrete_Type.Arrayed:
                     node.cached_members_meta.tree_member_count
                         = node.Local_Arrayed_Members().Count;
                     break;
-                case Internal_Symbolic_Array_Type.Catenated:
+                case Internal_Symbolic_Discrete_Type.Catenated:
                     node.cached_members_meta.tree_member_count
-                        = Array__node__tree_member_count(node.Tree_Catenated_Members().a0)
-                        + Array__node__tree_member_count(node.Tree_Catenated_Members().a1);
+                        = Discrete__node__tree_member_count(node.Tree_Catenated_Members().a0)
+                        + Discrete__node__tree_member_count(node.Tree_Catenated_Members().a1);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -626,10 +626,10 @@ internal class Internal_Executor
 
     private MDER_Any? Array__maybe_at(MDER_Array array, Int64 ord_pos)
     {
-        return Array__node__maybe_at(array.tree_root_node, ord_pos);
+        return Discrete__node__maybe_at(array.tree_root_node, ord_pos);
     }
 
-    private MDER_Any? Array__node__maybe_at(Internal_MDER_Array_Struct node, Int64 ord_pos)
+    private MDER_Any? Discrete__node__maybe_at(Internal_MDER_Discrete_Struct node, Int64 ord_pos)
     {
         if (node.cached_members_meta!.tree_member_count == 0)
         {
@@ -638,35 +638,35 @@ internal class Internal_Executor
         Int64 maybe_last_ord_pos_seen = -1;
         switch (node.local_symbolic_type)
         {
-            case Internal_Symbolic_Array_Type.None:
+            case Internal_Symbolic_Discrete_Type.None:
                 return null;
-            case Internal_Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Discrete_Type.Singular:
                 if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().multiplicity))
                 {
                     return node.Local_Singular_Members().member;
                 }
                 return null;
-            case Internal_Symbolic_Array_Type.Arrayed:
-                Int64 local_member_count = Array__node__tree_member_count(node);
+            case Internal_Symbolic_Discrete_Type.Arrayed:
+                Int64 local_member_count = Discrete__node__tree_member_count(node);
                 if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
                 {
                     Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
                     return node.Local_Arrayed_Members()[(Int32)ord_pos_within_local];
                 }
                 return null;
-            case Internal_Symbolic_Array_Type.Catenated:
-                MDER_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos)!;
+            case Internal_Symbolic_Discrete_Type.Catenated:
+                MDER_Any maybe_member = Discrete__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos)!;
                 if (maybe_member is not null)
                 {
                     return maybe_member;
                 }
-                maybe_last_ord_pos_seen += Array__node__tree_member_count(node.Tree_Catenated_Members().a0);
+                maybe_last_ord_pos_seen += Discrete__node__tree_member_count(node.Tree_Catenated_Members().a0);
                 if (ord_pos <= maybe_last_ord_pos_seen)
                 {
                     return null;
                 }
                 Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
-                return Array__node__maybe_at(node.Tree_Catenated_Members().a1, ord_pos_within_succ);
+                return Discrete__node__maybe_at(node.Tree_Catenated_Members().a1, ord_pos_within_succ);
             default:
                 throw new NotImplementedException();
         }
@@ -697,41 +697,41 @@ internal class Internal_Executor
 
     internal void Array__Collapse(MDER_Array array)
     {
-        array.tree_root_node = Array__Collapsed_Struct(array.tree_root_node);
+        array.tree_root_node = Discrete__Collapsed_Struct(array.tree_root_node);
     }
 
     internal void Set__Collapse(MDER_Set set, Boolean want_indexed = false)
     {
-        set.tree_root_node = Array__Collapsed_Struct(set.tree_root_node, want_indexed);
+        set.tree_root_node = Discrete__Collapsed_Struct(set.tree_root_node, want_indexed);
     }
 
     internal void Bag__Collapse(MDER_Bag bag, Boolean want_indexed = false)
     {
-        bag.tree_root_node = Array__Collapsed_Struct(bag.tree_root_node, want_indexed);
+        bag.tree_root_node = Discrete__Collapsed_Struct(bag.tree_root_node, want_indexed);
     }
 
-    private Internal_MDER_Array_Struct Array__Collapsed_Struct(
-        Internal_MDER_Array_Struct node, Boolean want_indexed = false)
+    private Internal_MDER_Discrete_Struct Discrete__Collapsed_Struct(
+        Internal_MDER_Discrete_Struct node, Boolean want_indexed = false)
     {
         // Note: want_indexed only causes Indexed result when Singular
         // or Arrayed_MM otherwise would be used; None still also used.
         switch (node.local_symbolic_type)
         {
-            case Internal_Symbolic_Array_Type.None:
+            case Internal_Symbolic_Discrete_Type.None:
                 // Node is already collapsed.
                 // In theory we should never get here assuming that any
                 // operations which would knowingly result in the empty
                 // Array are optimized to return MDER_Array_C0 directly.
                 return this.__machine.MDER_Array_C0.tree_root_node;
-            case Internal_Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Discrete_Type.Singular:
                 if (!want_indexed)
                 {
                     // Node is already collapsed.
                     return node;
                 }
                 Internal_Multiplied_Member lsm = node.Local_Singular_Members();
-                return new Internal_MDER_Array_Struct {
-                    local_symbolic_type = Internal_Symbolic_Array_Type.Indexed,
+                return new Internal_MDER_Discrete_Struct {
+                    local_symbolic_type = Internal_Symbolic_Discrete_Type.Indexed,
                     members = new Dictionary<MDER_Any, Internal_Multiplied_Member>()
                         {{lsm.member, lsm}},
                     cached_members_meta = new Internal_Cached_Members_Meta {
@@ -741,10 +741,10 @@ internal class Internal_Executor
                             == Internal_Well_Known_Base_Type.MDER_Tuple),
                     },
                 };
-            case Internal_Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Discrete_Type.Arrayed:
                 // Node is already collapsed.
                 return node;
-            case Internal_Symbolic_Array_Type.Arrayed_MM:
+            case Internal_Symbolic_Discrete_Type.Arrayed_MM:
                 if (!want_indexed)
                 {
                     // Node is already collapsed.
@@ -764,8 +764,8 @@ internal class Internal_Executor
                         ary_res_dict[m.member].multiplicity ++;
                     }
                 }
-                return new Internal_MDER_Array_Struct {
-                    local_symbolic_type = Internal_Symbolic_Array_Type.Indexed,
+                return new Internal_MDER_Discrete_Struct {
+                    local_symbolic_type = Internal_Symbolic_Discrete_Type.Indexed,
                     members = ary_res_dict,
                     cached_members_meta = new Internal_Cached_Members_Meta {
                         tree_member_count = ary_src_list.Count,
@@ -773,14 +773,14 @@ internal class Internal_Executor
                         tree_relational = node.cached_members_meta.tree_relational,
                     },
                 };
-            case Internal_Symbolic_Array_Type.Catenated:
-                Internal_MDER_Array_Struct n0 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a0);
-                Internal_MDER_Array_Struct n1 = Array__Collapsed_Struct(node.Tree_Catenated_Members().a1);
-                if (n0.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+            case Internal_Symbolic_Discrete_Type.Catenated:
+                Internal_MDER_Discrete_Struct n0 = Discrete__Collapsed_Struct(node.Tree_Catenated_Members().a0);
+                Internal_MDER_Discrete_Struct n1 = Discrete__Collapsed_Struct(node.Tree_Catenated_Members().a1);
+                if (n0.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
                 {
                     return n1;
                 }
-                if (n1.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+                if (n1.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
                 {
                     return n0;
                 }
@@ -788,14 +788,14 @@ internal class Internal_Executor
                 // use Arrayed format for merger even if the input
                 // members are the same value.
                 // This will die if multiplicity greater than an Int32.
-                return new Internal_MDER_Array_Struct {
-                    local_symbolic_type = Internal_Symbolic_Array_Type.Arrayed,
+                return new Internal_MDER_Discrete_Struct {
+                    local_symbolic_type = Internal_Symbolic_Discrete_Type.Arrayed,
                     members = Enumerable.Concat(
-                        (n0.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+                        (n0.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular
                             ? Enumerable.Repeat(n0.Local_Singular_Members().member,
                                 (Int32)n0.Local_Singular_Members().multiplicity)
                             : n0.Local_Arrayed_Members()),
-                        (n1.local_symbolic_type == Internal_Symbolic_Array_Type.Singular
+                        (n1.local_symbolic_type == Internal_Symbolic_Discrete_Type.Singular
                             ? Enumerable.Repeat(n1.Local_Singular_Members().member,
                                 (Int32)n1.Local_Singular_Members().multiplicity)
                             : n1.Local_Arrayed_Members())
@@ -804,20 +804,20 @@ internal class Internal_Executor
                         // TODO: Merge existing source meta where efficient,
                         // tree_member_count and tree_relational in particular.
                 };
-            case Internal_Symbolic_Array_Type.Indexed:
+            case Internal_Symbolic_Discrete_Type.Indexed:
                 // Node is already collapsed.
                 return node;
-            case Internal_Symbolic_Array_Type.Unique:
-                Internal_MDER_Array_Struct uni_pa = Array__Collapsed_Struct(
+            case Internal_Symbolic_Discrete_Type.Unique:
+                Internal_MDER_Discrete_Struct uni_pa = Discrete__Collapsed_Struct(
                     node: node.Tree_Unique_Members(), want_indexed: true);
-                if (uni_pa.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+                if (uni_pa.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
                 {
                     return uni_pa;
                 }
                 Dictionary<MDER_Any, Internal_Multiplied_Member> uni_src_dict
                     = uni_pa.Local_Indexed_Members();
-                return new Internal_MDER_Array_Struct {
-                    local_symbolic_type = Internal_Symbolic_Array_Type.Indexed,
+                return new Internal_MDER_Discrete_Struct {
+                    local_symbolic_type = Internal_Symbolic_Discrete_Type.Indexed,
                     members = uni_src_dict.ToDictionary(
                         m => m.Key, m => new Internal_Multiplied_Member(m.Key, 1)),
                     cached_members_meta = new Internal_Cached_Members_Meta {
@@ -826,16 +826,16 @@ internal class Internal_Executor
                         tree_relational = uni_pa.cached_members_meta!.tree_relational,
                     },
                 };
-            case Internal_Symbolic_Array_Type.Summed:
-                Internal_MDER_Array_Struct n0_ = Array__Collapsed_Struct(
+            case Internal_Symbolic_Discrete_Type.Summed:
+                Internal_MDER_Discrete_Struct n0_ = Discrete__Collapsed_Struct(
                     node: node.Tree_Summed_Members().a0, want_indexed: true);
-                Internal_MDER_Array_Struct n1_ = Array__Collapsed_Struct(
+                Internal_MDER_Discrete_Struct n1_ = Discrete__Collapsed_Struct(
                     node: node.Tree_Summed_Members().a1, want_indexed: true);
-                if (n0_.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+                if (n0_.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
                 {
                     return n1_;
                 }
-                if (n1_.local_symbolic_type == Internal_Symbolic_Array_Type.None)
+                if (n1_.local_symbolic_type == Internal_Symbolic_Discrete_Type.None)
                 {
                     return n0_;
                 }
@@ -857,8 +857,8 @@ internal class Internal_Executor
                             res_dict[m.member].multiplicity + m.multiplicity);
                     }
                 }
-                return new Internal_MDER_Array_Struct {
-                    local_symbolic_type = Internal_Symbolic_Array_Type.Indexed,
+                return new Internal_MDER_Discrete_Struct {
+                    local_symbolic_type = Internal_Symbolic_Discrete_Type.Indexed,
                     members = res_dict,
                     cached_members_meta = new Internal_Cached_Members_Meta(),
                         // TODO: Merge existing source meta where efficient,
@@ -871,30 +871,30 @@ internal class Internal_Executor
 
     internal MDER_Any? Array__maybe_Pick_Arbitrary_Member(MDER_Array array)
     {
-        return Array__maybe_Pick_Arbitrary_Node_Member(array.tree_root_node);
+        return Discrete__maybe_Pick_Arbitrary_Node_Member(array.tree_root_node);
     }
 
     internal Boolean Array__Is_Relational(MDER_Array array)
     {
-        return Array__Tree_Relational(array.tree_root_node);
+        return Discrete__Tree_Relational(array.tree_root_node);
     }
 
     internal MDER_Any? Set__maybe_Pick_Arbitrary_Member(MDER_Set set)
     {
-        return Array__maybe_Pick_Arbitrary_Node_Member(set.tree_root_node);
+        return Discrete__maybe_Pick_Arbitrary_Node_Member(set.tree_root_node);
     }
 
     internal Boolean Set__Is_Relational(MDER_Set set)
     {
-        return Array__Tree_Relational(set.tree_root_node);
+        return Discrete__Tree_Relational(set.tree_root_node);
     }
 
     internal MDER_Any? Bag__maybe_Pick_Arbitrary_Member(MDER_Bag bag)
     {
-        return Array__maybe_Pick_Arbitrary_Node_Member(bag.tree_root_node);
+        return Discrete__maybe_Pick_Arbitrary_Node_Member(bag.tree_root_node);
     }
 
-    private MDER_Any? Array__maybe_Pick_Arbitrary_Node_Member(Internal_MDER_Array_Struct node)
+    private MDER_Any? Discrete__maybe_Pick_Arbitrary_Node_Member(Internal_MDER_Discrete_Struct node)
     {
         if (node.cached_members_meta!.tree_member_count == 0)
         {
@@ -902,24 +902,24 @@ internal class Internal_Executor
         }
         switch (node.local_symbolic_type)
         {
-            case Internal_Symbolic_Array_Type.None:
+            case Internal_Symbolic_Discrete_Type.None:
                 return null;
-            case Internal_Symbolic_Array_Type.Singular:
+            case Internal_Symbolic_Discrete_Type.Singular:
                 return node.Local_Singular_Members().member;
-            case Internal_Symbolic_Array_Type.Arrayed:
+            case Internal_Symbolic_Discrete_Type.Arrayed:
                 return node.Local_Arrayed_Members()[0];
-            case Internal_Symbolic_Array_Type.Arrayed_MM:
+            case Internal_Symbolic_Discrete_Type.Arrayed_MM:
                 return node.Local_Arrayed_MM_Members()[0].member;
-            case Internal_Symbolic_Array_Type.Catenated:
-                return Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
-                    ?? Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
-            case Internal_Symbolic_Array_Type.Indexed:
+            case Internal_Symbolic_Discrete_Type.Catenated:
+                return Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)
+                    ?? Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1);
+            case Internal_Symbolic_Discrete_Type.Indexed:
                 return node.Local_Indexed_Members().First().Value.member;
-            case Internal_Symbolic_Array_Type.Unique:
-                return Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
-            case Internal_Symbolic_Array_Type.Summed:
-                return Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
-                    ?? Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
+            case Internal_Symbolic_Discrete_Type.Unique:
+                return Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Unique_Members());
+            case Internal_Symbolic_Discrete_Type.Summed:
+                return Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)
+                    ?? Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1);
             default:
                 throw new NotImplementedException();
         }
@@ -927,25 +927,25 @@ internal class Internal_Executor
 
     internal Boolean Bag__Is_Relational(MDER_Bag bag)
     {
-        return Array__Tree_Relational(bag.tree_root_node);
+        return Discrete__Tree_Relational(bag.tree_root_node);
     }
 
-    private Boolean Array__Tree_Relational(Internal_MDER_Array_Struct node)
+    private Boolean Discrete__Tree_Relational(Internal_MDER_Discrete_Struct node)
     {
         if (node.cached_members_meta!.tree_relational is null)
         {
             Boolean tr = true;
             switch (node.local_symbolic_type)
             {
-                case Internal_Symbolic_Array_Type.None:
+                case Internal_Symbolic_Discrete_Type.None:
                     tr = true;
                     break;
-                case Internal_Symbolic_Array_Type.Singular:
+                case Internal_Symbolic_Discrete_Type.Singular:
                     tr = node.Local_Singular_Members().member._WKBT()
                         == Internal_Well_Known_Base_Type.MDER_Tuple;
                     break;
-                case Internal_Symbolic_Array_Type.Arrayed:
-                    MDER_Any m0 = Array__maybe_Pick_Arbitrary_Node_Member(node)!;
+                case Internal_Symbolic_Discrete_Type.Arrayed:
+                    MDER_Any m0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = m0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
@@ -953,8 +953,8 @@ internal class Internal_Executor
                                 && Tuple__Same_Heading((MDER_Tuple)m, (MDER_Tuple)m0)
                         );
                     break;
-                case Internal_Symbolic_Array_Type.Arrayed_MM:
-                    MDER_Any m0_ = Array__maybe_Pick_Arbitrary_Node_Member(node)!;
+                case Internal_Symbolic_Discrete_Type.Arrayed_MM:
+                    MDER_Any m0_ = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = m0_._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_MM_Members(),
@@ -962,15 +962,15 @@ internal class Internal_Executor
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)m0_)
                         );
                     break;
-                case Internal_Symbolic_Array_Type.Catenated:
-                    MDER_Any pm0 = Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)!;
-                    MDER_Any sm0 = Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1)!;
-                    tr = Array__Tree_Relational(node.Tree_Catenated_Members().a0)
-                        && Array__Tree_Relational(node.Tree_Catenated_Members().a1)
+                case Internal_Symbolic_Discrete_Type.Catenated:
+                    MDER_Any pm0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a0)!;
+                    MDER_Any sm0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Catenated_Members().a1)!;
+                    tr = Discrete__Tree_Relational(node.Tree_Catenated_Members().a0)
+                        && Discrete__Tree_Relational(node.Tree_Catenated_Members().a1)
                         && (pm0 is null || sm0 is null || Tuple__Same_Heading((MDER_Tuple)pm0, (MDER_Tuple)sm0));
                     break;
-                case Internal_Symbolic_Array_Type.Indexed:
-                    MDER_Any im0 = Array__maybe_Pick_Arbitrary_Node_Member(node)!;
+                case Internal_Symbolic_Discrete_Type.Indexed:
+                    MDER_Any im0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
                     tr = im0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
@@ -978,14 +978,14 @@ internal class Internal_Executor
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)im0)
                         );
                     break;
-                case Internal_Symbolic_Array_Type.Unique:
-                    tr = Array__Tree_Relational(node.Tree_Unique_Members());
+                case Internal_Symbolic_Discrete_Type.Unique:
+                    tr = Discrete__Tree_Relational(node.Tree_Unique_Members());
                     break;
-                case Internal_Symbolic_Array_Type.Summed:
-                    tr = Array__Tree_Relational(node.Tree_Summed_Members().a0)
-                        && Array__Tree_Relational(node.Tree_Summed_Members().a1);
-                    MDER_Tuple pam0 = (MDER_Tuple)Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)!;
-                    MDER_Tuple eam0 = (MDER_Tuple)Array__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1)!;
+                case Internal_Symbolic_Discrete_Type.Summed:
+                    tr = Discrete__Tree_Relational(node.Tree_Summed_Members().a0)
+                        && Discrete__Tree_Relational(node.Tree_Summed_Members().a1);
+                    MDER_Tuple pam0 = (MDER_Tuple)Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a0)!;
+                    MDER_Tuple eam0 = (MDER_Tuple)Discrete__maybe_Pick_Arbitrary_Node_Member(node.Tree_Summed_Members().a1)!;
                     if (pam0 is not null && eam0 is not null)
                     {
                         tr = tr && Tuple__Same_Heading(pam0, eam0);
