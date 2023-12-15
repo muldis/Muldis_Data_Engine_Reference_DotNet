@@ -10,7 +10,7 @@ public class MDER_Set : MDER_Discrete
     internal String _as_MUON_Set_artifact(String indent)
     {
         String mei = indent + "\u0009";
-        this.machine()._executor().Set__Collapse(set: this, want_indexed: true);
+        this.Discrete__Collapse(want_indexed: true);
         Internal_MDER_Discrete_Struct node = this.tree_root_node;
         switch (node.local_symbolic_type)
         {
@@ -29,13 +29,13 @@ public class MDER_Set : MDER_Discrete
     internal Boolean _MDER_Set__same(MDER_Set value_1)
     {
         MDER_Set value_0 = this;
-        this.machine()._executor().Set__Collapse(set: value_0, want_indexed: true);
-        this.machine()._executor().Set__Collapse(set: value_1, want_indexed: true);
-        return this.collapsed_Set_Struct__same(
+        value_0.Discrete__Collapse(want_indexed: true);
+        value_1.Discrete__Collapse(want_indexed: true);
+        return this.collapsed_Discrete_Struct__same(
             value_0.tree_root_node, value_0.tree_root_node);
     }
 
-    private Boolean collapsed_Set_Struct__same(
+    private Boolean collapsed_Discrete_Struct__same(
         Internal_MDER_Discrete_Struct node_0, Internal_MDER_Discrete_Struct node_1)
     {
         if (Object.ReferenceEquals(node_0, node_1))

@@ -451,7 +451,7 @@ public class MDER_Machine
             {
                 return MDER_Tuple_Array_D0C0;
             }
-            if (this._executor().Array__count(body) == 1)
+            if (body.Discrete__count() == 1)
             {
                 return MDER_Tuple_Array_D0C1;
             }
@@ -467,7 +467,7 @@ public class MDER_Machine
             {
                 return MDER_Relation_D0C0;
             }
-            if (this._executor().Set__maybe_Pick_Arbitrary_Member(body) is not null)
+            if (body.Discrete__maybe_Pick_Arbitrary_Member() is not null)
             {
                 return MDER_Relation_D0C1;
             }
@@ -850,7 +850,7 @@ public class MDER_Machine
                 if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Array)
                 {
                     MDER_Array bv = (MDER_Array)((MDER_Any)v);
-                    if (!this.__executor.Array__Is_Relational(bv))
+                    if (!bv.Discrete__Is_Relational())
                     {
                         throw new ArgumentException
                         (
@@ -859,7 +859,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Array__maybe_Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)bv.Discrete__maybe_Pick_Arbitrary_Member());
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -881,7 +881,7 @@ public class MDER_Machine
                 if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Set)
                 {
                     MDER_Set bv = (MDER_Set)((MDER_Any)v);
-                    if (!this.__executor.Set__Is_Relational(bv))
+                    if (!bv.Discrete__Is_Relational())
                     {
                         throw new ArgumentException
                         (
@@ -890,7 +890,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Set__maybe_Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)bv.Discrete__maybe_Pick_Arbitrary_Member());
                     if (hv is null)
                     {
                         throw new ArgumentException
@@ -912,7 +912,7 @@ public class MDER_Machine
                 if (v is MDER_Any && ((MDER_Any)v)._WKBT() == Internal_Well_Known_Base_Type.MDER_Bag)
                 {
                     MDER_Bag bv = (MDER_Bag)((MDER_Any)v);
-                    if (!this.__executor.Bag__Is_Relational(bv))
+                    if (!bv.Discrete__Is_Relational())
                     {
                         throw new ArgumentException
                         (
@@ -921,7 +921,7 @@ public class MDER_Machine
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
-                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)this.__executor.Bag__maybe_Pick_Arbitrary_Member(bv));
+                    MDER_Heading? hv = this.__executor.Tuple__maybe_Heading((MDER_Tuple?)bv.Discrete__maybe_Pick_Arbitrary_Member());
                     if (hv is null)
                     {
                         throw new ArgumentException

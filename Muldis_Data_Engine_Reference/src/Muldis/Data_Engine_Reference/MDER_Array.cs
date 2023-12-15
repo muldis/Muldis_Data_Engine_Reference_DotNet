@@ -48,13 +48,13 @@ public class MDER_Array : MDER_Discrete
     internal Boolean _MDER_Array__same(MDER_Array value_1)
     {
         MDER_Array value_0 = this;
-        this.machine()._executor().Array__Collapse(value_0);
-        this.machine()._executor().Array__Collapse(value_1);
-        return this.collapsed_Array_Struct__same(
+        value_0.Discrete__Collapse();
+        value_1.Discrete__Collapse();
+        return this.collapsed_Discrete_Struct__same(
             value_0.tree_root_node, value_0.tree_root_node);
     }
 
-    private Boolean collapsed_Array_Struct__same(
+    private Boolean collapsed_Discrete_Struct__same(
         Internal_MDER_Discrete_Struct node_0, Internal_MDER_Discrete_Struct node_1)
     {
         if (Object.ReferenceEquals(node_0, node_1))
@@ -103,5 +103,53 @@ public class MDER_Array : MDER_Discrete
         }
         // We should never get here.
         throw new NotImplementedException();
+    }
+
+    internal MDER_Any? Array__maybe_at(Int64 ord_pos)
+    {
+        return Array__node__maybe_at(this.tree_root_node, ord_pos);
+    }
+
+    internal MDER_Any? Array__node__maybe_at(Internal_MDER_Discrete_Struct node, Int64 ord_pos)
+    {
+        if (node.cached_members_meta!.tree_member_count == 0)
+        {
+            return null;
+        }
+        Int64 maybe_last_ord_pos_seen = -1;
+        switch (node.local_symbolic_type)
+        {
+            case Internal_Symbolic_Discrete_Type.None:
+                return null;
+            case Internal_Symbolic_Discrete_Type.Singular:
+                if (ord_pos <= (maybe_last_ord_pos_seen + node.Local_Singular_Members().multiplicity))
+                {
+                    return node.Local_Singular_Members().member;
+                }
+                return null;
+            case Internal_Symbolic_Discrete_Type.Arrayed:
+                Int64 local_member_count = Discrete__node__tree_member_count(node);
+                if (ord_pos <= (maybe_last_ord_pos_seen + local_member_count))
+                {
+                    Int64 ord_pos_within_local = ord_pos - (1 + maybe_last_ord_pos_seen);
+                    return node.Local_Arrayed_Members()[(Int32)ord_pos_within_local];
+                }
+                return null;
+            case Internal_Symbolic_Discrete_Type.Catenated:
+                MDER_Any maybe_member = Array__node__maybe_at(node.Tree_Catenated_Members().a0, ord_pos)!;
+                if (maybe_member is not null)
+                {
+                    return maybe_member;
+                }
+                maybe_last_ord_pos_seen += Discrete__node__tree_member_count(node.Tree_Catenated_Members().a0);
+                if (ord_pos <= maybe_last_ord_pos_seen)
+                {
+                    return null;
+                }
+                Int64 ord_pos_within_succ = ord_pos - (1 + maybe_last_ord_pos_seen);
+                return Array__node__maybe_at(node.Tree_Catenated_Members().a1, ord_pos_within_succ);
+            default:
+                throw new NotImplementedException();
+        }
     }
 }
