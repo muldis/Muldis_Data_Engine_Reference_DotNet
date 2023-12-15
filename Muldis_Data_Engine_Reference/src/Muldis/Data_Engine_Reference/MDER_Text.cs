@@ -52,7 +52,7 @@ public class MDER_Text : MDER_Any
 
     internal String _code_point_members()
     {
-        return __code_point_members;
+        return this.__code_point_members;
     }
 
     internal String _as_MUON_Text_artifact()
@@ -65,5 +65,66 @@ public class MDER_Text : MDER_Any
         MDER_Text topic_0 = this;
         return String.Equals(topic_0.__code_point_members,
             topic_1.__code_point_members);
+    }
+
+    internal Int64 Text__count()
+    {
+        if (this.cached_member_count is null)
+        {
+            if (this.has_any_non_BMP)
+            {
+                String s = this.__code_point_members;
+                Int32 count = 0;
+                for (Int32 i = 0; i < s.Length; i++)
+                {
+                    count++;
+                    if ((i+1) < s.Length
+                        && Char.IsSurrogatePair(s[i], s[i+1]))
+                    {
+                        i++;
+                    }
+                }
+                this.cached_member_count = count;
+            }
+            else
+            {
+                this.cached_member_count = this.__code_point_members.Length;
+            }
+        }
+        return (Int64)this.cached_member_count;
+    }
+
+    internal MDER_Integer? Text__maybe_at(Int64 ord_pos)
+    {
+        if (ord_pos >= this.cached_member_count)
+        {
+            return null;
+        }
+        if (this.has_any_non_BMP)
+        {
+            String s = this.__code_point_members;
+            Int32 logical_i = 0;
+            for (Int32 i = 0; i < s.Length; i++)
+            {
+                if (logical_i == ord_pos)
+                {
+                    if ((i+1) < s.Length
+                        && Char.IsSurrogatePair(s[i], s[i+1]))
+                    {
+                        return this.machine().MDER_Integer(
+                            Char.ConvertToUtf32(s[i], s[i+1]));
+                    }
+                    return this.machine().MDER_Integer(s[i]);
+                }
+                logical_i++;
+                if ((i+1) < s.Length
+                    && Char.IsSurrogatePair(s[i], s[i+1]))
+                {
+                    i++;
+                }
+            }
+        }
+        return this.machine().MDER_Integer(
+            this.__code_point_members[(Int32)ord_pos]);
     }
 }

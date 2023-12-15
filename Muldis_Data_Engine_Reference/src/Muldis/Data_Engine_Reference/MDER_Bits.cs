@@ -52,4 +52,15 @@ public class MDER_Bits : MDER_Any
         }
         return list;
     }
+
+    internal Int64 Bits__count()
+    {
+        return this.__bit_members.Length;
+    }
+
+    internal MDER_Integer? Bits__maybe_at(Int64 ord_pos)
+    {
+        return (ord_pos >= this.__bit_members.Length) ? null
+            : this.machine().MDER_Integer(this.__bit_members[(Int32)ord_pos] ? 1 : 0);
+    }
 }
