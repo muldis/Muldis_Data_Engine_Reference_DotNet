@@ -61,11 +61,11 @@ public class App
 
         // Try to parse the file content into canonical format VM source code.
         MDER_Any maybe_source_code_text = machine.MDER_evaluate(
-            machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
+            machine.MDER_import(new KeyValuePair<String, Object>("Nesting", new String[] {"foundation", "Text_from_UTF_8_Blob"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {source_code_blob}))
         );
         if ((Boolean)machine.MDER_export_qualified(machine.MDER_evaluate(
-            machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Excuse"})),
+            machine.MDER_import(new KeyValuePair<String, Object>("Nesting", new String[] {"foundation", "Excuse"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text })))).Value!)
         {
             System.Console.WriteLine("The requested source code providing file"
@@ -75,14 +75,14 @@ public class App
         }
         System.Console.WriteLine("Debug: maybe_source_code_text = [" + maybe_source_code_text + "]");
         MDER_Any maybe_source_code = machine.MDER_evaluate(
-            machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
+            machine.MDER_import(new KeyValuePair<String, Object>("Nesting", new String[] {"foundation", "MDPT_Parsing_Unit_Text_to_Any"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {maybe_source_code_text }))
         );
         System.Console.WriteLine("Debug: maybe_source_code = [" + maybe_source_code + "]");
 
         // Temporary Executor test.
         MDER_Any sum = machine.MDER_evaluate(
-            machine.MDER_import(new KeyValuePair<String, Object>("Attr_Name_List", new String[] {"foundation", "Integer_plus"})),
+            machine.MDER_import(new KeyValuePair<String, Object>("Nesting", new String[] {"foundation", "Integer_plus"})),
             machine.MDER_import(new KeyValuePair<String, Object>("Tuple", new Object[] {27, 39}))
         );
         System.Console.WriteLine("Test data: sum = [" + sum + "]");

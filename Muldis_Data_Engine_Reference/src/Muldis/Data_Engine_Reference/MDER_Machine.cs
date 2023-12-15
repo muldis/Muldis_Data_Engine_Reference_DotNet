@@ -1040,7 +1040,7 @@ public class MDER_Machine
                 break;
             case "New_External":
                 return this.New_MDER_External(v);
-            case "Attr_Name_List":
+            case "Nesting":
                 if (v is String[])
                 {
                     foreach (String s in ((String[])v))
