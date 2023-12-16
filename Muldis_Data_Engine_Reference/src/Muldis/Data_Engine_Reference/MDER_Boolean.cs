@@ -6,4 +6,6 @@ public abstract class MDER_Boolean : MDER_Any
         : base(machine, WKBT)
     {
     }
+
+    public abstract Boolean as_Boolean();
 }

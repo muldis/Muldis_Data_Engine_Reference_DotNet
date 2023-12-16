@@ -6,4 +6,9 @@ public sealed class MDER_False : MDER_Boolean
         : base(machine, Internal_Well_Known_Base_Type.MDER_False)
     {
     }
+
+    public override Boolean as_Boolean()
+    {
+        return false;
+    }
 }

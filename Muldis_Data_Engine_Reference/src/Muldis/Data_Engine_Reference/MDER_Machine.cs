@@ -24,17 +24,17 @@ public class MDER_Machine
     // see https://en.wikipedia.org/wiki/String_interning for more on that.
 
     // MDER_Ignorance 0iIGNORANCE (type default value) value.
-    private readonly MDER_Ignorance MDER_0iIGNORANCE;
+    private readonly MDER_Ignorance __ignorance;
 
     // MDER_Boolean 0bFALSE (type default value) and 0bTRUE values.
-    private readonly MDER_False MDER_0bFALSE;
-    private readonly MDER_True MDER_0bTRUE;
+    private readonly MDER_False __false;
+    private readonly MDER_True __true;
 
     // MDER_Integer value cache.
     // Seeded with {-1,0,1}.
     // Limited to 10K entries each in range -2B..2B (signed 32-bit integer).
     // The MDER_Integer 0 is the type default value.
-    private readonly Dictionary<Int32, MDER_Integer> integers;
+    private readonly Dictionary<Int32, MDER_Integer> __integers;
 
     // MDER_Fraction 0.0 (type default value).
     private readonly MDER_Fraction MDER_Fraction_0;
@@ -102,19 +102,19 @@ public class MDER_Machine
     {
         this.__executor = new Internal_Executor(this);
 
-        this.MDER_0iIGNORANCE = new MDER_Ignorance(this);
+        this.__ignorance = new MDER_Ignorance(this);
 
-        this.MDER_0bFALSE = new MDER_False(this);
-        this.MDER_0bTRUE = new MDER_True(this);
+        this.__false = new MDER_False(this);
+        this.__true = new MDER_True(this);
 
-        this.integers = new Dictionary<Int32, MDER_Integer>();
+        this.__integers = new Dictionary<Int32, MDER_Integer>();
         for (Int32 i = -1; i <= 1; i++)
         {
             MDER_Integer v = this.MDER_Integer(i);
         }
 
         this.MDER_Fraction_0 = new MDER_Fraction(this, 0.0M,
-            this.integers[0].as_BigInteger(), this.integers[1].as_BigInteger());
+            this.__integers[0].as_BigInteger(), this.__integers[1].as_BigInteger());
 
         this.MDER_Bits_C0 = new MDER_Bits(this, new BitArray(0));
 
@@ -177,7 +177,7 @@ public class MDER_Machine
         this.MDER_Tuple_D0 = new MDER_Tuple(this, new Dictionary<String, MDER_Any>());
 
         this.false_nullary_article
-            = new MDER_Article(this, this.MDER_0bFALSE, this.MDER_Tuple_D0);
+            = new MDER_Article(this, this.__false, this.MDER_Tuple_D0);
 
         this.MDER_Tuple_Array_D0C0 = new MDER_Tuple_Array(this,
             MDER_Heading_D0, MDER_Array_C0);
@@ -241,37 +241,47 @@ public class MDER_Machine
     }
 
 
-    internal MDER_Ignorance MDER_Ignorance()
+    public MDER_Ignorance MDER_Ignorance()
     {
-        return this.MDER_0iIGNORANCE;
+        return this.__ignorance;
     }
 
-    internal MDER_Boolean MDER_Boolean(Boolean topic)
+    public MDER_Boolean MDER_Boolean(Boolean as_Boolean)
     {
-        return topic ? MDER_0bTRUE : MDER_0bFALSE;
+        return as_Boolean ? this.__true : this.__false;
     }
 
-    internal MDER_False MDER_False()
+    public MDER_False MDER_False()
     {
-        return this.MDER_0bFALSE;
+        return this.__false;
     }
 
-    internal MDER_True MDER_True()
+    public MDER_True MDER_True()
     {
-        return this.MDER_0bTRUE;
+        return this.__true;
     }
 
-    internal MDER_Integer MDER_Integer(BigInteger as_BigInteger)
+    public MDER_Integer MDER_Integer(Int32 as_Int32)
+    {
+        return this.MDER_Integer((BigInteger)as_Int32);
+    }
+
+    public MDER_Integer MDER_Integer(Int64 as_Int64)
+    {
+        return this.MDER_Integer((BigInteger)as_Int64);
+    }
+
+    public MDER_Integer MDER_Integer(BigInteger as_BigInteger)
     {
         Boolean may_cache = as_BigInteger >= -2000000000 && as_BigInteger <= 2000000000;
-        if (may_cache && this.integers.ContainsKey((Int32)as_BigInteger))
+        if (may_cache && this.__integers.ContainsKey((Int32)as_BigInteger))
         {
-            return this.integers[(Int32)as_BigInteger];
+            return this.__integers[(Int32)as_BigInteger];
         }
         MDER_Integer integer = new MDER_Integer(this, as_BigInteger);
-        if (may_cache && this.integers.Count < 10000)
+        if (may_cache && this.__integers.Count < 10000)
         {
-            this.integers.Add((Int32)as_BigInteger, integer);
+            this.__integers.Add((Int32)as_BigInteger, integer);
         }
         return integer;
     }
@@ -475,7 +485,7 @@ public class MDER_Machine
 
     internal MDER_Article MDER_Article(MDER_Any label, MDER_Tuple attrs)
     {
-        if (Object.ReferenceEquals(label, MDER_0bFALSE)
+        if (Object.ReferenceEquals(label, this.__false)
             && Object.ReferenceEquals(attrs, MDER_Tuple_D0))
         {
             return this.false_nullary_article;
@@ -624,6 +634,10 @@ public class MDER_Machine
                 if (v is Int32)
                 {
                     return this.MDER_Integer((Int32)v);
+                }
+                if (v is Int64)
+                {
+                    return this.MDER_Integer((Int64)v);
                 }
                 if (v is BigInteger)
                 {
@@ -1064,6 +1078,10 @@ public class MDER_Machine
         if (topic is Int32)
         {
             return this.MDER_Integer((Int32)topic);
+        }
+        if (topic is Int64)
+        {
+            return this.MDER_Integer((Int64)topic);
         }
         if (topic is BigInteger)
         {
