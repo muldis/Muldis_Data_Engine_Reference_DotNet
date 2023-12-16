@@ -133,33 +133,27 @@ public class MDER_Machine
         this.MDER_Array_C0 = new MDER_Array(this,
             new Internal_MDER_Discrete_Struct {
                 local_symbolic_type = Internal_Symbolic_Discrete_Type.None,
-                cached_members_meta = new Internal_Cached_Members_Meta {
-                    tree_member_count = 0,
-                    tree_all_unique = true,
-                    tree_relational = true,
-                },
+                cached_tree_member_count = 0,
+                cached_tree_all_unique = true,
+                cached_tree_relational = true,
             }
         );
 
         this.MDER_Set_C0 = new MDER_Set(this,
             new Internal_MDER_Discrete_Struct {
                 local_symbolic_type = Internal_Symbolic_Discrete_Type.None,
-                cached_members_meta = new Internal_Cached_Members_Meta {
-                    tree_member_count = 0,
-                    tree_all_unique = true,
-                    tree_relational = true,
-                },
+                cached_tree_member_count = 0,
+                cached_tree_all_unique = true,
+                cached_tree_relational = true,
             }
         );
 
         this.MDER_Bag_C0 = new MDER_Bag(this,
             new Internal_MDER_Discrete_Struct {
                 local_symbolic_type = Internal_Symbolic_Discrete_Type.None,
-                cached_members_meta = new Internal_Cached_Members_Meta {
-                    tree_member_count = 0,
-                    tree_all_unique = true,
-                    tree_relational = true,
-                },
+                cached_tree_member_count = 0,
+                cached_tree_all_unique = true,
+                cached_tree_relational = true,
             }
         );
 
@@ -194,11 +188,9 @@ public class MDER_Machine
                 new Internal_MDER_Discrete_Struct {
                     local_symbolic_type = Internal_Symbolic_Discrete_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Internal_Cached_Members_Meta {
-                        tree_member_count = 1,
-                        tree_all_unique = true,
-                        tree_relational = true,
-                    },
+                    cached_tree_member_count = 1,
+                    cached_tree_all_unique = true,
+                    cached_tree_relational = true,
                 }
             )
         );
@@ -212,11 +204,9 @@ public class MDER_Machine
                 new Internal_MDER_Discrete_Struct {
                     local_symbolic_type = Internal_Symbolic_Discrete_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Internal_Cached_Members_Meta {
-                        tree_member_count = 1,
-                        tree_all_unique = true,
-                        tree_relational = true,
-                    },
+                    cached_tree_member_count = 1,
+                    cached_tree_all_unique = true,
+                    cached_tree_relational = true,
                 }
             )
         );
@@ -230,11 +220,9 @@ public class MDER_Machine
                 new Internal_MDER_Discrete_Struct {
                     local_symbolic_type = Internal_Symbolic_Discrete_Type.Singular,
                     members = new Internal_Multiplied_Member(MDER_Tuple_D0),
-                    cached_members_meta = new Internal_Cached_Members_Meta {
-                        tree_member_count = 1,
-                        tree_all_unique = true,
-                        tree_relational = true,
-                    },
+                    cached_tree_member_count = 1,
+                    cached_tree_all_unique = true,
+                    cached_tree_relational = true,
                 }
             )
         );
@@ -364,12 +352,10 @@ public class MDER_Machine
                 new Internal_MDER_Discrete_Struct {
                     local_symbolic_type = Internal_Symbolic_Discrete_Type.Singular,
                     members = new Internal_Multiplied_Member(members[0]),
-                    cached_members_meta = new Internal_Cached_Members_Meta {
-                        tree_member_count = 1,
-                        tree_all_unique = true,
-                        tree_relational = (members[0]._WKBT()
-                            == Internal_Well_Known_Base_Type.MDER_Tuple),
-                    },
+                    cached_tree_member_count = 1,
+                    cached_tree_all_unique = true,
+                    cached_tree_relational = (members[0]._WKBT()
+                        == Internal_Well_Known_Base_Type.MDER_Tuple),
                 }
             );
         }
@@ -377,7 +363,6 @@ public class MDER_Machine
             new Internal_MDER_Discrete_Struct {
                 local_symbolic_type = Internal_Symbolic_Discrete_Type.Arrayed,
                 members = members,
-                cached_members_meta = new Internal_Cached_Members_Meta(),
             }
         );
     }
@@ -394,11 +379,8 @@ public class MDER_Machine
                 members = new Internal_MDER_Discrete_Struct {
                     local_symbolic_type = Internal_Symbolic_Discrete_Type.Arrayed_MM,
                     members = members,
-                    cached_members_meta = new Internal_Cached_Members_Meta(),
                 },
-                cached_members_meta = new Internal_Cached_Members_Meta {
-                    tree_all_unique = true,
-                },
+                cached_tree_all_unique = true,
             }
         );
     }
@@ -413,7 +395,6 @@ public class MDER_Machine
             new Internal_MDER_Discrete_Struct {
                 local_symbolic_type = Internal_Symbolic_Discrete_Type.Arrayed_MM,
                 members = members,
-                cached_members_meta = new Internal_Cached_Members_Meta(),
             }
         );
     }

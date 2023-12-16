@@ -112,7 +112,7 @@ public class MDER_Array : MDER_Discrete
 
     internal MDER_Any? Array__node__maybe_at(Internal_MDER_Discrete_Struct node, Int64 ord_pos)
     {
-        if (node.cached_members_meta!.tree_member_count == 0)
+        if (node.cached_tree_member_count == 0)
         {
             return null;
         }

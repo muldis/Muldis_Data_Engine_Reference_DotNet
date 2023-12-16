@@ -387,9 +387,7 @@ internal class Internal_Executor
                         new Internal_MDER_Discrete_Struct {
                             local_symbolic_type = Internal_Symbolic_Discrete_Type.Unique,
                             members = ((MDER_Bag)v).tree_root_node,
-                            cached_members_meta = new Internal_Cached_Members_Meta {
-                                tree_all_unique = true,
-                            },
+                            cached_tree_all_unique = true,
                         }
                     );
                 case "Tuple_degree":

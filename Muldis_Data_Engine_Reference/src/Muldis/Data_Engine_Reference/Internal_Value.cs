@@ -83,8 +83,25 @@ internal class Internal_MDER_Discrete_Struct
         // Makes no guarantees that the Array is none/singular/otherwise.
     internal Object? members;
 
-    // A cache of calculations about this Array's members.
-    internal Internal_Cached_Members_Meta? cached_members_meta;
+    // Nullable Integer
+    // Cached count of members of the Muldis Data Language Array/Bag represented by
+    // this tree node including those defined by it and child nodes.
+    internal Int64? cached_tree_member_count;
+
+    // Nullable Boolean
+    // This is true iff we know that no 2 members of the Muldis Data Language
+    // Array/Bag represented by this tree node (including child nodes)
+    // are the same value, and false iff we know that at least 2
+    // members are the same value.
+    internal Boolean? cached_tree_all_unique;
+
+    // Nullable Boolean
+    // This is true iff we know that the Muldis Data Language Array/Bag represented
+    // by this tree node (as with cached_tree_all_unique) has no member that
+    // is not a Muldis Data Language Tuple and has no 2 members that do not have
+    // the same heading; this is false iff we know that any member is
+    // not a Tuple or that any 2 members do not have the same heading.
+    internal Boolean? cached_tree_relational;
 
     internal Internal_Multiplied_Member Local_Singular_Members()
     {
@@ -163,33 +180,4 @@ internal class Internal_Multiplied_Member
     {
         return (Internal_Multiplied_Member)this.MemberwiseClone();
     }
-}
-
-// Muldis.Data_Engine_Reference.Internal_cached_members_meta
-// Represents cached metadata for the members of a Muldis Data Language "discrete
-// homogeneous" collection such as an Array or Bag, particularly a
-// collection implemented as a tree of nodes, where each node may
-// either define members locally or refer to child nodes but not both.
-
-internal class Internal_Cached_Members_Meta
-{
-    // Nullable Integer
-    // Cached count of members of the Muldis Data Language Array/Bag represented by
-    // this tree node including those defined by it and child nodes.
-    internal Int64? tree_member_count;
-
-    // Nullable Boolean
-    // This is true iff we know that no 2 members of the Muldis Data Language
-    // Array/Bag represented by this tree node (including child nodes)
-    // are the same value, and false iff we know that at least 2
-    // members are the same value.
-    internal Boolean? tree_all_unique;
-
-    // Nullable Boolean
-    // This is true iff we know that the Muldis Data Language Array/Bag represented
-    // by this tree node (as with tree_all_unique) has no member that
-    // is not a Muldis Data Language Tuple and has no 2 members that do not have
-    // the same heading; this is false iff we know that any member is
-    // not a Tuple or that any 2 members do not have the same heading.
-    internal Boolean? tree_relational;
 }
