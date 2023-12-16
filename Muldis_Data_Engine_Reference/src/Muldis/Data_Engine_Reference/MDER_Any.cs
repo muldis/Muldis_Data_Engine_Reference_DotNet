@@ -157,7 +157,8 @@ public abstract class MDER_Any
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + artifact_as_String + "))\u000A",
-            test_result == Internal_Unicode_Test_Result.Valid_Has_Non_BMP
+            test_result == Internal_Unicode_Test_Result.Valid_Has_Non_BMP,
+            false
         );
     }
 

@@ -31,7 +31,7 @@ internal class Internal_Executor
         if (Is_Absolute_Name(function))
         {
             if (Object.ReferenceEquals(
-                ((MDER_Array)function).Array__maybe_at(0), this.__machine.MDER_Attr_Name("foundation")))
+                ((MDER_Array)function).Array__maybe_at(0), this.__machine._MDER_Text("foundation", false, true)))
             {
                 return evaluate_foundation_function(
                     (MDER_Text)((MDER_Array)function).Array__maybe_at(1)!, args_as_Tuple);
@@ -200,12 +200,12 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = ((MDER_Array)topic).Array__maybe_at(0)!;
-        if ((Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation")) && count == 2)
-            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used")) && count >= 2)
-            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("folder")) && count >= 1)
-            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("material")) && count == 1)
-            || (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("floating")) && count >= 2))
+        if ((Object.ReferenceEquals(first, this.__machine._MDER_Text("foundation", false, true)) && count == 2)
+            || (Object.ReferenceEquals(first, this.__machine._MDER_Text("used", false, true)) && count >= 2)
+            || (Object.ReferenceEquals(first, this.__machine._MDER_Text("package", false, true)) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine._MDER_Text("folder", false, true)) && count >= 1)
+            || (Object.ReferenceEquals(first, this.__machine._MDER_Text("material", false, true)) && count == 1)
+            || (Object.ReferenceEquals(first, this.__machine._MDER_Text("floating", false, true)) && count >= 2))
         {
             return true;
         }
@@ -219,9 +219,9 @@ internal class Internal_Executor
             return false;
         }
         MDER_Any first = ((MDER_Array)topic).Array__maybe_at(0)!;
-        if (Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("foundation"))
-            || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("used"))
-            || Object.ReferenceEquals(first, this.__machine.MDER_Attr_Name("package")))
+        if (Object.ReferenceEquals(first, this.__machine._MDER_Text("foundation", false, true))
+            || Object.ReferenceEquals(first, this.__machine._MDER_Text("used", false, true))
+            || Object.ReferenceEquals(first, this.__machine._MDER_Text("package", false, true)))
         {
             return true;
         }
@@ -546,7 +546,8 @@ internal class Internal_Executor
         }
         return this.__machine._MDER_Text(
             code_points,
-            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP),
+            false
         );
     }
 }

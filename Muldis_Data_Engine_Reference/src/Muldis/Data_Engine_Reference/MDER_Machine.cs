@@ -123,11 +123,11 @@ public class MDER_Machine
         this.__texts = new Dictionary<String, MDER_Text>();
         foreach (String s in new String[] {"", "\u0000", "\u0001", "\u0002"})
         {
-            MDER_Text v = this._MDER_Text(s, false);
+            MDER_Text v = this._MDER_Text(s, false, true);
         }
         foreach (String s in Internal_Constants.Strings__Seeded_Non_Positional_Attr_Names())
         {
-            MDER_Text v = this._MDER_Text(s, false);
+            MDER_Text v = this._MDER_Text(s, false, true);
         }
 
         this.MDER_Array_C0 = new MDER_Array(this,
@@ -231,7 +231,7 @@ public class MDER_Machine
         foreach (String s in Internal_Constants.Strings__Well_Known_Excuses())
         {
             well_known_excuses.Add(s,
-                new MDER_Excuse(this, this.MDER_Attr_Name(s), this.MDER_Tuple_D0));
+                new MDER_Excuse(this, this._MDER_Text(s, false, true), this.MDER_Tuple_D0));
         }
     }
 
@@ -358,7 +358,8 @@ public class MDER_Machine
         return new MDER_Blob(this, octet_members_as_Byte_array);
     }
 
-    public MDER_Text MDER_Text(String code_point_members_as_String)
+    public MDER_Text MDER_Text(String code_point_members_as_String,
+        Boolean may_cache = false)
     {
         if (code_point_members_as_String is null)
         {
@@ -380,12 +381,13 @@ public class MDER_Machine
         }
         return this._MDER_Text(
             code_point_members_as_String,
-            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP),
+            may_cache
         );
     }
 
     internal MDER_Text _MDER_Text(String code_point_members_as_String,
-        Boolean has_any_non_BMP)
+        Boolean has_any_non_BMP, Boolean may_cache)
     {
         if (this.__texts.ContainsKey(code_point_members_as_String))
         {
@@ -393,18 +395,12 @@ public class MDER_Machine
         }
         MDER_Text text = new MDER_Text(this, code_point_members_as_String,
             has_any_non_BMP);
-        if (code_point_members_as_String.Length <= 200
+        if (may_cache && code_point_members_as_String.Length <= 200
             && this.__texts.Count < 10000)
         {
             this.__texts.Add(code_point_members_as_String, text);
         }
         return text;
-    }
-
-    // Temporary wrapper.
-    internal MDER_Text MDER_Attr_Name(String code_point_members_as_String)
-    {
-        return this._MDER_Text(code_point_members_as_String, false);
     }
 
     internal MDER_Array MDER_Array(List<MDER_Any> members)
@@ -571,7 +567,7 @@ public class MDER_Machine
         {
             return well_known_excuses[topic];
         }
-        return new MDER_Excuse(this, this.MDER_Attr_Name(topic), this.MDER_Tuple_D0);
+        return new MDER_Excuse(this, this._MDER_Text(topic, false, true), this.MDER_Tuple_D0);
     }
 
     // TODO: Here or in Internal_Executor also have Article_attrs() etc functions
@@ -791,7 +787,8 @@ public class MDER_Machine
                     }
                     return this._MDER_Text(
                         (String)v,
-                        (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+                        (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP),
+                        false
                     );
                 }
                 break;
@@ -1023,7 +1020,7 @@ public class MDER_Machine
                             );
                         }
                         return this.MDER_Article(
-                            this.MDER_Attr_Name((String)label),
+                            this._MDER_Text((String)label, false, true),
                             attrs_cv_as_MDER_Tuple
                         );
                     }
@@ -1044,7 +1041,7 @@ public class MDER_Machine
                         }
                         return this.MDER_Article(
                             this.MDER_Array(new List<MDER_Any>(((String[])label).Select(
-                                m => this.MDER_Attr_Name(m)
+                                m => this._MDER_Text(m, false, true)
                             ))),
                             attrs_cv_as_MDER_Tuple
                         );
@@ -1109,7 +1106,7 @@ public class MDER_Machine
                         }
                     }
                     return this.MDER_Array(new List<MDER_Any>(((String[])v).Select(
-                        m => this.MDER_Attr_Name(m)
+                        m => this._MDER_Text(m, false, true)
                     )));
                 }
                 break;
@@ -1171,7 +1168,8 @@ public class MDER_Machine
             }
             return this._MDER_Text(
                 (String)topic,
-                (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP),
+                false
             );
         }
         throw new NotImplementedException("Unhandled MDER value type [" + (topic.GetType().FullName ?? "(GetType.FullName() is null)") + "].");
