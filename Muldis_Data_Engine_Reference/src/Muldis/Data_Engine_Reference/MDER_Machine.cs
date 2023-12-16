@@ -334,28 +334,28 @@ public class MDER_Machine
         return new MDER_Bits(this, bit_members_as_BitArray);
     }
 
-    public MDER_Blob MDER_Blob(Byte[] octet_members_as_Byte_array)
+    public MDER_Blob MDER_Blob(Byte[] octet_members_as_array_of_Byte)
     {
-        if (octet_members_as_Byte_array is null)
+        if (octet_members_as_array_of_Byte is null)
         {
-            throw new ArgumentNullException("octet_members_as_Byte_array");
+            throw new ArgumentNullException("octet_members_as_array_of_Byte");
         }
-        if (octet_members_as_Byte_array.Length == 0)
+        if (octet_members_as_array_of_Byte.Length == 0)
         {
             return this.__blob_C0;
         }
         // An array is mutable so clone to protect our internals.
         return new MDER_Blob(this,
-            (Byte[])octet_members_as_Byte_array.Clone());
+            (Byte[])octet_members_as_array_of_Byte.Clone());
     }
 
-    internal MDER_Blob _MDER_Blob(Byte[] octet_members_as_Byte_array)
+    internal MDER_Blob _MDER_Blob(Byte[] octet_members_as_array_of_Byte)
     {
-        if (octet_members_as_Byte_array.Length == 0)
+        if (octet_members_as_array_of_Byte.Length == 0)
         {
             return this.__blob_C0;
         }
-        return new MDER_Blob(this, octet_members_as_Byte_array);
+        return new MDER_Blob(this, octet_members_as_array_of_Byte);
     }
 
     public MDER_Text MDER_Text(String code_point_members_as_String,

@@ -82,7 +82,7 @@ internal static class Internal_Unicode
         return null;
     }
 
-    internal static String? maybe_String_from_UTF_8_Byte_array(Byte[] topic)
+    internal static String? maybe_String_from_UTF_8_array_of_Byte(Byte[] topic)
     {
         UTF8Encoding enc = new UTF8Encoding
         (

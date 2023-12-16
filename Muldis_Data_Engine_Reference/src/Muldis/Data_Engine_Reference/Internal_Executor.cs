@@ -533,8 +533,8 @@ internal class Internal_Executor
 
     internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob blob)
     {
-        Byte[] octets = blob._octet_members_as_Byte_array();
-        String? code_points = Internal_Unicode.maybe_String_from_UTF_8_Byte_array(octets);
+        Byte[] octets = blob._octet_members_as_array_of_Byte();
+        String? code_points = Internal_Unicode.maybe_String_from_UTF_8_array_of_Byte(octets);
         if (code_points is null)
         {
             return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
