@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Text;
 
 namespace Muldis.Data_Engine_Reference;
 
@@ -231,7 +230,7 @@ internal class Internal_Executor
 
     internal MDER_Any evaluate_foundation_function(MDER_Text func_name, MDER_Tuple args)
     {
-        String func_name_s = func_name._code_point_members();
+        String func_name_s = func_name.code_point_members_as_String();
 
         // TYPE DEFINERS
 
@@ -510,29 +509,6 @@ internal class Internal_Executor
         return result;
     }
 
-    internal Internal_Dot_Net_String_Unicode_Test_Result Test_Dot_Net_String(String topic)
-    {
-        Internal_Dot_Net_String_Unicode_Test_Result ok_result
-            = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Is_All_BMP;
-        for (Int32 i = 0; i < topic.Length; i++)
-        {
-            if (Char.IsSurrogate(topic[i]))
-            {
-                if ((i+1) < topic.Length
-                    && Char.IsSurrogatePair(topic[i], topic[i+1]))
-                {
-                    ok_result = Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP;
-                    i++;
-                }
-                else
-                {
-                    return Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed;
-                }
-            }
-        }
-        return ok_result;
-    }
-
     internal MDER_Heading Tuple__Heading(MDER_Tuple tuple)
     {
         return this.__machine.MDER_Heading(new HashSet<String>(tuple.attrs.Keys));
@@ -555,30 +531,22 @@ internal class Internal_Executor
             && Enumerable.All(attr_names, attr_name => attrs.ContainsKey(attr_name));
     }
 
-    internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob topic)
+    internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob blob)
     {
-        Byte[] octets = topic._octet_members_as_Byte_array();
-        UTF8Encoding enc = new UTF8Encoding
-        (
-            encoderShouldEmitUTF8Identifier: false,
-            throwOnInvalidBytes: true
-        );
-        try
-        {
-            String s = enc.GetString(octets);
-            Internal_Dot_Net_String_Unicode_Test_Result tr = Test_Dot_Net_String(s);
-            if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
-            {
-                return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
-            }
-            return this.__machine.MDER_Text(
-                s,
-                (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
-            );
-        }
-        catch
+        Byte[] octets = blob._octet_members_as_Byte_array();
+        String? code_points = Internal_Unicode.maybe_String_from_UTF_8_Byte_array(octets);
+        if (code_points is null)
         {
             return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
         }
+        Internal_Unicode_Test_Result tr = Internal_Unicode.test_String(code_points);
+        if (tr == Internal_Unicode_Test_Result.Is_Malformed)
+        {
+            return this.__machine.Simple_MDER_Excuse("X_Unicode_Blob_Not_UTF_8");
+        }
+        return this.__machine._MDER_Text(
+            code_points,
+            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+        );
     }
 }

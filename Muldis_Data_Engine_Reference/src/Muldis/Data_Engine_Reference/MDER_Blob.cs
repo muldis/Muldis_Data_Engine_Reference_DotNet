@@ -38,15 +38,15 @@ public class MDER_Blob : MDER_Any
             topic_1.__octet_members_as_Byte_array);
     }
 
-    internal Int64 _MDER_Blob__count()
+    internal Int32 _MDER_Blob__octet_count()
     {
         return this.__octet_members_as_Byte_array.Length;
     }
 
-    internal MDER_Integer? _MDER_Blob__maybe_at(Int64 ord_pos)
+    internal MDER_Integer? _MDER_Blob__octet_maybe_at(Int32 ord_pos)
     {
         return (ord_pos >= this.__octet_members_as_Byte_array.Length) ? null
             : this.machine().MDER_Integer(
-                this.__octet_members_as_Byte_array[(Int32)ord_pos]);
+                this.__octet_members_as_Byte_array[ord_pos]);
     }
 }

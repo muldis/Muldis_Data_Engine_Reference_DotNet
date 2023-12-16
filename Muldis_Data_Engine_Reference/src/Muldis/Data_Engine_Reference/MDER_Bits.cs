@@ -4,7 +4,7 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Bits : MDER_Any
 {
-    // An object of the .NET class BitArray is mutable.
+    // A value of the .NET class BitArray is mutable.
     // It should be cloned as needed for protection of our internals.
     private readonly BitArray __bit_members_as_BitArray;
 
@@ -52,15 +52,15 @@ public class MDER_Bits : MDER_Any
         return list;
     }
 
-    internal Int64 _MDER_Bits__count()
+    internal Int32 _MDER_Bits__bit_count()
     {
         return this.__bit_members_as_BitArray.Length;
     }
 
-    internal MDER_Integer? _MDER_Bits__maybe_at(Int64 ord_pos)
+    internal MDER_Integer? _MDER_Bits__bit_maybe_at(Int32 ord_pos)
     {
         return (ord_pos >= this.__bit_members_as_BitArray.Length) ? null
             : this.machine().MDER_Integer(
-                this.__bit_members_as_BitArray[(Int32)ord_pos] ? 1 : 0);
+                this.__bit_members_as_BitArray[ord_pos] ? 1 : 0);
     }
 }

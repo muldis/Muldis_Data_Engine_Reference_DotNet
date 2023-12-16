@@ -103,7 +103,7 @@ public abstract class MDER_Any
     // Muldis Data Language values so that debuggers including MS Visual Studio can
     // assist programmers at easily determining what the current logical
     // values of their program variables are, which would otherwise be
-    // quite labour intensive for humans inspeding MDER_Any object fields.
+    // quite labour intensive for humans inspecting MDER_Any object fields.
     // This class is explicitly NOT guaranteed to be deterministic and so
     // different runs of its functions on what are logically the same
     // Muldis Data Language values might produce different String outputs; reasons for
@@ -151,13 +151,13 @@ public abstract class MDER_Any
     public MDER_Text as_MUON_Plain_Text_artifact_as_MDER_Text()
     {
         String artifact_as_String = this._as_MUON_Any_artifact("");
-        Internal_Dot_Net_String_Unicode_Test_Result test_result
-            = this.__machine._executor().Test_Dot_Net_String(artifact_as_String);
-        return this.__machine.MDER_Text(
+        Internal_Unicode_Test_Result test_result
+            = Internal_Unicode.test_String(artifact_as_String);
+        return this.__machine._MDER_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + artifact_as_String + "))\u000A",
-            test_result == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP
+            test_result == Internal_Unicode_Test_Result.Valid_Has_Non_BMP
         );
     }
 

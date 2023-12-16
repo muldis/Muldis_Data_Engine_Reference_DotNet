@@ -49,7 +49,7 @@ public class MDER_Machine
     // Seeded with empty string and well-known attribute names.
     // Limited to 10K entries each not more than 200 code points length.
     // The MDER_Text empty string is the type default value.
-    private readonly Dictionary<String, MDER_Text> texts;
+    private readonly Dictionary<String, MDER_Text> __texts;
 
     // MDER_Array with no members (type default value).
     internal readonly MDER_Array MDER_Array_C0;
@@ -120,14 +120,14 @@ public class MDER_Machine
 
         this.__blob_C0 = new MDER_Blob(this, new Byte[] {});
 
-        this.texts = new Dictionary<String, MDER_Text>();
+        this.__texts = new Dictionary<String, MDER_Text>();
         foreach (String s in new String[] {"", "\u0000", "\u0001", "\u0002"})
         {
-            MDER_Text v = this.MDER_Text(s, false);
+            MDER_Text v = this._MDER_Text(s, false);
         }
         foreach (String s in Internal_Constants.Strings__Seeded_Non_Positional_Attr_Names())
         {
-            MDER_Text v = this.MDER_Text(s, false);
+            MDER_Text v = this._MDER_Text(s, false);
         }
 
         this.MDER_Array_C0 = new MDER_Array(this,
@@ -240,7 +240,6 @@ public class MDER_Machine
         return this.__executor;
     }
 
-
     public MDER_Ignorance MDER_Ignorance()
     {
         return this.__ignorance;
@@ -273,7 +272,8 @@ public class MDER_Machine
 
     public MDER_Integer MDER_Integer(BigInteger as_BigInteger)
     {
-        Boolean may_cache = as_BigInteger >= -2000000000 && as_BigInteger <= 2000000000;
+        Boolean may_cache
+            = as_BigInteger >= -2000000000 && as_BigInteger <= 2000000000;
         if (may_cache && this.__integers.ContainsKey((Int32)as_BigInteger))
         {
             return this.__integers[(Int32)as_BigInteger];
@@ -345,7 +345,8 @@ public class MDER_Machine
             return this.__blob_C0;
         }
         // An array is mutable so clone to protect our internals.
-        return new MDER_Blob(this, (Byte[])octet_members_as_Byte_array.Clone());
+        return new MDER_Blob(this,
+            (Byte[])octet_members_as_Byte_array.Clone());
     }
 
     internal MDER_Blob _MDER_Blob(Byte[] octet_members_as_Byte_array)
@@ -357,25 +358,53 @@ public class MDER_Machine
         return new MDER_Blob(this, octet_members_as_Byte_array);
     }
 
-    internal MDER_Text MDER_Text(String code_point_members, Boolean has_any_non_BMP)
+    public MDER_Text MDER_Text(String code_point_members_as_String)
     {
-        Boolean may_cache = code_point_members.Length <= 200;
-        if (may_cache && this.texts.ContainsKey(code_point_members))
+        if (code_point_members_as_String is null)
         {
-            return this.texts[code_point_members];
+            throw new ArgumentNullException("code_point_members_as_String");
         }
-        MDER_Text text = new MDER_Text(this, code_point_members, has_any_non_BMP);
-        if (may_cache && this.texts.Count < 10000)
+        if (this.__texts.ContainsKey(code_point_members_as_String))
         {
-            this.texts.Add(code_point_members, text);
+            return this.__texts[code_point_members_as_String];
+        }
+        Internal_Unicode_Test_Result tr
+            = Internal_Unicode.test_String(code_point_members_as_String);
+        if (tr == Internal_Unicode_Test_Result.Is_Malformed)
+        {
+            throw new ArgumentException
+            (
+                paramName: "code_point_members_as_String",
+                message: "Can't select MDER_Text with a malformed .NET String."
+            );
+        }
+        return this._MDER_Text(
+            code_point_members_as_String,
+            (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
+        );
+    }
+
+    internal MDER_Text _MDER_Text(String code_point_members_as_String,
+        Boolean has_any_non_BMP)
+    {
+        if (this.__texts.ContainsKey(code_point_members_as_String))
+        {
+            return this.__texts[code_point_members_as_String];
+        }
+        MDER_Text text = new MDER_Text(this, code_point_members_as_String,
+            has_any_non_BMP);
+        if (code_point_members_as_String.Length <= 200
+            && this.__texts.Count < 10000)
+        {
+            this.__texts.Add(code_point_members_as_String, text);
         }
         return text;
     }
 
     // Temporary wrapper.
-    internal MDER_Text MDER_Attr_Name(String code_point_members)
+    internal MDER_Text MDER_Attr_Name(String code_point_members_as_String)
     {
-        return this.MDER_Text(code_point_members, false);
+        return this._MDER_Text(code_point_members_as_String, false);
     }
 
     internal MDER_Array MDER_Array(List<MDER_Any> members)
@@ -751,8 +780,8 @@ public class MDER_Machine
             case "Text":
                 if (v is String)
                 {
-                    Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)v);
-                    if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    Internal_Unicode_Test_Result tr = Internal_Unicode.test_String((String)v);
+                    if (tr == Internal_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -760,9 +789,9 @@ public class MDER_Machine
                             message: "Can't select MDER_Text with a malformed .NET String."
                         );
                     }
-                    return this.MDER_Text(
+                    return this._MDER_Text(
                         (String)v,
-                        (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                        (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
                     );
                 }
                 break;
@@ -814,8 +843,8 @@ public class MDER_Machine
                     HashSet<String> attr_names = (HashSet<String>)v;
                     foreach (String atnm in attr_names)
                     {
-                        if (this.__executor.Test_Dot_Net_String(atnm)
-                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        if (Internal_Unicode.test_String(atnm)
+                            == Internal_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -846,8 +875,8 @@ public class MDER_Machine
                     Dictionary<String, Object> attrs = (Dictionary<String, Object>)v;
                     foreach (String atnm in attrs.Keys)
                     {
-                        if (this.__executor.Test_Dot_Net_String(atnm)
-                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        if (Internal_Unicode.test_String(atnm)
+                            == Internal_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -983,8 +1012,8 @@ public class MDER_Machine
                     MDER_Tuple attrs_cv_as_MDER_Tuple = (MDER_Tuple)attrs_cv;
                     if (label is String)
                     {
-                        if (this.__executor.Test_Dot_Net_String((String)label)
-                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        if (Internal_Unicode.test_String((String)label)
+                            == Internal_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -1002,8 +1031,8 @@ public class MDER_Machine
                     {
                         foreach (String s in ((String[])label))
                         {
-                            if (this.__executor.Test_Dot_Net_String(s)
-                                == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                            if (Internal_Unicode.test_String(s)
+                                == Internal_Unicode_Test_Result.Is_Malformed)
                             {
                                 throw new ArgumentException
                                 (
@@ -1029,8 +1058,8 @@ public class MDER_Machine
             case "Excuse":
                 if (v is String)
                 {
-                    if (this.__executor.Test_Dot_Net_String((String)v)
-                        == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                    if (Internal_Unicode.test_String((String)v)
+                        == Internal_Unicode_Test_Result.Is_Malformed)
                     {
                         throw new ArgumentException
                         (
@@ -1068,8 +1097,8 @@ public class MDER_Machine
                 {
                     foreach (String s in ((String[])v))
                     {
-                        if (this.__executor.Test_Dot_Net_String(s)
-                            == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+                        if (Internal_Unicode.test_String(s)
+                            == Internal_Unicode_Test_Result.Is_Malformed)
                         {
                             throw new ArgumentException
                             (
@@ -1131,8 +1160,8 @@ public class MDER_Machine
         }
         if (topic is String)
         {
-            Internal_Dot_Net_String_Unicode_Test_Result tr = this.__executor.Test_Dot_Net_String((String)topic);
-            if (tr == Internal_Dot_Net_String_Unicode_Test_Result.Is_Malformed)
+            Internal_Unicode_Test_Result tr = Internal_Unicode.test_String((String)topic);
+            if (tr == Internal_Unicode_Test_Result.Is_Malformed)
             {
                 throw new ArgumentException
                 (
@@ -1140,9 +1169,9 @@ public class MDER_Machine
                     message: "Can't select MDER_Text with a malformed .NET String."
                 );
             }
-            return this.MDER_Text(
+            return this._MDER_Text(
                 (String)topic,
-                (tr == Internal_Dot_Net_String_Unicode_Test_Result.Valid_Has_Non_BMP)
+                (tr == Internal_Unicode_Test_Result.Valid_Has_Non_BMP)
             );
         }
         throw new NotImplementedException("Unhandled MDER value type [" + (topic.GetType().FullName ?? "(GetType.FullName() is null)") + "].");

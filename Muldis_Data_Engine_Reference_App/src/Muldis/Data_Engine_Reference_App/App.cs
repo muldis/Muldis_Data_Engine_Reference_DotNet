@@ -96,6 +96,11 @@ public class App
         MDER_Blob blob4 = machine.MDER_Blob(new byte[] {0xA7,0x05,0xE4,0x16});
         System.Console.WriteLine("Test data: blob4 = [" + blob4 + "]");
 
+        MDER_Text texte = machine.MDER_Text("");
+        System.Console.WriteLine("Test data: texte = [" + texte + "]");
+        MDER_Text texth = machine.MDER_Text("hello");
+        System.Console.WriteLine("Test data: texth = [" + texth + "]");
+
         // Import the user-specified source code file's raw content into
         // the Muldis Data Language implementing virtual machine where it would be used.
         MDER_Blob source_code_blob = machine.MDER_Blob(sourceCodeFileContent);
@@ -134,7 +139,7 @@ public class App
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
         System.Console.WriteLine("Test data: that_too = [" + that_too + "]");
-        MDER_Any the_other = machine.MDER_import("Fr ⊂ ac 💩 ti ÷ on");
+        MDER_Text the_other = machine.MDER_Text("Fr ⊂ ac 💩 ti ÷ on");
         System.Console.WriteLine("Test data: the_other = [" + the_other + "]");
         MDER_Any f0 = machine.MDER_import(014.0M);
         System.Console.WriteLine("Test data: f0 = [" + f0 + "]");
