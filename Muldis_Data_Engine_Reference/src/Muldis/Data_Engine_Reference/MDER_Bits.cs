@@ -4,42 +4,41 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Bits : MDER_Any
 {
-    private readonly BitArray __bit_members;
+    // An object of the .NET class BitArray is mutable.
+    // It should be cloned as needed for protection of our internals.
+    private readonly BitArray __bit_members_as_BitArray;
 
-    internal MDER_Bits(MDER_Machine machine, BitArray bit_members)
+    internal MDER_Bits(MDER_Machine machine,
+        BitArray bit_members_as_BitArray)
         : base(machine, Internal_Well_Known_Base_Type.MDER_Bits)
     {
-        this.__bit_members = bit_members;
+        this.__bit_members_as_BitArray = bit_members_as_BitArray;
     }
 
-    internal BitArray _bit_members()
+    public BitArray bit_members_as_BitArray()
     {
-        return this.__bit_members;
+        // A BitArray is mutable so clone to protect our internals.
+        return new BitArray(this.__bit_members_as_BitArray);
+    }
+
+    internal BitArray _bit_members_as_BitArray()
+    {
+        return this.__bit_members_as_BitArray;
     }
 
     internal String _as_MUON_Bits_artifact()
     {
-        if (Object.ReferenceEquals(this, this.machine().MDER_Bits_C0))
-        {
-            return "0bb";
-        }
-        System.Collections.IEnumerator e = this.__bit_members.GetEnumerator();
-        List<Boolean> list = new List<Boolean>();
-        while (e.MoveNext())
-        {
-            list.Add((Boolean)e.Current);
-        }
-        return "0bb" + String.Concat(
-                Enumerable.Select(list, m => m ? "1" : "0")
-            );
+        return "0bb" + String.Concat(Enumerable.Select(
+            this._BitArray_to_List(this.__bit_members_as_BitArray),
+            m => m ? "1" : "0"));
     }
 
     internal Boolean _MDER_Bits__same(MDER_Bits topic_1)
     {
         MDER_Bits topic_0 = this;
         return Enumerable.SequenceEqual(
-            _BitArray_to_List(topic_0.__bit_members),
-            _BitArray_to_List(topic_1.__bit_members));
+            this._BitArray_to_List(topic_0.__bit_members_as_BitArray),
+            this._BitArray_to_List(topic_1.__bit_members_as_BitArray));
     }
 
     private List<Boolean> _BitArray_to_List(BitArray topic)
@@ -53,14 +52,15 @@ public class MDER_Bits : MDER_Any
         return list;
     }
 
-    internal Int64 Bits__count()
+    internal Int64 _MDER_Bits__count()
     {
-        return this.__bit_members.Length;
+        return this.__bit_members_as_BitArray.Length;
     }
 
-    internal MDER_Integer? Bits__maybe_at(Int64 ord_pos)
+    internal MDER_Integer? _MDER_Bits__maybe_at(Int64 ord_pos)
     {
-        return (ord_pos >= this.__bit_members.Length) ? null
-            : this.machine().MDER_Integer(this.__bit_members[(Int32)ord_pos] ? 1 : 0);
+        return (ord_pos >= this.__bit_members_as_BitArray.Length) ? null
+            : this.machine().MDER_Integer(
+                this.__bit_members_as_BitArray[(Int32)ord_pos] ? 1 : 0);
     }
 }

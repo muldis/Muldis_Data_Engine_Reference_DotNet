@@ -43,7 +43,8 @@ public abstract class MDER_Any
     // whose character code points are typically in the 0..127 range.
     private String? __cached_MDER_Any_identity;
 
-    internal MDER_Any(MDER_Machine machine, Internal_Well_Known_Base_Type WKBT)
+    internal MDER_Any(MDER_Machine machine,
+        Internal_Well_Known_Base_Type WKBT)
     {
         this.__machine = machine;
         this.__WKBT = WKBT;

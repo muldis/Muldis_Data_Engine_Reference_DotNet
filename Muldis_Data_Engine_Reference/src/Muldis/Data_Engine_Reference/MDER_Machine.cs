@@ -40,10 +40,10 @@ public class MDER_Machine
     private readonly MDER_Fraction MDER_Fraction_0;
 
     // MDER_Bits with no members (type default value).
-    internal readonly MDER_Bits MDER_Bits_C0;
+    private readonly MDER_Bits __bits_C0;
 
     // MDER_Blob with no members (type default value).
-    internal readonly MDER_Blob MDER_Blob_C0;
+    private readonly MDER_Blob __blob_C0;
 
     // MDER_Text value cache.
     // Seeded with empty string and well-known attribute names.
@@ -116,9 +116,9 @@ public class MDER_Machine
         this.MDER_Fraction_0 = new MDER_Fraction(this, 0.0M,
             this.__integers[0].as_BigInteger(), this.__integers[1].as_BigInteger());
 
-        this.MDER_Bits_C0 = new MDER_Bits(this, new BitArray(0));
+        this.__bits_C0 = new MDER_Bits(this, new BitArray(0));
 
-        this.MDER_Blob_C0 = new MDER_Blob(this, new Byte[] {});
+        this.__blob_C0 = new MDER_Blob(this, new Byte[] {});
 
         this.texts = new Dictionary<String, MDER_Text>();
         foreach (String s in new String[] {"", "\u0000", "\u0001", "\u0002"})
@@ -311,22 +311,50 @@ public class MDER_Machine
         return new MDER_Fraction(this, numerator, denominator);
     }
 
-    internal MDER_Bits MDER_Bits(BitArray bit_members)
+    public MDER_Bits MDER_Bits(BitArray bit_members_as_BitArray)
     {
-        if (bit_members.Length == 0)
+        if (bit_members_as_BitArray is null)
         {
-            return MDER_Bits_C0;
+            throw new ArgumentNullException("bit_members_as_BitArray");
         }
-        return new MDER_Bits(this, bit_members);
+        if (bit_members_as_BitArray.Length == 0)
+        {
+            return this.__bits_C0;
+        }
+        // A BitArray is mutable so clone to protect our internals.
+        return new MDER_Bits(this, new BitArray(bit_members_as_BitArray));
     }
 
-    internal MDER_Blob MDER_Blob(Byte[] octet_members)
+    internal MDER_Bits _MDER_Bits(BitArray bit_members_as_BitArray)
     {
-        if (octet_members.Length == 0)
+        if (bit_members_as_BitArray.Length == 0)
         {
-            return MDER_Blob_C0;
+            return this.__bits_C0;
         }
-        return new MDER_Blob(this, octet_members);
+        return new MDER_Bits(this, bit_members_as_BitArray);
+    }
+
+    public MDER_Blob MDER_Blob(Byte[] octet_members_as_Byte_array)
+    {
+        if (octet_members_as_Byte_array is null)
+        {
+            throw new ArgumentNullException("octet_members_as_Byte_array");
+        }
+        if (octet_members_as_Byte_array.Length == 0)
+        {
+            return this.__blob_C0;
+        }
+        // An array is mutable so clone to protect our internals.
+        return new MDER_Blob(this, (Byte[])octet_members_as_Byte_array.Clone());
+    }
+
+    internal MDER_Blob _MDER_Blob(Byte[] octet_members_as_Byte_array)
+    {
+        if (octet_members_as_Byte_array.Length == 0)
+        {
+            return this.__blob_C0;
+        }
+        return new MDER_Blob(this, octet_members_as_Byte_array);
     }
 
     internal MDER_Text MDER_Text(String code_point_members, Boolean has_any_non_BMP)
@@ -709,15 +737,15 @@ public class MDER_Machine
             case "Bits":
                 if (v is BitArray)
                 {
-                    // BitArrays are mutable so clone argument to protect our internals.
+                    // A BitArray is mutable so clone to protect our internals.
                     return this.MDER_Bits(new BitArray((BitArray)v));
                 }
                 break;
             case "Blob":
                 if (v is Byte[])
                 {
-                    // Arrays are mutable so clone argument to protect our internals.
-                    return this.MDER_Blob(((Byte[])v).ToArray());
+                    // An array is mutable so clone to protect our internals.
+                    return this.MDER_Blob((Byte[])((Byte[])v).Clone());
                 }
                 break;
             case "Text":
@@ -1093,13 +1121,13 @@ public class MDER_Machine
         }
         if (topic is BitArray)
         {
-            // BitArrays are mutable so clone argument to protect our internals.
+            // A BitArray is mutable so clone to protect our internals.
             return this.MDER_Bits(new BitArray((BitArray)topic));
         }
         if (topic is Byte[])
         {
-            // Arrays are mutable so clone argument to protect our internals.
-            return this.MDER_Blob(((Byte[])topic).ToArray());
+            // An array is mutable so clone to protect our internals.
+            return this.MDER_Blob((Byte[])((Byte[])topic).Clone());
         }
         if (topic is String)
         {

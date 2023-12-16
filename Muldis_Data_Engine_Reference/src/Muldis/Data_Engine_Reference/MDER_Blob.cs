@@ -2,45 +2,51 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Blob : MDER_Any
 {
-    private readonly Byte[] __octet_members;
+    // A value of the .NET array class Byte[] is mutable.
+    // It should be cloned as needed for protection of our internals.
+    private readonly Byte[] __octet_members_as_Byte_array;
 
-    internal MDER_Blob(MDER_Machine machine, Byte[] octet_members)
+    internal MDER_Blob(MDER_Machine machine,
+        Byte[] octet_members_as_Byte_array)
         : base(machine, Internal_Well_Known_Base_Type.MDER_Blob)
     {
-        this.__octet_members = octet_members;
+        this.__octet_members_as_Byte_array = octet_members_as_Byte_array;
     }
 
-    internal Byte[] _octet_members()
+    public Byte[] octet_members_as_Byte_array()
     {
-        return this.__octet_members;
+        // An array is mutable so clone to protect our internals.
+        return (Byte[])this.__octet_members_as_Byte_array.Clone();
+    }
+
+    internal Byte[] _octet_members_as_Byte_array()
+    {
+        return this.__octet_members_as_Byte_array;
     }
 
     internal String _as_MUON_Blob_artifact()
     {
-        if (Object.ReferenceEquals(this, this.machine().MDER_Blob_C0))
-        {
-            return "0xx";
-        }
-        return "0xx" + String.Concat(
-                Enumerable.Select(this.__octet_members, m => m.ToString("X2"))
-            );
+        return "0xx" + String.Concat(Enumerable.Select(
+            this.__octet_members_as_Byte_array, m => m.ToString("X2")));
     }
 
     internal Boolean _MDER_Blob__same(MDER_Blob topic_1)
     {
         MDER_Blob topic_0 = this;
-        return Enumerable.SequenceEqual(topic_0.__octet_members,
-            topic_1.__octet_members);
+        return Enumerable.SequenceEqual(
+            topic_0.__octet_members_as_Byte_array,
+            topic_1.__octet_members_as_Byte_array);
     }
 
-    internal Int64 Blob__count()
+    internal Int64 _MDER_Blob__count()
     {
-        return this.__octet_members.Length;
+        return this.__octet_members_as_Byte_array.Length;
     }
 
-    internal MDER_Integer? Blob__maybe_at(Int64 ord_pos)
+    internal MDER_Integer? _MDER_Blob__maybe_at(Int64 ord_pos)
     {
-        return (ord_pos >= this.__octet_members.Length) ? null
-            : this.machine().MDER_Integer(this.__octet_members[(Int32)ord_pos]);
+        return (ord_pos >= this.__octet_members_as_Byte_array.Length) ? null
+            : this.machine().MDER_Integer(
+                this.__octet_members_as_Byte_array[(Int32)ord_pos]);
     }
 }

@@ -4,8 +4,8 @@ namespace Muldis.Data_Engine_Reference;
 
 public class MDER_Integer : MDER_Any
 {
-    // The .NET structure type BigInteger is immutable, like the other .NET
-    // numeric types, so it is safe to pass around without cloning.
+    // A value of the .NET structure type BigInteger is immutable, like the
+    // other .NET numeric types, so is safe to pass around without cloning.
     // A BigInteger is also optimized to handle small values compactly.
     // It would be counter-productive for MDER_Integer to have an alternate
     // representation like Int64, not only for the much greater maintenance

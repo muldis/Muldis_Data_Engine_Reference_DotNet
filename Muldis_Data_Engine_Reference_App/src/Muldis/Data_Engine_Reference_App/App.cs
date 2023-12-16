@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Numerics;
 
 using Muldis.Data_Engine_Reference;
@@ -84,9 +85,20 @@ public class App
         MDER_Integer i2323 = machine.MDER_Integer(BigInteger.Pow(23,23));
         System.Console.WriteLine("Test data: i2323 = [" + i2323 + "]");
 
+        MDER_Bits bitse = machine.MDER_Bits(new BitArray(0));
+        System.Console.WriteLine("Test data: bitse = [" + bitse + "]");
+        MDER_Bits bits755 = machine.MDER_Bits(new BitArray(new bool[]
+            {true, true, true, true, false, true, true, false, true}));
+        System.Console.WriteLine("Test data: bits755 = [" + bits755 + "]");
+
+        MDER_Blob blobe = machine.MDER_Blob(new byte[] {});
+        System.Console.WriteLine("Test data: blobe = [" + blobe + "]");
+        MDER_Blob blob4 = machine.MDER_Blob(new byte[] {0xA7,0x05,0xE4,0x16});
+        System.Console.WriteLine("Test data: blob4 = [" + blob4 + "]");
+
         // Import the user-specified source code file's raw content into
         // the Muldis Data Language implementing virtual machine where it would be used.
-        MDER_Any source_code_blob = machine.MDER_import(sourceCodeFileContent);
+        MDER_Blob source_code_blob = machine.MDER_Blob(sourceCodeFileContent);
         System.Console.WriteLine("Debug: source_code_blob = [" + source_code_blob + "]");
 
         // Try to parse the file content into canonical format VM source code.

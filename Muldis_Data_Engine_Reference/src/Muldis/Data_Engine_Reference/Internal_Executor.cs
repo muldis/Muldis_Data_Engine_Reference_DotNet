@@ -557,7 +557,7 @@ internal class Internal_Executor
 
     internal MDER_Any MDER_Text_from_UTF_8_MDER_Blob(MDER_Blob topic)
     {
-        Byte[] octets = topic._octet_members();
+        Byte[] octets = topic._octet_members_as_Byte_array();
         UTF8Encoding enc = new UTF8Encoding
         (
             encoderShouldEmitUTF8Identifier: false,
