@@ -9,4 +9,11 @@ public class MDER_External : MDER_Any
     {
         this.external_value = external_value;
     }
+
+    internal String _as_MUON_External_artifact()
+    {
+        // We display something useful for debugging purposes, but no
+        // (transient) MDER_External can actually be rendered as MUON.
+        return "`Some MDER_External value is here.`";
+    }
 }

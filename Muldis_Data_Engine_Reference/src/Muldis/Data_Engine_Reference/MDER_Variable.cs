@@ -9,4 +9,11 @@ public class MDER_Variable : MDER_Any
     {
         this.current_value = initial_current_value;
     }
+
+    internal String _as_MUON_Variable_artifact()
+    {
+        // We display something useful for debugging purposes, but no
+        // (transient) MDER_Variable can actually be rendered as MUON.
+        return "`Some MDER_Variable value is here.`";
+    }
 }

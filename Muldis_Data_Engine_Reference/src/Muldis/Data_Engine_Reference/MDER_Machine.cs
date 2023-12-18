@@ -545,7 +545,7 @@ public class MDER_Machine
         // TODO: If label corresponds to a MDER_Any type then
         // validate whether the label+attrs is actually a member of its
         // Muldis Data Language type, and if it is, return a MDER_Any using the most
-        // specific well known base type for that MD value rather than
+        // specific type for that MD value rather than
         // using the generic Article format, for normalization.
         // Note: We do NOT ever have to declare known-not-wkt for types
         // with their own storage formats (things we would never declare
@@ -1177,21 +1177,20 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("topic");
         }
-        switch (topic)
+        return topic switch
         {
-            case MDER_Ignorance specific_topic:
-                return null;
-            case MDER_False specific_topic:
-                return false;
-            case MDER_True specific_topic:
-                return true;
-            case MDER_Integer specific_topic:
-                return specific_topic.as_BigInteger();
-            case MDER_External specific_topic:
-                return specific_topic.external_value;
-            default:
-                return MDER_export_qualified(topic);
-        }
+            MDER_Ignorance specific_topic =>
+                null,
+            MDER_False specific_topic =>
+                false,
+            MDER_True specific_topic =>
+                true,
+            MDER_Integer specific_topic =>
+                specific_topic.as_BigInteger(),
+            MDER_External specific_topic =>
+                specific_topic.external_value,
+            _ => MDER_export_qualified(topic),
+        };
     }
 
     public KeyValuePair<String, Object?> MDER_export_qualified(MDER_Any topic)
@@ -1200,50 +1199,49 @@ public class MDER_Machine
         {
             throw new ArgumentNullException("topic");
         }
-        switch (topic)
+        return topic switch
         {
-            case MDER_Ignorance specific_topic:
-                return new KeyValuePair<String, Object?>("Ignorance", null);
-            case MDER_False specific_topic:
-                return new KeyValuePair<String, Object?>("Boolean", false);
-            case MDER_True specific_topic:
-                return new KeyValuePair<String, Object?>("Boolean", true);
-            case MDER_Integer specific_topic:
-                return new KeyValuePair<String, Object?>("Integer",
-                    ((MDER_Integer)topic).as_BigInteger());
-            case MDER_Fraction specific_topic:
-                throw new NotImplementedException();
-            case MDER_Bits specific_topic:
-                throw new NotImplementedException();
-            case MDER_Blob specific_topic:
-                throw new NotImplementedException();
-            case MDER_Text specific_topic:
-                throw new NotImplementedException();
-            case MDER_Array specific_topic:
-                throw new NotImplementedException();
-            case MDER_Set specific_topic:
-                throw new NotImplementedException();
-            case MDER_Bag specific_topic:
-                throw new NotImplementedException();
-            case MDER_Heading specific_topic:
-                throw new NotImplementedException();
-            case MDER_Tuple specific_topic:
-                throw new NotImplementedException();
-            case MDER_Article specific_topic:
-                throw new NotImplementedException();
-            case MDER_Excuse specific_topic:
-                throw new NotImplementedException();
-            case MDER_Variable specific_topic:
-                throw new NotImplementedException();
-            case MDER_Process specific_topic:
-                throw new NotImplementedException();
-            case MDER_Stream specific_topic:
-                throw new NotImplementedException();
-            case MDER_External specific_topic:
-                return new KeyValuePair<String, Object?>("New_External",
-                    ((MDER_External)topic).external_value);
-            default:
-                throw new NotImplementedException();
-        }
+            MDER_Ignorance specific_topic =>
+                new KeyValuePair<String, Object?>("Ignorance", null),
+            MDER_False specific_topic =>
+                new KeyValuePair<String, Object?>("Boolean", false),
+            MDER_True specific_topic =>
+                new KeyValuePair<String, Object?>("Boolean", true),
+            MDER_Integer specific_topic =>
+                new KeyValuePair<String, Object?>("Integer",
+                    specific_topic.as_BigInteger()),
+            MDER_Fraction specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Bits specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Blob specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Text specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Array specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Set specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Bag specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Heading specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Tuple specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Article specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Excuse specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Variable specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Process specific_topic =>
+                throw new NotImplementedException(),
+            MDER_Stream specific_topic =>
+                throw new NotImplementedException(),
+            MDER_External specific_topic =>
+                new KeyValuePair<String, Object?>("New_External",
+                    specific_topic.external_value),
+            _ => throw new NotImplementedException(),
+        };
     }
 }

@@ -242,45 +242,30 @@ internal class Internal_Executor
                     "X_Type_Definer_Function_Args_Not_MDER_Heading_0").ToString());
             }
             MDER_Any v = args.attrs["\u0000"];
-            switch (func_name_s)
+            return this.__machine.MDER_Boolean(func_name_s switch
             {
-                case "Any":
-                    return this.__machine.MDER_True();
-                case "None":
-                    return this.__machine.MDER_False();
+                "Any" => true,
+                "None" => false,
 
                 // FOUNDATION BASE TYPE DEFINERS
 
-                case "Ignorance":
-                    return this.__machine.MDER_Boolean(v is MDER_Ignorance);
-                case "Boolean":
-                    return this.__machine.MDER_Boolean(
-                        v is MDER_False || v is MDER_True);
-                case "Integer":
-                    return this.__machine.MDER_Boolean(v is MDER_Integer);
-                case "Array":
-                    return this.__machine.MDER_Boolean(v is MDER_Array);
-                case "Bag":
-                    return this.__machine.MDER_Boolean(v is MDER_Bag);
-                case "Tuple":
-                    return this.__machine.MDER_Boolean(v is MDER_Tuple);
-                case "Article":
-                    return this.__machine.MDER_Boolean(v is MDER_Article);
-                case "Handle":
-                    return this.__machine.MDER_Boolean(v is MDER_Variable
-                        || v is MDER_Process || v is MDER_Stream
-                        || v is MDER_External);
+                "Ignorance" => v is MDER_Ignorance,
+                "Boolean" => v is MDER_False || v is MDER_True,
+                "Integer" => v is MDER_Integer,
+                "Array" => v is MDER_Array,
+                "Bag" => v is MDER_Bag,
+                "Tuple" => v is MDER_Tuple,
+                "Article" => v is MDER_Article,
+                "Handle" =>
+                    v is MDER_Variable || v is MDER_Process
+                    || v is MDER_Stream || v is MDER_External,
 
                 // HANDLE SUBTYPE DEFINERS
 
-                case "Variable":
-                    return this.__machine.MDER_Boolean(v is MDER_Variable);
-                case "Process":
-                    return this.__machine.MDER_Boolean(v is MDER_Process);
-                case "Stream":
-                    return this.__machine.MDER_Boolean(v is MDER_Stream);
-                case "External":
-                    return this.__machine.MDER_Boolean(v is MDER_External);
+                "Variable" => v is MDER_Variable,
+                "Process" => v is MDER_Process,
+                "Stream" => v is MDER_Stream,
+                "External" => v is MDER_External,
 
                 // ARRAY SUBTYPE DEFINERS
 
@@ -288,18 +273,14 @@ internal class Internal_Executor
 
                 // ARTICLE SUBTYPE DEFINERS
 
-                case "Blob":
-                    return this.__machine.MDER_Boolean(v is MDER_Blob);
+                "Blob" => v is MDER_Blob,
 
-                case "Text":
-                    return this.__machine.MDER_Boolean(v is MDER_Text);
+                "Text" => v is MDER_Text,
 
-                case "Excuse":
-                    return this.__machine.MDER_Boolean(v is MDER_Excuse);
+                "Excuse" => v is MDER_Excuse,
 
-                default:
-                    throw new NotImplementedException();
-            }
+                _ => throw new NotImplementedException(),
+            });
         }
 
         // NON TYPE DEFINER UNARY FUNCTIONS
