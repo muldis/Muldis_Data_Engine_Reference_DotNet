@@ -45,7 +45,7 @@ public class MDER_Text : MDER_Any
 
     internal MDER_Text(MDER_Machine machine,
         String code_point_members_as_String, Boolean has_any_non_BMP)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Text)
+        : base(machine)
     {
         this.__code_point_members_as_String = code_point_members_as_String;
         this.__has_any_non_BMP = has_any_non_BMP;

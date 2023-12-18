@@ -5,7 +5,7 @@ public class MDER_Variable : MDER_Any
     internal MDER_Any current_value;
 
     internal MDER_Variable(MDER_Machine machine, MDER_Any initial_current_value)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Variable)
+        : base(machine)
     {
         this.current_value = initial_current_value;
     }

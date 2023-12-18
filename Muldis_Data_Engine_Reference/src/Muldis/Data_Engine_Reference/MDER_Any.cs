@@ -28,13 +28,6 @@ public abstract class MDER_Any
     // MDER_Machine this Muldis Data Language "value" lives in.
     private readonly MDER_Machine __machine;
 
-    // Muldis Data Language most specific well known base data type (__WKBT) this
-    // "value" is a member of.  Helps interpret which subtype of MDER_Any
-    // we have without having to use the language's type reflection system.
-    // Some of these types have their own subset of specialized
-    // representation formats for the sake of optimization.
-    private readonly Internal_Well_Known_Base_Type __WKBT;
-
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDER_Any represents.  This is calculated lazily if needed,
     // typically when the "value" is a member of an indexed collection.
@@ -43,11 +36,9 @@ public abstract class MDER_Any
     // whose character code points are typically in the 0..127 range.
     private String? __cached_MDER_Any_identity;
 
-    internal MDER_Any(MDER_Machine machine,
-        Internal_Well_Known_Base_Type WKBT)
+    internal MDER_Any(MDER_Machine machine)
     {
         this.__machine = machine;
-        this.__WKBT = WKBT;
     }
 
     public override String ToString()
@@ -58,11 +49,6 @@ public abstract class MDER_Any
     public MDER_Machine machine()
     {
         return this.__machine;
-    }
-
-    internal Internal_Well_Known_Base_Type _WKBT()
-    {
-        return this.__WKBT;
     }
 
     // Provides utility pure functions that accept any Muldis Data Language "value"
@@ -169,62 +155,63 @@ public abstract class MDER_Any
 
     internal String _as_MUON_Any_artifact(String indent)
     {
-        switch (this.__WKBT)
+        MDER_Any topic = this;
+        switch (topic)
         {
-            case Internal_Well_Known_Base_Type.MDER_Ignorance:
+            case MDER_Ignorance specific_topic:
                 return "0iIGNORANCE";
-            case Internal_Well_Known_Base_Type.MDER_False:
+            case MDER_False specific_topic:
                 return "0bFALSE";
-            case Internal_Well_Known_Base_Type.MDER_True:
+            case MDER_True specific_topic:
                 return "0bTRUE";
-            case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)this)._as_MUON_Integer_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Fraction:
-                return ((MDER_Fraction)this)._as_MUON_Fraction_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Bits:
-                return ((MDER_Bits)this)._as_MUON_Bits_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Blob:
-                return ((MDER_Blob)this)._as_MUON_Blob_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Text:
-                return ((MDER_Text)this)._as_MUON_Text_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Array:
-                return ((MDER_Array)this)._as_MUON_Array_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Set:
-                return ((MDER_Set)this)._as_MUON_Set_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Bag:
-                return ((MDER_Bag)this)._as_MUON_Bag_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Heading:
-                return ((MDER_Heading)this)._as_MUON_Heading_artifact();
-            case Internal_Well_Known_Base_Type.MDER_Tuple:
-                return ((MDER_Tuple)this)._as_MUON_Tuple_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
-                return ((MDER_Tuple_Array)this)._as_MUON_Tuple_Array_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Relation:
-                return ((MDER_Relation)this)._as_MUON_Relation_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
-                return ((MDER_Tuple_Bag)this)._as_MUON_Tuple_Bag_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Article:
-                return ((MDER_Article)this)._as_MUON_Article_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Excuse:
-                return ((MDER_Excuse)this)._as_MUON_Excuse_artifact(indent);
-            case Internal_Well_Known_Base_Type.MDER_Variable:
+            case MDER_Integer specific_topic:
+                return specific_topic._as_MUON_Integer_artifact();
+            case MDER_Fraction specific_topic:
+                return specific_topic._as_MUON_Fraction_artifact();
+            case MDER_Bits specific_topic:
+                return specific_topic._as_MUON_Bits_artifact();
+            case MDER_Blob specific_topic:
+                return specific_topic._as_MUON_Blob_artifact();
+            case MDER_Text specific_topic:
+                return specific_topic._as_MUON_Text_artifact();
+            case MDER_Array specific_topic:
+                return specific_topic._as_MUON_Array_artifact(indent);
+            case MDER_Set specific_topic:
+                return specific_topic._as_MUON_Set_artifact(indent);
+            case MDER_Bag specific_topic:
+                return specific_topic._as_MUON_Bag_artifact(indent);
+            case MDER_Heading specific_topic:
+                return specific_topic._as_MUON_Heading_artifact();
+            case MDER_Tuple specific_topic:
+                return specific_topic._as_MUON_Tuple_artifact(indent);
+            case MDER_Tuple_Array specific_topic:
+                return specific_topic._as_MUON_Tuple_Array_artifact(indent);
+            case MDER_Relation specific_topic:
+                return specific_topic._as_MUON_Relation_artifact(indent);
+            case MDER_Tuple_Bag specific_topic:
+                return specific_topic._as_MUON_Tuple_Bag_artifact(indent);
+            case MDER_Article specific_topic:
+                return specific_topic._as_MUON_Article_artifact(indent);
+            case MDER_Excuse specific_topic:
+                return specific_topic._as_MUON_Excuse_artifact(indent);
+            case MDER_Variable specific_topic:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Variable can actually be rendered as MUON.
                 return "`Some MDER_Variable value is here.`";
-            case Internal_Well_Known_Base_Type.MDER_Process:
+            case MDER_Process specific_topic:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Process can actually be rendered as MUON.
                 return "`Some MDER_Process value is here.`";
-            case Internal_Well_Known_Base_Type.MDER_Stream:
+            case MDER_Stream specific_topic:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_Stream can actually be rendered as MUON.
                 return "`Some MDER_Stream value is here.`";
-            case Internal_Well_Known_Base_Type.MDER_External:
+            case MDER_External specific_topic:
                 // We display something useful for debugging purposes, but no
                 // (transient) MDER_External can actually be rendered as MUON.
                 return "`Some MDER_External value is here.`";
             default:
-                return "\\TODO_FIX_UN_HANDLED_TYPE\\\"" + this._WKBT().ToString() + "\"";
+                throw new NotImplementedException();
         }
     }
 
@@ -316,7 +303,7 @@ public abstract class MDER_Any
             // MDER_Ignorance, MDER_False, MDER_True.
             return true;
         }
-        if (topic_0.__WKBT != topic_1.__WKBT)
+        if (!Type.Equals(topic_0.GetType(), topic_1.GetType()))
         {
             return false;
         }
@@ -330,47 +317,57 @@ public abstract class MDER_Any
             }
             return false;
         }
-        switch (topic_0.__WKBT)
+        switch ((topic_0, topic_1))
         {
-            case Internal_Well_Known_Base_Type.MDER_Ignorance:
-            case Internal_Well_Known_Base_Type.MDER_False:
-            case Internal_Well_Known_Base_Type.MDER_True:
+            case (MDER_Ignorance specific_topic_0, MDER_Ignorance specific_topic_1):
                 // We should never get here.
                 throw new InvalidOperationException();
-            case Internal_Well_Known_Base_Type.MDER_Integer:
-                return ((MDER_Integer)topic_0)._MDER_Integer__same((MDER_Integer)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Fraction:
-                return ((MDER_Fraction)topic_0)._MDER_Fraction__same((MDER_Fraction)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Bits:
-                return ((MDER_Bits)topic_0)._MDER_Bits__same((MDER_Bits)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Blob:
-                return ((MDER_Blob)topic_0)._MDER_Blob__same((MDER_Blob)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Text:
-                return ((MDER_Text)topic_0)._MDER_Text__same((MDER_Text)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Array:
-                return ((MDER_Array)topic_0)._MDER_Array__same((MDER_Array)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Set:
-                return ((MDER_Set)topic_0)._MDER_Set__same((MDER_Set)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Bag:
-                return ((MDER_Bag)topic_0)._MDER_Bag__same((MDER_Bag)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Heading:
-                return ((MDER_Heading)topic_0)._MDER_Heading__same((MDER_Heading)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Tuple:
-                return ((MDER_Tuple)topic_0)._MDER_Tuple__same((MDER_Tuple)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Array:
-                return ((MDER_Tuple_Array)topic_0)._MDER_Tuple_Array__same((MDER_Tuple_Array)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Relation:
-                return ((MDER_Relation)topic_0)._MDER_Relation__same((MDER_Relation)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Tuple_Bag:
-                return ((MDER_Tuple_Bag)topic_0)._MDER_Tuple_Bag__same((MDER_Tuple_Bag)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Article:
-                return ((MDER_Article)topic_0)._MDER_Article__same((MDER_Article)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Excuse:
-                return ((MDER_Excuse)topic_0)._MDER_Excuse__same((MDER_Excuse)topic_1);
-            case Internal_Well_Known_Base_Type.MDER_Variable:
-            case Internal_Well_Known_Base_Type.MDER_Process:
-            case Internal_Well_Known_Base_Type.MDER_Stream:
-            case Internal_Well_Known_Base_Type.MDER_External:
+            case (MDER_False specific_topic_0, MDER_False specific_topic_1):
+                // We should never get here.
+                throw new InvalidOperationException();
+            case (MDER_True specific_topic_0, MDER_True specific_topic_1):
+                // We should never get here.
+                throw new InvalidOperationException();
+            case (MDER_Integer specific_topic_0, MDER_Integer specific_topic_1):
+                return specific_topic_0._MDER_Integer__same(specific_topic_1);
+            case (MDER_Fraction specific_topic_0, MDER_Fraction specific_topic_1):
+                return specific_topic_0._MDER_Fraction__same(specific_topic_1);
+            case (MDER_Bits specific_topic_0, MDER_Bits specific_topic_1):
+                return specific_topic_0._MDER_Bits__same(specific_topic_1);
+            case (MDER_Blob specific_topic_0, MDER_Blob specific_topic_1):
+                return specific_topic_0._MDER_Blob__same(specific_topic_1);
+            case (MDER_Text specific_topic_0, MDER_Text specific_topic_1):
+                return specific_topic_0._MDER_Text__same(specific_topic_1);
+            case (MDER_Array specific_topic_0, MDER_Array specific_topic_1):
+                return specific_topic_0._MDER_Array__same(specific_topic_1);
+            case (MDER_Set specific_topic_0, MDER_Set specific_topic_1):
+                return specific_topic_0._MDER_Set__same(specific_topic_1);
+            case (MDER_Bag specific_topic_0, MDER_Bag specific_topic_1):
+                return specific_topic_0._MDER_Bag__same(specific_topic_1);
+            case (MDER_Heading specific_topic_0, MDER_Heading specific_topic_1):
+                return specific_topic_0._MDER_Heading__same(specific_topic_1);
+            case (MDER_Tuple specific_topic_0, MDER_Tuple specific_topic_1):
+                return specific_topic_0._MDER_Tuple__same(specific_topic_1);
+            case (MDER_Tuple_Array specific_topic_0, MDER_Tuple_Array specific_topic_1):
+                return specific_topic_0._MDER_Tuple_Array__same(specific_topic_1);
+            case (MDER_Relation specific_topic_0, MDER_Relation specific_topic_1):
+                return specific_topic_0._MDER_Relation__same(specific_topic_1);
+            case (MDER_Tuple_Bag specific_topic_0, MDER_Tuple_Bag specific_topic_1):
+                return specific_topic_0._MDER_Tuple_Bag__same(specific_topic_1);
+            case (MDER_Article specific_topic_0, MDER_Article specific_topic_1):
+                return specific_topic_0._MDER_Article__same(specific_topic_1);
+            case (MDER_Excuse specific_topic_0, MDER_Excuse specific_topic_1):
+                return specific_topic_0._MDER_Excuse__same(specific_topic_1);
+            case (MDER_Variable specific_topic_0, MDER_Variable specific_topic_1):
+                // Every Muldis Data Language Handle object is always distinct from every other one.
+                return false;
+            case (MDER_Process specific_topic_0, MDER_Process specific_topic_1):
+                // Every Muldis Data Language Handle object is always distinct from every other one.
+                return false;
+            case (MDER_Stream specific_topic_0, MDER_Stream specific_topic_1):
+                // Every Muldis Data Language Handle object is always distinct from every other one.
+                return false;
+            case (MDER_External specific_topic_0, MDER_External specific_topic_1):
                 // Every Muldis Data Language Handle object is always distinct from every other one.
                 return false;
             default:

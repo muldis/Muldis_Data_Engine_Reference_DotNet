@@ -10,7 +10,7 @@ public class MDER_Article : MDER_Any
     internal readonly MDER_Tuple attrs;
 
     internal MDER_Article(MDER_Machine machine, MDER_Any label, MDER_Tuple attrs)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Article)
+        : base(machine)
     {
         this.label = label;
         this.attrs = attrs;

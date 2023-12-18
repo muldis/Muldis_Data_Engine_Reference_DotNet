@@ -13,7 +13,7 @@ public class MDER_Integer : MDER_Any
     private readonly BigInteger __as_BigInteger;
 
     internal MDER_Integer(MDER_Machine machine, BigInteger as_BigInteger)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Integer)
+        : base(machine)
     {
         this.__as_BigInteger = as_BigInteger;
     }

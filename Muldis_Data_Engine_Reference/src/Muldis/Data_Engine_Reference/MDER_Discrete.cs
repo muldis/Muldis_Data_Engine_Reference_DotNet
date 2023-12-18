@@ -4,9 +4,9 @@ public abstract class MDER_Discrete : MDER_Any
 {
     internal Internal_MDER_Discrete_Struct tree_root_node;
 
-    internal MDER_Discrete(MDER_Machine machine, Internal_Well_Known_Base_Type WKBT,
+    internal MDER_Discrete(MDER_Machine machine,
         Internal_MDER_Discrete_Struct tree_root_node)
-        : base(machine, WKBT)
+        : base(machine)
     {
         this.tree_root_node = tree_root_node;
     }
@@ -76,8 +76,7 @@ public abstract class MDER_Discrete : MDER_Any
                         {{lsm.member, lsm}},
                     cached_tree_member_count = lsm.multiplicity,
                     cached_tree_all_unique = (lsm.multiplicity == 1),
-                    cached_tree_relational = (lsm.member._WKBT()
-                        == Internal_Well_Known_Base_Type.MDER_Tuple),
+                    cached_tree_relational = (lsm.member is MDER_Tuple),
                 };
             case Internal_Symbolic_Discrete_Type.Arrayed:
                 // Node is already collapsed.
@@ -253,24 +252,23 @@ public abstract class MDER_Discrete : MDER_Any
                     tr = true;
                     break;
                 case Internal_Symbolic_Discrete_Type.Singular:
-                    tr = node.Local_Singular_Members().member._WKBT()
-                        == Internal_Well_Known_Base_Type.MDER_Tuple;
+                    tr = node.Local_Singular_Members().member is MDER_Tuple;
                     break;
                 case Internal_Symbolic_Discrete_Type.Arrayed:
                     MDER_Any m0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = m0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = m0 is MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_Members(),
-                            m => m._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m is MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m, (MDER_Tuple)m0)
                         );
                     break;
                 case Internal_Symbolic_Discrete_Type.Arrayed_MM:
                     MDER_Any m0_ = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = m0_._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = m0_ is MDER_Tuple
                         && Enumerable.All(
                             node.Local_Arrayed_MM_Members(),
-                            m => m.member._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m.member is MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)m0_)
                         );
                     break;
@@ -283,10 +281,10 @@ public abstract class MDER_Discrete : MDER_Any
                     break;
                 case Internal_Symbolic_Discrete_Type.Indexed:
                     MDER_Any im0 = Discrete__maybe_Pick_Arbitrary_Node_Member(node)!;
-                    tr = im0._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                    tr = im0 is MDER_Tuple
                         && Enumerable.All(
                             node.Local_Indexed_Members().Values,
-                            m => m.member._WKBT() == Internal_Well_Known_Base_Type.MDER_Tuple
+                            m => m.member is MDER_Tuple
                                 && Tuple__Same_Heading((MDER_Tuple)m.member, (MDER_Tuple)im0)
                         );
                     break;

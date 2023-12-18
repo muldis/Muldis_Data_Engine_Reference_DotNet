@@ -8,7 +8,7 @@ public class MDER_Blob : MDER_Any
 
     internal MDER_Blob(MDER_Machine machine,
         Byte[] octet_members_as_array_of_Byte)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Blob)
+        : base(machine)
     {
         this.__octet_members_as_array_of_Byte
             = octet_members_as_array_of_Byte;

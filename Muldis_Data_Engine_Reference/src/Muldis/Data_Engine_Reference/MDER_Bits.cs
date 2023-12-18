@@ -10,7 +10,7 @@ public class MDER_Bits : MDER_Any
 
     internal MDER_Bits(MDER_Machine machine,
         BitArray bit_members_as_BitArray)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Bits)
+        : base(machine)
     {
         this.__bit_members_as_BitArray = bit_members_as_BitArray;
     }

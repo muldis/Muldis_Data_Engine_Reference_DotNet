@@ -22,14 +22,14 @@ public class MDER_Fraction : MDER_Any
 
     internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
+        : base(machine)
     {
         this.__maybe_as_Decimal = as_Decimal;
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
     internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
+        : base(machine)
     {
         this.__maybe_as_Decimal = as_Decimal;
         this.__maybe_as_nd_pair = null;
@@ -37,7 +37,7 @@ public class MDER_Fraction : MDER_Any
 
     internal MDER_Fraction(MDER_Machine machine,
         BigInteger numerator, BigInteger denominator)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Fraction)
+        : base(machine)
     {
         this.__maybe_as_Decimal = null;
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);

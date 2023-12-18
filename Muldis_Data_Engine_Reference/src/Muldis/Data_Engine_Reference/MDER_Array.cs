@@ -3,7 +3,7 @@ namespace Muldis.Data_Engine_Reference;
 public class MDER_Array : MDER_Discrete
 {
     internal MDER_Array(MDER_Machine machine, Internal_MDER_Discrete_Struct tree_root_node)
-        : base(machine, Internal_Well_Known_Base_Type.MDER_Array, tree_root_node)
+        : base(machine, tree_root_node)
     {
     }
 
