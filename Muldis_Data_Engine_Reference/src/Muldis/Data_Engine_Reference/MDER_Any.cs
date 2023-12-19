@@ -25,14 +25,6 @@ namespace Muldis.Data_Engine_Reference;
 
 public abstract class MDER_Any
 {
-    // Normalized serialization of the Muldis Data Language "value" that its host
-    // MDER_Any represents.  This is calculated lazily if needed,
-    // typically when the "value" is a member of an indexed collection.
-    // The serialization format either is or resembles a Muldis Object Notation Plain Text
-    // literal for selecting the value, in the form of character strings
-    // whose character code points are typically in the 0..127 range.
-    private String? __cached_MDER_Any_identity;
-
     internal MDER_Any()
     {
     }
@@ -42,38 +34,21 @@ public abstract class MDER_Any
         return this._preview_as_String();
     }
 
+    // The MDER_Machine VM that this MDER_Any "value" lives in.
     public abstract MDER_Machine machine();
 
-    // Provides utility pure functions that accept any Muldis Data Language "value"
-    // and derive a .NET String that uniquely identifies it.
-    // This class is deterministic and guarantees that iff 2 MDER_Any are
-    // logically considered to be the "same" Muldis Data Language value then they will
-    // map to exactly the same .NET String value, and moreover, that iff 2
-    // MDER_Any are logically considered to NOT be the "same" Muldis Data Language value,
-    // they are guaranteed to map to distinct .NET String values.
-    // The outputs of this generator are intended for internal use only,
-    // where the outputs are transient and only intended to be used within
-    // the same in-memory Muldis.Data_Engine_Reference VM instance that generated them.
-    // The intended use of this class is to produce normalized identity
-    // values for .NET collection indexes, Dictionary keys for example, or
-    // otherwise support the means of primary/last resort for set-like
-    // operations like duplicate elimination, relational joins, and more.
-    // The outputs of this class may possibly conform to the
-    // Muldis_Object_Notation_Plain_Text specification and be parseable to yield the
-    // original input values, but that is not guaranteed; even if that is
-    // the case, the outputs might be considerably less "pretty" as a
-    // trade-off to make the generating faster and less error-prone.
-    // A normal side effect of using Internal_Identity_Generator on a MDER_Any/etc
-    // value is to update a cache therein to hold the serialization result.
-
-    internal String _identity_as_String()
-    {
-        if (this.__cached_MDER_Any_identity is null)
-        {
-            this.__cached_MDER_Any_identity = this._as_MUON_Plain_Text_artifact("");
-        }
-        return this.__cached_MDER_Any_identity;
-    }
+    // Surrogate identity for this MDER_Any with a simpler representation.
+    // Two MDER_Any have the same surrogate identity iff MDL considers them
+    // to be the "same" value; otherwise they have different surrogates.
+    // The surrogate is the value serialized as a MUON Plain Text artifact.
+    // The surrogate is only valid during the lifetime of the host process
+    // and only intended for use in the private memory of the MDER_Machine
+    // that made it; it should not be used for interchange or persistence.
+    // The surrogate may be lazily generated and cached.
+    // The surrogate is intended to support implementation of collections
+    // of the general case of a MDER_Any that index elements by logical
+    // value, such as set-like collections, that are simple and performant.
+    internal abstract String _identity_as_String();
 
     // Provides utility pure functions that accept any Muldis Data Language "value"
     // and derive a .NET String that provides a "preview quick look"
@@ -238,16 +213,6 @@ public abstract class MDER_Any
         }
         if (!Type.Equals(topic_0.GetType(), topic_1.GetType()))
         {
-            return false;
-        }
-        if (topic_0.__cached_MDER_Any_identity is not null
-            && topic_1.__cached_MDER_Any_identity is not null)
-        {
-            if (String.Equals(topic_0.__cached_MDER_Any_identity,
-                topic_1.__cached_MDER_Any_identity))
-            {
-                return true;
-            }
             return false;
         }
         return (topic_0, topic_1) switch

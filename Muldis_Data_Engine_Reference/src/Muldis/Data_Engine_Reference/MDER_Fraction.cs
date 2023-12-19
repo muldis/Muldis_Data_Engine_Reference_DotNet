@@ -4,8 +4,11 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Fraction : MDER_Any
 {
-    // The virtual machine that this "value" lives in.
+    // The MDER_Machine VM that this MDER_Any "value" lives in.
     private readonly MDER_Machine __machine;
+
+    // Surrogate identity for this MDER_Any with a simpler representation.
+    private String? __cached_identity_as_String;
 
     // The __maybe_as_Decimal field is optionally valued if the MDER_Fraction
     // value is known small enough to fit in the range it can represent
@@ -31,11 +34,6 @@ public sealed class MDER_Fraction : MDER_Any
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
-    public override MDER_Machine machine()
-    {
-        return this.__machine;
-    }
-
     internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
     {
         this.__machine = machine;
@@ -49,6 +47,21 @@ public sealed class MDER_Fraction : MDER_Any
         this.__machine = machine;
         this.__maybe_as_Decimal = null;
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
+    }
+
+    internal override String _identity_as_String()
+    {
+        if (this.__cached_identity_as_String is null)
+        {
+            this.__cached_identity_as_String
+                = this._as_MUON_Plain_Text_artifact("");
+        }
+        return this.__cached_identity_as_String;
     }
 
     private BigInteger _numerator()

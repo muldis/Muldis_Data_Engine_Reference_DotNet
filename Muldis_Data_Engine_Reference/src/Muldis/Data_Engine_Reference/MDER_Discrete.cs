@@ -2,8 +2,11 @@ namespace Muldis.Data_Engine_Reference;
 
 public abstract class MDER_Discrete : MDER_Any
 {
-    // The virtual machine that this "value" lives in.
+    // The MDER_Machine VM that this MDER_Any "value" lives in.
     private readonly MDER_Machine __machine;
+
+    // Surrogate identity for this MDER_Any with a simpler representation.
+    private String? __cached_identity_as_String;
 
     internal Internal_MDER_Discrete_Struct tree_root_node;
 
@@ -17,6 +20,16 @@ public abstract class MDER_Discrete : MDER_Any
     public override MDER_Machine machine()
     {
         return this.__machine;
+    }
+
+    internal override String _identity_as_String()
+    {
+        if (this.__cached_identity_as_String is null)
+        {
+            this.__cached_identity_as_String
+                = this._as_MUON_Plain_Text_artifact("");
+        }
+        return this.__cached_identity_as_String;
     }
 
     internal Int64 Discrete__count()
