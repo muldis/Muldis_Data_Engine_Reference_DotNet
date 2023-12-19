@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Bits : MDER_Any
+public sealed class MDER_Bits : MDER_Any
 {
     // A value of the .NET class BitArray is mutable.
     // It should be cloned as needed for protection of our internals.

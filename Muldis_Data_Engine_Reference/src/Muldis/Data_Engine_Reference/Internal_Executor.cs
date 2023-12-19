@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-internal class Internal_Executor
+internal sealed class Internal_Executor
 {
     private readonly MDER_Machine __machine;
 

@@ -353,7 +353,7 @@ internal enum Internal_Symbolic_Discrete_Type
 // implement while at the same time is the least critical to the
 // internals; it is mainly just used for user data.
 
-internal class Internal_MDER_Discrete_Struct
+internal sealed class Internal_MDER_Discrete_Struct
 {
     // Local Symbolic Type (LST) determines the role this node plays in
     // the tree.  Determines interpreting "members" field.
@@ -465,7 +465,7 @@ internal class Internal_MDER_Discrete_Struct
 // Represents an ordered pair of MDER_Array, typically corresponding in
 // order to the "0" and "1" conceptually-ordered arg/attr to a function.
 
-internal class Internal_MDER_Discrete_Pair
+internal sealed class Internal_MDER_Discrete_Pair
 {
     // This is the first conceptually-ordered arg/attr.
     internal Internal_MDER_Discrete_Struct a0;
@@ -484,7 +484,7 @@ internal class Internal_MDER_Discrete_Pair
 // Represents a multiset of 1..N members of a collection where every
 // member is the same Muldis Data Language value.
 
-internal class Internal_Multiplied_Member
+internal sealed class Internal_Multiplied_Member
 {
     // The Muldis Data Language value that every member of this multiset is.
     internal MDER_Any member;

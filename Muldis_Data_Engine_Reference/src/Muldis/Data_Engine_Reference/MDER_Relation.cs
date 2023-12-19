@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Relation : MDER_Any
+public sealed class MDER_Relation : MDER_Any
 {
     internal readonly MDER_Heading heading;
     internal readonly MDER_Set body;

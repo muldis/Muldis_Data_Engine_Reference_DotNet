@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Excuse : MDER_Any
+public sealed class MDER_Excuse : MDER_Any
 {
     // The Muldis Data Language value that is the "label" of this MDER_Excuse value.
     // TODO: Change this to a MDER_Nesting.

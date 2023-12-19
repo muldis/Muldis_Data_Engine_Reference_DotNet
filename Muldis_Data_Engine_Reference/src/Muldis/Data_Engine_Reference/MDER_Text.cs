@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Text : MDER_Any
+public sealed class MDER_Text : MDER_Any
 {
     // A value of the .NET class String is immutable,
     // It should be safe to pass around without cloning.

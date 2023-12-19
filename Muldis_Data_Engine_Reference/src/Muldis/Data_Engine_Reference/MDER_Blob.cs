@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Blob : MDER_Any
+public sealed class MDER_Blob : MDER_Any
 {
     // A value of the .NET array class Byte[] is mutable.
     // It should be cloned as needed for protection of our internals.

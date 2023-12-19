@@ -5,7 +5,7 @@ using Muldis.Data_Engine_Reference;
 
 namespace Muldis.Data_Engine_Reference_App;
 
-public class App
+public sealed class App
 {
     public static void Main(String[] args)
     {

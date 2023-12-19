@@ -1,6 +1,6 @@
 namespace Muldis.Object_Notation_Processor_Reference;
 
-public class Repeatable_Octet_Input_Stream_Position_Hold
+public sealed class Repeatable_Octet_Input_Stream_Position_Hold
     // implements AutoCloseable
 {
     // A Repeatable_Octet_Input_Stream_Position_Hold object is an opaque

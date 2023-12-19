@@ -20,7 +20,7 @@ namespace Muldis.Data_Engine_Reference;
 // likes of ".." or "\\" or "C:\" etc in child paths, which would
 // allow escape from the sandbox thanks to Path.Combine() etc.
 
-internal class Internal_Storage
+internal sealed class Internal_Storage
 {
     private String file_system_base_dir;
 

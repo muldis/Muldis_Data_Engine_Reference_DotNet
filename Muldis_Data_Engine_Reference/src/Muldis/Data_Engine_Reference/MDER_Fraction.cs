@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Fraction : MDER_Any
+public sealed class MDER_Fraction : MDER_Any
 {
     // The __maybe_as_Decimal field is optionally valued if the MDER_Fraction
     // value is known small enough to fit in the range it can represent

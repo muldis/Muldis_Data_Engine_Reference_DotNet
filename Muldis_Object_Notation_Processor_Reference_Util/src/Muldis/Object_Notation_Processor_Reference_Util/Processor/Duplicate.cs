@@ -2,7 +2,7 @@ namespace Muldis.Object_Notation_Processor_Reference_Util.Processor;
 
 using Muldis.Object_Notation_Processor_Reference;
 
-public class Duplicate : IProcessor
+public sealed class Duplicate : IProcessor
 {
     public Duplicate()
     {

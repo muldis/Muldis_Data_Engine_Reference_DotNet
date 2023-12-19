@@ -3,7 +3,7 @@ using Muldis.Object_Notation_Processor_Reference_Util.Processor;
 
 namespace Muldis.Object_Notation_Processor_Reference_App;
 
-public class App
+public sealed class App
 {
     private enum App_Arg_Name
     {

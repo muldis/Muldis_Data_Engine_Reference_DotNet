@@ -6,7 +6,7 @@ namespace Muldis.Data_Engine_Reference;
 // Represents a numerator/denominator pair.
 // Only used internally by Muldis.Data_Engine_Reference.MDER_Fraction.
 
-internal class Internal_Fraction_As_Pair
+internal sealed class Internal_Fraction_As_Pair
 {
     // The numerator+denominator field pair can represent any
     // MDER_Fraction value at all, such that the Fraction's value is

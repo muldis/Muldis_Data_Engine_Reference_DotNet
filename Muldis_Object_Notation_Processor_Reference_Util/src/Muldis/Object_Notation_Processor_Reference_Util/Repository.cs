@@ -1,6 +1,6 @@
 namespace Muldis.Object_Notation_Processor_Reference_Util;
 
-public class Repository
+public sealed class Repository
 {
     private Logger logger;
 

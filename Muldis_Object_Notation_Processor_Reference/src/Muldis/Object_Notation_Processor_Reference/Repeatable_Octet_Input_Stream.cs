@@ -1,6 +1,6 @@
 namespace Muldis.Object_Notation_Processor_Reference;
 
-public class Repeatable_Octet_Input_Stream
+public sealed class Repeatable_Octet_Input_Stream
 {
     // A Repeatable_Octet_Input_Stream object is an octet input stream which
     // supports repeatable-reads to simplify look-ahead operations by its users.

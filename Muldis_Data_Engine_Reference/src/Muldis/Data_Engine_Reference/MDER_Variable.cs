@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Variable : MDER_Any
+public sealed class MDER_Variable : MDER_Any
 {
     internal MDER_Any current_value;
 

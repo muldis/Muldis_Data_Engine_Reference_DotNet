@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-public class MDER_Integer : MDER_Any
+public sealed class MDER_Integer : MDER_Any
 {
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.

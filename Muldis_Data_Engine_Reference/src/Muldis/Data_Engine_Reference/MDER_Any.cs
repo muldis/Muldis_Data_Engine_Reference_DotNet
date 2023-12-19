@@ -366,7 +366,7 @@ public abstract class MDER_Any
     }
 }
 
-public class MDER_Any_Comparer : EqualityComparer<MDER_Any>
+public sealed class MDER_Any_Comparer : EqualityComparer<MDER_Any>
 {
     public override Boolean Equals(MDER_Any? topic_0, MDER_Any? topic_1)
     {

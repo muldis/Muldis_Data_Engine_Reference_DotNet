@@ -1,6 +1,6 @@
 namespace Muldis.Object_Notation_Processor_Reference_Util;
 
-public class Logger
+public sealed class Logger
 {
     private TextWriter? maybe_failure_stream;
     private TextWriter? maybe_notice_stream;
