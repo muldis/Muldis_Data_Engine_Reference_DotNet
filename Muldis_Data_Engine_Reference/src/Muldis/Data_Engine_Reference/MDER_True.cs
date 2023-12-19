@@ -20,6 +20,11 @@ public sealed class MDER_True : MDER_Boolean
         return this._as_MUON_Plain_Text_artifact("");
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     public override Boolean as_Boolean()
     {
         return true;

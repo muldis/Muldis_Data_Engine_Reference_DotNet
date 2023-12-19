@@ -50,58 +50,19 @@ public abstract class MDER_Any
     // value, such as set-like collections, that are simple and performant.
     internal abstract String _identity_as_String();
 
-    // Provides utility pure functions that accept any Muldis Data Language "value"
-    // and derive a .NET String that provides a "preview quick look"
-    // serialization of that value.  The intended use of this class is to
-    // underlie a .NET ToString() override for all .NET values representing
-    // Muldis Data Language values so that debuggers including MS Visual Studio can
-    // assist programmers at easily determining what the current logical
-    // values of their program variables are, which would otherwise be
-    // quite labour intensive for humans inspecting MDER_Any object fields.
-    // This class is explicitly NOT guaranteed to be deterministic and so
-    // different runs of its functions on what are logically the same
-    // Muldis Data Language values might produce different String outputs; reasons for
-    // that include not sorting collection elements and truncating results.
-    // Given its purpose in aiding debugging, it is intended that this
-    // class will NOT populate any calculation caching fields in MDER_Any/etc
-    // objects, to help avoid heisenbugs.
+    // Content "preview quick look" for this MDER_Any to aid debugging.
+    // The preview is the value serialized as a MUON Plain Text artifact.
+    // The preview is not guaranteed to represent the entire logical value
+    // and two MDER_Any that MDL considers to be the "same" value may not
+    // have the same preview; its purpose is to provide the gist only.
+    internal abstract String _preview_as_String();
 
-    internal String _preview_as_String()
-    {
-        return this._as_MUON_Plain_Text_artifact("");
-    }
-
-    // TODO: Some of this text has obsolete notions and it should be rewritten.
-    // Provides utility pure functions that accept any Muldis Data Language "Package"
-    // value, which is a native Muldis Data Language "standard compilation unit", and
-    // derive a "Text" value that is this "Package" encoded in compliance
-    // with the "Muldis_Object_Notation_Plain_Text 'https://muldis.com' '0.300.0'"
-    // formal specification.  This outputs of this generator are intended
-    // for external use, whether for storage in foo.mdpt disk files or
-    // other places, viewing by users, and reading by other programs, as a
-    // means of interchange with any other system conforming to the spec.
-    // This generator actually handles any Muldis Data Language "value", not just a "Package".
-    // This class is completely deterministic and its exact output Muldis Data Language
-    // Text/etc values are determined entirely by its input Package/etc values.
-    // This generator is expressly kept as simple as possible such that it
-    // has zero configuration options and only does simple pretty-printing;
-    // it is only meant so that the Muldis_D_Foundation has a competent
-    // serialization capability built-in whose result is easy enough to
-    // read and that is easy to diff changes for.
-    // This generator makes only the "foundational" flavor of
-    // Muldis_Object_Notation_Plain_Text and provides a literal serialization, including
-    // that all annotation and decoration values are output verbatim, with
-    // no interpretation and with nothing left out.  Round-tripping will
-    // only work as intended with a parser that doesn't produce decorations.
-    // Typically it is up to bootstrapped higher-level libraries written in
-    // Muldis Data Language to provide other generating options that are better
-    // pretty-printed or provide any configuration or that serialize with
-    // non-foundational Muldis_Object_Notation_Plain_Text or interpret decorations.
-    // While this generator's output includes a "parsing unit predicate" on
-    // request (its optionality is the sole configuration option), that
-    // does not include any preceeding "shebang line", which is up to the
-    // caller where such is desired.
-
+    // Exports this MDER_Any as a MUON Plain Text artifact for interchange.
+    // The export is guaranteed to represent the entire logical value in a
+    // round-trippable form with another MDER_Any.
+    // Two MDER_Any that MDL considers to be the "same" value may not
+    // have the same export; for example, elements of non-ordered
+    // collections might appear in different orders.
     public MDER_Text as_MUON_Plain_Text_artifact_as_MDER_Text()
     {
         String artifact_as_String = this._as_MUON_Plain_Text_artifact("");
@@ -116,6 +77,12 @@ public abstract class MDER_Any
         );
     }
 
+    // Exports this MDER_Any as a MUON Plain Text artifact for interchange.
+    // The export is guaranteed to represent the entire logical value in a
+    // round-trippable form with another MDER_Any.
+    // Two MDER_Any that MDL considers to be the "same" value may not
+    // have the same export; for example, elements of non-ordered
+    // collections might appear in different orders.
     public MDER_Blob as_MUON_Plain_Text_artifact_as_MDER_Blob()
     {
         throw new NotImplementedException();

@@ -64,6 +64,11 @@ public sealed class MDER_Fraction : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     private BigInteger _numerator()
     {
         this.ensure_pair();

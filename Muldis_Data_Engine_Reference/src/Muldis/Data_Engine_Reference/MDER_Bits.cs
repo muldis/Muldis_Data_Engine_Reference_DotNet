@@ -36,6 +36,11 @@ public sealed class MDER_Bits : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     public BitArray bit_members_as_BitArray()
     {
         // A BitArray is mutable so clone to protect our internals.

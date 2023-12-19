@@ -72,6 +72,11 @@ public sealed class MDER_Text : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     public String code_point_members_as_String()
     {
         return this.__code_point_members_as_String;

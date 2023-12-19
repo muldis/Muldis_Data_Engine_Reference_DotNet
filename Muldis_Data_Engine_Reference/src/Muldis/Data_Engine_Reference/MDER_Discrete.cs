@@ -32,6 +32,11 @@ public abstract class MDER_Discrete : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     internal Int64 Discrete__count()
     {
         return Discrete__node__tree_member_count(this.tree_root_node);

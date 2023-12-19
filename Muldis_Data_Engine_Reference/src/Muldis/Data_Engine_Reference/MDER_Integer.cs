@@ -39,6 +39,11 @@ public sealed class MDER_Integer : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     public Int32 as_Int32()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.

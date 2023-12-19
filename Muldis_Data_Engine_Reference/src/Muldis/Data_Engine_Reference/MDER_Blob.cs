@@ -35,6 +35,11 @@ public sealed class MDER_Blob : MDER_Any
         return this.__cached_identity_as_String;
     }
 
+    internal override String _preview_as_String()
+    {
+        return this._as_MUON_Plain_Text_artifact("");
+    }
+
     public Byte[] octet_members_as_array_of_Byte()
     {
         // An array is mutable so clone to protect our internals.
