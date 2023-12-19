@@ -19,4 +19,9 @@ public sealed class MDER_False : MDER_Boolean
     {
         return false;
     }
+
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
+    {
+        return "0bFALSE";
+    }
 }

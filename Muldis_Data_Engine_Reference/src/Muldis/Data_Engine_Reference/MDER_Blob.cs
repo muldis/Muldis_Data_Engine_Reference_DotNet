@@ -33,7 +33,7 @@ public sealed class MDER_Blob : MDER_Any
         return this.__octet_members_as_array_of_Byte;
     }
 
-    internal String _as_MUON_Blob_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         return "0xx" + String.Concat(Enumerable.Select(
             this.__octet_members_as_array_of_Byte, m => m.ToString("X2")));

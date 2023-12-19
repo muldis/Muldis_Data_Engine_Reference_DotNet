@@ -20,12 +20,12 @@ public sealed class MDER_Tuple_Bag : MDER_Any
         return this.__machine;
     }
 
-    internal String _as_MUON_Tuple_Bag_artifact(String indent)
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         return "(Tuple_Bag:("
-            + ((MDER_Heading)this.heading)._as_MUON_Heading_artifact()
+            + ((MDER_Heading)this.heading)._as_MUON_Plain_Text_artifact(indent)
             + " : "
-            + this.body._as_MUON_Any_artifact(indent)
+            + this.body._as_MUON_Plain_Text_artifact(indent)
             + "))";
     }
 

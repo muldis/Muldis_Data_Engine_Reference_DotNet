@@ -18,7 +18,7 @@ public sealed class MDER_External : MDER_Any
         return this.__machine;
     }
 
-    internal String _as_MUON_External_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         // We display something useful for debugging purposes, but no
         // (transient) MDER_External can actually be rendered as MUON.

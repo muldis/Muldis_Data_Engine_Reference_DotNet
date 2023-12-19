@@ -7,7 +7,7 @@ public sealed class MDER_Array : MDER_Discrete
     {
     }
 
-    internal String _as_MUON_Array_artifact(String indent)
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         String mei = indent + "\u0009";
         return Object.ReferenceEquals(this, this.machine().MDER_Array_C0) ? "(Array:[])"
@@ -31,12 +31,12 @@ public sealed class MDER_Array : MDER_Discrete
                 return "";
             case Internal_Symbolic_Discrete_Type.Singular:
                 return String.Concat(Enumerable.Repeat(
-                    indent + node.Local_Singular_Members().member._as_MUON_Any_artifact(indent) + ",\u000A",
+                    indent + node.Local_Singular_Members().member._as_MUON_Plain_Text_artifact(indent) + ",\u000A",
                     (Int32)node.Local_Singular_Members().multiplicity));
             case Internal_Symbolic_Discrete_Type.Arrayed:
                 return String.Concat(Enumerable.Select(
                     node.Local_Arrayed_Members(),
-                    m => indent + m._as_MUON_Any_artifact(indent) + ",\u000A"));
+                    m => indent + m._as_MUON_Plain_Text_artifact(indent) + ",\u000A"));
             case Internal_Symbolic_Discrete_Type.Catenated:
                 return this._as_MUON_Array_artifact__node__tree(node.Tree_Catenated_Members().a0, indent)
                     + this._as_MUON_Array_artifact__node__tree(node.Tree_Catenated_Members().a1, indent);

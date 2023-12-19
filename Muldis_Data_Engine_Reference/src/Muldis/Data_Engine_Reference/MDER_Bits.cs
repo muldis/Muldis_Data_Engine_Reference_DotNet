@@ -34,7 +34,7 @@ public sealed class MDER_Bits : MDER_Any
         return this.__bit_members_as_BitArray;
     }
 
-    internal String _as_MUON_Bits_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         return "0bb" + String.Concat(Enumerable.Select(
             this._BitArray_to_List(this.__bit_members_as_BitArray),

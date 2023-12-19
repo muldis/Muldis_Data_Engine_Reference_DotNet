@@ -69,7 +69,7 @@ public sealed class MDER_Text : MDER_Any
         return this.__has_any_non_BMP;
     }
 
-    internal String _as_MUON_Text_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         return this._from_String_as_MUON_Text_artifact(
             this.__code_point_members_as_String);

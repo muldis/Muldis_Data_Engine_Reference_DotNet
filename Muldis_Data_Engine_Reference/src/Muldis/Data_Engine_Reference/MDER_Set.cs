@@ -7,7 +7,7 @@ public sealed class MDER_Set : MDER_Discrete
     {
     }
 
-    internal String _as_MUON_Set_artifact(String indent)
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         String mei = indent + "\u0009";
         this.Discrete__Collapse(want_indexed: true);
@@ -19,7 +19,7 @@ public sealed class MDER_Set : MDER_Discrete
             case Internal_Symbolic_Discrete_Type.Indexed:
                 return "(Set:[\u000A" + String.Concat(Enumerable.Select(
                     Enumerable.OrderBy(node.Local_Indexed_Members(), m => m.Key),
-                    m => mei + m.Key._as_MUON_Any_artifact(mei) + ",\u000A"
+                    m => mei + m.Key._as_MUON_Plain_Text_artifact(mei) + ",\u000A"
                 )) + indent + "])";
             default:
                 throw new NotImplementedException();

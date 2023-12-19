@@ -174,7 +174,7 @@ public sealed class MDER_Fraction : MDER_Any
         throw new NotImplementedException();
     }
 
-    internal String _as_MUON_Fraction_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         // Iff the Fraction value can be exactly expressed as a
         // non-terminating decimal (includes all Fraction that can be

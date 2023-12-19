@@ -24,13 +24,13 @@ public sealed class MDER_Article : MDER_Any
         return this.__machine;
     }
 
-    internal String _as_MUON_Article_artifact(String indent)
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         // TODO: Change Article so represented as Nesting+Kit pair.
         return "(Article:("
-            + this.label._as_MUON_Any_artifact(indent)
+            + this.label._as_MUON_Plain_Text_artifact(indent)
             + " : "
-            + this.attrs._as_MUON_Any_artifact(indent)
+            + this.attrs._as_MUON_Plain_Text_artifact(indent)
             + "))";
     }
 

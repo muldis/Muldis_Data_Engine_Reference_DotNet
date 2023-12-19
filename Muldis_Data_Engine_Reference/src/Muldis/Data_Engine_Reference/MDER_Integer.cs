@@ -43,7 +43,7 @@ public sealed class MDER_Integer : MDER_Any
         return this.__as_BigInteger;
     }
 
-    internal String _as_MUON_Integer_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         return this.__as_BigInteger.ToString();
     }

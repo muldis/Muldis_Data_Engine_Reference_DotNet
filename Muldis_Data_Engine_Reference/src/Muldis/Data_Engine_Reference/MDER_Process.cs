@@ -15,7 +15,7 @@ public sealed class MDER_Process : MDER_Any
         return this.__machine;
     }
 
-    internal String _as_MUON_Process_artifact()
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         // We display something useful for debugging purposes, but no
         // (transient) MDER_Process can actually be rendered as MUON.

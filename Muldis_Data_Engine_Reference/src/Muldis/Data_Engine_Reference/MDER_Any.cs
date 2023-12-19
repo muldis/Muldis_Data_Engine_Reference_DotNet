@@ -70,7 +70,7 @@ public abstract class MDER_Any
     {
         if (this.__cached_MDER_Any_identity is null)
         {
-            this.__cached_MDER_Any_identity = this._as_MUON_Any_artifact("");
+            this.__cached_MDER_Any_identity = this._as_MUON_Plain_Text_artifact("");
         }
         return this.__cached_MDER_Any_identity;
     }
@@ -93,7 +93,7 @@ public abstract class MDER_Any
 
     internal String _preview_as_String()
     {
-        return this._as_MUON_Any_artifact("");
+        return this._as_MUON_Plain_Text_artifact("");
     }
 
     // TODO: Some of this text has obsolete notions and it should be rewritten.
@@ -129,7 +129,7 @@ public abstract class MDER_Any
 
     public MDER_Text as_MUON_Plain_Text_artifact_as_MDER_Text()
     {
-        String artifact_as_String = this._as_MUON_Any_artifact("");
+        String artifact_as_String = this._as_MUON_Plain_Text_artifact("");
         Internal_Unicode_Test_Result test_result
             = Internal_Unicode.test_String(artifact_as_String);
         return this.machine()._MDER_Text(
@@ -146,58 +146,7 @@ public abstract class MDER_Any
         throw new NotImplementedException();
     }
 
-    internal String _as_MUON_Any_artifact(String indent)
-    {
-        MDER_Any topic = this;
-        return topic switch
-        {
-            MDER_Ignorance specific_topic =>
-                "0iIGNORANCE",
-            MDER_False specific_topic =>
-                "0bFALSE",
-            MDER_True specific_topic =>
-                "0bTRUE",
-            MDER_Integer specific_topic =>
-                specific_topic._as_MUON_Integer_artifact(),
-            MDER_Fraction specific_topic =>
-                specific_topic._as_MUON_Fraction_artifact(),
-            MDER_Bits specific_topic =>
-                specific_topic._as_MUON_Bits_artifact(),
-            MDER_Blob specific_topic =>
-                specific_topic._as_MUON_Blob_artifact(),
-            MDER_Text specific_topic =>
-                specific_topic._as_MUON_Text_artifact(),
-            MDER_Array specific_topic =>
-                specific_topic._as_MUON_Array_artifact(indent),
-            MDER_Set specific_topic =>
-                specific_topic._as_MUON_Set_artifact(indent),
-            MDER_Bag specific_topic =>
-                specific_topic._as_MUON_Bag_artifact(indent),
-            MDER_Heading specific_topic =>
-                specific_topic._as_MUON_Heading_artifact(),
-            MDER_Tuple specific_topic =>
-                specific_topic._as_MUON_Tuple_artifact(indent),
-            MDER_Tuple_Array specific_topic =>
-                specific_topic._as_MUON_Tuple_Array_artifact(indent),
-            MDER_Relation specific_topic =>
-                specific_topic._as_MUON_Relation_artifact(indent),
-            MDER_Tuple_Bag specific_topic =>
-                specific_topic._as_MUON_Tuple_Bag_artifact(indent),
-            MDER_Article specific_topic =>
-                specific_topic._as_MUON_Article_artifact(indent),
-            MDER_Excuse specific_topic =>
-                specific_topic._as_MUON_Excuse_artifact(indent),
-            MDER_Variable specific_topic =>
-                specific_topic._as_MUON_Variable_artifact(),
-            MDER_Process specific_topic =>
-                specific_topic._as_MUON_Process_artifact(),
-            MDER_Stream specific_topic =>
-                specific_topic._as_MUON_Stream_artifact(),
-            MDER_External specific_topic =>
-                specific_topic._as_MUON_External_artifact(),
-            _ => throw new NotImplementedException(),
-        };
-    }
+    internal abstract String _as_MUON_Plain_Text_artifact(String indent);
 
     // The following 2 methods might have been in MDER_Text but are in
     // MDER_Any instead temporarily because other value classes use them too.

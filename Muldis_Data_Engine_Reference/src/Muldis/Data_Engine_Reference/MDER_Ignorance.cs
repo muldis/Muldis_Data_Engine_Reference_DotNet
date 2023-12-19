@@ -14,4 +14,9 @@ public sealed class MDER_Ignorance : MDER_Any
     {
         return this.__machine;
     }
+
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
+    {
+        return "0iIGNORANCE";
+    }
 }

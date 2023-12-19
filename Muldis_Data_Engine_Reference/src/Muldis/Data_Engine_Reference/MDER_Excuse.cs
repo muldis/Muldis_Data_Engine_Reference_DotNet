@@ -24,13 +24,13 @@ public sealed class MDER_Excuse : MDER_Any
         return this.__machine;
     }
 
-    internal String _as_MUON_Excuse_artifact(String indent)
+    internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
         // TODO: Change Excuse so represented as Nesting+Kit pair.
         return "(Excuse:("
-            + this.label._as_MUON_Any_artifact(indent)
+            + this.label._as_MUON_Plain_Text_artifact(indent)
             + " : "
-            + this.attrs._as_MUON_Any_artifact(indent)
+            + this.attrs._as_MUON_Plain_Text_artifact(indent)
             + "))";
     }
 
