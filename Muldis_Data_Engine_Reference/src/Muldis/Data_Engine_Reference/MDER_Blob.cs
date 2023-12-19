@@ -2,16 +2,24 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Blob : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // A value of the .NET array class Byte[] is mutable.
     // It should be cloned as needed for protection of our internals.
     private readonly Byte[] __octet_members_as_array_of_Byte;
 
     internal MDER_Blob(MDER_Machine machine,
         Byte[] octet_members_as_array_of_Byte)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__octet_members_as_array_of_Byte
             = octet_members_as_array_of_Byte;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     public Byte[] octet_members_as_array_of_Byte()

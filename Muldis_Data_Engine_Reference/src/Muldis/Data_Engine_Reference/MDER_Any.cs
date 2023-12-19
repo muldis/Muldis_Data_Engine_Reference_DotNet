@@ -25,9 +25,6 @@ namespace Muldis.Data_Engine_Reference;
 
 public abstract class MDER_Any
 {
-    // MDER_Machine this Muldis Data Language "value" lives in.
-    private readonly MDER_Machine __machine;
-
     // Normalized serialization of the Muldis Data Language "value" that its host
     // MDER_Any represents.  This is calculated lazily if needed,
     // typically when the "value" is a member of an indexed collection.
@@ -36,9 +33,8 @@ public abstract class MDER_Any
     // whose character code points are typically in the 0..127 range.
     private String? __cached_MDER_Any_identity;
 
-    internal MDER_Any(MDER_Machine machine)
+    internal MDER_Any()
     {
-        this.__machine = machine;
     }
 
     public override String ToString()
@@ -46,10 +42,7 @@ public abstract class MDER_Any
         return this._preview_as_String();
     }
 
-    public MDER_Machine machine()
-    {
-        return this.__machine;
-    }
+    public abstract MDER_Machine machine();
 
     // Provides utility pure functions that accept any Muldis Data Language "value"
     // and derive a .NET String that uniquely identifies it.
@@ -139,7 +132,7 @@ public abstract class MDER_Any
         String artifact_as_String = this._as_MUON_Any_artifact("");
         Internal_Unicode_Test_Result test_result
             = Internal_Unicode.test_String(artifact_as_String);
-        return this.__machine._MDER_Text(
+        return this.machine()._MDER_Text(
             "(Muldis_Object_Notation_Syntax:([Plain_Text,"
             + " \"https://muldis.com\", \"0.300.0\"]:\u000A"
             + artifact_as_String + "))\u000A",

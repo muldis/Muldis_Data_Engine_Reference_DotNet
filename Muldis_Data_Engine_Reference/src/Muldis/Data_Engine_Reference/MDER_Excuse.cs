@@ -2,6 +2,9 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Excuse : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // The Muldis Data Language value that is the "label" of this MDER_Excuse value.
     // TODO: Change this to a MDER_Nesting.
     internal readonly MDER_Any label;
@@ -10,10 +13,15 @@ public sealed class MDER_Excuse : MDER_Any
     internal readonly MDER_Tuple attrs;
 
     internal MDER_Excuse(MDER_Machine machine, MDER_Any label, MDER_Tuple attrs)
-        : base(machine)
     {
+        this.__machine = machine;
         this.label = label;
         this.attrs = attrs;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String _as_MUON_Excuse_artifact(String indent)

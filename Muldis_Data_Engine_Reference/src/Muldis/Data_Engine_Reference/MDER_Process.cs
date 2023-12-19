@@ -2,8 +2,17 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Process : MDER_Any
 {
-    internal MDER_Process(MDER_Machine machine) : base(machine)
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
+    internal MDER_Process(MDER_Machine machine)
     {
+        this.__machine = machine;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String _as_MUON_Process_artifact()

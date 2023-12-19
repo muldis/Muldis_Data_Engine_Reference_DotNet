@@ -2,12 +2,20 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Heading : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     internal readonly HashSet<String> attr_names;
 
     internal MDER_Heading(MDER_Machine machine, HashSet<String> attr_names)
-        : base(machine)
     {
+        this.__machine = machine;
         this.attr_names = attr_names;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String _as_MUON_Heading_artifact()

@@ -2,6 +2,9 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Text : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // A value of the .NET class String is immutable,
     // It should be safe to pass around without cloning.
     // Represents a Muldis Data Language Text value where each member value is
@@ -45,10 +48,15 @@ public sealed class MDER_Text : MDER_Any
 
     internal MDER_Text(MDER_Machine machine,
         String code_point_members_as_String, Boolean has_any_non_BMP)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__code_point_members_as_String = code_point_members_as_String;
         this.__has_any_non_BMP = has_any_non_BMP;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     public String code_point_members_as_String()

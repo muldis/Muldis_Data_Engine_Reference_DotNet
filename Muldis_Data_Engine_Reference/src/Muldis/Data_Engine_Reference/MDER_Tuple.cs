@@ -2,12 +2,20 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Tuple : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     internal readonly Dictionary<String, MDER_Any> attrs;
 
     internal MDER_Tuple(MDER_Machine machine, Dictionary<String, MDER_Any> attrs)
-        : base(machine)
     {
+        this.__machine = machine;
         this.attrs = attrs;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String _as_MUON_Tuple_artifact(String indent)

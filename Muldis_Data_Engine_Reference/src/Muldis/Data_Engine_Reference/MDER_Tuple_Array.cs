@@ -2,14 +2,22 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Tuple_Array : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     internal readonly MDER_Heading heading;
     internal readonly MDER_Array body;
 
     internal MDER_Tuple_Array(MDER_Machine machine, MDER_Heading heading, MDER_Array body)
-        : base(machine)
     {
+        this.__machine = machine;
         this.heading = heading;
         this.body = body;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal String _as_MUON_Tuple_Array_artifact(String indent)

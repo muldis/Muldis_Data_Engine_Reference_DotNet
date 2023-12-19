@@ -4,6 +4,9 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Fraction : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // The __maybe_as_Decimal field is optionally valued if the MDER_Fraction
     // value is known small enough to fit in the range it can represent
     // and it is primarily used when the MDER_Fraction value was input to
@@ -22,23 +25,28 @@ public sealed class MDER_Fraction : MDER_Any
 
     internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__maybe_as_Decimal = as_Decimal;
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }
 
-    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
-        : base(machine)
+    public override MDER_Machine machine()
     {
+        return this.__machine;
+    }
+
+    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
+    {
+        this.__machine = machine;
         this.__maybe_as_Decimal = as_Decimal;
         this.__maybe_as_nd_pair = null;
     }
 
     internal MDER_Fraction(MDER_Machine machine,
         BigInteger numerator, BigInteger denominator)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__maybe_as_Decimal = null;
         this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
     }

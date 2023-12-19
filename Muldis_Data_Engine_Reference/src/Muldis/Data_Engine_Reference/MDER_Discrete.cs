@@ -2,13 +2,21 @@ namespace Muldis.Data_Engine_Reference;
 
 public abstract class MDER_Discrete : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     internal Internal_MDER_Discrete_Struct tree_root_node;
 
     internal MDER_Discrete(MDER_Machine machine,
         Internal_MDER_Discrete_Struct tree_root_node)
-        : base(machine)
     {
+        this.__machine = machine;
         this.tree_root_node = tree_root_node;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     internal Int64 Discrete__count()

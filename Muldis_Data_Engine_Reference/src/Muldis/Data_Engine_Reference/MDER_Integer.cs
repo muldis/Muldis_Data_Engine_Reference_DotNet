@@ -4,6 +4,9 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Integer : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
     // A BigInteger is also optimized to handle small values compactly.
@@ -13,9 +16,14 @@ public sealed class MDER_Integer : MDER_Any
     private readonly BigInteger __as_BigInteger;
 
     internal MDER_Integer(MDER_Machine machine, BigInteger as_BigInteger)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__as_BigInteger = as_BigInteger;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     public Int32 as_Int32()

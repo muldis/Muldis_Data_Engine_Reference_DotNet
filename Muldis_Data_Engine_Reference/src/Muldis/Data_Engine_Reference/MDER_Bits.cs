@@ -4,15 +4,23 @@ namespace Muldis.Data_Engine_Reference;
 
 public sealed class MDER_Bits : MDER_Any
 {
+    // The virtual machine that this "value" lives in.
+    private readonly MDER_Machine __machine;
+
     // A value of the .NET class BitArray is mutable.
     // It should be cloned as needed for protection of our internals.
     private readonly BitArray __bit_members_as_BitArray;
 
     internal MDER_Bits(MDER_Machine machine,
         BitArray bit_members_as_BitArray)
-        : base(machine)
     {
+        this.__machine = machine;
         this.__bit_members_as_BitArray = bit_members_as_BitArray;
+    }
+
+    public override MDER_Machine machine()
+    {
+        return this.__machine;
     }
 
     public BitArray bit_members_as_BitArray()
