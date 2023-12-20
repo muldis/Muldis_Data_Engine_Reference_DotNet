@@ -7,17 +7,151 @@ namespace Muldis.Data_Engine_Reference_App;
 
 public sealed class App
 {
-    public static void Main(String[] args)
+    private enum App_Arg_Name
     {
-        if (args.Length != 1)
+        task,
+        verbose,
+        @in,
+    }
+
+    private enum App_Task
+    {
+        version,
+        help,
+        perform,
+    }
+
+    private App()
+    {
+    }
+
+    public static void Main(String[] raw_app_args)
+    {
+        task_version();
+        Dictionary<App_Arg_Name, String?> app_args
+            = normalized_app_args(raw_app_args);
+        if (app_args.Count == 0)
         {
-            // TODO: Review whether hostExecutablePath reflects actual
-            // main program invocation syntax or not, and accounts for
-            // the varied host operating systems or compiled vs debugged.
-            String hostExecutablePath
-                = System.Reflection.Assembly.GetEntryAssembly()!.Location;
-            System.Console.WriteLine("Usage: " + hostExecutablePath
-                + " <source code file path>");
+            System.Console.WriteLine(
+                "Fatal: Task-naming primary app argument is missing.");
+            task_help();
+            return;
+        }
+        App_Task task;
+        if (!Enum.TryParse<App_Task>(app_args[App_Arg_Name.task], out task))
+        {
+            System.Console.WriteLine(
+                "Fatal: Unrecognized task: " + app_args[App_Arg_Name.task]);
+            task_help();
+            return;
+        }
+        switch (task)
+        {
+            case App_Task.version:
+                // Skip since app always does this when it starts.
+                break;
+            case App_Task.help:
+                task_help();
+                break;
+            case App_Task.perform:
+                task_perform(app_args);
+                break;
+            default:
+                task_help();
+                break;
+        }
+    }
+
+    private static Dictionary<App_Arg_Name, String?> normalized_app_args(
+        String[] raw_app_args)
+    {
+        // The "task" arg is expected to be positional, and the others named.
+        // A positional arg does NOT start with "--",
+        // a named looks like "--foo=bar" or "--foo".
+        Dictionary<App_Arg_Name, String?> app_args
+            = new Dictionary<App_Arg_Name, String?>();
+        if (raw_app_args.Length > 0 && !raw_app_args[0].StartsWith("--"))
+        {
+            for (Int32 i = 1; i < raw_app_args.Length; i++)
+            {
+                String raw_app_arg = raw_app_args[i];
+                if (raw_app_arg.StartsWith("--"))
+                {
+                    String arg_name;
+                    String? arg_value;
+                    if (raw_app_arg.Contains("="))
+                    {
+                        // Named arg format "--foo=bar",
+                        // the most generic format.
+                        Int32 eq_pos = raw_app_arg.IndexOf("=");
+                        arg_name = raw_app_arg.Substring(2, eq_pos - 2);
+                        arg_value = raw_app_arg.Substring(eq_pos + 1);
+                    }
+                    else
+                    {
+                        // Named arg format "--foo",
+                        // a Boolean where present is true, absent false.
+                        arg_name = raw_app_arg.Substring(2);
+                        arg_value = null;
+                    }
+                    App_Arg_Name app_arg_name;
+                    if (Enum.TryParse<App_Arg_Name>(
+                        arg_name, out app_arg_name))
+                    {
+                        app_args.Add(app_arg_name, arg_value);
+                    }
+                    else
+                    {
+                        System.Console.WriteLine(
+                            "Warning: Ignoring unrecognized argument: "
+                            + arg_name);
+                    }
+                }
+            }
+            // Assign the positional "task" last so it takes
+            // precedence over any named one.
+            app_args.Add(App_Arg_Name.task, raw_app_args[0]);
+        }
+        return app_args;
+    }
+
+    private static void task_version()
+    {
+        System.Console.WriteLine("This application is"
+            + " Muldis.Data_Engine_Reference_App.App version 0.1.");
+    }
+
+    private static void task_help()
+    {
+        String APP_NAME = "sh muldisder.sh";
+        System.Console.WriteLine("Usage:");
+        System.Console.WriteLine("  " + APP_NAME + " version");
+        System.Console.WriteLine("  " + APP_NAME + " help");
+        foreach (String generic_task in new String[] {"perform"})
+        {
+            System.Console.WriteLine("  " + APP_NAME + " " + generic_task
+                + " [--verbose]"
+                + " --in=<input file path>"
+            );
+        }
+    }
+
+    private static void task_perform(
+        Dictionary<App_Arg_Name, String?> app_args)
+    {
+        System.Console.WriteLine("This is task perform.");
+        Boolean verbose = app_args.ContainsKey(App_Arg_Name.verbose);
+        if (!app_args.ContainsKey(App_Arg_Name.@in))
+        {
+            System.Console.WriteLine(
+                "Fatal: Task perform: Missing argument: " + App_Arg_Name.@in);
+            return;
+        }
+        String? raw_arg_path_in = app_args[App_Arg_Name.@in];
+        if (raw_arg_path_in is null || String.Equals(raw_arg_path_in, ""))
+        {
+            System.Console.WriteLine(
+                "Fatal: Task perform: Missing argument: " + App_Arg_Name.@in);
             return;
         }
 
@@ -27,7 +161,7 @@ public sealed class App
 
         // File system path for the file containing plain text source
         // code that the user wishes to execute as their main program.
-        String sourceCodeFilePath = args[0];
+        String sourceCodeFilePath = raw_arg_path_in;
 
         // If the user-specified file path is absolute, Path.Combine()
         // will just use that as the final path; otherwise it is taken

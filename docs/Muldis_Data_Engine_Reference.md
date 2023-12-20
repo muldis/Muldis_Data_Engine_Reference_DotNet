@@ -94,7 +94,13 @@ the project is compiled.
 Here is an example of its use:
 
 ```
-sh muldisder.sh corpora/Syntax_Plain_Text/spec_all_examples.muon
+sh muldisder.sh perform --in=corpora/Syntax_Plain_Text/spec_all_examples.muon
+```
+
+Simply running it without arguments or with `help` will display a *Usage* message.
+
+```
+sh muldisder.sh help
 ```
 
 I have not yet produced an alternate thin wrapper Windows shell script,
