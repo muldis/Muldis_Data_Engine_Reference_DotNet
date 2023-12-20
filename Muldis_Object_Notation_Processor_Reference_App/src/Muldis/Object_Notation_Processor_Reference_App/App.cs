@@ -35,17 +35,20 @@ public sealed class App
     public static void Main(String[] raw_app_args)
     {
         task_version();
-        Dictionary<App_Arg_Name, String?> app_args = normalized_app_args(raw_app_args);
+        Dictionary<App_Arg_Name, String?> app_args
+            = normalized_app_args(raw_app_args);
         if (app_args.Count == 0)
         {
-            System.Console.WriteLine("Fatal: Task-naming primary app argument is missing.");
+            System.Console.WriteLine(
+                "Fatal: Task-naming primary app argument is missing.");
             task_help();
             return;
         }
         App_Task task;
         if (!Enum.TryParse<App_Task>(app_args[App_Arg_Name.task], out task))
         {
-            System.Console.WriteLine("Fatal: Unrecognized task: " + app_args[App_Arg_Name.task]);
+            System.Console.WriteLine(
+                "Fatal: Unrecognized task: " + app_args[App_Arg_Name.task]);
             task_help();
             return;
         }
@@ -73,11 +76,14 @@ public sealed class App
         }
     }
 
-    private static Dictionary<App_Arg_Name, String?> normalized_app_args(String[] raw_app_args)
+    private static Dictionary<App_Arg_Name, String?> normalized_app_args(
+        String[] raw_app_args)
     {
         // The "task" arg is expected to be positional, and the others named.
-        // A positional arg does NOT start with "--", a named looks like "--foo=bar" or "--foo".
-        Dictionary<App_Arg_Name, String?> app_args = new Dictionary<App_Arg_Name, String?>();
+        // A positional arg does NOT start with "--",
+        // a named looks like "--foo=bar" or "--foo".
+        Dictionary<App_Arg_Name, String?> app_args
+            = new Dictionary<App_Arg_Name, String?>();
         if (raw_app_args.Length > 0 && !raw_app_args[0].StartsWith("--"))
         {
             for (Int32 i = 1; i < raw_app_args.Length; i++)
@@ -89,30 +95,35 @@ public sealed class App
                     String? arg_value;
                     if (raw_app_arg.Contains("="))
                     {
-                        // Named arg format "--foo=bar", the most generic format.
+                        // Named arg format "--foo=bar",
+                        // the most generic format.
                         Int32 eq_pos = raw_app_arg.IndexOf("=");
                         arg_name = raw_app_arg.Substring(2, eq_pos - 2);
                         arg_value = raw_app_arg.Substring(eq_pos + 1);
                     }
                     else
                     {
-                        // Named arg format "--foo", a Boolean where present is true, absent false.
+                        // Named arg format "--foo",
+                        // a Boolean where present is true, absent false.
                         arg_name = raw_app_arg.Substring(2);
                         arg_value = null;
                     }
                     App_Arg_Name app_arg_name;
-                    if (Enum.TryParse<App_Arg_Name>(arg_name, out app_arg_name))
+                    if (Enum.TryParse<App_Arg_Name>(
+                        arg_name, out app_arg_name))
                     {
                         app_args.Add(app_arg_name, arg_value);
                     }
                     else
                     {
                         System.Console.WriteLine(
-                            "Warning: Ignoring unrecognized argument: " + arg_name);
+                            "Warning: Ignoring unrecognized argument: "
+                            + arg_name);
                     }
                 }
             }
-            // Assign the positional "task" last so it takes precedence over any named one.
+            // Assign the positional "task" last so it takes
+            // precedence over any named one.
             app_args.Add(App_Arg_Name.task, raw_app_args[0]);
         }
         return app_args;
@@ -130,7 +141,8 @@ public sealed class App
         System.Console.WriteLine("Usage:");
         System.Console.WriteLine("  " + APP_NAME + " version");
         System.Console.WriteLine("  " + APP_NAME + " help");
-        foreach (String generic_task in new String[] {"duplicate", "analyze", "validate", "format",
+        foreach (String generic_task in new String[]
+            {"duplicate", "analyze", "validate", "format",
             "textify", "untextify", "blobify", "unblobify"})
         {
             System.Console.WriteLine("  " + APP_NAME + " " + generic_task
