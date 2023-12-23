@@ -34,6 +34,18 @@ public abstract class MDER_Any
         return this._preview_as_String();
     }
 
+    public override Boolean Equals(Object? obj)
+    {
+        return (obj is MDER_Any specific_obj)
+            ? this._MDER_Any__same(specific_obj)
+            : false;
+    }
+
+    public override Int32 GetHashCode()
+    {
+        return this._identity_as_String().GetHashCode();
+    }
+
     // The MDER_Machine VM that this MDER_Any "value" lives in.
     public abstract MDER_Machine machine();
 
@@ -237,32 +249,5 @@ public abstract class MDER_Any
                 false,
             _ => throw new NotImplementedException(),
         };
-    }
-}
-
-public sealed class MDER_Any_Comparer : EqualityComparer<MDER_Any>
-{
-    public override Boolean Equals(MDER_Any? topic_0, MDER_Any? topic_1)
-    {
-        if (Object.ReferenceEquals(topic_0, topic_1))
-        {
-            // We get here if both args are null, if that is possible.
-            return true;
-        }
-        if (topic_0 is null || topic_1 is null)
-        {
-            return false;
-        }
-        return topic_0._MDER_Any__same(topic_1);
-    }
-
-    public override Int32 GetHashCode(MDER_Any topic)
-    {
-        if (topic is null)
-        {
-            // Would we ever get here?
-            return 0;
-        }
-        return topic._identity_as_String().GetHashCode();
     }
 }
