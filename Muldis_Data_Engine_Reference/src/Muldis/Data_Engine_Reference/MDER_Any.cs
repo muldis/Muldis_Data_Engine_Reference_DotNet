@@ -187,7 +187,7 @@ public abstract class MDER_Any
         if (Object.ReferenceEquals(topic_0, topic_1))
         {
             // We should always get here for any singleton specific types:
-            // MDER_Ignorance, MDER_False, MDER_True.
+            // MDER_Ignorance.
             return true;
         }
         if (!Type.Equals(topic_0.GetType(), topic_1.GetType()))
@@ -199,12 +199,8 @@ public abstract class MDER_Any
             (MDER_Ignorance specific_topic_0, MDER_Ignorance specific_topic_1) =>
                 // We should never get here.
                 throw new InvalidOperationException(),
-            (MDER_False specific_topic_0, MDER_False specific_topic_1) =>
-                // We should never get here.
-                throw new InvalidOperationException(),
-            (MDER_True specific_topic_0, MDER_True specific_topic_1) =>
-                // We should never get here.
-                throw new InvalidOperationException(),
+            (MDER_Boolean specific_topic_0, MDER_Boolean specific_topic_1) =>
+                specific_topic_0._MDER_Boolean__same(specific_topic_1),
             (MDER_Integer specific_topic_0, MDER_Integer specific_topic_1) =>
                 specific_topic_0._MDER_Integer__same(specific_topic_1),
             (MDER_Fraction specific_topic_0, MDER_Fraction specific_topic_1) =>

@@ -250,7 +250,7 @@ internal sealed class Internal_Executor
                 // FOUNDATION BASE TYPE DEFINERS
 
                 "Ignorance" => v is MDER_Ignorance,
-                "Boolean" => v is MDER_False || v is MDER_True,
+                "Boolean" => v is MDER_Boolean,
                 "Integer" => v is MDER_Integer,
                 "Array" => v is MDER_Array,
                 "Bag" => v is MDER_Bag,

@@ -27,8 +27,8 @@ public sealed class MDER_Machine
     private readonly MDER_Ignorance __ignorance;
 
     // MDER_Boolean 0bFALSE (type default value) and 0bTRUE values.
-    private readonly MDER_False __false;
-    private readonly MDER_True __true;
+    private readonly MDER_Boolean __false;
+    private readonly MDER_Boolean __true;
 
     // MDER_Integer value cache.
     // Seeded with {-1,0,1}.
@@ -104,8 +104,8 @@ public sealed class MDER_Machine
 
         this.__ignorance = new MDER_Ignorance(this);
 
-        this.__false = new MDER_False(this);
-        this.__true = new MDER_True(this);
+        this.__false = new MDER_Boolean(this, false);
+        this.__true = new MDER_Boolean(this, true);
 
         this.__integers = new Dictionary<Int32, MDER_Integer>();
         for (Int32 i = -1; i <= 1; i++)
@@ -248,16 +248,6 @@ public sealed class MDER_Machine
     public MDER_Boolean MDER_Boolean(Boolean as_Boolean)
     {
         return as_Boolean ? this.__true : this.__false;
-    }
-
-    public MDER_False MDER_False()
-    {
-        return this.__false;
-    }
-
-    public MDER_True MDER_True()
-    {
-        return this.__true;
     }
 
     public MDER_Integer MDER_Integer(Int32 as_Int32)
@@ -1181,10 +1171,8 @@ public sealed class MDER_Machine
         {
             MDER_Ignorance specific_topic =>
                 null,
-            MDER_False specific_topic =>
-                false,
-            MDER_True specific_topic =>
-                true,
+            MDER_Boolean specific_topic =>
+                specific_topic.as_Boolean(),
             MDER_Integer specific_topic =>
                 specific_topic.as_BigInteger(),
             MDER_External specific_topic =>
@@ -1203,10 +1191,9 @@ public sealed class MDER_Machine
         {
             MDER_Ignorance specific_topic =>
                 new KeyValuePair<String, Object?>("Ignorance", null),
-            MDER_False specific_topic =>
-                new KeyValuePair<String, Object?>("Boolean", false),
-            MDER_True specific_topic =>
-                new KeyValuePair<String, Object?>("Boolean", true),
+            MDER_Boolean specific_topic =>
+                new KeyValuePair<String, Object?>("Boolean",
+                    specific_topic.as_Boolean()),
             MDER_Integer specific_topic =>
                 new KeyValuePair<String, Object?>("Integer",
                     specific_topic.as_BigInteger()),

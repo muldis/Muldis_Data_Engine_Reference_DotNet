@@ -201,14 +201,10 @@ public sealed class App
         MDER_Ignorance ig = vm.MDER_Ignorance();
         System.Console.WriteLine("Test data: ig = [" + ig + "]");
 
-        MDER_Boolean bf1 = vm.MDER_False();
-        System.Console.WriteLine("Test data: bf1 = [" + bf1 + "]");
-        MDER_Boolean bf2 = vm.MDER_Boolean(false);
-        System.Console.WriteLine("Test data: bf2 = [" + bf2 + "]");
-        MDER_Boolean bt1 = vm.MDER_True();
-        System.Console.WriteLine("Test data: bt1 = [" + bt1 + "]");
-        MDER_Boolean bt2 = vm.MDER_Boolean(true);
-        System.Console.WriteLine("Test data: bt2 = [" + bt2 + "]");
+        MDER_Boolean bf = vm.MDER_Boolean(false);
+        System.Console.WriteLine("Test data: bf = [" + bf + "]");
+        MDER_Boolean bt = vm.MDER_Boolean(true);
+        System.Console.WriteLine("Test data: bt = [" + bt + "]");
 
         MDER_Integer i0 = vm.MDER_Integer(0);
         System.Console.WriteLine("Test data: i0 = [" + i0 + "]");
