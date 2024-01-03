@@ -1,6 +1,6 @@
 namespace Muldis.Data_Engine_Reference;
 
-public sealed class MDER_Tuple_Bag : MDER_Any
+public sealed class MDER_Multirelation : MDER_Any
 {
     // The MDER_Machine VM that this MDER_Any "value" lives in.
     private readonly MDER_Machine __machine;
@@ -11,7 +11,7 @@ public sealed class MDER_Tuple_Bag : MDER_Any
     internal readonly MDER_Heading heading;
     internal readonly MDER_Bag body;
 
-    internal MDER_Tuple_Bag(MDER_Machine machine, MDER_Heading heading, MDER_Bag body)
+    internal MDER_Multirelation(MDER_Machine machine, MDER_Heading heading, MDER_Bag body)
     {
         this.__machine = machine;
         this.heading = heading;
@@ -40,16 +40,16 @@ public sealed class MDER_Tuple_Bag : MDER_Any
 
     internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
-        return "(Tuple_Bag:("
+        return "(Multirelation:("
             + ((MDER_Heading)this.heading)._as_MUON_Plain_Text_artifact(indent)
             + " : "
             + this.body._as_MUON_Plain_Text_artifact(indent)
             + "))";
     }
 
-    internal Boolean _MDER_Tuple_Bag__same(MDER_Tuple_Bag topic_1)
+    internal Boolean _MDER_Multirelation__same(MDER_Multirelation topic_1)
     {
-        MDER_Tuple_Bag topic_0 = this;
+        MDER_Multirelation topic_0 = this;
         return topic_0.heading._MDER_Any__same(topic_1.heading)
             && topic_0.body._MDER_Any__same(topic_1.body);
     }

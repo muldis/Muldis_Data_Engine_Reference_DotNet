@@ -489,14 +489,14 @@ internal sealed class Internal_MDER_Discrete_Struct
 
 // Muldis.Data_Engine_Reference.Internal_MDER_Discrete_Pair
 // Represents an ordered pair of MDER_Array, typically corresponding in
-// order to the "0" and "1" conceptually-ordered arg/attr to a function.
+// order to the "0" and "1" conceptually-positional arg/attr to a function.
 
 internal sealed class Internal_MDER_Discrete_Pair
 {
-    // This is the first conceptually-ordered arg/attr.
+    // This is the first conceptually-positional arg/attr.
     internal Internal_MDER_Discrete_Struct a0;
 
-    // This is the second conceptually-ordered arg/attr.
+    // This is the second conceptually-positional arg/attr.
     internal Internal_MDER_Discrete_Struct a1;
 
     internal Internal_MDER_Discrete_Pair(Internal_MDER_Discrete_Struct a0, Internal_MDER_Discrete_Struct a1)

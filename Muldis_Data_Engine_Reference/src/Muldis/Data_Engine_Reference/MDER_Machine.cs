@@ -76,20 +76,20 @@ public sealed class MDER_Machine
     // MDER_Tuple with no attributes (type default value).
     internal readonly MDER_Tuple MDER_Tuple_D0;
 
-    // MDER_Tuple_Array with no attributes and no members
+    // MDER_Orderelation with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDER_Tuple_Array MDER_Tuple_Array_D0C0;
-    internal readonly MDER_Tuple_Array MDER_Tuple_Array_D0C1;
+    internal readonly MDER_Orderelation MDER_Orderelation_D0C0;
+    internal readonly MDER_Orderelation MDER_Orderelation_D0C1;
 
     // MDER_Relation with no attributes and no members
     // (type default value), or with no attributes and 1 member.
     internal readonly MDER_Relation MDER_Relation_D0C0;
     internal readonly MDER_Relation MDER_Relation_D0C1;
 
-    // MDER_Tuple_Bag with no attributes and no members
+    // MDER_Multirelation with no attributes and no members
     // (type default value), or with no attributes and 1 member.
-    internal readonly MDER_Tuple_Bag MDER_Tuple_Bag_D0C0;
-    internal readonly MDER_Tuple_Bag MDER_Tuple_Bag_D0C1;
+    internal readonly MDER_Multirelation MDER_Multirelation_D0C0;
+    internal readonly MDER_Multirelation MDER_Multirelation_D0C1;
 
     // MDER_Article with False label and no attributes
     // (type default value but not actually useful in practice).
@@ -179,10 +179,10 @@ public sealed class MDER_Machine
         this.false_nullary_article
             = new MDER_Article(this, this.__false, this.MDER_Tuple_D0);
 
-        this.MDER_Tuple_Array_D0C0 = new MDER_Tuple_Array(this,
+        this.MDER_Orderelation_D0C0 = new MDER_Orderelation(this,
             MDER_Heading_D0, MDER_Array_C0);
 
-        this.MDER_Tuple_Array_D0C1 = new MDER_Tuple_Array(this,
+        this.MDER_Orderelation_D0C1 = new MDER_Orderelation(this,
             MDER_Heading_D0,
             new MDER_Array(this,
                 new Internal_MDER_Discrete_Struct {
@@ -211,10 +211,10 @@ public sealed class MDER_Machine
             )
         );
 
-        this.MDER_Tuple_Bag_D0C0 = new MDER_Tuple_Bag(this,
+        this.MDER_Multirelation_D0C0 = new MDER_Multirelation(this,
             MDER_Heading_D0, MDER_Bag_C0);
 
-        this.MDER_Tuple_Bag_D0C1 = new MDER_Tuple_Bag(this,
+        this.MDER_Multirelation_D0C1 = new MDER_Multirelation(this,
             MDER_Heading_D0,
             new MDER_Bag(this,
                 new Internal_MDER_Discrete_Struct {
@@ -476,20 +476,20 @@ public sealed class MDER_Machine
         return new MDER_Tuple(this, attrs);
     }
 
-    internal MDER_Tuple_Array MDER_Tuple_Array(MDER_Heading heading, MDER_Array body)
+    internal MDER_Orderelation MDER_Orderelation(MDER_Heading heading, MDER_Array body)
     {
         if (Object.ReferenceEquals(heading, MDER_Heading_D0))
         {
             if (Object.ReferenceEquals(body, MDER_Array_C0))
             {
-                return MDER_Tuple_Array_D0C0;
+                return MDER_Orderelation_D0C0;
             }
             if (body.Discrete__count() == 1)
             {
-                return MDER_Tuple_Array_D0C1;
+                return MDER_Orderelation_D0C1;
             }
         }
-        return new MDER_Tuple_Array(this, heading, body);
+        return new MDER_Orderelation(this, heading, body);
     }
 
     internal MDER_Relation MDER_Relation(MDER_Heading heading, MDER_Set body)
@@ -508,21 +508,21 @@ public sealed class MDER_Machine
         return new MDER_Relation(this, heading, body);
     }
 
-    internal MDER_Tuple_Bag MDER_Tuple_Bag(MDER_Heading heading, MDER_Bag body)
+    internal MDER_Multirelation MDER_Multirelation(MDER_Heading heading, MDER_Bag body)
     {
         if (Object.ReferenceEquals(heading, MDER_Heading_D0))
         {
             if (Object.ReferenceEquals(body, MDER_Bag_C0))
             {
-                return MDER_Tuple_Bag_D0C0;
+                return MDER_Multirelation_D0C0;
             }
             // TODO
             //if (this.executor.Bag__count(body) == 1)
             //{
-            //    return MDER_Tuple_Bag_D0C1;
+            //    return MDER_Multirelation_D0C1;
             //}
         }
-        return new MDER_Tuple_Bag(this, heading, body);
+        return new MDER_Multirelation(this, heading, body);
     }
 
     internal MDER_Article MDER_Article(MDER_Any label, MDER_Tuple attrs)
@@ -875,12 +875,12 @@ public sealed class MDER_Machine
                     );
                 }
                 break;
-            case "Tuple_Array":
+            case "Orderelation":
                 if (v is MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Array bv = this.MDER_Array_C0;
-                    return this.MDER_Tuple_Array(hv, bv);
+                    return this.MDER_Orderelation(hv, bv);
                 }
                 if (v is MDER_Array)
                 {
@@ -890,7 +890,7 @@ public sealed class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "topic",
-                            message: "Can't select MDER_Tuple_Array from a MDER_Array whose"
+                            message: "Can't select MDER_Orderelation from a MDER_Array whose"
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
@@ -900,10 +900,10 @@ public sealed class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "topic",
-                            message: "Can't select MDER_Tuple_Array from empty MDER_Array."
+                            message: "Can't select MDER_Orderelation from empty MDER_Array."
                         );
                     }
-                    return this.MDER_Tuple_Array(hv, bv);
+                    return this.MDER_Orderelation(hv, bv);
                 }
                 break;
             case "Relation":
@@ -937,12 +937,12 @@ public sealed class MDER_Machine
                     return this.MDER_Relation(hv, bv);
                 }
                 break;
-            case "Tuple_Bag":
+            case "Multirelation":
                 if (v is MDER_Heading)
                 {
                     MDER_Heading hv = (MDER_Heading)((MDER_Any)v);
                     MDER_Bag bv = this.MDER_Bag_C0;
-                    return this.MDER_Tuple_Bag(hv, bv);
+                    return this.MDER_Multirelation(hv, bv);
                 }
                 if (v is MDER_Bag)
                 {
@@ -952,7 +952,7 @@ public sealed class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "topic",
-                            message: "Can't select MDER_Tuple_Bag from a MDER_Bag whose"
+                            message: "Can't select MDER_Multirelation from a MDER_Bag whose"
                                 + " members aren't all MDER_Tuple with a common heading."
                         );
                     }
@@ -962,10 +962,10 @@ public sealed class MDER_Machine
                         throw new ArgumentException
                         (
                             paramName: "topic",
-                            message: "Can't select MDER_Tuple_Bag from empty MDER_Bag."
+                            message: "Can't select MDER_Multirelation from empty MDER_Bag."
                         );
                     }
-                    return this.MDER_Tuple_Bag(hv, bv);
+                    return this.MDER_Multirelation(hv, bv);
                 }
                 break;
             case "Article":

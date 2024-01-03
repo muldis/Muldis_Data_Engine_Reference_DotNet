@@ -221,12 +221,12 @@ public abstract class MDER_Any
                 specific_topic_0._MDER_Heading__same(specific_topic_1),
             (MDER_Tuple specific_topic_0, MDER_Tuple specific_topic_1) =>
                 specific_topic_0._MDER_Tuple__same(specific_topic_1),
-            (MDER_Tuple_Array specific_topic_0, MDER_Tuple_Array specific_topic_1) =>
-                specific_topic_0._MDER_Tuple_Array__same(specific_topic_1),
+            (MDER_Orderelation specific_topic_0, MDER_Orderelation specific_topic_1) =>
+                specific_topic_0._MDER_Orderelation__same(specific_topic_1),
             (MDER_Relation specific_topic_0, MDER_Relation specific_topic_1) =>
                 specific_topic_0._MDER_Relation__same(specific_topic_1),
-            (MDER_Tuple_Bag specific_topic_0, MDER_Tuple_Bag specific_topic_1) =>
-                specific_topic_0._MDER_Tuple_Bag__same(specific_topic_1),
+            (MDER_Multirelation specific_topic_0, MDER_Multirelation specific_topic_1) =>
+                specific_topic_0._MDER_Multirelation__same(specific_topic_1),
             (MDER_Article specific_topic_0, MDER_Article specific_topic_1) =>
                 specific_topic_0._MDER_Article__same(specific_topic_1),
             (MDER_Excuse specific_topic_0, MDER_Excuse specific_topic_1) =>

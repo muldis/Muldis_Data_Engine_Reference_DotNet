@@ -120,7 +120,7 @@ internal sealed class Internal_Executor
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Array(MDER_Any topic)
+    internal Boolean Is_Orderelation(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
@@ -130,7 +130,7 @@ internal sealed class Internal_Executor
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Tuple_Bag(MDER_Any topic)
+    internal Boolean Is_Multirelation(MDER_Any topic)
     {
         throw new NotImplementedException();
     }
