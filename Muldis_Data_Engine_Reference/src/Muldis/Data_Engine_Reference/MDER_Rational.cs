@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Engine_Reference;
 
-public sealed class MDER_Fraction : MDER_Any
+public sealed class MDER_Rational : MDER_Any
 {
     // The MDER_Machine VM that this MDER_Any "value" lives in.
     private readonly MDER_Machine __machine;
@@ -10,43 +10,43 @@ public sealed class MDER_Fraction : MDER_Any
     // Surrogate identity for this MDER_Any with a simpler representation.
     private String? __cached_identity_as_String;
 
-    // The __maybe_as_Decimal field is optionally valued if the MDER_Fraction
+    // The __maybe_as_Decimal field is optionally valued if the MDER_Rational
     // value is known small enough to fit in the range it can represent
-    // and it is primarily used when the MDER_Fraction value was input to
+    // and it is primarily used when the MDER_Rational value was input to
     // the system as a .NET Decimal in the first place or was output
-    // from the system as such; a MDER_Fraction input first as a Decimal
+    // from the system as such; a MDER_Rational input first as a Decimal
     // is only copied to the as_pair field when needed;
     // if both said fields are valued at once, they are redundant.
     private Decimal? __maybe_as_Decimal;
 
     // The as_pair field, comprising a numerator+denominator field
     // pair, can represent any
-    // MDER_Fraction value at all, such that the Fraction's value is
+    // MDER_Rational value at all, such that the Rational's value is
     // defined as the fractional division of numerator by denominator.
     // as_pair might not be defined if as_Decimal is defined.
-    private Internal_Fraction_As_Pair? __maybe_as_nd_pair;
+    private Internal_Rational_As_Pair? __maybe_as_nd_pair;
 
-    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal,
+    internal MDER_Rational(MDER_Machine machine, Decimal as_Decimal,
         BigInteger numerator, BigInteger denominator)
     {
         this.__machine = machine;
         this.__maybe_as_Decimal = as_Decimal;
-        this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
+        this.__maybe_as_nd_pair = new Internal_Rational_As_Pair(numerator, denominator);
     }
 
-    internal MDER_Fraction(MDER_Machine machine, Decimal as_Decimal)
+    internal MDER_Rational(MDER_Machine machine, Decimal as_Decimal)
     {
         this.__machine = machine;
         this.__maybe_as_Decimal = as_Decimal;
         this.__maybe_as_nd_pair = null;
     }
 
-    internal MDER_Fraction(MDER_Machine machine,
+    internal MDER_Rational(MDER_Machine machine,
         BigInteger numerator, BigInteger denominator)
     {
         this.__machine = machine;
         this.__maybe_as_Decimal = null;
-        this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(numerator, denominator);
+        this.__maybe_as_nd_pair = new Internal_Rational_As_Pair(numerator, denominator);
     }
 
     public override MDER_Machine machine()
@@ -123,7 +123,7 @@ public sealed class MDER_Fraction : MDER_Any
             denominator_dec = denominator_dec * 10M;
         }
         Decimal numerator_dec = (Decimal)this.__maybe_as_Decimal * denominator_dec;
-        this.__maybe_as_nd_pair = new Internal_Fraction_As_Pair(
+        this.__maybe_as_nd_pair = new Internal_Rational_As_Pair(
             new BigInteger(numerator_dec), new BigInteger(denominator_dec));
         this.__maybe_as_nd_pair.cached_is_terminating_decimal = true;
     }
@@ -194,8 +194,8 @@ public sealed class MDER_Fraction : MDER_Any
 
     internal override String _as_MUON_Plain_Text_artifact(String indent)
     {
-        // Iff the Fraction value can be exactly expressed as a
-        // non-terminating decimal (includes all Fraction that can be
+        // Iff the Rational value can be exactly expressed as a
+        // non-terminating decimal (includes all Rational that can be
         // non-terminating binary/octal/hex), express in that format;
         // otherwise, express as a coprime numerator/denominator pair.
         // Note, is_terminating_decimal() will ensure as_pair is
@@ -219,7 +219,7 @@ public sealed class MDER_Fraction : MDER_Any
             Int32 dec_scale = this.pair_decimal_denominator_scale();
             if (dec_scale == 0)
             {
-                // We have an integer expressed as a Fraction.
+                // We have an integer expressed as a Rational.
                 return this._numerator().ToString() + ".0";
             }
             BigInteger dec_denominator = BigInteger.Pow(10, dec_scale);
@@ -233,9 +233,9 @@ public sealed class MDER_Fraction : MDER_Any
         return this._numerator().ToString() + "/" + this._denominator().ToString();
     }
 
-    internal Boolean _MDER_Fraction__same(MDER_Fraction topic_1)
+    internal Boolean _MDER_Rational__same(MDER_Rational topic_1)
     {
-        MDER_Fraction topic_0 = this;
+        MDER_Rational topic_0 = this;
         if (topic_0.__maybe_as_Decimal is not null && topic_1.__maybe_as_Decimal is not null)
         {
             return (topic_0.__maybe_as_Decimal == topic_1.__maybe_as_Decimal);

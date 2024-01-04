@@ -90,7 +90,7 @@ internal sealed class Internal_Executor
         throw new NotImplementedException();
     }
 
-    internal Boolean Is_Fraction(MDER_Any topic)
+    internal Boolean Is_Rational(MDER_Any topic)
     {
         throw new NotImplementedException();
     }

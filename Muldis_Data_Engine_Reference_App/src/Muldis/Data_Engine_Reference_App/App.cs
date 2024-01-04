@@ -269,7 +269,7 @@ public sealed class App
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
         System.Console.WriteLine("Test data: that_too = [" + that_too + "]");
-        MDER_Text the_other = vm.MDER_Text("Fr ⊂ ac 💩 ti ÷ on");
+        MDER_Text the_other = vm.MDER_Text("Ra ⊂ ti 💩 on ÷ al");
         System.Console.WriteLine("Test data: the_other = [" + the_other + "]");
         MDER_Any f0 = vm.MDER_import(014.0M);
         System.Console.WriteLine("Test data: f0 = [" + f0 + "]");
@@ -277,19 +277,19 @@ public sealed class App
         System.Console.WriteLine("Test data: f1 = [" + f1 + "]");
         MDER_Any f2 = vm.MDER_import(02340233.23402532000M);
         System.Console.WriteLine("Test data: f2 = [" + f2 + "]");
-        MDER_Any f3 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13, 5)));
+        MDER_Any f3 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(13, 5)));
         System.Console.WriteLine("Test data: f3 = [" + f3 + "]");
-        MDER_Any f4 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27, 6)));
+        MDER_Any f4 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(27, 6)));
         System.Console.WriteLine("Test data: f4 = [" + f4 + "]");
-        MDER_Any f5 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35, -41)));
+        MDER_Any f5 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(35, -41)));
         System.Console.WriteLine("Test data: f5 = [" + f5 + "]");
-        MDER_Any f6 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432), new BigInteger(32543252))));
+        MDER_Any f6 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(new BigInteger(-54235435432), new BigInteger(32543252))));
         System.Console.WriteLine("Test data: f6 = [" + f6 + "]");
-        MDER_Any f7 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26, 13)));
+        MDER_Any f7 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(26, 13)));
         System.Console.WriteLine("Test data: f7 = [" + f7 + "]");
-        MDER_Any f8 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, 1)));
+        MDER_Any f8 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(5, 1)));
         System.Console.WriteLine("Test data: f8 = [" + f8 + "]");
-        MDER_Any f9 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, -1)));
+        MDER_Any f9 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(5, -1)));
         System.Console.WriteLine("Test data: f9 = [" + f9 + "]");
     }
 
@@ -336,7 +336,7 @@ public sealed class App
             {{"\u0014", 25}, {"aye", "zwei"}, {"some one", "other two"}}
         ));
         System.Console.WriteLine("Test data: that_too = [" + that_too + "]");
-        MDER_Any the_other = vm.MDER_import("Fr ⊂ ac 💩 ti ÷ on");
+        MDER_Any the_other = vm.MDER_import("Ra ⊂ ti 💩 on ÷ al");
         System.Console.WriteLine("Test data: the_other = [" + the_other + "]");
         MDER_Any f0 = vm.MDER_import(014.0M);
         System.Console.WriteLine("Test data: f0 = [" + f0 + "]");
@@ -344,19 +344,19 @@ public sealed class App
         System.Console.WriteLine("Test data: f1 = [" + f1 + "]");
         MDER_Any f2 = vm.MDER_import(02340233.23402532000M);
         System.Console.WriteLine("Test data: f2 = [" + f2 + "]");
-        MDER_Any f3 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(13, 5)));
+        MDER_Any f3 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(13, 5)));
         System.Console.WriteLine("Test data: f3 = [" + f3 + "]");
-        MDER_Any f4 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(27, 6)));
+        MDER_Any f4 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(27, 6)));
         System.Console.WriteLine("Test data: f4 = [" + f4 + "]");
-        MDER_Any f5 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(35, -41)));
+        MDER_Any f5 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(35, -41)));
         System.Console.WriteLine("Test data: f5 = [" + f5 + "]");
-        MDER_Any f6 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(new BigInteger(-54235435432), new BigInteger(32543252))));
+        MDER_Any f6 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(new BigInteger(-54235435432), new BigInteger(32543252))));
         System.Console.WriteLine("Test data: f6 = [" + f6 + "]");
-        MDER_Any f7 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(26, 13)));
+        MDER_Any f7 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(26, 13)));
         System.Console.WriteLine("Test data: f7 = [" + f7 + "]");
-        MDER_Any f8 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, 1)));
+        MDER_Any f8 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(5, 1)));
         System.Console.WriteLine("Test data: f8 = [" + f8 + "]");
-        MDER_Any f9 = vm.MDER_import(new KeyValuePair<String, Object>("Fraction", new KeyValuePair<Object, Object>(5, -1)));
+        MDER_Any f9 = vm.MDER_import(new KeyValuePair<String, Object>("Rational", new KeyValuePair<Object, Object>(5, -1)));
         System.Console.WriteLine("Test data: f9 = [" + f9 + "]");
     }
 }

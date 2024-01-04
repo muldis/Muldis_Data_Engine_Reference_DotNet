@@ -36,8 +36,8 @@ public sealed class MDER_Machine
     // The MDER_Integer 0 is the type default value.
     private readonly Dictionary<Int32, MDER_Integer> __integers;
 
-    // MDER_Fraction 0.0 (type default value).
-    private readonly MDER_Fraction MDER_Fraction_0;
+    // MDER_Rational 0.0 (type default value).
+    private readonly MDER_Rational MDER_Rational_0;
 
     // MDER_Bits with no members (type default value).
     private readonly MDER_Bits __bits_C0;
@@ -113,7 +113,7 @@ public sealed class MDER_Machine
             MDER_Integer v = this.MDER_Integer(i);
         }
 
-        this.MDER_Fraction_0 = new MDER_Fraction(this, 0.0M,
+        this.MDER_Rational_0 = new MDER_Rational(this, 0.0M,
             this.__integers[0].as_BigInteger(), this.__integers[1].as_BigInteger());
 
         this.__bits_C0 = new MDER_Bits(this, new BitArray(0));
@@ -276,21 +276,21 @@ public sealed class MDER_Machine
         return integer;
     }
 
-    internal MDER_Fraction MDER_Fraction(Decimal as_Decimal)
+    internal MDER_Rational MDER_Rational(Decimal as_Decimal)
     {
         if (as_Decimal == 0)
         {
-            return MDER_Fraction_0;
+            return MDER_Rational_0;
         }
-        return new MDER_Fraction(this, as_Decimal);
+        return new MDER_Rational(this, as_Decimal);
     }
 
-    internal MDER_Fraction MDER_Fraction(BigInteger numerator, BigInteger denominator)
+    internal MDER_Rational MDER_Rational(BigInteger numerator, BigInteger denominator)
     {
         // Note we assume our caller has already ensured denominator is not zero.
         if (numerator == 0)
         {
-            return MDER_Fraction_0;
+            return MDER_Rational_0;
         }
         // We still have to ensure normalization such that denominator is positive.
         if (denominator < 0)
@@ -298,7 +298,7 @@ public sealed class MDER_Machine
             denominator = -denominator;
             numerator   = -numerator  ;
         }
-        return new MDER_Fraction(this, numerator, denominator);
+        return new MDER_Rational(this, numerator, denominator);
     }
 
     public MDER_Bits MDER_Bits(BitArray bit_members_as_BitArray)
@@ -686,10 +686,10 @@ public sealed class MDER_Machine
                     return this.MDER_Integer((BigInteger)v);
                 }
                 break;
-            case "Fraction":
+            case "Rational":
                 if (v is Decimal)
                 {
-                    return this.MDER_Fraction((Decimal)v);
+                    return this.MDER_Rational((Decimal)v);
                 }
                 if ((v.GetType().FullName ?? "").StartsWith("System.Collections.Generic.KeyValuePair`"))
                 {
@@ -701,7 +701,7 @@ public sealed class MDER_Machine
                         throw new ArgumentNullException
                         (
                             paramName: "topic",
-                            message: "Can't select MDER_Fraction with a null denominator."
+                            message: "Can't select MDER_Rational with a null denominator."
                         );
                     }
                     if (numerator is Int32 && denominator is Int32)
@@ -711,10 +711,10 @@ public sealed class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "topic",
-                                message: "Can't select MDER_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Rational with a denominator of zero."
                             );
                         }
-                        return this.MDER_Fraction((Int32)numerator, (Int32)denominator);
+                        return this.MDER_Rational((Int32)numerator, (Int32)denominator);
                     }
                     if (numerator is BigInteger && denominator is BigInteger)
                     {
@@ -723,10 +723,10 @@ public sealed class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "topic",
-                                message: "Can't select MDER_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Rational with a denominator of zero."
                             );
                         }
-                        return this.MDER_Fraction((BigInteger)numerator, (BigInteger)denominator);
+                        return this.MDER_Rational((BigInteger)numerator, (BigInteger)denominator);
                     }
                     if (numerator is MDER_Integer && denominator is MDER_Integer)
                     {
@@ -735,10 +735,10 @@ public sealed class MDER_Machine
                             throw new ArgumentException
                             (
                                 paramName: "topic",
-                                message: "Can't select MDER_Fraction with a denominator of zero."
+                                message: "Can't select MDER_Rational with a denominator of zero."
                             );
                         }
-                        return this.MDER_Fraction(
+                        return this.MDER_Rational(
                             ((MDER_Integer)numerator  ).as_BigInteger(),
                             ((MDER_Integer)denominator).as_BigInteger()
                         );
@@ -1129,7 +1129,7 @@ public sealed class MDER_Machine
         }
         if (topic is Decimal)
         {
-            return this.MDER_Fraction((Decimal)topic);
+            return this.MDER_Rational((Decimal)topic);
         }
         if (topic is BitArray)
         {
@@ -1197,7 +1197,7 @@ public sealed class MDER_Machine
             MDER_Integer specific_topic =>
                 new KeyValuePair<String, Object?>("Integer",
                     specific_topic.as_BigInteger()),
-            MDER_Fraction specific_topic =>
+            MDER_Rational specific_topic =>
                 throw new NotImplementedException(),
             MDER_Bits specific_topic =>
                 throw new NotImplementedException(),

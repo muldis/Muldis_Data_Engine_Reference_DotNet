@@ -203,8 +203,8 @@ public abstract class MDER_Any
                 specific_topic_0._MDER_Boolean__same(specific_topic_1),
             (MDER_Integer specific_topic_0, MDER_Integer specific_topic_1) =>
                 specific_topic_0._MDER_Integer__same(specific_topic_1),
-            (MDER_Fraction specific_topic_0, MDER_Fraction specific_topic_1) =>
-                specific_topic_0._MDER_Fraction__same(specific_topic_1),
+            (MDER_Rational specific_topic_0, MDER_Rational specific_topic_1) =>
+                specific_topic_0._MDER_Rational__same(specific_topic_1),
             (MDER_Bits specific_topic_0, MDER_Bits specific_topic_1) =>
                 specific_topic_0._MDER_Bits__same(specific_topic_1),
             (MDER_Blob specific_topic_0, MDER_Blob specific_topic_1) =>
