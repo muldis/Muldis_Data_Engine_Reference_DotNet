@@ -9,15 +9,17 @@ The fully-qualified name of what this document describes is
 
 # DESCRIPTION
 
+**IMPORTANT NOTICE:
+The current project "Muldis Data Engine Reference"
+has been mostly superseded by the other project "Muldis Data Library";
+the latter is a rewrite of a majority of the former.
+Any further work on the current project is blocked until
+"Muldis Data Library" has been sufficiently completed, after which the
+latter is intended to be a foundation for the current project.**
+
 MDE is a work in progress.
 It is not yet ready to use for its intended purpose, nor is it yet even a
 minimum viable product.
-
-Further significant work on MDE is blocked pending the prior minimum viable
-product completion of its dependency-to-be project:
-
-[Muldis Object Notation Processor Reference: .NET (MUONP)](../Muldis_Object_Notation_Processor_Reference) - Reference implementation of MUON processing utilities
-
 This documentation will be rewritten or updated as the project develops.
 
 ## What This Is Intended To Be
@@ -112,7 +114,7 @@ Darren Duncan - darren@DarrenDuncan.net
 
 # LICENSE AND COPYRIGHT
 
-**Muldis Data Engine Reference: .NET** (MDE) is Copyright © 2015-2023, Muldis Data Systems, Inc.
+**Muldis Data Engine Reference: .NET** (MDE) is Copyright © 2015-2024, Muldis Data Systems, Inc.
 
 <https://muldis.com>
 

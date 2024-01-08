@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Object_Notation_Proc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Object_Notation_Processor_Reference_App", "Muldis_Object_Notation_Processor_Reference_App\Muldis_Object_Notation_Processor_Reference_App.csproj", "{9BB27D8D-DAA5-442B-9442-B182A1353840}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muldis_Data_Library", "Muldis_Data_Library\Muldis_Data_Library.csproj", "{92B584BB-75C4-45F0-9FBA-59BC25A1307A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{9BB27D8D-DAA5-442B-9442-B182A1353840}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BB27D8D-DAA5-442B-9442-B182A1353840}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BB27D8D-DAA5-442B-9442-B182A1353840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B584BB-75C4-45F0-9FBA-59BC25A1307A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B584BB-75C4-45F0-9FBA-59BC25A1307A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B584BB-75C4-45F0-9FBA-59BC25A1307A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B584BB-75C4-45F0-9FBA-59BC25A1307A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
