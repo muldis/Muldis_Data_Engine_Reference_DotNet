@@ -20,6 +20,10 @@ internal static class Internal_Any
         {
             (MDV_Boolean specific_topic_0, MDV_Boolean specific_topic_1) =>
                 specific_topic_0.as_Boolean() == specific_topic_1.as_Boolean(),
+            (MDV_Integer specific_topic_0, MDV_Integer specific_topic_1) =>
+                Internal_Integer._same(specific_topic_0, specific_topic_1),
+            (MDV_Rational specific_topic_0, MDV_Rational specific_topic_1) =>
+                Internal_Rational._same(specific_topic_0, specific_topic_1),
             _ => throw new NotImplementedException(),
         };
     }
