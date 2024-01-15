@@ -59,6 +59,68 @@ public static class MDS_Core
         return MDV_Boolean.from(!Internal_Any._same(topic_0, topic_1));
     }
 
+    // The interface type definer `Excuse` is semifinite.  An `Excuse`
+    // value is an explicitly stated reason for why, given some particular
+    // problem domain, a value is not being used that is ordinary for that
+    // domain.  For example, the typical integer division operation is not
+    // defined to give an integer result when the divisor is zero, and so a
+    // function for integer division could be defined to result in an
+    // `Excuse` value rather than throw an exception in that case.
+    // An `Excuse` is also characterized by an *exception* that is not
+    // meant to terminate execution of code early.
+
+    public static MDV_Boolean Excuse(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Excuse);
+    }
+
+    // coalesce ??
+
+    public static MDV_Any coalesce(MDV_Any topic_0, MDV_Any topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return (topic_0 is MDV_Excuse) ? topic_1 : topic_0;
+    }
+
+    // anticoalesce !!
+
+    public static MDV_Any anticoalesce(MDV_Any topic_0, MDV_Any topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return (topic_0 is MDV_Excuse) ? topic_0 : topic_1;
+    }
+
+    // Singleton type definer `Ignorance`.
+    // Represents foundation type `fdn::Ignorance`.
+    // The `Ignorance` value represents the `Excuse` value which
+    // simply says that an ordinary value for any given domain is missing
+    // and that there is simply no excuse that has been given for this; in
+    // other words, something has gone wrong without the slightest hint of
+    // an explanation.  This is conceptually the most generic `Excuse`
+    // value there is, to help with expedient development, but any uses
+    // should be considered technical debt, to be replaced later.
+    // `Ignorance` is a finite type.
+    // `Ignorance` has a default value of `0iIGNORANCE`.
+
+    public static MDV_Boolean Ignorance(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Ignorance);
+    }
+
     // The interface type definer `Orderable` is semifinite.  An `Orderable` value has
     // all of the traditional comparison operators defined for it such that values
     // of its type *T* can be deterministically sorted by Muldis Data Language into a
@@ -95,6 +157,48 @@ public static class MDS_Core
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Orderable);
+    }
+
+    // Singleton type definer `Before_All_Others`.
+    // Represents foundation type `fdn::Before_All_Others`.
+    // The `Before_All_Others` value represents a type-agnostic analogy of
+    // negative infinity, an `Orderable` value that sorts *before* all
+    // other values in the Muldis Data Language type system, and that is
+    // its only meaning.  This value is expressly *not* meant to represent
+    // any specific mathematical or physical concept of *infinity* or `∞`
+    // (of which there are many), including those of the IEEE
+    // floating-point standards.
+    // `Before_All_Others` is a finite type.
+    // `Before_All_Others` has a default value of ...TODO...
+
+    public static MDV_Boolean Before_All_Others(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Before_All_Others);
+    }
+
+    // Singleton type definer `After_All_Others`.
+    // Represents foundation type `fdn::After_All_Others`.
+    // The `After_All_Others` value represents a type-agnostic analogy of
+    // positive infinity, an `Orderable` value that sorts *after* all
+    // other values in the Muldis Data Language type system, and that is
+    // its only meaning.  This value is expressly *not* meant to represent
+    // any specific mathematical or physical concept of *infinity* or `∞`
+    // (of which there are many), including those of the IEEE
+    // floating-point standards.
+    // `After_All_Others` is a finite type.
+    // `After_All_Others` has a default value of ...TODO...
+
+    public static MDV_Boolean After_All_Others(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_After_All_Others);
     }
 
     // The interface type definer `Successable` is semifinite.  A `Successable` value

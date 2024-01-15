@@ -18,6 +18,17 @@ internal static class Internal_Any
         }
         return (topic_0, topic_1) switch
         {
+            (MDV_Ignorance specific_topic_0, MDV_Ignorance specific_topic_1) =>
+                // We should never get here; however...
+                true,
+            (MDV_Before_All_Others specific_topic_0,
+                MDV_Before_All_Others specific_topic_1) =>
+                // We should never get here; however...
+                true,
+            (MDV_After_All_Others specific_topic_0,
+                MDV_After_All_Others specific_topic_1) =>
+                // We should never get here; however...
+                true,
             (MDV_Boolean specific_topic_0, MDV_Boolean specific_topic_1) =>
                 specific_topic_0.as_Boolean() == specific_topic_1.as_Boolean(),
             (MDV_Integer specific_topic_0, MDV_Integer specific_topic_1) =>
