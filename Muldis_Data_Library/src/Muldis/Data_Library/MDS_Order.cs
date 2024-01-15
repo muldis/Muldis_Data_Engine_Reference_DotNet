@@ -29,7 +29,12 @@ public static class MDS_Order
 
     public static MDV_Boolean in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(!topic_0.as_Boolean() || topic_1.as_Boolean());
+        return MDV_Boolean.from(MDS_Order._in_order(topic_0, topic_1));
+    }
+
+    internal static Boolean _in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return !topic_0.as_Boolean() || topic_1.as_Boolean();
     }
 
     // before <
@@ -37,7 +42,7 @@ public static class MDS_Order
 
     public static MDV_Boolean before(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(!topic_0.as_Boolean() && topic_1.as_Boolean());
+        return MDV_Boolean.from(!MDS_Order._in_order(topic_1, topic_0));
     }
 
     // after >
@@ -45,7 +50,7 @@ public static class MDS_Order
 
     public static MDV_Boolean after(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() && !topic_1.as_Boolean());
+        return MDV_Boolean.from(!MDS_Order._in_order(topic_0, topic_1));
     }
 
     // before_or_same <= ≤
@@ -53,7 +58,7 @@ public static class MDS_Order
 
     public static MDV_Boolean before_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(!topic_0.as_Boolean() || topic_1.as_Boolean());
+        return MDV_Boolean.from(MDS_Order._in_order(topic_0, topic_1));
     }
 
     // after_or_same >= ≥
@@ -61,7 +66,7 @@ public static class MDS_Order
 
     public static MDV_Boolean after_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from( topic_0.as_Boolean() || !topic_1.as_Boolean());
+        return MDV_Boolean.from(MDS_Order._in_order(topic_1, topic_0));
     }
 
     // min
@@ -69,7 +74,7 @@ public static class MDS_Order
 
     public static MDV_Boolean min(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() && topic_1.as_Boolean());
+        return MDS_Order._in_order(topic_0, topic_1) ? topic_0 : topic_1;
     }
 
     // max
@@ -77,7 +82,7 @@ public static class MDS_Order
 
     public static MDV_Boolean max(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() || topic_1.as_Boolean());
+        return MDS_Order._in_order(topic_0, topic_1) ? topic_1 : topic_0;
     }
 
     // asset
