@@ -122,16 +122,15 @@ public static class MDS_Core
     }
 
     // The interface type definer `Orderable` is semifinite.  An `Orderable` value has
-    // all of the traditional comparison operators defined for it such that values
-    // of its type *T* can be deterministically sorted by Muldis Data Language into a
+    // all of the traditional comparison operators defined for it, such that
+    // for each composing type *T* of `Orderable`, the set of values of *T*
+    // can be deterministically mutually sorted by Muldis Data Language into a
     // canonical total order.  But *T* otherwise does not necessarily have
     // conceptually a total order in the normal sense or that order is different
     // than what the provided comparison operators give you.  An `Orderable` type
     // is a type for which one can take all of its values and place them on a line
     // such that each value is definitively considered *before* all of the values
-    // one one side and *after* all of the values on the other side.  Other
-    // programming languages may name their corresponding types *IComparable* or
-    // *Ord* or *ordered* or *ordinal*.
+    // one one side and *after* all of the values on the other side.
     //
     // The default value of `Orderable` is the `Integer` value `0`.  The
     // minimum and maximum values of `Orderable` are `\!Before_All_Others`
@@ -139,10 +138,15 @@ public static class MDS_Core
     // canonically considered to be before and after, respectively, *every* other
     // value of the Muldis Data Language type system, regardless of whether those values are
     // members a type for which an `Orderable`-composing type definer exists.  The
-    // primary reason for having these values `\!Before_All_Others` and
-    // `\!After_All_Others` is so Muldis Data Language has an easy consistent way to
-    // define an `Interval` that is partially or completely unbounded, and to use
+    // two values `\!Before_All_Others` and `\!After_All_Others` can be useful in
+    // defining an *interval* that is partially or completely unbounded, and to use
     // as *two-sided identity element* values for chained order-comparisons.
+    // To be clear, Muldis Data Language does not actually system-define a
+    // default total order for the whole type system, nor does it define
+    // any orderings between discrete regular types, including with the
+    // conceptually minimum and maximum values, so the set of all values
+    // comprising `Orderable` itself only has a partial order, but users can
+    // define a cross-composer total order for their own use cases as desired.
     //
     // `Orderable` is composed, directly or indirectly, by:
     // `Before_All_Others`, `After_All_Others`, `Bicessable`,
@@ -219,9 +223,7 @@ public static class MDS_Core
     // general case.  For some trivial cases of `Successable`, the *state* and
     // *asset* are one and the same, so just 1 function call per value is needed.
     // Keep in mind that asset values may repeat in a sequence, so it is not them
-    // but rather the state values that have the total order property.  Other
-    // programming languages may name their corresponding types *sequence* or
-    // *iterator* or *enumerator*.
+    // but rather the state values that have the total order property.
     //
     // `Successable` is a less rigorous analogy to `Bicessable`, where the
     // latter also requires the ability to produce the *predecessor* value of the
@@ -271,8 +273,7 @@ public static class MDS_Core
     // two values of that type and then find a third value of that type which lies
     // between the first two on the line; by definition for a `Bicessable` type,
     // there is no third value between one of its values and that value's
-    // predecessor or successor value.  Other programming languages may name their
-    // corresponding types *ordinal* or categorically as *enum*.  Note that
+    // predecessor or successor value.  Note that
     // while a generic rational numeric type may qualify as an ordinal type by
     // some definitions of *ordinal*, since it is possible to count all the
     // rationals if arranged a particular way, these types would not qualify as
@@ -318,12 +319,7 @@ public static class MDS_Core
     // nonzero; for composing collection types it is asking whether the collection
     // has any members.  The primary reason for `Boolable` is to provide an easy
     // consistent and terse way to ask a common predicate question such as this.
-    // The default value of `Boolable` is `False`.  Other programming languages
-    // often have the concept of particular values from a wide variety of types as
-    // being conceptually either *false* or *true*, and `Boolable` is the
-    // formalization of that concept for Muldis Data Language, allowing program code to be
-    // written in a similar style but with more type safety as any treatment of a
-    // value as a `Boolean` must be made explicit.
+    // The default value of `Boolable` is `False`.
     //
     // `Boolable` is composed, directly or indirectly, by: `Boolean`,
     // `Numerical`, `Integral`, `Integer`, `Fractional`, `Rational`,

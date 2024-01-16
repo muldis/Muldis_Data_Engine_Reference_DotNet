@@ -7,26 +7,6 @@ public static class MDS_Order
     // in_order
     // public static MDV_Boolean in_order(MDV_Orderable topic_0, MDV_Orderable topic_1)
 
-    public static MDV_Boolean in_order(MDV_Before_All_Others topic_0, MDV_Orderable topic_1)
-    {
-        return MDV_Boolean.@true();
-    }
-
-    public static MDV_Boolean in_order(MDV_Orderable topic_0, MDV_Before_All_Others topic_1)
-    {
-        return MDV_Boolean.from(Internal_Any._same(topic_0, topic_1));
-    }
-
-    public static MDV_Boolean in_order(MDV_After_All_Others topic_0, MDV_Orderable topic_1)
-    {
-        return MDV_Boolean.from(Internal_Any._same(topic_0, topic_1));
-    }
-
-    public static MDV_Boolean in_order(MDV_Orderable topic_0, MDV_After_All_Others topic_1)
-    {
-        return MDV_Boolean.@true();
-    }
-
     public static MDV_Boolean in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
         return MDV_Boolean.from(MDS_Order._in_order(topic_0, topic_1));

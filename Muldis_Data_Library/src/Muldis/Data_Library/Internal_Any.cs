@@ -12,6 +12,10 @@ internal static class Internal_Any
         {
             return true;
         }
+        // TODO: Reinforce this check to be resilient in the face of
+        // possible subclassing of the built-in types that might result in
+        // this returning false in error were two operands somehow created
+        // in different ways either by way of or not the same subclass.
         if (!Type.Equals(topic_0.GetType(), topic_1.GetType()))
         {
             return false;
