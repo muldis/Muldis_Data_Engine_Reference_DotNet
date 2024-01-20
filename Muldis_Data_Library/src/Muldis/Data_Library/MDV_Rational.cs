@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Library;
 
-public struct MDV_Rational : MDV_Any, MDV_Fractional
+public sealed class MDV_Rational : MDV_Any, MDV_Fractional
 {
     private static readonly MDV_Rational __negative_one
         = new MDV_Rational(-1,1,true);
