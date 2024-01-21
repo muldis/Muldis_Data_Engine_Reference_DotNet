@@ -20,94 +20,68 @@ public static class MDS_Logic
         return MDV_Boolean.from(!topic.as_Boolean());
     }
 
-    // false ⊥
-
     public static MDV_Boolean @false()
     {
         return MDV_Boolean.@false();
     }
-
-    // true ⊤
 
     public static MDV_Boolean @true()
     {
         return MDV_Boolean.@true();
     }
 
-    // not ! ¬
-
     public static MDV_Boolean not(MDV_Boolean topic)
     {
-        return MDV_Boolean.from(!topic.as_Boolean());
+        return MDV_Boolean.not(topic);
     }
-
-    // and ∧
 
     public static MDV_Boolean and(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() && topic_1.as_Boolean());
+        return MDV_Boolean.and(topic_0, topic_1);
     }
-
-    // nand not_and ⊼ ↑
 
     public static MDV_Boolean nand(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(!topic_0.as_Boolean() || !topic_1.as_Boolean());
+        return MDV_Boolean.nand(topic_0, topic_1);
     }
-
-    // or ∨
 
     public static MDV_Boolean or(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() || topic_1.as_Boolean());
+        return MDV_Boolean.or(topic_0, topic_1);
     }
-
-    // nor not_or ⊽ ↓
 
     public static MDV_Boolean nor(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(!topic_0.as_Boolean() && !topic_1.as_Boolean());
+        return MDV_Boolean.nor(topic_0, topic_1);
     }
-
-    // xnor iff ↔
 
     public static MDV_Boolean xnor(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() == topic_1.as_Boolean());
+        return MDV_Boolean.xnor(topic_0, topic_1);
     }
-
-    // xor ⊻ ↮
 
     public static MDV_Boolean xor(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDV_Boolean.from(topic_0.as_Boolean() != topic_1.as_Boolean());
+        return MDV_Boolean.xor(topic_0, topic_1);
     }
-
-    // imp implies →
 
     public static MDV_Boolean imp(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return topic_0.as_Boolean() ? topic_1 : MDV_Boolean.@true();
+        return MDV_Boolean.imp(topic_0, topic_1);
     }
-
-    // nimp not_implies ↛
 
     public static MDV_Boolean nimp(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDS_Logic.not(MDS_Logic.imp(topic_0, topic_1));
+        return MDV_Boolean.nimp(topic_0, topic_1);
     }
-
-    // if ←
 
     public static MDV_Boolean @if(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDS_Logic.imp(topic_1, topic_0);
+        return MDV_Boolean.@if(topic_0, topic_1);
     }
-
-    // nif not_if ↚
 
     public static MDV_Boolean nif(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
-        return MDS_Logic.nimp(topic_1, topic_0);
+        return MDV_Boolean.nif(topic_0, topic_1);
     }
 }

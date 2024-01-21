@@ -37,16 +37,6 @@ public readonly struct MDV_Boolean
         return as_Boolean ? MDV_Boolean.__true : MDV_Boolean.__false;
     }
 
-    public static MDV_Boolean @false()
-    {
-        return MDV_Boolean.__false;
-    }
-
-    public static MDV_Boolean @true()
-    {
-        return MDV_Boolean.__true;
-    }
-
     public Boolean as_Boolean()
     {
         return this.__as_Boolean;
@@ -65,5 +55,96 @@ public readonly struct MDV_Boolean
     internal static Boolean _in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
     {
         return !topic_0.__as_Boolean || topic_1.__as_Boolean;
+    }
+
+    // false ⊥
+
+    public static MDV_Boolean @false()
+    {
+        return MDV_Boolean.__false;
+    }
+
+    // true ⊤
+
+    public static MDV_Boolean @true()
+    {
+        return MDV_Boolean.__true;
+    }
+
+    // not ! ¬
+
+    public static MDV_Boolean not(MDV_Boolean topic)
+    {
+        return MDV_Boolean.from(!topic.__as_Boolean);
+    }
+
+    // and ∧
+
+    public static MDV_Boolean and(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(topic_0.__as_Boolean && topic_1.__as_Boolean);
+    }
+
+    // nand not_and ⊼ ↑
+
+    public static MDV_Boolean nand(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(!topic_0.__as_Boolean || !topic_1.__as_Boolean);
+    }
+
+    // or ∨
+
+    public static MDV_Boolean or(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(topic_0.__as_Boolean || topic_1.__as_Boolean);
+    }
+
+    // nor not_or ⊽ ↓
+
+    public static MDV_Boolean nor(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(!topic_0.__as_Boolean && !topic_1.__as_Boolean);
+    }
+
+    // xnor iff ↔
+
+    public static MDV_Boolean xnor(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(topic_0.__as_Boolean == topic_1.__as_Boolean);
+    }
+
+    // xor ⊻ ↮
+
+    public static MDV_Boolean xor(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(topic_0.__as_Boolean != topic_1.__as_Boolean);
+    }
+
+    // imp implies →
+
+    public static MDV_Boolean imp(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.__as_Boolean ? topic_1 : MDV_Boolean.__true;
+    }
+
+    // nimp not_implies ↛
+
+    public static MDV_Boolean nimp(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.not(MDV_Boolean.imp(topic_0, topic_1));
+    }
+
+    // if ←
+
+    public static MDV_Boolean @if(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.imp(topic_1, topic_0);
+    }
+
+    // nif not_if ↚
+
+    public static MDV_Boolean nif(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.nimp(topic_1, topic_0);
     }
 }
