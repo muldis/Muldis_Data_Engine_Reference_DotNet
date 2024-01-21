@@ -53,7 +53,7 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Rational specific_obj)
-            ? Internal_Rational._same(this, specific_obj)
+            ? MDV_Rational._specific_same(this, specific_obj)
             : false;
     }
 
@@ -211,5 +211,17 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
             this.__denominator = this.__denominator / gcd;
         }
         this.__known_to_be_normalized = true;
+    }
+
+    internal static Boolean _specific_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0.__denominator == topic_1.__denominator)
+        {
+            return (topic_0.__numerator == topic_1.__numerator);
+        }
+        topic_0._ensure_normalized();
+        topic_1._ensure_normalized();
+        return (topic_0.__denominator == topic_1.__denominator
+            && topic_0.__numerator == topic_1.__numerator);
     }
 }

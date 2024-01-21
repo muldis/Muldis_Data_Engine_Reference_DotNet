@@ -4,18 +4,6 @@ namespace Muldis.Data_Library;
 
 internal static class Internal_Rational
 {
-    internal static Boolean _same(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0._denominator() == topic_1._denominator())
-        {
-            return (topic_0._numerator() == topic_1._numerator());
-        }
-        topic_0._ensure_normalized();
-        topic_1._ensure_normalized();
-        return (topic_0._denominator() == topic_1._denominator()
-            && topic_0._numerator() == topic_1._numerator());
-    }
-
     public static Boolean _in_order(MDV_Rational topic_0, MDV_Rational topic_1)
     {
         if (topic_0._denominator() == topic_1._denominator())

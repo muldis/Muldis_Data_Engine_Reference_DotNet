@@ -4,11 +4,6 @@ namespace Muldis.Data_Library;
 
 internal static class Internal_Integer
 {
-    internal static Boolean _same(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.as_BigInteger() == topic_1.as_BigInteger();
-    }
-
     public static Boolean _in_order(MDV_Integer topic_0, MDV_Integer topic_1)
     {
         return topic_0.as_BigInteger() <= topic_1.as_BigInteger();

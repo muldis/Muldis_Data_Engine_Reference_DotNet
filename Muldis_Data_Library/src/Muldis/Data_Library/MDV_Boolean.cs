@@ -28,7 +28,7 @@ public readonly struct MDV_Boolean
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Boolean specific_obj)
-            ? this.__as_Boolean == specific_obj.__as_Boolean
+            ? MDV_Boolean._specific_same(this, specific_obj)
             : false;
     }
 
@@ -50,5 +50,10 @@ public readonly struct MDV_Boolean
     public Boolean as_Boolean()
     {
         return this.__as_Boolean;
+    }
+
+    internal static Boolean _specific_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.__as_Boolean == topic_1.__as_Boolean;
     }
 }

@@ -34,7 +34,7 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Integer specific_obj)
-            ? Internal_Integer._same(this, specific_obj)
+            ? MDV_Integer._specific_same(this, specific_obj)
             : false;
     }
 
@@ -86,5 +86,10 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
         return (Int32)this.__as_BigInteger;
+    }
+
+    internal static Boolean _specific_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.__as_BigInteger == topic_1.__as_BigInteger;
     }
 }

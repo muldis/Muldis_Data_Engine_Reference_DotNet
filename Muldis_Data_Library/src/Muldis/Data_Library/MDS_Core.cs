@@ -37,26 +37,14 @@ public static class MDS_Core
         return MDV_Boolean.@false();
     }
 
-    // same =
-
     public static MDV_Boolean same(MDV_Any topic_0, MDV_Any topic_1)
     {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(Internal_Any._same(topic_0, topic_1));
+        return MDV_Any.same(topic_0, topic_1);
     }
-
-    // not_same != ≠
 
     public static MDV_Boolean not_same(MDV_Any topic_0, MDV_Any topic_1)
     {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(!Internal_Any._same(topic_0, topic_1));
+        return MDV_Any.not_same(topic_0, topic_1);
     }
 
     // The interface type definer `Excuse` is semifinite.  An `Excuse`
