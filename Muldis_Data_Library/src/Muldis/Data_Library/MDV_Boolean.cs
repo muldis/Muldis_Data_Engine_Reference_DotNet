@@ -56,4 +56,14 @@ public readonly struct MDV_Boolean
     {
         return topic_0.__as_Boolean == topic_1.__as_Boolean;
     }
+
+    public static MDV_Boolean in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(MDV_Boolean._in_order(topic_0, topic_1));
+    }
+
+    internal static Boolean _in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return !topic_0.__as_Boolean || topic_1.__as_Boolean;
+    }
 }

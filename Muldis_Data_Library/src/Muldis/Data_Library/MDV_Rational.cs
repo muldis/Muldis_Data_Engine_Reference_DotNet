@@ -224,4 +224,32 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
         return (topic_0.__denominator == topic_1.__denominator
             && topic_0.__numerator == topic_1.__numerator);
     }
+
+    public static MDV_Boolean in_order(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Boolean.from(MDV_Rational._in_order(topic_0, topic_1));
+    }
+
+    internal static Boolean _in_order(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0.__denominator == topic_1.__denominator)
+        {
+            return (topic_0.__numerator <= topic_1.__numerator);
+        }
+        // We need to compare the arguments in terms of their equivalent
+        // fractions where the denominators are equal.
+        // This typically means making the denominators larger, their least
+        // common multiple; but first we will ensure coprime so the LCM
+        // we will work with is also as small as possible.
+        topic_0._ensure_normalized();
+        topic_1._ensure_normalized();
+        if (topic_0.__denominator == topic_1.__denominator)
+        {
+            return (topic_0.__numerator <= topic_1.__numerator);
+        }
+        BigInteger common_d = Internal_Integer._least_common_multiple(
+            topic_0.__denominator, topic_1.__denominator);
+        return ((topic_0.__numerator * (common_d / topic_0.__denominator))
+            <= (topic_1.__numerator * (common_d / topic_1.__denominator)));
+    }
 }

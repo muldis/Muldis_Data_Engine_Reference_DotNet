@@ -92,4 +92,14 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
     {
         return topic_0.__as_BigInteger == topic_1.__as_BigInteger;
     }
+
+    public static MDV_Boolean in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Boolean.from(MDV_Integer._in_order(topic_0, topic_1));
+    }
+
+    internal static Boolean _in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
+    }
 }

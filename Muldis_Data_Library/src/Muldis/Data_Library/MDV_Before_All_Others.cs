@@ -25,4 +25,9 @@ public readonly struct MDV_Before_All_Others
     {
         return MDV_Before_All_Others.__only;
     }
+
+    public static MDV_Boolean in_order(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
+    {
+        return MDV_Boolean.@true();
+    }
 }
