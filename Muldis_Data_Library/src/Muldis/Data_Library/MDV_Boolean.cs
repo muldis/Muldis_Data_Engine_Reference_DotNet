@@ -1,6 +1,7 @@
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Boolean : MDV_Any, MDV_Bicessable, MDV_Boolable
+public readonly struct MDV_Boolean
+    : MDV_Bicessable<MDV_Boolean>, MDV_Boolable<MDV_Boolean>
 {
     private static readonly MDV_Boolean __false = new MDV_Boolean(false);
     private static readonly MDV_Boolean __true = new MDV_Boolean(true);

@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Integer : MDV_Any, MDV_Integral
+public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
 {
     private static readonly MDV_Integer __negative_one = new MDV_Integer(-1);
     private static readonly MDV_Integer __zero = new MDV_Integer(0);

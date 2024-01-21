@@ -1,7 +1,7 @@
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Before_All_Others
-    : MDV_Any, MDV_Excuse, MDV_Orderable
+    : MDV_Excuse, MDV_Orderable<MDV_Before_All_Others>
 {
     private static readonly MDV_Before_All_Others __only
         = new MDV_Before_All_Others();

@@ -1,6 +1,6 @@
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Ignorance : MDV_Any, MDV_Excuse
+public readonly struct MDV_Ignorance : MDV_Excuse
 {
     private static readonly MDV_Ignorance __only = new MDV_Ignorance();
 

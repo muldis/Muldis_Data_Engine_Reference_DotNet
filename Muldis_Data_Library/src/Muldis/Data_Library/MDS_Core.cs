@@ -160,7 +160,7 @@ public static class MDS_Core
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Orderable);
+        return MDV_Boolean.from(topic is MDV_Orderable<MDV_Any>);
     }
 
     // Singleton type definer `Before_All_Others`.
@@ -259,7 +259,7 @@ public static class MDS_Core
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Successable);
+        return MDV_Boolean.from(topic is MDV_Successable<MDV_Any>);
     }
 
     // The interface type definer `Bicessable` is semifinite.  A `Bicessable` value
@@ -307,7 +307,7 @@ public static class MDS_Core
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Bicessable);
+        return MDV_Boolean.from(topic is MDV_Bicessable<MDV_Any>);
     }
 
     // The interface type definer `Boolable` is semifinite.  A `Boolable` value has a
@@ -345,7 +345,7 @@ public static class MDS_Core
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Boolable);
+        return MDV_Boolean.from(topic is MDV_Boolable<MDV_Any>);
     }
 
     // Selection type definer `Boolean`.
