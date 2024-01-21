@@ -33,31 +33,31 @@ public readonly struct MDV_Before_All_Others
 
     public static MDV_Boolean before(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.@false();
     }
 
     public static MDV_Boolean after(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.@false();
     }
 
     public static MDV_Boolean before_or_same(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.@true();
     }
 
     public static MDV_Boolean after_or_same(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.@true();
     }
 
     public static MDV_Before_All_Others min(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return topic_0;
     }
 
     public static MDV_Before_All_Others max(MDV_Before_All_Others topic_0, MDV_Before_All_Others topic_1)
     {
-        throw new NotImplementedException();
+        return topic_0;
     }
 }

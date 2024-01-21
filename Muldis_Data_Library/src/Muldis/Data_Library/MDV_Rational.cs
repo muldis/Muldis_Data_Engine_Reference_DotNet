@@ -255,41 +255,41 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
 
     public static MDV_Boolean before(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(!MDV_Rational._in_order(topic_1, topic_0));
     }
 
     public static MDV_Boolean after(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(!MDV_Rational._in_order(topic_0, topic_1));
     }
 
     public static MDV_Boolean before_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(MDV_Rational._in_order(topic_0, topic_1));
     }
 
     public static MDV_Boolean after_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(MDV_Rational._in_order(topic_1, topic_0));
     }
 
     public static MDV_Rational min(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Rational._in_order(topic_0, topic_1) ? topic_0 : topic_1;
     }
 
     public static MDV_Rational max(MDV_Rational topic_0, MDV_Rational topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Rational._in_order(topic_0, topic_1) ? topic_1 : topic_0;
     }
 
     public static MDV_Boolean so(MDV_Rational topic)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(topic.__numerator != 0);
     }
 
     public static MDV_Boolean not_so(MDV_Rational topic)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(topic.__numerator == 0);
     }
 }

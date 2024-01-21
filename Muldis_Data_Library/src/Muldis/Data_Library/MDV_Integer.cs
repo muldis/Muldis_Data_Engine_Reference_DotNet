@@ -105,56 +105,56 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
 
     public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(!MDV_Integer._in_order(topic_1, topic_0));
     }
 
     public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(!MDV_Integer._in_order(topic_0, topic_1));
     }
 
     public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(MDV_Integer._in_order(topic_0, topic_1));
     }
 
     public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(MDV_Integer._in_order(topic_1, topic_0));
     }
 
     public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Integer._in_order(topic_0, topic_1) ? topic_0 : topic_1;
     }
 
     public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
     {
-        throw new NotImplementedException();
+        return MDV_Integer._in_order(topic_0, topic_1) ? topic_1 : topic_0;
     }
 
     public static MDV_Any asset(MDV_Integer topic)
     {
-        throw new NotImplementedException();
+        return topic;
     }
 
     public static MDV_Integer succ(MDV_Integer topic)
     {
-        throw new NotImplementedException();
+        return MDV_Integer.from(topic.__as_BigInteger + 1);
     }
 
     public static MDV_Integer pred(MDV_Integer topic)
     {
-        throw new NotImplementedException();
+        return MDV_Integer.from(topic.__as_BigInteger - 1);
     }
 
     public static MDV_Boolean so(MDV_Integer topic)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(topic.__as_BigInteger != 0);
     }
 
     public static MDV_Boolean not_so(MDV_Integer topic)
     {
-        throw new NotImplementedException();
+        return MDV_Boolean.from(topic.__as_BigInteger == 0);
     }
 }
