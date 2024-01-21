@@ -57,6 +57,65 @@ public readonly struct MDV_Boolean
         return !topic_0.__as_Boolean || topic_1.__as_Boolean;
     }
 
+    public static MDV_Boolean before(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(!MDV_Boolean._in_order(topic_1, topic_0));
+    }
+
+    public static MDV_Boolean after(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(!MDV_Boolean._in_order(topic_0, topic_1));
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(MDV_Boolean._in_order(topic_0, topic_1));
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean.from(MDV_Boolean._in_order(topic_1, topic_0));
+    }
+
+    public static MDV_Boolean min(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean._in_order(topic_0, topic_1) ? topic_0 : topic_1;
+    }
+
+    public static MDV_Boolean max(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return MDV_Boolean._in_order(topic_0, topic_1) ? topic_1 : topic_0;
+    }
+
+    public static MDV_Any asset(MDV_Boolean topic)
+    {
+        return topic;
+    }
+
+    public static MDV_Boolean succ(MDV_Boolean topic)
+    {
+        return !topic.__as_Boolean ? MDV_Boolean.@true()
+            : throw new NotImplementedException();
+        // Alternate conceptually is MDV_After_All_Others.
+    }
+
+    public static MDV_Boolean pred(MDV_Boolean topic)
+    {
+        return topic.__as_Boolean ? MDV_Boolean.@false()
+            : throw new NotImplementedException();
+        // Alternate conceptually is MDV_Before_All_Others.
+    }
+
+    public static MDV_Boolean so(MDV_Boolean topic)
+    {
+        return topic;
+    }
+
+    public static MDV_Boolean not_so(MDV_Boolean topic)
+    {
+        return MDV_Boolean.from(!topic.__as_Boolean);
+    }
+
     // false ⊥
 
     public static MDV_Boolean @false()

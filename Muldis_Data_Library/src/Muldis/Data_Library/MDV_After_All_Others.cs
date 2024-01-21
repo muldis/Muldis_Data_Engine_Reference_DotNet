@@ -30,4 +30,34 @@ public readonly struct MDV_After_All_Others
     {
         return MDV_Boolean.@true();
     }
+
+    public static MDV_Boolean before(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean before_or_same(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after_or_same(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_After_All_Others min(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_After_All_Others max(MDV_After_All_Others topic_0, MDV_After_All_Others topic_1)
+    {
+        throw new NotImplementedException();
+    }
 }

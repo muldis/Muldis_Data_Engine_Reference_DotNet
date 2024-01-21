@@ -252,4 +252,44 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
         return ((topic_0.__numerator * (common_d / topic_0.__denominator))
             <= (topic_1.__numerator * (common_d / topic_1.__denominator)));
     }
+
+    public static MDV_Boolean before(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Rational min(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Rational max(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean so(MDV_Rational topic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean not_so(MDV_Rational topic)
+    {
+        throw new NotImplementedException();
+    }
 }

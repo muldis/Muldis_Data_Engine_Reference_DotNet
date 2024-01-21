@@ -4,20 +4,14 @@ namespace Muldis.Data_Library;
 
 public static class MDS_Logic
 {
-    // so ? to_Boolean
-    // public static MDV_Boolean so(MDV_Boolable topic)
-
     public static MDV_Boolean so(MDV_Boolean topic)
     {
-        return topic;
+        return MDV_Boolean.so(topic);
     }
-
-    // not_so !?
-    // public static MDV_Boolean not_so(MDV_Boolable topic)
 
     public static MDV_Boolean not_so(MDV_Boolean topic)
     {
-        return MDV_Boolean.from(!topic.as_Boolean());
+        return MDV_Boolean.not_so(topic);
     }
 
     public static MDV_Boolean @false()

@@ -102,4 +102,59 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
     {
         return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
     }
+
+    public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Any asset(MDV_Integer topic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Integer succ(MDV_Integer topic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Integer pred(MDV_Integer topic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean so(MDV_Integer topic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static MDV_Boolean not_so(MDV_Integer topic)
+    {
+        throw new NotImplementedException();
+    }
 }
