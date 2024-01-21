@@ -1,3 +1,11 @@
+// Selection type definer `Any`.
+// `Any` represents the *universal type*, which is the maximal data type
+// of the entire Muldis Data Language type system and consists of all
+// values which can possibly exist.  It is the union of all other types.
+// It is a *supertype* of every other type.
+// `Any` is an infinite type.
+// `Any` has a default value of `0bFALSE`.
+
 namespace Muldis.Data_Library;
 
 public interface MDV_Any

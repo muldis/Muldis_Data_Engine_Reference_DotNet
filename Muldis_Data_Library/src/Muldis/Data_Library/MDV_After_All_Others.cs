@@ -1,3 +1,15 @@
+// Singleton type definer `After_All_Others`.
+// Represents foundation type `fdn::After_All_Others`.
+// The `After_All_Others` value represents a type-agnostic analogy of
+// positive infinity, an `Orderable` value that sorts *after* all
+// other values in the Muldis Data Language type system, and that is
+// its only meaning.  This value is expressly *not* meant to represent
+// any specific mathematical or physical concept of *infinity* or `∞`
+// (of which there are many), including those of the IEEE
+// floating-point standards.
+// `After_All_Others` is a finite type.
+// `After_All_Others` has a default value of ...TODO...
+
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_After_All_Others

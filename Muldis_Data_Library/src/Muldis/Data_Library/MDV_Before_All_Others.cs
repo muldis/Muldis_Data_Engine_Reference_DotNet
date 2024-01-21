@@ -1,3 +1,15 @@
+// Singleton type definer `Before_All_Others`.
+// Represents foundation type `fdn::Before_All_Others`.
+// The `Before_All_Others` value represents a type-agnostic analogy of
+// negative infinity, an `Orderable` value that sorts *before* all
+// other values in the Muldis Data Language type system, and that is
+// its only meaning.  This value is expressly *not* meant to represent
+// any specific mathematical or physical concept of *infinity* or `∞`
+// (of which there are many), including those of the IEEE
+// floating-point standards.
+// `Before_All_Others` is a finite type.
+// `Before_All_Others` has a default value of ...TODO...
+
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Before_All_Others

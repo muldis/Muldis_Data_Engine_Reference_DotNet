@@ -1,3 +1,12 @@
+// Selection type definer `Boolean`.
+// Represents foundation type `fdn::Boolean`.
+// A `Boolean` value is a general purpose 2-valued logic boolean or *truth
+// value*, or specifically it is one of the 2 values `0bFALSE` and `0bTRUE`.
+// `Boolean` is a finite type.
+// `Boolean` has a default value of `0bFALSE`.
+// `Boolean` is both `Orderable` and `Bicessable`;
+// its minimum value is `0bFALSE` and its maximum value is `0bTRUE`.
+
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Boolean
