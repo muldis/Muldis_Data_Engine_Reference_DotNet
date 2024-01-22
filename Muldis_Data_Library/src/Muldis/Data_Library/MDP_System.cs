@@ -282,6 +282,66 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Integer);
     }
 
+    public static MDV_Boolean in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.in_order(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.before(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.after(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.before_or_same(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.after_or_same(topic_0, topic_1);
+    }
+
+    public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.min(topic_0, topic_1);
+    }
+
+    public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.max(topic_0, topic_1);
+    }
+
+    public static MDV_Any asset(MDV_Integer topic)
+    {
+        return MDV_Integer.asset(topic);
+    }
+
+    public static MDV_Integer succ(MDV_Integer topic)
+    {
+        return MDV_Integer.succ(topic);
+    }
+
+    public static MDV_Integer pred(MDV_Integer topic)
+    {
+        return MDV_Integer.pred(topic);
+    }
+
+    public static MDV_Boolean so(MDV_Integer topic)
+    {
+        return MDV_Integer.so(topic);
+    }
+
+    public static MDV_Boolean not_so(MDV_Integer topic)
+    {
+        return MDV_Integer.not_so(topic);
+    }
+
     public static MDV_Integer greatest_common_divisor(
         MDV_Integer topic_0, MDV_Integer topic_1)
     {
@@ -310,5 +370,50 @@ public static class MDP_System
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Rational);
+    }
+
+    public static MDV_Boolean in_order(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.in_order(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean before(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.before(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean after(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.after(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.before_or_same(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.after_or_same(topic_0, topic_1);
+    }
+
+    public static MDV_Rational min(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.min(topic_0, topic_1);
+    }
+
+    public static MDV_Rational max(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        return MDV_Rational.max(topic_0, topic_1);
+    }
+
+    public static MDV_Boolean so(MDV_Rational topic)
+    {
+        return MDV_Rational.so(topic);
+    }
+
+    public static MDV_Boolean not_so(MDV_Rational topic)
+    {
+        return MDV_Rational.not_so(topic);
     }
 }
