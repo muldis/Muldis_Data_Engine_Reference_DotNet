@@ -254,4 +254,49 @@ public static class MDP_System
     {
         return MDV_Boolean.nif(topic_0, topic_1);
     }
+
+    public static MDV_Boolean Numerical(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Numerical);
+    }
+
+    public static MDV_Boolean Integral(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Integral);
+    }
+
+    public static MDV_Boolean Integer(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Integer);
+    }
+
+    public static MDV_Boolean Fractional(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Fractional);
+    }
+
+    public static MDV_Boolean Rational(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Rational);
+    }
 }
