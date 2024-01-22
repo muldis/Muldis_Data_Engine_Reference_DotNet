@@ -103,7 +103,7 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
             result_n = -result_n;
             result_d = -result_d;
         }
-        BigInteger gcd = Internal_Integer._greatest_common_divisor(
+        BigInteger gcd = MDV_Integer._greatest_common_divisor(
             result_n, result_d);
         // Ensure numerator and denominator coprime.
         if (gcd > 1)
@@ -218,7 +218,7 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
         {
             return;
         }
-        BigInteger gcd = Internal_Integer._greatest_common_divisor(
+        BigInteger gcd = MDV_Integer._greatest_common_divisor(
             this.__numerator, this.__denominator);
         if (gcd > 1)
         {
@@ -263,7 +263,7 @@ public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
         {
             return (topic_0.__numerator <= topic_1.__numerator);
         }
-        BigInteger common_d = Internal_Integer._least_common_multiple(
+        BigInteger common_d = MDV_Integer._least_common_multiple(
             topic_0.__denominator, topic_1.__denominator);
         return ((topic_0.__numerator * (common_d / topic_0.__denominator))
             <= (topic_1.__numerator * (common_d / topic_1.__denominator)));

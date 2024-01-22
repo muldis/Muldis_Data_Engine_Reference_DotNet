@@ -19,4 +19,13 @@ namespace Muldis.Data_Library;
 public interface MDV_Integral<Specific_T>
     : MDV_Bicessable<Specific_T>, MDV_Numerical<Specific_T>
 {
+    // greatest_common_divisor gcd
+
+    public static abstract Specific_T greatest_common_divisor(
+        Specific_T topic_0, Specific_T topic_1);
+
+    // least_common_multiple lcm
+
+    public static abstract Specific_T least_common_multiple(
+        Specific_T topic_0, Specific_T topic_1);
 }

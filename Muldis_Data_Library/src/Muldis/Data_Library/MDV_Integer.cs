@@ -167,4 +167,37 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
     {
         return MDV_Boolean.from(topic.__as_BigInteger == 0);
     }
+
+    public static MDV_Integer greatest_common_divisor(
+        MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.from(MDV_Integer._greatest_common_divisor(
+            topic_0.__as_BigInteger, topic_1.__as_BigInteger));
+    }
+
+    internal static BigInteger _greatest_common_divisor(
+        BigInteger topic_0, BigInteger topic_1)
+    {
+        // Note that greatest common divisor always has a non-negative result.
+        return BigInteger.GreatestCommonDivisor(topic_0, topic_1);
+    }
+
+    public static MDV_Integer least_common_multiple(
+        MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.from(MDV_Integer._least_common_multiple(
+            topic_0.__as_BigInteger, topic_1.__as_BigInteger));
+    }
+
+    internal static BigInteger _least_common_multiple(
+        BigInteger topic_0, BigInteger topic_1)
+    {
+        // Note that least common multiple always has a non-negative result.
+        if (topic_0.IsZero || topic_1.IsZero)
+        {
+            return 0;
+        }
+        return (BigInteger.Abs(topic_0) * (BigInteger.Abs(topic_1)
+            / BigInteger.GreatestCommonDivisor(topic_0, topic_1)));
+    }
 }

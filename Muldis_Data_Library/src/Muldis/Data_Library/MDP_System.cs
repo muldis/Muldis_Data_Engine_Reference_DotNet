@@ -261,7 +261,7 @@ public static class MDP_System
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Numerical);
+        return MDV_Boolean.from(topic is MDV_Numerical<MDV_Any>);
     }
 
     public static MDV_Boolean Integral(MDV_Any topic)
@@ -270,7 +270,7 @@ public static class MDP_System
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Integral);
+        return MDV_Boolean.from(topic is MDV_Integral<MDV_Any>);
     }
 
     public static MDV_Boolean Integer(MDV_Any topic)
@@ -282,13 +282,25 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Integer);
     }
 
+    public static MDV_Integer greatest_common_divisor(
+        MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.greatest_common_divisor(topic_0, topic_1);
+    }
+
+    public static MDV_Integer least_common_multiple(
+        MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return MDV_Integer.least_common_multiple(topic_0, topic_1);
+    }
+
     public static MDV_Boolean Fractional(MDV_Any topic)
     {
         if (topic is null)
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Fractional);
+        return MDV_Boolean.from(topic is MDV_Fractional<MDV_Any>);
     }
 
     public static MDV_Boolean Rational(MDV_Any topic)
