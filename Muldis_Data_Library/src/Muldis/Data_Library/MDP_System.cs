@@ -76,24 +76,6 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Orderable<MDV_Any>);
     }
 
-    public static MDV_Boolean Before_All_Others(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Before_All_Others);
-    }
-
-    public static MDV_Boolean After_All_Others(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_After_All_Others);
-    }
-
     public static MDV_Boolean Successable(MDV_Any topic)
     {
         if (topic is null)

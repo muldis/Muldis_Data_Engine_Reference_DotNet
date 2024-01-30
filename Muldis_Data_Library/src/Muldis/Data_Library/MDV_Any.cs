@@ -55,14 +55,6 @@ public interface MDV_Any
             (MDV_Ignorance specific_topic_0, MDV_Ignorance specific_topic_1) =>
                 // We should never get here; however...
                 true,
-            (MDV_Before_All_Others specific_topic_0,
-                MDV_Before_All_Others specific_topic_1) =>
-                // We should never get here; however...
-                true,
-            (MDV_After_All_Others specific_topic_0,
-                MDV_After_All_Others specific_topic_1) =>
-                // We should never get here; however...
-                true,
             (MDV_Boolean specific_topic_0, MDV_Boolean specific_topic_1) =>
                 MDV_Boolean._specific_same(specific_topic_0, specific_topic_1),
             (MDV_Integer specific_topic_0, MDV_Integer specific_topic_1) =>

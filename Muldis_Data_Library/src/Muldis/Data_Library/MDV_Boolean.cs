@@ -105,14 +105,14 @@ public readonly struct MDV_Boolean
     {
         return !topic.__as_Boolean ? MDV_Boolean.@true()
             : throw new NotImplementedException();
-        // Alternate conceptually is MDV_After_All_Others.
+        // Alternate conceptually is After_All_Others.
     }
 
     public static MDV_Boolean pred(MDV_Boolean topic)
     {
         return topic.__as_Boolean ? MDV_Boolean.@false()
             : throw new NotImplementedException();
-        // Alternate conceptually is MDV_Before_All_Others.
+        // Alternate conceptually is Before_All_Others.
     }
 
     public static MDV_Boolean so(MDV_Boolean topic)
