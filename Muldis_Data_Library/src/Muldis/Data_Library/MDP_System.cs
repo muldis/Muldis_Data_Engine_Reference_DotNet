@@ -336,15 +336,6 @@ public static class MDP_System
         return MDV_Integer.least_common_multiple(topic_0, topic_1);
     }
 
-    public static MDV_Boolean Fractional(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Fractional<MDV_Any>);
-    }
-
     public static MDV_Boolean Rational(MDV_Any topic)
     {
         if (topic is null)

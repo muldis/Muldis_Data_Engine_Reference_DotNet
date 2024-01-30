@@ -18,7 +18,8 @@ using System.Numerics;
 
 namespace Muldis.Data_Library;
 
-public sealed class MDV_Rational : MDV_Fractional<MDV_Rational>
+public sealed class MDV_Rational
+    : MDV_Orderable<MDV_Rational>, MDV_Numerical<MDV_Rational>
 {
     private static readonly MDV_Rational __negative_one
         = new MDV_Rational(-1,1,true);
