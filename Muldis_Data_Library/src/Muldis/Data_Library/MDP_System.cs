@@ -246,15 +246,6 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Numerical<MDV_Any>);
     }
 
-    public static MDV_Boolean Integral(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Integral<MDV_Any>);
-    }
-
     public static MDV_Boolean Integer(MDV_Any topic)
     {
         if (topic is null)

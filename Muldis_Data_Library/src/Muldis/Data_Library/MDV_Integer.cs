@@ -12,7 +12,8 @@ using System.Numerics;
 
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
+public readonly struct MDV_Integer
+    : MDV_Bicessable<MDV_Integer>, MDV_Numerical<MDV_Integer>
 {
     private static readonly MDV_Integer __negative_one = new MDV_Integer(-1);
     private static readonly MDV_Integer __zero = new MDV_Integer(0);
@@ -168,6 +169,8 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
         return MDV_Boolean.from(topic.__as_BigInteger == 0);
     }
 
+    // greatest_common_divisor gcd
+
     public static MDV_Integer greatest_common_divisor(
         MDV_Integer topic_0, MDV_Integer topic_1)
     {
@@ -181,6 +184,8 @@ public readonly struct MDV_Integer : MDV_Integral<MDV_Integer>
         // Note that greatest common divisor always has a non-negative result.
         return BigInteger.GreatestCommonDivisor(topic_0, topic_1);
     }
+
+    // least_common_multiple lcm
 
     public static MDV_Integer least_common_multiple(
         MDV_Integer topic_0, MDV_Integer topic_1)
