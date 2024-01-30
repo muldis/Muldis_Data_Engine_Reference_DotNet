@@ -94,15 +94,6 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Bicessable<MDV_Any>);
     }
 
-    public static MDV_Boolean Boolable(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Boolable<MDV_Any>);
-    }
-
     public static MDV_Boolean Boolean(MDV_Any topic)
     {
         if (topic is null)
@@ -160,16 +151,6 @@ public static class MDP_System
     public static MDV_Boolean pred(MDV_Boolean topic)
     {
         return MDV_Boolean.pred(topic);
-    }
-
-    public static MDV_Boolean so(MDV_Boolean topic)
-    {
-        return MDV_Boolean.so(topic);
-    }
-
-    public static MDV_Boolean not_so(MDV_Boolean topic)
-    {
-        return MDV_Boolean.not_so(topic);
     }
 
     public static MDV_Boolean @false()
@@ -305,14 +286,14 @@ public static class MDP_System
         return MDV_Integer.pred(topic);
     }
 
-    public static MDV_Boolean so(MDV_Integer topic)
+    public static MDV_Boolean so_zero(MDV_Integer topic)
     {
-        return MDV_Integer.so(topic);
+        return MDV_Integer.so_zero(topic);
     }
 
-    public static MDV_Boolean not_so(MDV_Integer topic)
+    public static MDV_Boolean not_zero(MDV_Integer topic)
     {
-        return MDV_Integer.not_so(topic);
+        return MDV_Integer.not_zero(topic);
     }
 
     public static MDV_Integer greatest_common_divisor(
@@ -371,13 +352,13 @@ public static class MDP_System
         return MDV_Rational.max(topic_0, topic_1);
     }
 
-    public static MDV_Boolean so(MDV_Rational topic)
+    public static MDV_Boolean so_zero(MDV_Rational topic)
     {
-        return MDV_Rational.so(topic);
+        return MDV_Rational.so_zero(topic);
     }
 
-    public static MDV_Boolean not_so(MDV_Rational topic)
+    public static MDV_Boolean not_zero(MDV_Rational topic)
     {
-        return MDV_Rational.not_so(topic);
+        return MDV_Rational.not_zero(topic);
     }
 }

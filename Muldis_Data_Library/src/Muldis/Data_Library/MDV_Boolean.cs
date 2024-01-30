@@ -9,8 +9,7 @@
 
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Boolean
-    : MDV_Bicessable<MDV_Boolean>, MDV_Boolable<MDV_Boolean>
+public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
 {
     private static readonly MDV_Boolean __false = new MDV_Boolean(false);
     private static readonly MDV_Boolean __true = new MDV_Boolean(true);
@@ -113,16 +112,6 @@ public readonly struct MDV_Boolean
         return topic.__as_Boolean ? MDV_Boolean.@false()
             : throw new NotImplementedException();
         // Alternate conceptually is Before_All_Others.
-    }
-
-    public static MDV_Boolean so(MDV_Boolean topic)
-    {
-        return topic;
-    }
-
-    public static MDV_Boolean not_so(MDV_Boolean topic)
-    {
-        return MDV_Boolean.from(!topic.__as_Boolean);
     }
 
     // false ⊥

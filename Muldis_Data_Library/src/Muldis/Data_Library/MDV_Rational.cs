@@ -328,7 +328,7 @@ public sealed class MDV_Rational
         return MDV_Rational._in_order(topic_0, topic_1) ? topic_1 : topic_0;
     }
 
-    public static MDV_Boolean so(MDV_Rational topic)
+    public static MDV_Boolean so_zero(MDV_Rational topic)
     {
         if (topic is null)
         {
@@ -337,7 +337,7 @@ public sealed class MDV_Rational
         return MDV_Boolean.from(topic.__numerator != 0);
     }
 
-    public static MDV_Boolean not_so(MDV_Rational topic)
+    public static MDV_Boolean not_zero(MDV_Rational topic)
     {
         if (topic is null)
         {

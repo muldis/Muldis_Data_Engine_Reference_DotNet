@@ -159,12 +159,12 @@ public readonly struct MDV_Integer
         return MDV_Integer.from(topic.__as_BigInteger - 1);
     }
 
-    public static MDV_Boolean so(MDV_Integer topic)
+    public static MDV_Boolean so_zero(MDV_Integer topic)
     {
         return MDV_Boolean.from(topic.__as_BigInteger != 0);
     }
 
-    public static MDV_Boolean not_so(MDV_Integer topic)
+    public static MDV_Boolean not_zero(MDV_Integer topic)
     {
         return MDV_Boolean.from(topic.__as_BigInteger == 0);
     }
