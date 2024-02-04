@@ -45,7 +45,7 @@ public readonly struct MDV_Integer
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Integer specific_obj)
-            ? this._specific_same(specific_obj)
+            ? this._same(specific_obj)
             : false;
     }
 
@@ -99,7 +99,23 @@ public readonly struct MDV_Integer
         return (Int32)this.__as_BigInteger;
     }
 
-    internal Boolean _specific_same(MDV_Integer topic_1)
+    public MDV_Boolean same(MDV_Any topic_1)
+    {
+        MDV_Integer topic_0 = this;
+        return (topic_1 is MDV_Integer specific_topic_1)
+            ? MDV_Boolean.from(topic_0._same(specific_topic_1))
+            : MDV_Boolean.@false();
+    }
+
+    public MDV_Boolean not_same(MDV_Any topic_1)
+    {
+        MDV_Integer topic_0 = this;
+        return (topic_1 is MDV_Integer specific_topic_1)
+            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
+            : MDV_Boolean.@true();
+    }
+
+    internal Boolean _same(MDV_Integer topic_1)
     {
         MDV_Integer topic_0 = this;
         return topic_0.__as_BigInteger == topic_1.__as_BigInteger;

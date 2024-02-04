@@ -70,7 +70,7 @@ public sealed class MDV_Rational
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Rational specific_obj)
-            ? this._specific_same(specific_obj)
+            ? this._same(specific_obj)
             : false;
     }
 
@@ -230,7 +230,23 @@ public sealed class MDV_Rational
         this.__known_to_be_normalized = true;
     }
 
-    internal Boolean _specific_same(MDV_Rational topic_1)
+    public MDV_Boolean same(MDV_Any topic_1)
+    {
+        MDV_Rational topic_0 = this;
+        return (topic_1 is MDV_Rational specific_topic_1)
+            ? MDV_Boolean.from(topic_0._same(specific_topic_1))
+            : MDV_Boolean.@false();
+    }
+
+    public MDV_Boolean not_same(MDV_Any topic_1)
+    {
+        MDV_Rational topic_0 = this;
+        return (topic_1 is MDV_Rational specific_topic_1)
+            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
+            : MDV_Boolean.@true();
+    }
+
+    internal Boolean _same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
         if (topic_0.__denominator == topic_1.__denominator)
@@ -246,7 +262,7 @@ public sealed class MDV_Rational
     public MDV_Boolean in_order(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -280,7 +296,7 @@ public sealed class MDV_Rational
     public MDV_Boolean before(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -290,7 +306,7 @@ public sealed class MDV_Rational
     public MDV_Boolean after(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -300,7 +316,7 @@ public sealed class MDV_Rational
     public MDV_Boolean before_or_same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -310,7 +326,7 @@ public sealed class MDV_Rational
     public MDV_Boolean after_or_same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -320,7 +336,7 @@ public sealed class MDV_Rational
     public MDV_Rational min(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -330,7 +346,7 @@ public sealed class MDV_Rational
     public MDV_Rational max(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0 is null || topic_1 is null)
+        if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
@@ -340,20 +356,12 @@ public sealed class MDV_Rational
     public MDV_Boolean so_zero()
     {
         MDV_Rational topic = this;
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
         return MDV_Boolean.from(topic.__numerator != 0);
     }
 
     public MDV_Boolean not_zero()
     {
         MDV_Rational topic = this;
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
         return MDV_Boolean.from(topic.__numerator == 0);
     }
 }

@@ -36,7 +36,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Boolean specific_obj)
-            ? this._specific_same(specific_obj)
+            ? this._same(specific_obj)
             : false;
     }
 
@@ -50,7 +50,23 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return this.__as_Boolean;
     }
 
-    internal Boolean _specific_same(MDV_Boolean topic_1)
+    public MDV_Boolean same(MDV_Any topic_1)
+    {
+        MDV_Boolean topic_0 = this;
+        return (topic_1 is MDV_Boolean specific_topic_1)
+            ? MDV_Boolean.from(topic_0._same(specific_topic_1))
+            : MDV_Boolean.__false;
+    }
+
+    public MDV_Boolean not_same(MDV_Any topic_1)
+    {
+        MDV_Boolean topic_0 = this;
+        return (topic_1 is MDV_Boolean specific_topic_1)
+            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
+            : MDV_Boolean.__true;
+    }
+
+    internal Boolean _same(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return topic_0.__as_Boolean == topic_1.__as_Boolean;
