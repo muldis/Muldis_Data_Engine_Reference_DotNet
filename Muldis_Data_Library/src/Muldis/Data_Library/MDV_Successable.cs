@@ -52,9 +52,9 @@ public interface MDV_Successable<Specific_T> : MDV_Any
 {
     // asset
 
-    public static abstract MDV_Any asset(Specific_T topic);
+    public abstract MDV_Any asset();
 
     // succ
 
-    public static abstract Specific_T succ(Specific_T topic);
+    public abstract Specific_T succ();
 }

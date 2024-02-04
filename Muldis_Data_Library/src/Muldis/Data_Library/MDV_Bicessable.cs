@@ -44,5 +44,5 @@ public interface MDV_Bicessable<Specific_T>
 {
     // pred
 
-    public static abstract Specific_T pred(Specific_T topic);
+    public abstract Specific_T pred();
 }

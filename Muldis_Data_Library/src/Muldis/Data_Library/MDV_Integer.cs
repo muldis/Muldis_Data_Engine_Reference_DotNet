@@ -45,7 +45,7 @@ public readonly struct MDV_Integer
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Integer specific_obj)
-            ? MDV_Integer._specific_same(this, specific_obj)
+            ? this._specific_same(specific_obj)
             : false;
     }
 
@@ -99,81 +99,95 @@ public readonly struct MDV_Integer
         return (Int32)this.__as_BigInteger;
     }
 
-    internal static Boolean _specific_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    internal Boolean _specific_same(MDV_Integer topic_1)
     {
+        MDV_Integer topic_0 = this;
         return topic_0.__as_BigInteger == topic_1.__as_BigInteger;
     }
 
-    public static MDV_Boolean in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Boolean in_order(MDV_Integer topic_1)
     {
-        return MDV_Boolean.from(MDV_Integer._in_order(topic_0, topic_1));
+        MDV_Integer topic_0 = this;
+        return MDV_Boolean.from(topic_0._in_order(topic_1));
     }
 
-    internal static Boolean _in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    internal Boolean _in_order(MDV_Integer topic_1)
     {
+        MDV_Integer topic_0 = this;
         return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
     }
 
-    public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Boolean before(MDV_Integer topic_1)
     {
-        return MDV_Boolean.from(!MDV_Integer._in_order(topic_1, topic_0));
+        MDV_Integer topic_0 = this;
+        return MDV_Boolean.from(!topic_1._in_order(topic_0));
     }
 
-    public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Boolean after(MDV_Integer topic_1)
     {
-        return MDV_Boolean.from(!MDV_Integer._in_order(topic_0, topic_1));
+        MDV_Integer topic_0 = this;
+        return MDV_Boolean.from(!topic_0._in_order(topic_1));
     }
 
-    public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Boolean before_or_same(MDV_Integer topic_1)
     {
-        return MDV_Boolean.from(MDV_Integer._in_order(topic_0, topic_1));
+        MDV_Integer topic_0 = this;
+        return MDV_Boolean.from(topic_0._in_order(topic_1));
     }
 
-    public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Boolean after_or_same(MDV_Integer topic_1)
     {
-        return MDV_Boolean.from(MDV_Integer._in_order(topic_1, topic_0));
+        MDV_Integer topic_0 = this;
+        return MDV_Boolean.from(topic_1._in_order(topic_0));
     }
 
-    public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Integer min(MDV_Integer topic_1)
     {
-        return MDV_Integer._in_order(topic_0, topic_1) ? topic_0 : topic_1;
+        MDV_Integer topic_0 = this;
+        return topic_0._in_order(topic_1) ? topic_0 : topic_1;
     }
 
-    public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Integer max(MDV_Integer topic_1)
     {
-        return MDV_Integer._in_order(topic_0, topic_1) ? topic_1 : topic_0;
+        MDV_Integer topic_0 = this;
+        return topic_0._in_order(topic_1) ? topic_1 : topic_0;
     }
 
-    public static MDV_Any asset(MDV_Integer topic)
+    public MDV_Any asset()
     {
+        MDV_Integer topic = this;
         return topic;
     }
 
-    public static MDV_Integer succ(MDV_Integer topic)
+    public MDV_Integer succ()
     {
+        MDV_Integer topic = this;
         return MDV_Integer.from(topic.__as_BigInteger + 1);
     }
 
-    public static MDV_Integer pred(MDV_Integer topic)
+    public MDV_Integer pred()
     {
+        MDV_Integer topic = this;
         return MDV_Integer.from(topic.__as_BigInteger - 1);
     }
 
-    public static MDV_Boolean so_zero(MDV_Integer topic)
+    public MDV_Boolean so_zero()
     {
+        MDV_Integer topic = this;
         return MDV_Boolean.from(topic.__as_BigInteger != 0);
     }
 
-    public static MDV_Boolean not_zero(MDV_Integer topic)
+    public MDV_Boolean not_zero()
     {
+        MDV_Integer topic = this;
         return MDV_Boolean.from(topic.__as_BigInteger == 0);
     }
 
     // greatest_common_divisor gcd
 
-    public static MDV_Integer greatest_common_divisor(
-        MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Integer greatest_common_divisor(MDV_Integer topic_1)
     {
+        MDV_Integer topic_0 = this;
         return MDV_Integer.from(MDV_Integer._greatest_common_divisor(
             topic_0.__as_BigInteger, topic_1.__as_BigInteger));
     }
@@ -187,9 +201,9 @@ public readonly struct MDV_Integer
 
     // least_common_multiple lcm
 
-    public static MDV_Integer least_common_multiple(
-        MDV_Integer topic_0, MDV_Integer topic_1)
+    public MDV_Integer least_common_multiple(MDV_Integer topic_1)
     {
+        MDV_Integer topic_0 = this;
         return MDV_Integer.from(MDV_Integer._least_common_multiple(
             topic_0.__as_BigInteger, topic_1.__as_BigInteger));
     }

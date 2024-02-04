@@ -29,9 +29,9 @@ public interface MDV_Numerical<Specific_T> : MDV_Any
 {
     // so_zero
 
-    public static abstract MDV_Boolean so_zero(Specific_T topic);
+    public abstract MDV_Boolean so_zero();
 
     // not_zero
 
-    public static abstract MDV_Boolean not_zero(Specific_T topic);
+    public abstract MDV_Boolean not_zero();
 }
