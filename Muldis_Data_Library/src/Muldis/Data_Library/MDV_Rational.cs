@@ -146,6 +146,38 @@ public sealed class MDV_Rational
         return MDV_Rational.__positive_one;
     }
 
+    public void Deconstruct(
+        out MDV_Integer numerator, out MDV_Integer denominator)
+    {
+        this._ensure_normalized();
+        numerator = MDV_Integer.from(this.__numerator);
+        denominator = MDV_Integer.from(this.__denominator);
+    }
+
+    public void Deconstruct(
+        out BigInteger numerator, out BigInteger denominator)
+    {
+        this._ensure_normalized();
+        numerator = this.__numerator;
+        denominator = this.__denominator;
+    }
+
+    public void Deconstruct(out Int64 numerator, out Int64 denominator)
+    {
+        this._ensure_normalized();
+        // This will throw a .NET OverflowException if the value doesn't fit.
+        numerator = (Int64)this.__numerator;
+        denominator = (Int64)this.__denominator;
+    }
+
+    public void Deconstruct(out Int32 numerator, out Int32 denominator)
+    {
+        this._ensure_normalized();
+        // This will throw a .NET OverflowException if the value doesn't fit.
+        numerator = (Int32)this.__numerator;
+        denominator = (Int32)this.__denominator;
+    }
+
     internal BigInteger _numerator()
     {
         return this.__numerator;

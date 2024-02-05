@@ -45,6 +45,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return as_Boolean ? MDV_Boolean.__true : MDV_Boolean.__false;
     }
 
+    public void Deconstruct(out Boolean as_Boolean)
+    {
+        as_Boolean = this.__as_Boolean;
+    }
+
     public Boolean as_Boolean()
     {
         return this.__as_Boolean;

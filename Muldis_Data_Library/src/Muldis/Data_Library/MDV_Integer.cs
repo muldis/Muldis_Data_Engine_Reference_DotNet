@@ -82,6 +82,23 @@ public readonly struct MDV_Integer
         return MDV_Integer.__positive_one;
     }
 
+    public void Deconstruct(out BigInteger as_BigInteger)
+    {
+        as_BigInteger = this.__as_BigInteger;
+    }
+
+    public void Deconstruct(out Int64 as_Int64)
+    {
+        // This will throw a .NET OverflowException if the value doesn't fit.
+        as_Int64 = (Int64)this.__as_BigInteger;
+    }
+
+    public void Deconstruct(out Int32 as_Int32)
+    {
+        // This will throw a .NET OverflowException if the value doesn't fit.
+        as_Int32 = (Int32)this.__as_BigInteger;
+    }
+
     public BigInteger as_BigInteger()
     {
         return this.__as_BigInteger;
