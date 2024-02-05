@@ -22,11 +22,11 @@ public sealed class MDV_Rational
     : MDV_Orderable<MDV_Rational>, MDV_Numerical<MDV_Rational>
 {
     private static readonly MDV_Rational __negative_one
-        = new MDV_Rational(-1,1,true);
+        = new MDV_Rational(-1, 1, true);
     private static readonly MDV_Rational __zero
-        = new MDV_Rational(0,1,true);
+        = new MDV_Rational(0, 1, true);
     private static readonly MDV_Rational __positive_one
-        = new MDV_Rational(1,1,true);
+        = new MDV_Rational(1, 1, true);
 
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
@@ -59,7 +59,7 @@ public sealed class MDV_Rational
 
     public override Int32 GetHashCode()
     {
-        return (this.__numerator ^ this.__denominator).GetHashCode();
+        return this.__numerator.GetHashCode() ^ this.__denominator.GetHashCode();
     }
 
     public override String ToString()
@@ -115,7 +115,7 @@ public sealed class MDV_Rational
         return !result_d.IsOne ? MDV_Rational._from(result_n, result_d, true)
             : result_n.IsZero ? MDV_Rational.__zero
             : result_n.IsOne ? MDV_Rational.__positive_one
-            : result_n == -1 ? MDV_Rational.__negative_one
+            : result_n.Equals(-1) ? MDV_Rational.__negative_one
             : MDV_Rational._from(result_n, result_d, true);
     }
 
@@ -281,14 +281,14 @@ public sealed class MDV_Rational
     internal Boolean _same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0.__denominator == topic_1.__denominator)
+        if (topic_0.__denominator.Equals(topic_1.__denominator))
         {
-            return (topic_0.__numerator == topic_1.__numerator);
+            return (topic_0.__numerator.Equals(topic_1.__numerator));
         }
         topic_0._ensure_normalized();
         topic_1._ensure_normalized();
-        return (topic_0.__denominator == topic_1.__denominator
-            && topic_0.__numerator == topic_1.__numerator);
+        return (topic_0.__denominator.Equals(topic_1.__denominator)
+            && topic_0.__numerator.Equals(topic_1.__numerator));
     }
 
     public MDV_Boolean in_order(MDV_Rational topic_1)
@@ -304,7 +304,7 @@ public sealed class MDV_Rational
     internal Boolean _in_order(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0.__denominator == topic_1.__denominator)
+        if (topic_0.__denominator.Equals(topic_1.__denominator))
         {
             return (topic_0.__numerator <= topic_1.__numerator);
         }
@@ -315,7 +315,7 @@ public sealed class MDV_Rational
         // we will work with is also as small as possible.
         topic_0._ensure_normalized();
         topic_1._ensure_normalized();
-        if (topic_0.__denominator == topic_1.__denominator)
+        if (topic_0.__denominator.Equals(topic_1.__denominator))
         {
             return (topic_0.__numerator <= topic_1.__numerator);
         }
@@ -388,12 +388,12 @@ public sealed class MDV_Rational
     public MDV_Boolean so_zero()
     {
         MDV_Rational topic = this;
-        return MDV_Boolean.from(topic.__numerator != 0);
+        return MDV_Boolean.from(topic.__numerator.IsZero);
     }
 
     public MDV_Boolean not_zero()
     {
         MDV_Rational topic = this;
-        return MDV_Boolean.from(topic.__numerator == 0);
+        return MDV_Boolean.from(!topic.__numerator.IsZero);
     }
 }

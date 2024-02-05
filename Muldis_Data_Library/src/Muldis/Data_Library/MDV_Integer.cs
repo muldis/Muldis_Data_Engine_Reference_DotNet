@@ -53,7 +53,7 @@ public readonly struct MDV_Integer
     {
         return as_BigInteger.IsZero ? MDV_Integer.__zero
             : as_BigInteger.IsOne ? MDV_Integer.__positive_one
-            : as_BigInteger == -1 ? MDV_Integer.__negative_one
+            : as_BigInteger.Equals(-1) ? MDV_Integer.__negative_one
             : new MDV_Integer(as_BigInteger);
     }
 
@@ -135,7 +135,7 @@ public readonly struct MDV_Integer
     internal Boolean _same(MDV_Integer topic_1)
     {
         MDV_Integer topic_0 = this;
-        return topic_0.__as_BigInteger == topic_1.__as_BigInteger;
+        return topic_0.__as_BigInteger.Equals(topic_1.__as_BigInteger);
     }
 
     public MDV_Boolean in_order(MDV_Integer topic_1)
@@ -207,13 +207,13 @@ public readonly struct MDV_Integer
     public MDV_Boolean so_zero()
     {
         MDV_Integer topic = this;
-        return MDV_Boolean.from(topic.__as_BigInteger != 0);
+        return MDV_Boolean.from(topic.__as_BigInteger.IsZero);
     }
 
     public MDV_Boolean not_zero()
     {
         MDV_Integer topic = this;
-        return MDV_Boolean.from(topic.__as_BigInteger == 0);
+        return MDV_Boolean.from(!topic.__as_BigInteger.IsZero);
     }
 
     // greatest_common_divisor gcd
@@ -249,7 +249,9 @@ public readonly struct MDV_Integer
         {
             return 0;
         }
-        return (BigInteger.Abs(topic_0) * (BigInteger.Abs(topic_1)
-            / BigInteger.GreatestCommonDivisor(topic_0, topic_1)));
+        return (BigInteger.Abs(topic_0) * (
+            BigInteger.Abs(topic_1)
+                / BigInteger.GreatestCommonDivisor(topic_0, topic_1)
+        ));
     }
 }

@@ -74,7 +74,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     internal Boolean _same(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
-        return topic_0.__as_Boolean == topic_1.__as_Boolean;
+        return topic_0.__as_Boolean.Equals(topic_1.__as_Boolean);
     }
 
     public MDV_Boolean in_order(MDV_Boolean topic_1)
@@ -134,17 +134,23 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public MDV_Boolean succ()
     {
         MDV_Boolean topic = this;
-        return !topic.__as_Boolean ? MDV_Boolean.@true()
-            : throw new NotImplementedException();
-        // Alternate conceptually is After_All_Others.
+        if (topic.__as_Boolean)
+        {
+            // Alternate conceptually is After_All_Others.
+            throw new NotImplementedException();
+        }
+        return MDV_Boolean.@true();
     }
 
     public MDV_Boolean pred()
     {
         MDV_Boolean topic = this;
-        return topic.__as_Boolean ? MDV_Boolean.@false()
-            : throw new NotImplementedException();
-        // Alternate conceptually is Before_All_Others.
+        if (!topic.__as_Boolean)
+        {
+            // Alternate conceptually is Before_All_Others.
+            throw new NotImplementedException();
+        }
+        return MDV_Boolean.@false();
     }
 
     // false ⊥
@@ -206,7 +212,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public MDV_Boolean xnor(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(topic_0.__as_Boolean == topic_1.__as_Boolean);
+        return MDV_Boolean.from(topic_0.__as_Boolean.Equals(topic_1.__as_Boolean));
     }
 
     // xor ⊻ ↮
@@ -214,7 +220,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public MDV_Boolean xor(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(topic_0.__as_Boolean != topic_1.__as_Boolean);
+        return MDV_Boolean.from(!topic_0.__as_Boolean.Equals(topic_1.__as_Boolean));
     }
 
     // imp implies →
