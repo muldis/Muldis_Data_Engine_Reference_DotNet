@@ -92,6 +92,139 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Orderable<MDV_Any>);
     }
 
+    public static MDV_Boolean in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.in_order(topic_1);
+    }
+
+    public static MDV_Boolean in_order(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.in_order(topic_1);
+    }
+
+    public static MDV_Boolean in_order(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.in_order(topic_1);
+    }
+
+    public static MDV_Boolean before(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.before(topic_1);
+    }
+
+    public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.before(topic_1);
+    }
+
+    public static MDV_Boolean before(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.before(topic_1);
+    }
+
+    public static MDV_Boolean after(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.after(topic_1);
+    }
+
+    public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.after(topic_1);
+    }
+
+    public static MDV_Boolean after(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.after(topic_1);
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.before_or_same(topic_1);
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.before_or_same(topic_1);
+    }
+
+    public static MDV_Boolean before_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.before_or_same(topic_1);
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.after_or_same(topic_1);
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.after_or_same(topic_1);
+    }
+
+    public static MDV_Boolean after_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.after_or_same(topic_1);
+    }
+
+    public static MDV_Boolean min(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.min(topic_1);
+    }
+
+    public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.min(topic_1);
+    }
+
+    public static MDV_Rational min(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.min(topic_1);
+    }
+
+    public static MDV_Boolean max(MDV_Boolean topic_0, MDV_Boolean topic_1)
+    {
+        return topic_0.max(topic_1);
+    }
+
+    public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
+    {
+        return topic_0.max(topic_1);
+    }
+
+    public static MDV_Rational max(MDV_Rational topic_0, MDV_Rational topic_1)
+    {
+        if (topic_0 is null || topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.max(topic_1);
+    }
+
     public static MDV_Boolean Successable(MDV_Any topic)
     {
         if (topic is null)
@@ -99,6 +232,26 @@ public static class MDP_System
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Successable<MDV_Any>);
+    }
+
+    public static MDV_Any asset(MDV_Boolean topic)
+    {
+        return topic.asset();
+    }
+
+    public static MDV_Any asset(MDV_Integer topic)
+    {
+        return topic.asset();
+    }
+
+    public static MDV_Boolean succ(MDV_Boolean topic)
+    {
+        return topic.succ();
+    }
+
+    public static MDV_Integer succ(MDV_Integer topic)
+    {
+        return topic.succ();
     }
 
     public static MDV_Boolean Bicessable(MDV_Any topic)
@@ -110,6 +263,16 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Bicessable<MDV_Any>);
     }
 
+    public static MDV_Boolean pred(MDV_Boolean topic)
+    {
+        return topic.pred();
+    }
+
+    public static MDV_Integer pred(MDV_Integer topic)
+    {
+        return topic.pred();
+    }
+
     public static MDV_Boolean Boolean(MDV_Any topic)
     {
         if (topic is null)
@@ -117,56 +280,6 @@ public static class MDP_System
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Boolean);
-    }
-
-    public static MDV_Boolean in_order(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.in_order(topic_1);
-    }
-
-    public static MDV_Boolean before(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.before(topic_1);
-    }
-
-    public static MDV_Boolean after(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.after(topic_1);
-    }
-
-    public static MDV_Boolean before_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.before_or_same(topic_1);
-    }
-
-    public static MDV_Boolean after_or_same(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.after_or_same(topic_1);
-    }
-
-    public static MDV_Boolean min(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.min(topic_1);
-    }
-
-    public static MDV_Boolean max(MDV_Boolean topic_0, MDV_Boolean topic_1)
-    {
-        return topic_0.max(topic_1);
-    }
-
-    public static MDV_Any asset(MDV_Boolean topic)
-    {
-        return topic.asset();
-    }
-
-    public static MDV_Boolean succ(MDV_Boolean topic)
-    {
-        return topic.succ();
-    }
-
-    public static MDV_Boolean pred(MDV_Boolean topic)
-    {
-        return topic.pred();
     }
 
     public static MDV_Boolean @false()
@@ -243,6 +356,34 @@ public static class MDP_System
         return MDV_Boolean.from(topic is MDV_Numerical<MDV_Any>);
     }
 
+    public static MDV_Boolean so_zero(MDV_Integer topic)
+    {
+        return topic.so_zero();
+    }
+
+    public static MDV_Boolean so_zero(MDV_Rational topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic.so_zero();
+    }
+
+    public static MDV_Boolean not_zero(MDV_Integer topic)
+    {
+        return topic.not_zero();
+    }
+
+    public static MDV_Boolean not_zero(MDV_Rational topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic.not_zero();
+    }
+
     public static MDV_Boolean Integer(MDV_Any topic)
     {
         if (topic is null)
@@ -250,66 +391,6 @@ public static class MDP_System
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Integer);
-    }
-
-    public static MDV_Boolean in_order(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.in_order(topic_1);
-    }
-
-    public static MDV_Boolean before(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.before(topic_1);
-    }
-
-    public static MDV_Boolean after(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.after(topic_1);
-    }
-
-    public static MDV_Boolean before_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.before_or_same(topic_1);
-    }
-
-    public static MDV_Boolean after_or_same(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.after_or_same(topic_1);
-    }
-
-    public static MDV_Integer min(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.min(topic_1);
-    }
-
-    public static MDV_Integer max(MDV_Integer topic_0, MDV_Integer topic_1)
-    {
-        return topic_0.max(topic_1);
-    }
-
-    public static MDV_Any asset(MDV_Integer topic)
-    {
-        return topic.asset();
-    }
-
-    public static MDV_Integer succ(MDV_Integer topic)
-    {
-        return topic.succ();
-    }
-
-    public static MDV_Integer pred(MDV_Integer topic)
-    {
-        return topic.pred();
-    }
-
-    public static MDV_Boolean so_zero(MDV_Integer topic)
-    {
-        return topic.so_zero();
-    }
-
-    public static MDV_Boolean not_zero(MDV_Integer topic)
-    {
-        return topic.not_zero();
     }
 
     public static MDV_Integer greatest_common_divisor(
@@ -331,86 +412,5 @@ public static class MDP_System
             throw new ArgumentNullException();
         }
         return MDV_Boolean.from(topic is MDV_Rational);
-    }
-
-    public static MDV_Boolean in_order(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.in_order(topic_1);
-    }
-
-    public static MDV_Boolean before(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.before(topic_1);
-    }
-
-    public static MDV_Boolean after(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.after(topic_1);
-    }
-
-    public static MDV_Boolean before_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.before_or_same(topic_1);
-    }
-
-    public static MDV_Boolean after_or_same(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.after_or_same(topic_1);
-    }
-
-    public static MDV_Rational min(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.min(topic_1);
-    }
-
-    public static MDV_Rational max(MDV_Rational topic_0, MDV_Rational topic_1)
-    {
-        if (topic_0 is null || topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0.max(topic_1);
-    }
-
-    public static MDV_Boolean so_zero(MDV_Rational topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic.so_zero();
-    }
-
-    public static MDV_Boolean not_zero(MDV_Rational topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic.not_zero();
     }
 }
