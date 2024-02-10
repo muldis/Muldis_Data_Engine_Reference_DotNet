@@ -19,7 +19,7 @@ internal static class Internal_Preview
 
     internal static String Rational(MDV_Rational topic)
     {
-        return topic._numerator().ToString()
-            + "/" + topic._denominator().ToString();
+        return topic.numerator_as_BigInteger().ToString()
+            + "/" + topic.denominator_as_BigInteger().ToString();
     }
 }

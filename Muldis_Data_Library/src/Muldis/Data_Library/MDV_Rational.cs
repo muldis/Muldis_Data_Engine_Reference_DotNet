@@ -18,43 +18,24 @@ using System.Numerics;
 
 namespace Muldis.Data_Library;
 
-public sealed class MDV_Rational
+public readonly struct MDV_Rational
     : MDV_Orderable<MDV_Rational>, MDV_Numerical<MDV_Rational>
 {
-    private static readonly MDV_Rational __negative_one
-        = new MDV_Rational(-1, 1, true);
-    private static readonly MDV_Rational __zero
-        = new MDV_Rational(0, 1, true);
-    private static readonly MDV_Rational __positive_one
-        = new MDV_Rational(1, 1, true);
+    private static readonly MDV_Rational __negative_one = new MDV_Rational(-1, 1);
+    private static readonly MDV_Rational __zero = new MDV_Rational(0, 1);
+    private static readonly MDV_Rational __positive_one = new MDV_Rational(1, 1);
 
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
-    // A BigInteger is also optimized to handle small values compactly.
-    // It would be counter-productive for MDV_Rational to have an alternate
-    // representation like Int64, not only for the much greater maintenance
-    // burden, but as it would likely use more memory or perform worse.
-    private BigInteger __numerator;
-    private BigInteger __denominator;
+    // The numerator/denominator pair is normalized, meaning it is coprime,
+    // and the denominator is positive.
+    private readonly BigInteger __numerator;
+    private readonly BigInteger __denominator;
 
-    // A value of the .NET structure type Boolean is immutable.
-    // It should be safe to pass around without cloning.
-    // A true value here declares we know the numerator/denominator pair is
-    // normalized, meaning it is coprime, and the denominator is positive.
-    // If this is false, the pair might still be normalized but we haven't
-    // confirmed that.
-    // If this is false, we still at least expect the denominator to be
-    // positive; that kind of normalization at least must be done for all
-    // MDV_Rational, even if making the pair have the lowest possible
-    // magnitudes is done lazily only when needed.
-    private Boolean __known_to_be_normalized;
-
-    private MDV_Rational(BigInteger numerator, BigInteger denominator,
-        Boolean known_to_be_normalized)
+    private MDV_Rational(BigInteger numerator, BigInteger denominator)
     {
         this.__numerator = numerator;
         this.__denominator = denominator;
-        this.__known_to_be_normalized = known_to_be_normalized;
     }
 
     public override Int32 GetHashCode()
@@ -72,14 +53,6 @@ public sealed class MDV_Rational
         return (obj is MDV_Rational specific_obj)
             ? this._same(specific_obj)
             : false;
-    }
-
-    internal static MDV_Rational _from(
-        BigInteger numerator, BigInteger denominator,
-        Boolean known_to_be_normalized)
-    {
-        return new MDV_Rational(numerator, denominator,
-            known_to_be_normalized);
     }
 
     public static MDV_Rational from(
@@ -112,11 +85,11 @@ public sealed class MDV_Rational
             result_n = result_n / gcd;
             result_d = result_d / gcd;
         }
-        return !result_d.IsOne ? MDV_Rational._from(result_n, result_d, true)
+        return !result_d.IsOne ? new MDV_Rational(result_n, result_d)
             : result_n.IsZero ? MDV_Rational.__zero
             : result_n.IsOne ? MDV_Rational.__positive_one
             : result_n.Equals(-1) ? MDV_Rational.__negative_one
-            : MDV_Rational._from(result_n, result_d, true);
+            : new MDV_Rational(result_n, result_d);
     }
 
     public static MDV_Rational from(Int64 numerator, Int64 denominator)
@@ -149,7 +122,6 @@ public sealed class MDV_Rational
     public void Deconstruct(
         out MDV_Integer numerator, out MDV_Integer denominator)
     {
-        this._ensure_normalized();
         numerator = MDV_Integer.from(this.__numerator);
         denominator = MDV_Integer.from(this.__denominator);
     }
@@ -157,14 +129,12 @@ public sealed class MDV_Rational
     public void Deconstruct(
         out BigInteger numerator, out BigInteger denominator)
     {
-        this._ensure_normalized();
         numerator = this.__numerator;
         denominator = this.__denominator;
     }
 
     public void Deconstruct(out Int64 numerator, out Int64 denominator)
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         numerator = (Int64)this.__numerator;
         denominator = (Int64)this.__denominator;
@@ -172,94 +142,53 @@ public sealed class MDV_Rational
 
     public void Deconstruct(out Int32 numerator, out Int32 denominator)
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         numerator = (Int32)this.__numerator;
         denominator = (Int32)this.__denominator;
     }
 
-    internal BigInteger _numerator()
-    {
-        return this.__numerator;
-    }
-
     public MDV_Integer numerator()
     {
-        this._ensure_normalized();
         return MDV_Integer.from(this.__numerator);
     }
 
     public BigInteger numerator_as_BigInteger()
     {
-        this._ensure_normalized();
         return this.__numerator;
     }
 
     public Int64 numerator_as_Int64()
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         return (Int64)this.__numerator;
     }
 
     public Int32 numerator_as_Int32()
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         return (Int32)this.__numerator;
     }
 
-    internal BigInteger _denominator()
-    {
-        return this.__denominator;
-    }
-
     public MDV_Integer denominator()
     {
-        this._ensure_normalized();
         return MDV_Integer.from(this.__denominator);
     }
 
     public BigInteger denominator_as_BigInteger()
     {
-        this._ensure_normalized();
         return this.__denominator;
     }
 
     public Int64 denominator_as_Int64()
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         return (Int64)this.__denominator;
     }
 
     public Int32 denominator_as_Int32()
     {
-        this._ensure_normalized();
         // This will throw a .NET OverflowException if the value doesn't fit.
         return (Int32)this.__denominator;
-    }
-
-    internal Boolean _known_to_be_normalized()
-    {
-        return this.__known_to_be_normalized;
-    }
-
-    internal void _ensure_normalized()
-    {
-        if (this.__known_to_be_normalized)
-        {
-            return;
-        }
-        BigInteger gcd = MDV_Integer._greatest_common_divisor(
-            this.__numerator, this.__denominator);
-        if (gcd > 1)
-        {
-            // Make the numerator and denominator coprime.
-            this.__numerator = this.__numerator / gcd;
-            this.__denominator = this.__denominator / gcd;
-        }
-        this.__known_to_be_normalized = true;
     }
 
     public MDV_Boolean same(MDV_Any topic_1)
@@ -277,12 +206,6 @@ public sealed class MDV_Rational
     internal Boolean _same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
-        if (topic_0.__denominator.Equals(topic_1.__denominator))
-        {
-            return (topic_0.__numerator.Equals(topic_1.__numerator));
-        }
-        topic_0._ensure_normalized();
-        topic_1._ensure_normalized();
         return (topic_0.__denominator.Equals(topic_1.__denominator)
             && topic_0.__numerator.Equals(topic_1.__numerator));
     }
@@ -306,15 +229,6 @@ public sealed class MDV_Rational
         }
         // We need to compare the arguments in terms of their equivalent
         // fractions where the denominators are equal.
-        // This typically means making the denominators larger, their least
-        // common multiple; but first we will ensure coprime so the LCM
-        // we will work with is also as small as possible.
-        topic_0._ensure_normalized();
-        topic_1._ensure_normalized();
-        if (topic_0.__denominator.Equals(topic_1.__denominator))
-        {
-            return (topic_0.__numerator <= topic_1.__numerator);
-        }
         BigInteger common_d = MDV_Integer._least_common_multiple(
             topic_0.__denominator, topic_1.__denominator);
         return ((topic_0.__numerator * (common_d / topic_0.__denominator))

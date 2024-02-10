@@ -21,10 +21,6 @@ public readonly struct MDV_Integer
 
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
-    // A BigInteger is also optimized to handle small values compactly.
-    // It would be counter-productive for MDV_Integer to have an alternate
-    // representation like Int64, not only for the much greater maintenance
-    // burden, but as it would likely use more memory or perform worse.
     private readonly BigInteger __as_BigInteger;
 
     private MDV_Integer(BigInteger as_BigInteger)
