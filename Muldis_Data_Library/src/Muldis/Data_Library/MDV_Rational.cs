@@ -51,8 +51,7 @@ public readonly struct MDV_Rational
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Rational specific_obj)
-            ? this._same(specific_obj)
-            : false;
+            && this._same(specific_obj);
     }
 
     public static MDV_Rational from(
@@ -95,13 +94,13 @@ public readonly struct MDV_Rational
     public static MDV_Rational from(Int64 numerator, Int64 denominator)
     {
         return MDV_Rational.from(
-            (BigInteger)numerator, (BigInteger)denominator);
+            (BigInteger) numerator, (BigInteger) denominator);
     }
 
     public static MDV_Rational from(Int32 numerator, Int32 denominator)
     {
         return MDV_Rational.from(
-            (BigInteger)numerator, (BigInteger)denominator);
+            (BigInteger) numerator, (BigInteger) denominator);
     }
 
     public static MDV_Rational negative_one()
@@ -136,15 +135,15 @@ public readonly struct MDV_Rational
     public void Deconstruct(out Int64 numerator, out Int64 denominator)
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        numerator = (Int64)this.__numerator;
-        denominator = (Int64)this.__denominator;
+        numerator = (Int64) this.__numerator;
+        denominator = (Int64) this.__denominator;
     }
 
     public void Deconstruct(out Int32 numerator, out Int32 denominator)
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        numerator = (Int32)this.__numerator;
-        denominator = (Int32)this.__denominator;
+        numerator = (Int32) this.__numerator;
+        denominator = (Int32) this.__denominator;
     }
 
     public MDV_Integer numerator()
@@ -160,13 +159,13 @@ public readonly struct MDV_Rational
     public Int64 numerator_as_Int64()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int64)this.__numerator;
+        return (Int64) this.__numerator;
     }
 
     public Int32 numerator_as_Int32()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int32)this.__numerator;
+        return (Int32) this.__numerator;
     }
 
     public MDV_Integer denominator()
@@ -182,13 +181,13 @@ public readonly struct MDV_Rational
     public Int64 denominator_as_Int64()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int64)this.__denominator;
+        return (Int64) this.__denominator;
     }
 
     public Int32 denominator_as_Int32()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int32)this.__denominator;
+        return (Int32) this.__denominator;
     }
 
     public MDV_Boolean same(MDV_Any topic_1)
@@ -217,7 +216,7 @@ public readonly struct MDV_Rational
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic_0._in_order((MDV_Rational)topic_1));
+        return MDV_Boolean.from(topic_0._in_order((MDV_Rational) topic_1));
     }
 
     internal Boolean _in_order(MDV_Rational topic_1)

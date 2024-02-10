@@ -36,8 +36,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Boolean specific_obj)
-            ? this._same(specific_obj)
-            : false;
+            && this._same(specific_obj);
     }
 
     public static MDV_Boolean from(Boolean as_Boolean)
@@ -80,7 +79,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic_0._in_order((MDV_Boolean)topic_1));
+        return MDV_Boolean.from(topic_0._in_order((MDV_Boolean) topic_1));
     }
 
     internal Boolean _in_order(MDV_Boolean topic_1)

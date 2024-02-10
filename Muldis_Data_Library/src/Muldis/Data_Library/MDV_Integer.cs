@@ -41,8 +41,7 @@ public readonly struct MDV_Integer
     public override Boolean Equals(Object? obj)
     {
         return (obj is MDV_Integer specific_obj)
-            ? this._same(specific_obj)
-            : false;
+            && this._same(specific_obj);
     }
 
     public static MDV_Integer from(BigInteger as_BigInteger)
@@ -55,12 +54,12 @@ public readonly struct MDV_Integer
 
     public static MDV_Integer from(Int64 as_Int64)
     {
-        return MDV_Integer.from((BigInteger)as_Int64);
+        return MDV_Integer.from((BigInteger) as_Int64);
     }
 
     public static MDV_Integer from(Int32 as_Int32)
     {
-        return MDV_Integer.from((BigInteger)as_Int32);
+        return MDV_Integer.from((BigInteger) as_Int32);
     }
 
     public static MDV_Integer negative_one()
@@ -86,13 +85,13 @@ public readonly struct MDV_Integer
     public void Deconstruct(out Int64 as_Int64)
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        as_Int64 = (Int64)this.__as_BigInteger;
+        as_Int64 = (Int64) this.__as_BigInteger;
     }
 
     public void Deconstruct(out Int32 as_Int32)
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        as_Int32 = (Int32)this.__as_BigInteger;
+        as_Int32 = (Int32) this.__as_BigInteger;
     }
 
     public BigInteger as_BigInteger()
@@ -103,13 +102,13 @@ public readonly struct MDV_Integer
     public Int64 as_Int64()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int64)this.__as_BigInteger;
+        return (Int64) this.__as_BigInteger;
     }
 
     public Int32 as_Int32()
     {
         // This will throw a .NET OverflowException if the value doesn't fit.
-        return (Int32)this.__as_BigInteger;
+        return (Int32) this.__as_BigInteger;
     }
 
     public MDV_Boolean same(MDV_Any topic_1)
@@ -137,7 +136,7 @@ public readonly struct MDV_Integer
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic_0._in_order((MDV_Integer)topic_1));
+        return MDV_Boolean.from(topic_0._in_order((MDV_Integer) topic_1));
     }
 
     internal Boolean _in_order(MDV_Integer topic_1)
