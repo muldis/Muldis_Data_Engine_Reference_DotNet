@@ -16,7 +16,15 @@ public interface MDV_Any
 
     // not_same != ≠
 
-    public abstract MDV_Boolean not_same(MDV_Any topic_1);
+    public MDV_Boolean not_same(MDV_Any topic_1)
+    {
+        MDV_Any topic_0 = this;
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic_0.same(topic_1).not();
+    }
 
     // coalesce ??
 

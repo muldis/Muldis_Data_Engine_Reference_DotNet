@@ -56,5 +56,5 @@ public interface MDV_Successable<Specific_T> : MDV_Any
 
     // succ
 
-    public abstract Specific_T succ();
+    public abstract MDV_Successable<Specific_T> succ();
 }

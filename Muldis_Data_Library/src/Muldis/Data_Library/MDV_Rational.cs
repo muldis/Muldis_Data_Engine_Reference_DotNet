@@ -265,17 +265,13 @@ public sealed class MDV_Rational
     public MDV_Boolean same(MDV_Any topic_1)
     {
         MDV_Rational topic_0 = this;
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
         return (topic_1 is MDV_Rational specific_topic_1)
             ? MDV_Boolean.from(topic_0._same(specific_topic_1))
             : MDV_Boolean.@false();
-    }
-
-    public MDV_Boolean not_same(MDV_Any topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        return (topic_1 is MDV_Rational specific_topic_1)
-            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
-            : MDV_Boolean.@true();
     }
 
     internal Boolean _same(MDV_Rational topic_1)
@@ -291,14 +287,14 @@ public sealed class MDV_Rational
             && topic_0.__numerator.Equals(topic_1.__numerator));
     }
 
-    public MDV_Boolean in_order(MDV_Rational topic_1)
+    public MDV_Boolean in_order(MDV_Orderable<MDV_Rational> topic_1)
     {
         MDV_Rational topic_0 = this;
         if (topic_1 is null)
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
+        return MDV_Boolean.from(topic_0._in_order((MDV_Rational)topic_1));
     }
 
     internal Boolean _in_order(MDV_Rational topic_1)
@@ -325,75 +321,9 @@ public sealed class MDV_Rational
             <= (topic_1.__numerator * (common_d / topic_1.__denominator)));
     }
 
-    public MDV_Boolean before(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(!topic_1._in_order(topic_0));
-    }
-
-    public MDV_Boolean after(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(!topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean before_or_same(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean after_or_same(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic_1._in_order(topic_0));
-    }
-
-    public MDV_Rational min(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0._in_order(topic_1) ? topic_0 : topic_1;
-    }
-
-    public MDV_Rational max(MDV_Rational topic_1)
-    {
-        MDV_Rational topic_0 = this;
-        if (topic_1 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return topic_0._in_order(topic_1) ? topic_1 : topic_0;
-    }
-
     public MDV_Boolean so_zero()
     {
         MDV_Rational topic = this;
         return MDV_Boolean.from(topic.__numerator.IsZero);
-    }
-
-    public MDV_Boolean not_zero()
-    {
-        MDV_Rational topic = this;
-        return MDV_Boolean.from(!topic.__numerator.IsZero);
     }
 }

@@ -119,17 +119,13 @@ public readonly struct MDV_Integer
     public MDV_Boolean same(MDV_Any topic_1)
     {
         MDV_Integer topic_0 = this;
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
         return (topic_1 is MDV_Integer specific_topic_1)
             ? MDV_Boolean.from(topic_0._same(specific_topic_1))
             : MDV_Boolean.@false();
-    }
-
-    public MDV_Boolean not_same(MDV_Any topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return (topic_1 is MDV_Integer specific_topic_1)
-            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
-            : MDV_Boolean.@true();
     }
 
     internal Boolean _same(MDV_Integer topic_1)
@@ -138,10 +134,14 @@ public readonly struct MDV_Integer
         return topic_0.__as_BigInteger.Equals(topic_1.__as_BigInteger);
     }
 
-    public MDV_Boolean in_order(MDV_Integer topic_1)
+    public MDV_Boolean in_order(MDV_Orderable<MDV_Integer> topic_1)
     {
         MDV_Integer topic_0 = this;
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic_0._in_order((MDV_Integer)topic_1));
     }
 
     internal Boolean _in_order(MDV_Integer topic_1)
@@ -150,55 +150,19 @@ public readonly struct MDV_Integer
         return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
     }
 
-    public MDV_Boolean before(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return MDV_Boolean.from(!topic_1._in_order(topic_0));
-    }
-
-    public MDV_Boolean after(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return MDV_Boolean.from(!topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean before_or_same(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean after_or_same(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return MDV_Boolean.from(topic_1._in_order(topic_0));
-    }
-
-    public MDV_Integer min(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return topic_0._in_order(topic_1) ? topic_0 : topic_1;
-    }
-
-    public MDV_Integer max(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        return topic_0._in_order(topic_1) ? topic_1 : topic_0;
-    }
-
     public MDV_Any asset()
     {
         MDV_Integer topic = this;
         return topic;
     }
 
-    public MDV_Integer succ()
+    public MDV_Successable<MDV_Integer> succ()
     {
         MDV_Integer topic = this;
         return MDV_Integer.from(topic.__as_BigInteger + 1);
     }
 
-    public MDV_Integer pred()
+    public MDV_Bicessable<MDV_Integer> pred()
     {
         MDV_Integer topic = this;
         return MDV_Integer.from(topic.__as_BigInteger - 1);
@@ -208,12 +172,6 @@ public readonly struct MDV_Integer
     {
         MDV_Integer topic = this;
         return MDV_Boolean.from(topic.__as_BigInteger.IsZero);
-    }
-
-    public MDV_Boolean not_zero()
-    {
-        MDV_Integer topic = this;
-        return MDV_Boolean.from(!topic.__as_BigInteger.IsZero);
     }
 
     // greatest_common_divisor gcd

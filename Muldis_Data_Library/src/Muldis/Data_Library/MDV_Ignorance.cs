@@ -38,11 +38,10 @@ public readonly struct MDV_Ignorance : MDV_Excuse
 
     public MDV_Boolean same(MDV_Any topic_1)
     {
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
         return MDV_Boolean.from(topic_1 is MDV_Ignorance);
-    }
-
-    public MDV_Boolean not_same(MDV_Any topic_1)
-    {
-        return MDV_Boolean.from(topic_1 is not MDV_Ignorance);
     }
 }

@@ -33,5 +33,9 @@ public interface MDV_Numerical<Specific_T> : MDV_Any
 
     // not_zero
 
-    public abstract MDV_Boolean not_zero();
+    public MDV_Boolean not_zero()
+    {
+        MDV_Numerical<Specific_T> topic = this;
+        return topic.so_zero().not();
+    }
 }

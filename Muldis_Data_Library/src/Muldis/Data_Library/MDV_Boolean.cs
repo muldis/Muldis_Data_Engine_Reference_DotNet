@@ -58,17 +58,13 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     public MDV_Boolean same(MDV_Any topic_1)
     {
         MDV_Boolean topic_0 = this;
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
         return (topic_1 is MDV_Boolean specific_topic_1)
             ? MDV_Boolean.from(topic_0._same(specific_topic_1))
             : MDV_Boolean.__false;
-    }
-
-    public MDV_Boolean not_same(MDV_Any topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return (topic_1 is MDV_Boolean specific_topic_1)
-            ? MDV_Boolean.from(!topic_0._same(specific_topic_1))
-            : MDV_Boolean.__true;
     }
 
     internal Boolean _same(MDV_Boolean topic_1)
@@ -77,10 +73,14 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return topic_0.__as_Boolean.Equals(topic_1.__as_Boolean);
     }
 
-    public MDV_Boolean in_order(MDV_Boolean topic_1)
+    public MDV_Boolean in_order(MDV_Orderable<MDV_Boolean> topic_1)
     {
         MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
+        if (topic_1 is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic_0._in_order((MDV_Boolean)topic_1));
     }
 
     internal Boolean _in_order(MDV_Boolean topic_1)
@@ -89,49 +89,13 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return !topic_0.__as_Boolean || topic_1.__as_Boolean;
     }
 
-    public MDV_Boolean before(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(!topic_1._in_order(topic_0));
-    }
-
-    public MDV_Boolean after(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(!topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean before_or_same(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(topic_0._in_order(topic_1));
-    }
-
-    public MDV_Boolean after_or_same(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return MDV_Boolean.from(topic_1._in_order(topic_0));
-    }
-
-    public MDV_Boolean min(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return topic_0._in_order(topic_1) ? topic_0 : topic_1;
-    }
-
-    public MDV_Boolean max(MDV_Boolean topic_1)
-    {
-        MDV_Boolean topic_0 = this;
-        return topic_0._in_order(topic_1) ? topic_1 : topic_0;
-    }
-
     public MDV_Any asset()
     {
         MDV_Boolean topic = this;
         return topic;
     }
 
-    public MDV_Boolean succ()
+    public MDV_Successable<MDV_Boolean> succ()
     {
         MDV_Boolean topic = this;
         if (topic.__as_Boolean)
@@ -142,7 +106,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.@true();
     }
 
-    public MDV_Boolean pred()
+    public MDV_Bicessable<MDV_Boolean> pred()
     {
         MDV_Boolean topic = this;
         if (!topic.__as_Boolean)
