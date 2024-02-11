@@ -28,8 +28,7 @@
 // `Orderable` is composed, directly or indirectly, by:
 // `Before_All_Others`, `After_All_Others`, `Bicessable`,
 // `Boolean`, `Integral`, `Integer`, `Fractional`, `Rational`,
-// `Stringy`, `Bits`, `Blob`, `Textual`, `Text`, `Positional`, `Array`,
-// `Orderelation`.
+// `Positional`, `Bits`, `Blob`, `Textual`, `Text`, `Array`, `Orderelation`.
 
 namespace Muldis.Data_Library;
 
