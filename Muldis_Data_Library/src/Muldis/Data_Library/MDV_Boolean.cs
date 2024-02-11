@@ -66,7 +66,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
             : MDV_Boolean.__false;
     }
 
-    internal Boolean _same(MDV_Boolean topic_1)
+    private Boolean _same(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return topic_0.__as_Boolean.Equals(topic_1.__as_Boolean);
@@ -82,7 +82,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.from(topic_0._in_order((MDV_Boolean) topic_1));
     }
 
-    internal Boolean _in_order(MDV_Boolean topic_1)
+    private Boolean _in_order(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return !topic_0.__as_Boolean || topic_1.__as_Boolean;

@@ -202,7 +202,7 @@ public readonly struct MDV_Rational
             : MDV_Boolean.@false();
     }
 
-    internal Boolean _same(MDV_Rational topic_1)
+    private Boolean _same(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
         return (topic_0.__denominator.Equals(topic_1.__denominator)
@@ -219,7 +219,7 @@ public readonly struct MDV_Rational
         return MDV_Boolean.from(topic_0._in_order((MDV_Rational) topic_1));
     }
 
-    internal Boolean _in_order(MDV_Rational topic_1)
+    private Boolean _in_order(MDV_Rational topic_1)
     {
         MDV_Rational topic_0 = this;
         if (topic_0.__denominator.Equals(topic_1.__denominator))

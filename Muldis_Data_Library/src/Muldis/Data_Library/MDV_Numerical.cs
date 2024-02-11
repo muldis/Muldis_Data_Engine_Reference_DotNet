@@ -12,8 +12,7 @@
 // thing may choose to compose `Numerical` because it makes sense to provide
 // its operators.  The default value of `Numerical` is the `Integer` value
 // `0`.  A `Numerical` in the general case is not `Orderable`, but often a
-// type that is numeric is also orderable.  Other programming languages may
-// name their corresponding types *Numeric*.
+// type that is numeric is also orderable.
 //
 // `Numerical` is composed, directly or indirectly, by: `Integral`,
 // `Integer`, `Fractional`, `Rational`, `Quantitative`, `Quantity`.

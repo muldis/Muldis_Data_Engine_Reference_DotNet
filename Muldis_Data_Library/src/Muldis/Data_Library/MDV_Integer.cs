@@ -123,7 +123,7 @@ public readonly struct MDV_Integer
             : MDV_Boolean.@false();
     }
 
-    internal Boolean _same(MDV_Integer topic_1)
+    private Boolean _same(MDV_Integer topic_1)
     {
         MDV_Integer topic_0 = this;
         return topic_0.__as_BigInteger.Equals(topic_1.__as_BigInteger);
@@ -139,7 +139,7 @@ public readonly struct MDV_Integer
         return MDV_Boolean.from(topic_0._in_order((MDV_Integer) topic_1));
     }
 
-    internal Boolean _in_order(MDV_Integer topic_1)
+    private Boolean _in_order(MDV_Integer topic_1)
     {
         MDV_Integer topic_0 = this;
         return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
