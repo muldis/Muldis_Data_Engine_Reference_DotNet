@@ -112,10 +112,10 @@ internal static class Internal_Identity
         {
             return "\"\"";
         }
-        if (topic.Length == 1 && ((Int32)(Char)topic[0]) <= 0x1F)
+        if (topic.Length == 1 && ((Int32)(Char) topic[0]) <= 0x1F)
         {
             // Format as a code-point-text.
-            return "0t" + ((Int32)(Char)topic[0]);
+            return "0t" + ((Int32)(Char) topic[0]);
         }
         if (Regex.IsMatch(topic, @"\A[A-Za-z_][A-Za-z_0-9]*\z"))
         {
@@ -123,15 +123,14 @@ internal static class Internal_Identity
             return topic;
         }
         // Else, format as a quoted text.
-        if (String.Equals(topic, "") || !Regex.IsMatch(topic,
-            "[\u0000-\u001F\"\\`\u007F-\u009F]"))
+        if (!Regex.IsMatch(topic, "[\u0000-\u001F\"\\`\u007F-\u009F]"))
         {
             return "\"" + topic + "\"";
         }
         StringBuilder sb = new StringBuilder(topic.Length);
         for (Int32 i = 0; i < topic.Length; i++)
         {
-            Int32 c = (Int32)(Char)topic[i];
+            Int32 c = (Int32)(Char) topic[i];
             switch (c)
             {
                 case 0x7:
@@ -174,7 +173,7 @@ internal static class Internal_Identity
                     }
                     else
                     {
-                        sb.Append((Char)c);
+                        sb.Append((Char) c);
                     }
                     break;
             }

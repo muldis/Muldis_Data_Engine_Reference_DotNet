@@ -86,9 +86,9 @@ public readonly struct MDV_Text : MDV_Positional<MDV_Text>
             count_of_code_point_members++;
             if (Char.IsSurrogate(code_point_members_as_String[i]))
             {
-                if ((i+1) < code_point_members_as_String.Length
+                if ((i + 1) < code_point_members_as_String.Length
                     && Char.IsSurrogatePair(code_point_members_as_String[i],
-                    code_point_members_as_String[i+1]))
+                    code_point_members_as_String[i + 1]))
                 {
                     has_any_non_BMP = true;
                     i++;
