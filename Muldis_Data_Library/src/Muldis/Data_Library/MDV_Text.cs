@@ -163,7 +163,7 @@ public readonly struct MDV_Text : MDV_Positional<MDV_Text>
         return MDV_Boolean.from(topic.__code_point_members_as_String.Equals(String.Empty));
     }
 
-    public MDV_Emptyable<MDV_Text> empty()
+    public MDV_Homogeneous<MDV_Text> empty()
     {
         return MDV_Text.__empty;
     }

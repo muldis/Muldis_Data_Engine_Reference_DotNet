@@ -326,16 +326,16 @@ public static class MDP_System<Specific_T>
         return MDV_Boolean.from(topic is MDV_Rational);
     }
 
-    public static MDV_Boolean Emptyable(MDV_Any topic)
+    public static MDV_Boolean Homogeneous(MDV_Any topic)
     {
         if (topic is null)
         {
             throw new ArgumentNullException();
         }
-        return MDV_Boolean.from(topic is MDV_Emptyable<Specific_T>);
+        return MDV_Boolean.from(topic is MDV_Homogeneous<Specific_T>);
     }
 
-    public static MDV_Boolean so_empty(MDV_Emptyable<Specific_T> topic)
+    public static MDV_Boolean so_empty(MDV_Homogeneous<Specific_T> topic)
     {
         if (topic is null)
         {
@@ -344,7 +344,7 @@ public static class MDP_System<Specific_T>
         return topic.so_empty();
     }
 
-    public static MDV_Boolean not_empty(MDV_Emptyable<Specific_T> topic)
+    public static MDV_Boolean not_empty(MDV_Homogeneous<Specific_T> topic)
     {
         if (topic is null)
         {
@@ -353,7 +353,7 @@ public static class MDP_System<Specific_T>
         return topic.not_empty();
     }
 
-    public static MDV_Emptyable<Specific_T> empty(MDV_Emptyable<Specific_T> topic)
+    public static MDV_Homogeneous<Specific_T> empty(MDV_Homogeneous<Specific_T> topic)
     {
         if (topic is null)
         {
