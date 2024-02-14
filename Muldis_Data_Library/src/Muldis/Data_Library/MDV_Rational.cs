@@ -111,7 +111,7 @@ public readonly struct MDV_Rational
         return MDV_Rational.__negative_one;
     }
 
-    public static MDV_Rational zero()
+    public static MDV_Rational zero_()
     {
         return MDV_Rational.__zero;
     }
@@ -241,5 +241,10 @@ public readonly struct MDV_Rational
     {
         MDV_Rational topic = this;
         return MDV_Boolean.from(topic.__numerator.IsZero);
+    }
+
+    public MDV_Numerical<MDV_Rational> zero()
+    {
+        return MDV_Rational.__zero;
     }
 }

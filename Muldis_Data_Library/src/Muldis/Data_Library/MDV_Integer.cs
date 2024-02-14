@@ -70,7 +70,7 @@ public readonly struct MDV_Integer
         return MDV_Integer.__negative_one;
     }
 
-    public static MDV_Integer zero()
+    public static MDV_Integer zero_()
     {
         return MDV_Integer.__zero;
     }
@@ -170,6 +170,11 @@ public readonly struct MDV_Integer
     {
         MDV_Integer topic = this;
         return MDV_Boolean.from(topic.__as_BigInteger.IsZero);
+    }
+
+    public MDV_Numerical<MDV_Integer> zero()
+    {
+        return MDV_Integer.__zero;
     }
 
     // greatest_common_divisor gcd

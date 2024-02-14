@@ -296,6 +296,15 @@ public static class MDP_System<Specific_T>
         return topic.not_zero();
     }
 
+    public static MDV_Numerical<Specific_T> zero(MDV_Numerical<Specific_T> topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return topic.zero();
+    }
+
     public static MDV_Boolean Integer(MDV_Any topic)
     {
         if (topic is null)
