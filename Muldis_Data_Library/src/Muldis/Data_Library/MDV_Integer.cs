@@ -15,9 +15,12 @@ namespace Muldis.Data_Library;
 public readonly struct MDV_Integer
     : MDV_Bicessable<MDV_Integer>, MDV_Numerical<MDV_Integer>
 {
-    private static readonly MDV_Integer __negative_one = new MDV_Integer(-1);
-    private static readonly MDV_Integer __zero = new MDV_Integer(0);
-    private static readonly MDV_Integer __positive_one = new MDV_Integer(1);
+    private static readonly MDV_Integer __negative_one
+        = new MDV_Integer(BigInteger.MinusOne);
+    private static readonly MDV_Integer __zero
+        = new MDV_Integer(BigInteger.Zero);
+    private static readonly MDV_Integer __positive_one
+        = new MDV_Integer(BigInteger.One);
 
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
@@ -48,7 +51,7 @@ public readonly struct MDV_Integer
     {
         return as_BigInteger.IsZero ? MDV_Integer.__zero
             : as_BigInteger.IsOne ? MDV_Integer.__positive_one
-            : as_BigInteger.Equals(-1) ? MDV_Integer.__negative_one
+            : as_BigInteger.Equals(BigInteger.MinusOne) ? MDV_Integer.__negative_one
             : new MDV_Integer(as_BigInteger);
     }
 
@@ -154,13 +157,13 @@ public readonly struct MDV_Integer
     public MDV_Successable<MDV_Integer> succ()
     {
         MDV_Integer topic = this;
-        return MDV_Integer.from(topic.__as_BigInteger + 1);
+        return MDV_Integer.from(topic.__as_BigInteger + BigInteger.One);
     }
 
     public MDV_Bicessable<MDV_Integer> pred()
     {
         MDV_Integer topic = this;
-        return MDV_Integer.from(topic.__as_BigInteger - 1);
+        return MDV_Integer.from(topic.__as_BigInteger - BigInteger.One);
     }
 
     public MDV_Boolean so_zero()
@@ -200,7 +203,7 @@ public readonly struct MDV_Integer
         // Note that least common multiple always has a non-negative result.
         if (topic_0.IsZero || topic_1.IsZero)
         {
-            return 0;
+            return topic_0;
         }
         return (BigInteger.Abs(topic_0) * (
             BigInteger.Abs(topic_1)

@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -22,8 +23,82 @@ internal static class Internal_Preview
 
     internal static String Rational(MDV_Rational topic)
     {
+        // Iff the Rational value can be exactly expressed as a
+        // non-terminating decimal (includes all Rational that can be
+        // non-terminating binary/octal/hex), express in that format;
+        // otherwise, express as a normalized/reduced/coprime numerator/denominator pair.
+        if (Internal_Preview.is_terminating_decimal(topic))
+        {
+            Int32 dec_scale = Internal_Preview.decimal_denominator_scale(topic);
+            if (dec_scale == 0)
+            {
+                // We have an integer expressed as a Rational.
+                return topic.numerator_as_BigInteger().ToString() + ".0";
+            }
+            BigInteger dec_denominator
+                = BigInteger.Pow(new BigInteger(10), dec_scale);
+            BigInteger dec_numerator = topic.numerator_as_BigInteger()
+                * BigInteger.Divide(dec_denominator, topic.denominator_as_BigInteger());
+            String numerator_digits = dec_numerator.ToString();
+            Int32 left_size = numerator_digits.Length - dec_scale;
+            return numerator_digits.Substring(0, left_size)
+                + "." + numerator_digits.Substring(left_size);
+        }
         return topic.numerator_as_BigInteger().ToString()
             + "/" + topic.denominator_as_BigInteger().ToString();
+    }
+
+    private static Boolean is_terminating_decimal(MDV_Rational topic)
+    {
+        Boolean found_all_2_factors = false;
+        Boolean found_all_5_factors = false;
+        BigInteger confirmed_quotient = topic.denominator_as_BigInteger();
+        BigInteger attempt_quotient = BigInteger.One;
+        BigInteger attempt_remainder = BigInteger.Zero;
+        while (!found_all_2_factors)
+        {
+            (attempt_quotient, attempt_remainder)
+                = BigInteger.DivRem(confirmed_quotient, 2);
+            if (attempt_remainder > BigInteger.Zero)
+            {
+                found_all_2_factors = true;
+            }
+            else
+            {
+                confirmed_quotient = attempt_quotient;
+            }
+        }
+        while (!found_all_5_factors)
+        {
+            (attempt_quotient, attempt_remainder)
+                = BigInteger.DivRem(confirmed_quotient, 5);
+            if (attempt_remainder > BigInteger.Zero)
+            {
+                found_all_5_factors = true;
+            }
+            else
+            {
+                confirmed_quotient = attempt_quotient;
+            }
+        }
+        return confirmed_quotient.IsOne;
+    }
+
+    private static Int32 decimal_denominator_scale(MDV_Rational topic)
+    {
+        BigInteger denominator = topic.denominator_as_BigInteger();
+        for (Int32 dec_scale = 0; dec_scale <= Int32.MaxValue; dec_scale++)
+        {
+            // BigInteger.Pow() can only take an Int32 exponent anyway.
+            if (BigInteger.Remainder(BigInteger
+                    .Pow(new BigInteger(10), dec_scale), denominator)
+                .Equals(BigInteger.Zero))
+            {
+                return dec_scale;
+            }
+        }
+        // If somehow the denominator can be big enough that we'd actually get here.
+        throw new OverflowException();
     }
 
     internal static String Text(MDV_Text topic)

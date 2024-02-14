@@ -9,7 +9,7 @@
 // The intended interpretation of a `Rational` is as the rational number
 // that results from evaluating the given 2 integers as the mathematical
 // expression `numerator/denominator`, such that `/` means divide.
-// Canonically the *numerator* / *denominator* pair is coprime.
+// Canonically the *numerator* / *denominator* pair is normalized/reduced/coprime.
 // `Rational` is an infinite type.
 // `Rational` has a default value of `0.0`.
 // `Rational` is `Orderable`; it has no minimum or maximum value.
@@ -21,13 +21,16 @@ namespace Muldis.Data_Library;
 public readonly struct MDV_Rational
     : MDV_Orderable<MDV_Rational>, MDV_Numerical<MDV_Rational>
 {
-    private static readonly MDV_Rational __negative_one = new MDV_Rational(-1, 1);
-    private static readonly MDV_Rational __zero = new MDV_Rational(0, 1);
-    private static readonly MDV_Rational __positive_one = new MDV_Rational(1, 1);
+    private static readonly MDV_Rational __negative_one
+        = new MDV_Rational(BigInteger.MinusOne, BigInteger.One);
+    private static readonly MDV_Rational __zero
+        = new MDV_Rational(BigInteger.Zero, BigInteger.One);
+    private static readonly MDV_Rational __positive_one
+        = new MDV_Rational(BigInteger.One, BigInteger.One);
 
     // A value of the .NET structure type BigInteger is immutable.
     // It should be safe to pass around without cloning.
-    // The numerator/denominator pair is normalized, meaning it is coprime,
+    // The numerator/denominator pair is normalized/reduced/coprime,
     // and the denominator is positive.
     private readonly BigInteger __numerator;
     private readonly BigInteger __denominator;
@@ -71,15 +74,15 @@ public readonly struct MDV_Rational
         BigInteger result_n = numerator;
         BigInteger result_d = denominator;
         // Ensure denominator is positive.
-        if (result_d < 0)
+        if (result_d < BigInteger.Zero)
         {
             result_n = -result_n;
             result_d = -result_d;
         }
         BigInteger gcd = MDV_Integer._greatest_common_divisor(
             result_n, result_d);
-        // Ensure numerator and denominator coprime.
-        if (gcd > 1)
+        // Ensure numerator and denominator normalized/reduced/coprime.
+        if (gcd > BigInteger.One)
         {
             result_n = result_n / gcd;
             result_d = result_d / gcd;
@@ -87,7 +90,7 @@ public readonly struct MDV_Rational
         return !result_d.IsOne ? new MDV_Rational(result_n, result_d)
             : result_n.IsZero ? MDV_Rational.__zero
             : result_n.IsOne ? MDV_Rational.__positive_one
-            : result_n.Equals(-1) ? MDV_Rational.__negative_one
+            : result_n.Equals(BigInteger.MinusOne) ? MDV_Rational.__negative_one
             : new MDV_Rational(result_n, result_d);
     }
 
