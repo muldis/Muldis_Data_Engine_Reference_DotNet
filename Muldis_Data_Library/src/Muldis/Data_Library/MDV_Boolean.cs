@@ -30,7 +30,7 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
 
     public override String ToString()
     {
-        return Internal_Preview.Boolean(this);
+        return Internal_Identity.Boolean(this);
     }
 
     public override Boolean Equals(Object? obj)

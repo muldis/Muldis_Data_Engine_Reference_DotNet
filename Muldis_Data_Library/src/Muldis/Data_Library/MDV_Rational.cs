@@ -48,7 +48,7 @@ public readonly struct MDV_Rational
 
     public override String ToString()
     {
-        return Internal_Preview.Rational(this);
+        return Internal_Identity.Rational(this);
     }
 
     public override Boolean Equals(Object? obj)

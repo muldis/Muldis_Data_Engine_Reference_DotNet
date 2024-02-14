@@ -38,7 +38,7 @@ public readonly struct MDV_Integer
 
     public override String ToString()
     {
-        return Internal_Preview.Integer(this);
+        return Internal_Identity.Integer(this);
     }
 
     public override Boolean Equals(Object? obj)

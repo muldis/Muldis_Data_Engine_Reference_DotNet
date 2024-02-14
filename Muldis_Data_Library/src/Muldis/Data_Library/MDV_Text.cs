@@ -64,7 +64,7 @@ public readonly struct MDV_Text : MDV_Positional<MDV_Text>
 
     public override String ToString()
     {
-        return Internal_Preview.Text(this);
+        return Internal_Identity.Text(this);
     }
 
     public override Boolean Equals(Object? obj)

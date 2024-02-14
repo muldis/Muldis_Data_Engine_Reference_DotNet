@@ -23,7 +23,7 @@ public readonly struct MDV_Ignorance : MDV_Excuse
 
     public override String ToString()
     {
-        return Internal_Preview.Ignorance();
+        return Internal_Identity.Ignorance();
     }
 
     public override Boolean Equals(Object? obj)

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Muldis.Data_Library;
 
-internal static class Internal_Preview
+internal static class Internal_Identity
 {
     internal static String Ignorance()
     {
@@ -27,9 +27,9 @@ internal static class Internal_Preview
         // non-terminating decimal (includes all Rational that can be
         // non-terminating binary/octal/hex), express in that format;
         // otherwise, express as a normalized/reduced/coprime numerator/denominator pair.
-        if (Internal_Preview.is_terminating_decimal(topic))
+        if (Internal_Identity.is_terminating_decimal(topic))
         {
-            Int32 dec_scale = Internal_Preview.decimal_denominator_scale(topic);
+            Int32 dec_scale = Internal_Identity.decimal_denominator_scale(topic);
             if (dec_scale == 0)
             {
                 // We have an integer expressed as a Rational.
@@ -103,7 +103,7 @@ internal static class Internal_Preview
 
     internal static String Text(MDV_Text topic)
     {
-        return Internal_Preview._Text(topic.code_point_members_as_String());
+        return Internal_Identity._Text(topic.code_point_members_as_String());
     }
 
     private static String _Text(String topic)
