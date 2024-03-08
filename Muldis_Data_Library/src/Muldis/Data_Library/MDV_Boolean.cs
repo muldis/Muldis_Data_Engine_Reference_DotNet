@@ -1,12 +1,3 @@
-// Selection type definer `Boolean`.
-// Represents foundation type `fdn::Boolean`.
-// A `Boolean` value is a general purpose 2-valued logic boolean or *truth
-// value*, or specifically it is one of the 2 values `0bFALSE` and `0bTRUE`.
-// `Boolean` is a finite type.
-// `Boolean` has a default value of `0bFALSE`.
-// `Boolean` is both `Orderable` and `Bicessable`;
-// its minimum value is `0bFALSE` and its maximum value is `0bTRUE`.
-
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
@@ -116,21 +107,15 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.@false();
     }
 
-    // false ⊥
-
     public static MDV_Boolean @false()
     {
         return MDV_Boolean.__false;
     }
 
-    // true ⊤
-
     public static MDV_Boolean @true()
     {
         return MDV_Boolean.__true;
     }
-
-    // not ! ¬
 
     public MDV_Boolean not()
     {
@@ -138,15 +123,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.from(!topic.__as_Boolean);
     }
 
-    // and ∧
-
     public MDV_Boolean and(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return MDV_Boolean.from(topic_0.__as_Boolean && topic_1.__as_Boolean);
     }
-
-    // nand not_and ⊼ ↑
 
     public MDV_Boolean nand(MDV_Boolean topic_1)
     {
@@ -154,15 +135,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.from(!topic_0.__as_Boolean || !topic_1.__as_Boolean);
     }
 
-    // or ∨
-
     public MDV_Boolean or(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return MDV_Boolean.from(topic_0.__as_Boolean || topic_1.__as_Boolean);
     }
-
-    // nor not_or ⊽ ↓
 
     public MDV_Boolean nor(MDV_Boolean topic_1)
     {
@@ -170,15 +147,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.from(!topic_0.__as_Boolean && !topic_1.__as_Boolean);
     }
 
-    // xnor iff ↔
-
     public MDV_Boolean xnor(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return MDV_Boolean.from(topic_0.__as_Boolean.Equals(topic_1.__as_Boolean));
     }
-
-    // xor ⊻ ↮
 
     public MDV_Boolean xor(MDV_Boolean topic_1)
     {
@@ -186,15 +159,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return MDV_Boolean.from(!topic_0.__as_Boolean.Equals(topic_1.__as_Boolean));
     }
 
-    // imp implies →
-
     public MDV_Boolean imp(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return topic_0.__as_Boolean ? topic_1 : MDV_Boolean.__true;
     }
-
-    // nimp not_implies ↛
 
     public MDV_Boolean nimp(MDV_Boolean topic_1)
     {
@@ -202,15 +171,11 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
         return topic_0.imp(topic_1).not();
     }
 
-    // if ←
-
     public MDV_Boolean @if(MDV_Boolean topic_1)
     {
         MDV_Boolean topic_0 = this;
         return topic_1.imp(topic_0);
     }
-
-    // nif not_if ↚
 
     public MDV_Boolean nif(MDV_Boolean topic_1)
     {

@@ -1,13 +1,3 @@
-// Selection type definer `Integer`.
-// Represents foundation type `fdn::Integer`.
-// An `Integer` value is a general purpose exact integral number of any
-// magnitude, which explicitly does not represent any kind of
-// thing in particular, neither cardinal nor ordinal nor nominal.
-// `Integer` is an infinite type.
-// `Integer` has a default value of `0`.
-// `Integer` is both `Orderable` and `Bicessable`;
-// it has no minimum or maximum value.
-
 using System.Numerics;
 
 namespace Muldis.Data_Library;
@@ -177,8 +167,6 @@ public readonly struct MDV_Integer
         return MDV_Integer.__zero;
     }
 
-    // greatest_common_divisor gcd
-
     public MDV_Integer greatest_common_divisor(MDV_Integer topic_1)
     {
         MDV_Integer topic_0 = this;
@@ -192,8 +180,6 @@ public readonly struct MDV_Integer
         // Note that greatest common divisor always has a non-negative result.
         return BigInteger.GreatestCommonDivisor(topic_0, topic_1);
     }
-
-    // least_common_multiple lcm
 
     public MDV_Integer least_common_multiple(MDV_Integer topic_1)
     {

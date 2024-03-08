@@ -1,19 +1,3 @@
-// Selection type definer `Rational`.
-// Represents foundation type `fdn::Rational`.
-// A `Rational` value is a general purpose exact rational number of any
-// magnitude and precision, which explicitly does not represent any
-// kind of thing in particular, neither cardinal nor ordinal nor nominal.
-// A `Rational` value is characterized by the pairing of a *numerator*,
-// which is an `Integer` value, with a *denominator*, which is an
-// `Integer` value that is non-zero.
-// The intended interpretation of a `Rational` is as the rational number
-// that results from evaluating the given 2 integers as the mathematical
-// expression `numerator/denominator`, such that `/` means divide.
-// Canonically the *numerator* / *denominator* pair is normalized/reduced/coprime.
-// `Rational` is an infinite type.
-// `Rational` has a default value of `0.0`.
-// `Rational` is `Orderable`; it has no minimum or maximum value.
-
 using System.Numerics;
 
 namespace Muldis.Data_Library;

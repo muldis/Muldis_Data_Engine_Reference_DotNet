@@ -1,15 +1,3 @@
-// Singleton type definer `Ignorance`.
-// Represents foundation type `fdn::Ignorance`.
-// The `Ignorance` value represents the `Excuse` value which
-// simply says that an ordinary value for any given domain is missing
-// and that there is simply no excuse that has been given for this; in
-// other words, something has gone wrong without the slightest hint of
-// an explanation.  This is conceptually the most generic `Excuse`
-// value there is, to help with expedient development, but any uses
-// should be considered technical debt, to be replaced later.
-// `Ignorance` is a finite type.
-// `Ignorance` has a default value of `0iIGNORANCE`.
-
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Ignorance : MDV_Excuse

@@ -1,5 +1,3 @@
-// Muldis Data Language package `System`.
-
 namespace Muldis.Data_Library;
 
 public static class MDP_System<Specific_T>
@@ -12,13 +10,6 @@ public static class MDP_System<Specific_T>
         }
         return MDV_Boolean.@true();
     }
-
-    // Selection type definer `None`.
-    // `None` represents the *empty type*, which is the minimal data type
-    // of the entire Muldis Data Language type system and consists of
-    // exactly zero values.  It is the intersection of all other types.
-    // It is a *subtype* of every other type.
-    // `None` can not have a default value.
 
     public static MDV_Boolean None(MDV_Any topic)
     {

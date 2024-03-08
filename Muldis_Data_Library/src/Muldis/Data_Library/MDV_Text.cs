@@ -1,17 +1,3 @@
-// Selection type definer `Text`.
-// Represents foundation type `fdn::Text`.
-// A `Text` value is characterized by an arbitrarily-large ordered sequence of
-// Unicode standard *character code points*, where each distinct code point
-// corresponds to a distinct integer in the set `[0..0xD7FF,0xE000..0x10FFFF]`,
-// which explicitly does not represent any kind of thing in particular.
-// Each character is taken from a finite repertoire having 0x10F7FF members,
-// but `Text` imposes no limit on the length of each character sequence.
-// `Text` is an infinite type.
-// `Text` has a default value of `""` (the empty character string).
-// `Text` is `Orderable`; its minimum value is `""`; it has no maximum value;
-// its ordering algorithm corresponds directly to that of `Array`,
-// pairwise as integer sequences.
-
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Text : MDV_Positional<MDV_Text>
