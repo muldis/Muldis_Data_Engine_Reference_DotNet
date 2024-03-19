@@ -1,6 +1,6 @@
 namespace Muldis.Data_Library;
 
-public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
+public readonly struct MDV_Boolean : MDV_Orderable<MDV_Boolean>
 {
     private static readonly MDV_Boolean __false = new MDV_Boolean(false);
     private static readonly MDV_Boolean __true = new MDV_Boolean(true);
@@ -77,34 +77,6 @@ public readonly struct MDV_Boolean : MDV_Bicessable<MDV_Boolean>
     {
         MDV_Boolean topic_0 = this;
         return !topic_0.__as_Boolean || topic_1.__as_Boolean;
-    }
-
-    public MDV_Any asset()
-    {
-        MDV_Boolean topic = this;
-        return topic;
-    }
-
-    public MDV_Successable<MDV_Boolean> succ()
-    {
-        MDV_Boolean topic = this;
-        if (topic.__as_Boolean)
-        {
-            // Alternate conceptually is After_All_Others.
-            throw new NotImplementedException();
-        }
-        return MDV_Boolean.@true();
-    }
-
-    public MDV_Bicessable<MDV_Boolean> pred()
-    {
-        MDV_Boolean topic = this;
-        if (!topic.__as_Boolean)
-        {
-            // Alternate conceptually is Before_All_Others.
-            throw new NotImplementedException();
-        }
-        return MDV_Boolean.@false();
     }
 
     public static MDV_Boolean @false()
