@@ -201,4 +201,70 @@ public readonly struct MDV_Integer
                 / BigInteger.GreatestCommonDivisor(topic_0, topic_1)
         ));
     }
+
+    // Given that .NET is deficient in contrast with other languages
+    // by not automatically exposing "default" methods of interfaces in
+    // classes that compose them, every affected composing class has
+    // duplicate wrapper declarations of those methods, below this statement.
+    // For brevity, input checks of the wrapped methods are not duplicated.
+
+    public MDV_Boolean not_same(MDV_Any topic_1)
+    {
+        MDV_Any topic_0 = this;
+        return ((MDV_Any) topic_0).not_same(topic_1);
+    }
+
+    public MDV_Any coalesce(MDV_Any topic_1)
+    {
+        MDV_Any topic_0 = this;
+        return ((MDV_Any) topic_0).coalesce(topic_1);
+    }
+
+    public MDV_Any anticoalesce(MDV_Any topic_1)
+    {
+        MDV_Any topic_0 = this;
+        return ((MDV_Any) topic_0).anticoalesce(topic_1);
+    }
+
+    public MDV_Boolean before(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).before(topic_1);
+    }
+
+    public MDV_Boolean after(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).after(topic_1);
+    }
+
+    public MDV_Boolean before_or_same(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).before_or_same(topic_1);
+    }
+
+    public MDV_Boolean after_or_same(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).after_or_same(topic_1);
+    }
+
+    public MDV_Orderable<MDV_Integer> min(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).min(topic_1);
+    }
+
+    public MDV_Orderable<MDV_Integer> max(MDV_Orderable<MDV_Integer> topic_1)
+    {
+        MDV_Orderable<MDV_Integer> topic_0 = this;
+        return ((MDV_Orderable<MDV_Integer>) topic_0).max(topic_1);
+    }
+
+    public MDV_Boolean not_zero()
+    {
+        MDV_Numerical<MDV_Integer> topic = this;
+        return ((MDV_Numerical<MDV_Integer>) topic).not_zero();
+    }
 }
