@@ -144,16 +144,24 @@ public readonly struct MDV_Integer
         return topic;
     }
 
-    public MDV_Successable<MDV_Integer> succ()
+    public MDV_Successable<MDV_Integer> nth_succ(MDV_Integer topic_1)
     {
-        MDV_Integer topic = this;
-        return MDV_Integer.from(topic.__as_BigInteger + BigInteger.One);
+        MDV_Integer topic_0 = this;
+        if (topic_1.__as_BigInteger < BigInteger.Zero)
+        {
+            throw new ArgumentOutOfRangeException();
+        }
+        return MDV_Integer.from(topic_0.__as_BigInteger + topic_1.__as_BigInteger);
     }
 
-    public MDV_Bicessable<MDV_Integer> pred()
+    public MDV_Bicessable<MDV_Integer> nth_pred(MDV_Integer topic_1)
     {
-        MDV_Integer topic = this;
-        return MDV_Integer.from(topic.__as_BigInteger - BigInteger.One);
+        MDV_Integer topic_0 = this;
+        if (topic_1.__as_BigInteger < BigInteger.Zero)
+        {
+            throw new ArgumentOutOfRangeException();
+        }
+        return MDV_Integer.from(topic_0.__as_BigInteger - topic_1.__as_BigInteger);
     }
 
     public MDV_Boolean so_zero()
@@ -260,6 +268,18 @@ public readonly struct MDV_Integer
     {
         MDV_Orderable<MDV_Integer> topic_0 = this;
         return ((MDV_Orderable<MDV_Integer>) topic_0).max(topic_1);
+    }
+
+    public MDV_Successable<MDV_Integer> succ()
+    {
+        MDV_Successable<MDV_Integer> topic = this;
+        return ((MDV_Successable<MDV_Integer>) topic).succ();
+    }
+
+    public MDV_Bicessable<MDV_Integer> pred()
+    {
+        MDV_Bicessable<MDV_Integer> topic = this;
+        return ((MDV_Bicessable<MDV_Integer>) topic).pred();
     }
 
     public MDV_Boolean not_zero()
