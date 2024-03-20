@@ -407,4 +407,13 @@ public static class MDP_System<Specific_T>
         }
         return MDV_Boolean.from(topic is MDV_Text);
     }
+
+    public static MDV_Boolean Name(MDV_Any topic)
+    {
+        if (topic is null)
+        {
+            throw new ArgumentNullException();
+        }
+        return MDV_Boolean.from(topic is MDV_Name);
+    }
 }
