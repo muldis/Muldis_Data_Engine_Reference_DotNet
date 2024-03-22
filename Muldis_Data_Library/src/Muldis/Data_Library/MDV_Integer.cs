@@ -3,7 +3,7 @@ using System.Numerics;
 namespace Muldis.Data_Library;
 
 public readonly struct MDV_Integer
-    : MDV_Bicessable<MDV_Integer>, MDV_Numerical<MDV_Integer>
+    : MDV_Orderable<MDV_Integer>, MDV_Numerical<MDV_Integer>
 {
     private static readonly MDV_Integer __negative_one
         = new MDV_Integer(BigInteger.MinusOne);
@@ -138,32 +138,6 @@ public readonly struct MDV_Integer
         return topic_0.__as_BigInteger <= topic_1.__as_BigInteger;
     }
 
-    public MDV_Any asset()
-    {
-        MDV_Integer topic = this;
-        return topic;
-    }
-
-    public MDV_Successable<MDV_Integer> nth_succ(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        if (topic_1.__as_BigInteger < BigInteger.Zero)
-        {
-            throw new ArgumentOutOfRangeException();
-        }
-        return MDV_Integer.from(topic_0.__as_BigInteger + topic_1.__as_BigInteger);
-    }
-
-    public MDV_Bicessable<MDV_Integer> nth_pred(MDV_Integer topic_1)
-    {
-        MDV_Integer topic_0 = this;
-        if (topic_1.__as_BigInteger < BigInteger.Zero)
-        {
-            throw new ArgumentOutOfRangeException();
-        }
-        return MDV_Integer.from(topic_0.__as_BigInteger - topic_1.__as_BigInteger);
-    }
-
     public MDV_Boolean so_zero()
     {
         MDV_Integer topic = this;
@@ -268,18 +242,6 @@ public readonly struct MDV_Integer
     {
         MDV_Orderable<MDV_Integer> topic_0 = this;
         return ((MDV_Orderable<MDV_Integer>) topic_0).max(topic_1);
-    }
-
-    public MDV_Successable<MDV_Integer> succ()
-    {
-        MDV_Successable<MDV_Integer> topic = this;
-        return ((MDV_Successable<MDV_Integer>) topic).succ();
-    }
-
-    public MDV_Bicessable<MDV_Integer> pred()
-    {
-        MDV_Bicessable<MDV_Integer> topic = this;
-        return ((MDV_Bicessable<MDV_Integer>) topic).pred();
     }
 
     public MDV_Boolean not_zero()

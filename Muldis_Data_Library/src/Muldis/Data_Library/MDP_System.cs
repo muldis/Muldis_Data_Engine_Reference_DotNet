@@ -153,67 +153,6 @@ public static class MDP_System<Specific_T>
         return topic_0.max(topic_1);
     }
 
-    public static MDV_Boolean Successable(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Successable<MDV_Any>);
-    }
-
-    public static MDV_Any asset(MDV_Successable<Specific_T> topic)
-    {
-        return topic.asset();
-    }
-
-    public static MDV_Successable<Specific_T> succ(MDV_Successable<Specific_T> topic)
-    {
-        return topic.succ();
-    }
-
-    public static MDV_Successable<Specific_T> nth_succ(
-        MDV_Successable<Specific_T> topic_0, MDV_Integer topic_1)
-    {
-        if (topic_0 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        if (topic_1.before(MDV_Integer.zero_()).as_Boolean())
-        {
-            throw new ArgumentOutOfRangeException();
-        }
-        return topic_0.nth_succ(topic_1);
-    }
-
-    public static MDV_Boolean Bicessable(MDV_Any topic)
-    {
-        if (topic is null)
-        {
-            throw new ArgumentNullException();
-        }
-        return MDV_Boolean.from(topic is MDV_Bicessable<MDV_Any>);
-    }
-
-    public static MDV_Bicessable<Specific_T> pred(MDV_Bicessable<Specific_T> topic)
-    {
-        return topic.pred();
-    }
-
-    public static MDV_Bicessable<Specific_T> nth_pred(
-        MDV_Bicessable<Specific_T> topic_0, MDV_Integer topic_1)
-    {
-        if (topic_0 is null)
-        {
-            throw new ArgumentNullException();
-        }
-        if (topic_1.before(MDV_Integer.zero_()).as_Boolean())
-        {
-            throw new ArgumentOutOfRangeException();
-        }
-        return topic_0.nth_pred(topic_1);
-    }
-
     public static MDV_Boolean Boolean(MDV_Any topic)
     {
         if (topic is null)
